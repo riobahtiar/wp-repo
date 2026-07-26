@@ -1,56 +1,21 @@
 /**
- * WordPress i18n bridge for Vue/TS.
+ * Re-export WordPress i18n helpers (Gutenberg / wp-i18n package).
  *
- * Uses the `wp.i18n` runtime provided by WordPress core (script dep `wp-i18n`).
- * Source strings are English; translations load via wp_set_script_translations().
+ * Usage (same as Gutenberg docs):
  *
+ *   import { __ } from '@wordpress/i18n';
+ *   // or from this module:
+ *   import { __ } from '@/app/i18n';
+ *
+ * Runtime: Vite externalizes `@wordpress/i18n` to `window.wp.i18n`.
+ * PHP must enqueue with dependency `wp-i18n` and call
+ * `wp_set_script_translations( $handle, 'wp-bizwit', $languages_path )`.
+ *
+ * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/how-to-guides/internationalization.md
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
 
-type I18nApi = {
-	__: ( text: string, domain?: string ) => string;
-	_x: ( text: string, context: string, domain?: string ) => string;
-	_n: (
-		single: string,
-		plural: string,
-		number: number,
-		domain?: string
-	) => string;
-	sprintf: ( format: string, ...args: unknown[] ) => string;
-};
+export { __, _n, _nx, _x, sprintf, isRTL } from '@wordpress/i18n';
 
-function api(): I18nApi | null {
-	const w = window as Window & {
-		wp?: { i18n?: I18nApi };
-	};
-	return w.wp?.i18n ?? null;
-}
-
-const DOMAIN = 'wp-bizwit';
-
-/** Translate a UI string (English source). */
-export function __( text: string, domain: string = DOMAIN ): string {
-	const i18n = api();
-	return i18n ? i18n.__( text, domain ) : text;
-}
-
-/** Translate with context. */
-export function _x(
-	text: string,
-	context: string,
-	domain: string = DOMAIN
-): string {
-	const i18n = api();
-	return i18n ? i18n._x( text, context, domain ) : text;
-}
-
-/** Plural forms. */
-export function _n(
-	single: string,
-	plural: string,
-	number: number,
-	domain: string = DOMAIN
-): string {
-	const i18n = api();
-	return i18n ? i18n._n( single, plural, number, domain ) : number === 1 ? single : plural;
-}
+/** Default text domain for this plugin (must match plugin header). */
+export const TEXT_DOMAIN = 'wp-bizwit';

@@ -188,7 +188,9 @@ class Assets {
 
 		$this->ensure_module_filter();
 
-		$client_handle = 'wp-bizwit/vite-client';
+		// Handles use hyphens (not slashes) so script translation JSON can be
+		// named `{domain}-{locale}-{handle}.json` per Gutenberg / wp-i18n docs.
+		$client_handle = 'wp-bizwit-vite-client';
 		// HMR assets: null version is intentional so the browser always revalidates.
 		// phpcs:disable WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		wp_enqueue_script(
@@ -200,8 +202,9 @@ class Assets {
 		);
 		wp_script_add_data( $client_handle, 'type', 'module' );
 
-		$handle = 'wp-bizwit/' . $entry;
-		$deps   = array_merge( array( 'wp-i18n', $client_handle ), $extra_script_deps );
+		$handle = 'wp-bizwit-' . $entry;
+		// Gutenberg pattern: declare wp-i18n, then set script translations.
+		$deps = array_merge( array( 'wp-i18n', $client_handle ), $extra_script_deps );
 
 		wp_enqueue_script(
 			$handle,
@@ -285,11 +288,13 @@ class Assets {
 			return;
 		}
 
-		$handle  = 'wp-bizwit/' . $entry;
+		// Hyphenated handle: Gutenberg docs use handle-based JSON filenames
+		// `{domain}-{locale}-{handle}.json` (slashes in handles break paths).
+		$handle  = 'wp-bizwit-' . $entry;
 		$version = $this->asset_version( $file );
 		$url     = WP_BIZWIT_URL . 'build/' . ltrim( $file, '/' );
 
-		// wp-i18n provides window.wp.i18n for Vue/TS via resources/app/i18n.ts.
+		// Same as Gutenberg: wp-i18n dependency + wp_set_script_translations().
 		$deps = array_values( array_unique( array_merge( array( 'wp-i18n' ), $deps ) ) );
 
 		wp_enqueue_script(
@@ -301,7 +306,7 @@ class Assets {
 		);
 		wp_script_add_data( $handle, 'type', 'module' );
 
-		// Load Jed JSON translations for this handle when available.
+		// Optional third arg = languages dir (shipped translations, not only wordpress.org).
 		wp_set_script_translations( $handle, 'wp-bizwit', WP_BIZWIT_PATH . 'languages' );
 
 		$this->localize_config( $handle );
@@ -327,14 +332,14 @@ class Assets {
 			return null;
 		}
 
-		$handle  = 'wp-bizwit/import/' . sanitize_title( $import_key );
+		$handle  = 'wp-bizwit-import-' . sanitize_title( $import_key );
 		$version = $this->asset_version( $file );
 
 		if ( ! wp_script_is( $handle, 'registered' ) ) {
 			wp_register_script(
 				$handle,
 				WP_BIZWIT_URL . 'build/' . ltrim( $file, '/' ),
-				array(),
+				array( 'wp-i18n' ),
 				$version,
 				true
 			);
@@ -370,8 +375,8 @@ class Assets {
 			}
 
 			$style_handle = 0 === $index
-				? 'wp-bizwit/' . $entry
-				: 'wp-bizwit/' . $entry . '-' . (string) $index;
+				? 'wp-bizwit-' . $entry
+				: 'wp-bizwit-' . $entry . '-' . (string) $index;
 
 			wp_enqueue_style(
 				$style_handle,
@@ -484,7 +489,7 @@ class Assets {
 		add_filter(
 			'script_loader_tag',
 			static function ( string $tag, string $handle ): string {
-				if ( ! str_starts_with( $handle, 'wp-bizwit/' ) ) {
+				if ( ! str_starts_with( $handle, 'wp-bizwit-' ) ) {
 					return $tag;
 				}
 				if ( str_contains( $tag, 'type=' ) ) {

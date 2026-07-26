@@ -57,7 +57,8 @@ There is no webpack / `@wordpress/scripts` admin path. Optional Gutenberg blocks
 | When | `admin_enqueue_scripts` priority 110; only on BizWit screens (`page` starts with `wp-bizwit`) |
 | All BizWit screens | Enqueue the shared `admin` entry (styles under `.wp-bizwit` + tiny bootstrap) |
 | Dashboard | Additionally enqueues the `dashboard` island entry |
-| Handles | `wp-bizwit/{entry}` scripts (type=module) + matching styles |
+| Handles | `wp-bizwit-{entry}` scripts (type=module) + matching styles; dep `wp-i18n` + `wp_set_script_translations` |
+| JS i18n | Gutenberg pattern: `import { __ } from '@wordpress/i18n'` — see [i18n.md](i18n.md) |
 | Config | `wpBizwitConfig`: `restUrl`, `restNonce`, `pluginUrl`, `version`, `locale`, `region`, `currency` |
 | Missing build | Soft-fail; with `WP_DEBUG` admins see a notice to run `npm run -w wp-bizwit build` from the monorepo root |
 

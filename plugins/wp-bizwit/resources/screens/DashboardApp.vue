@@ -2,13 +2,17 @@
 /**
  * Dashboard pilot island — proves PHP → enqueue → Vue → REST → design system.
  *
- * User-facing copy uses @wordpress/i18n so strings follow the site locale
- * (English source → languages/*.json / PHP translations).
+ * JS i18n follows the Gutenberg guide:
+ *   import { __ } from '@wordpress/i18n';
+ * with text domain `wp-bizwit`, script dep `wp-i18n`, and
+ * wp_set_script_translations() so Jed JSON loads before the module runs.
+ *
+ * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/how-to-guides/internationalization.md
  */
+import { __ } from '@wordpress/i18n';
 import { onMounted, ref } from 'vue';
 
 import { apiGet } from '@/app/api/client';
-import { __ } from '@/app/i18n';
 import AppShell from '@ui/AppShell.vue';
 import Button from '@ui/Button.vue';
 import EmptyState from '@ui/EmptyState.vue';

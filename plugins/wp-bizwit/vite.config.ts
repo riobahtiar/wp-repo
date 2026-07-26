@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
+import externalGlobals from 'rollup-plugin-external-globals';
 import { defineConfig, type PluginOption } from 'vite';
 
 const rootDir = path.dirname( fileURLToPath( import.meta.url ) );
@@ -12,19 +13,23 @@ const analyze = process.env.ANALYZE === '1' || process.env.ANALYZE === 'true';
 /**
  * Vite multi-entry build for wp-admin product UI.
  *
- * Production assets land in `build/` and are enqueued by PHP (Phase 2) via
- * plugins_url( 'build/…', WP_BIZWIT_FILE ). base './' keeps asset URLs relative
- * to the built HTML/manifest so the plugin path stays portable.
+ * WordPress script packages (Gutenberg i18n pattern):
+ * - Source: `import { __ } from '@wordpress/i18n'`
+ * - Runtime: WordPress enqueues `wp-i18n` → `window.wp.i18n`
+ * - Build: externalize `@wordpress/i18n` so it is not bundled (same idea as
+ *   @wordpress/dependency-extraction-webpack-plugin in Gutenberg).
  *
- * Dev: `npm run dev` — HMR server; PHP enqueue for dev is also Phase 2.
- * Analyze: `npm run build:analyze` (sets ANALYZE=1) → build/stats.html
- * Unit: `npm run test:unit` (Vitest, same resolve aliases).
- *
- * rollup-plugin-visualizer is ESM-only; load it via dynamic import so Vite's
- * config bundler does not try to `require()` it on normal builds.
+ * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/how-to-guides/internationalization.md
  */
 export default defineConfig( async () => {
-	const plugins: PluginOption[] = [ vue(), tailwindcss() ];
+	const plugins: PluginOption[] = [
+		vue(),
+		tailwindcss(),
+		// Map ESM imports of @wordpress/i18n onto the global provided by WP core.
+		externalGlobals( {
+			'@wordpress/i18n': 'wp.i18n',
+		} ) as PluginOption,
+	];
 
 	if ( analyze ) {
 		const { visualizer } = await import( 'rollup-plugin-visualizer' );
@@ -45,15 +50,18 @@ export default defineConfig( async () => {
 		base: './',
 		build: {
 			outDir: 'build',
-			// Vite owns build/ entirely (no dual webpack pipeline).
 			emptyOutDir: true,
-			// Explicit path so the file is `build/manifest.json` (not `.vite/`).
 			manifest: 'manifest.json',
 			rollupOptions: {
 				input: {
 					admin: path.resolve( rootDir, 'resources/admin/main.ts' ),
-					dashboard: path.resolve( rootDir, 'resources/screens/dashboard.ts' ),
+					dashboard: path.resolve(
+						rootDir,
+						'resources/screens/dashboard.ts'
+					),
 				},
+				// Do not ship a second copy of @wordpress/i18n — use core's.
+				external: [ '@wordpress/i18n' ],
 			},
 		},
 		resolve: {
@@ -61,6 +69,10 @@ export default defineConfig( async () => {
 				'@': path.resolve( rootDir, 'resources' ),
 				'@ui': path.resolve( rootDir, 'resources/ui' ),
 			},
+		},
+		// Vitest: use the real package (Node), not the WP global.
+		optimizeDeps: {
+			include: [ '@wordpress/i18n' ],
 		},
 		test: {
 			include: [ 'resources/**/*.test.ts' ],

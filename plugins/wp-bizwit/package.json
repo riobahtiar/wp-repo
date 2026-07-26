@@ -8,6 +8,7 @@
     "@types/node": "^20.19.43",
     "@vitejs/plugin-vue": "^6.0.8",
     "@wordpress/env": "^11.7.0",
+    "rollup-plugin-external-globals": "^0.13.0",
     "rollup-plugin-visualizer": "^7.0.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
@@ -33,9 +34,13 @@
     "env:destroy": "wp-env destroy",
     "env:cli": "wp-env run cli --env-cwd=wp-content/plugins/wp-bizwit",
     "test:unit": "vitest run",
-    "test:php": "wp-env run tests-cli --env-cwd=wp-content/plugins/wp-bizwit bash -lc 'composer install --working-dir=tests --no-interaction && vendor/bin/phpunit'"
+    "test:php": "wp-env run tests-cli --env-cwd=wp-content/plugins/wp-bizwit bash -lc 'composer install --working-dir=tests --no-interaction && vendor/bin/phpunit'",
+    "i18n:pot": "wp i18n make-pot . languages/wp-bizwit.pot --domain=wp-bizwit --exclude=vendor,vendor-prefixed,node_modules,tests,bin,build",
+    "i18n:update-po": "wp i18n update-po languages/wp-bizwit.pot languages/",
+    "i18n:compile": "wp i18n make-mo languages/ && wp i18n make-php languages/ && node scripts/build-script-translations.mjs"
   },
   "dependencies": {
+    "@wordpress/i18n": "^5.26.0",
     "vue": "^3.5.40"
   }
 }

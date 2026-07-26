@@ -395,11 +395,10 @@ root): `dev`, `build`, `build:assets`, `build:analyze`, `check:bundle-size`,
 - **Blocks** (optional): none ship today. `WP_BizWit::register_blocks()` no-ops
   unless `build/Blocks` + `build/blocks-manifest.php` exist;
   `tests/php/BlockRegistrationTest.php` skips when empty.
-- **i18n**: **English source strings** in `__()` / Vue `i18n.ts`; complete
-  Indonesian in `languages/wp-bizwit-id_ID.po`. Switching the site language must
-  switch the whole UI. Domain terms (NPWP, PKP, termin, …) stay as-is in both.
-  See [`docs/i18n.md`](docs/i18n.md) and
-  [`docs/development.md`](docs/development.md#translations).
+- **i18n (PHP + JS)**: English source; complete `id_ID` catalogue. JS follows
+  [Gutenberg i18n](https://github.com/WordPress/gutenberg/blob/trunk/docs/how-to-guides/internationalization.md):
+  `import { __ } from '@wordpress/i18n'`, script dep `wp-i18n`,
+  `wp_set_script_translations()`. See [`docs/i18n.md`](docs/i18n.md).
 - **wp-env / PHPUnit**: from monorepo root —
   `npm run -w wp-bizwit env:start` · `npm run -w wp-bizwit test:php`.
 - **Testing**: Prefer repository and domain tests (`MoneyTest`,

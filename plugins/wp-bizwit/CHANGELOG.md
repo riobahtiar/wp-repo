@@ -15,8 +15,12 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **i18n: English source + full Indonesian catalogue.** User-facing strings use
   English msgids (WordPress.org practice). `id_ID` translations cover the
   catalogue; switching the site language switches the whole UI. Domain terms
-  (NPWP, PKP, termin, …) stay official in both languages. Vue uses `wp.i18n`
-  via `resources/app/i18n.ts`. See [docs/i18n.md](docs/i18n.md).
+  (NPWP, PKP, termin, …) stay official in both languages.
+- **JS i18n follows Gutenberg:** `import { __ } from '@wordpress/i18n'`, Vite
+  externalizes the package to core `wp.i18n`, handles `wp-bizwit-{entry}`,
+  `wp_set_script_translations()`, Jed JSON via `npm run i18n:compile`. See
+  [docs/i18n.md](docs/i18n.md) and the
+  [Gutenberg i18n guide](https://github.com/WordPress/gutenberg/blob/trunk/docs/how-to-guides/internationalization.md).
 
 ## [0.4.0] — 2026-07-27
 

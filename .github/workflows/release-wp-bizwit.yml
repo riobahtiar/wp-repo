@@ -40,6 +40,13 @@ jobs:
       - name: Build assets (workspace)
         run: npm run -w wp-bizwit build
 
+      - name: Compile translations (PHP mo + script JSON)
+        working-directory: plugins/wp-bizwit
+        run: |
+          wp i18n make-mo languages/
+          wp i18n make-php languages/
+          node scripts/build-script-translations.mjs
+
       - name: Parse tag
         id: meta
         run: |
