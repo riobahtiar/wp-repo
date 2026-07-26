@@ -13,25 +13,23 @@ npm run build
 | Command | Purpose |
 |---------|---------|
 | `npm run dev` | Vite HMR dev server for Vue product UI |
-| `npm run build` | Typecheck, clean `build/`, webpack legacy assets, then Vite (dual pipeline) |
-| `npm run build:legacy` | Webpack / `@wordpress/scripts` only (`wp-bizwit-admin.*`, blocks) |
-| `npm run build:assets` | Vite production build only (no clean, no webpack) |
-| `npm run start:legacy` | Watch mode for webpack legacy assets |
+| `npm run build` | Typecheck (`vue-tsc`) then Vite production build into `build/` |
+| `npm run build:assets` | Vite production build only (no typecheck) |
+| `npm run typecheck` | `vue-tsc --noEmit` |
 | `./vendor/bin/phpcs` | WordPress Coding Standards |
 | `./vendor/bin/phpcbf` | Auto-fix coding standard violations |
 | `./vendor/bin/phpstan analyse --memory-limit=1G` | Static analysis at level 6 |
 | `npm run test:unit` | Vitest unit tests (e.g. `formatMoney` in `resources/app/lib/`) |
 | `npm run test:php` | PHPUnit suite in the wp-env container |
 
-### Dual-pipeline assets (temporary)
+### Asset pipeline (Vite only)
 
-Until plan 07 Phase 6 retires webpack, **both** toolchains write into `build/`:
+Vite is the sole owner of `build/`:
 
-1. `prebuild:clean` removes `build/` once.
-2. `build:legacy` emits `wp-bizwit-admin.js` / `.css` / `.asset.php` (and any blocks) — still enqueued by PHP today.
-3. Vite builds multi-entry product UI with `emptyOutDir: false` so it **adds** hashed files under `build/assets/` and writes **`build/manifest.json`** without wiping the webpack output.
+1. `vue-tsc --noEmit` typechecks TypeScript / Vue SFCs.
+2. `vite build` with `emptyOutDir: true` writes hashed files under `build/assets/` and **`build/manifest.json`**.
 
-Do not run a bare `vite build` with `emptyOutDir: true` against a populated `build/` — that deletes the legacy assets PHP still loads.
+There is no webpack / `@wordpress/scripts` admin path. Optional Gutenberg blocks (if added later) would need their own build story; none ship today.
 
 ### PHP enqueue (Vite product UI)
 
@@ -42,11 +40,11 @@ Do not run a bare `vite build` with `emptyOutDir: true` against a populated `bui
 | Manifest | `build/manifest.json` (Vite `build.manifest: 'manifest.json'`) |
 | Logical entries | `admin` → `resources/admin/main.ts`, `dashboard` → `resources/screens/dashboard.ts` |
 | When | `admin_enqueue_scripts` priority 110; only on BizWit screens (`page` starts with `wp-bizwit`) |
-| Dashboard | Enqueues the `dashboard` entry only |
+| All BizWit screens | Enqueue the shared `admin` entry (styles under `.wp-bizwit` + tiny bootstrap) |
+| Dashboard | Additionally enqueues the `dashboard` island entry |
 | Handles | `wp-bizwit/{entry}` scripts (type=module) + matching styles |
 | Config | `wpBizwitConfig`: `restUrl`, `restNonce`, `pluginUrl`, `version`, `locale`, `region`, `currency` |
 | Missing build | Soft-fail; with `WP_DEBUG` admins see a notice to run `npm run build` |
-| Legacy | Webpack `wp-bizwit-admin` still enqueued separately until Phase 6 |
 
 ### REST API (`wp-bizwit/v1`)
 
@@ -137,8 +135,8 @@ src/
     Screens/      One class per screen, extending Screen
     Tables/       WP_List_Table subclasses
     Views/        Templates. Receive a single $data array — no extract()
-resources/        Vue/Vite entries (admin, screens, app/api, styles) + legacy webpack SCSS/JS
-build/            Dual output: webpack handle files + Vite assets + manifest.json
+resources/        Vue/Vite entries (admin, screens, app/api, ui, styles)
+build/            Vite output only: hashed assets + manifest.json
 languages/        Translation template and the id_ID catalogue
 tests/php/        PHPUnit tests
 ```

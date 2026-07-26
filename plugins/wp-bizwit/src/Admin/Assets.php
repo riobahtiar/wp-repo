@@ -93,8 +93,9 @@ class Assets {
 	/**
 	 * Enqueue Vite entries for the current admin screen.
 	 *
-	 * Hooked to `admin_enqueue_scripts`. Only loads on BizWit pages; dashboard
-	 * gets the `dashboard` entry. Later screens will map the same way.
+	 * Hooked to `admin_enqueue_scripts`. Loads shared `admin` styles/JS on every
+	 * BizWit page; dashboard also gets the `dashboard` island entry. Non-BizWit
+	 * admin screens receive nothing.
 	 *
 	 * @param string $hook Current admin page hook suffix.
 	 *
@@ -104,6 +105,9 @@ class Assets {
 		if ( ! $this->is_bizwit_admin_page( $hook ) ) {
 			return;
 		}
+
+		// Shared product styles + tiny bootstrap on every BizWit screen.
+		$this->enqueue_entry( 'admin' );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only page slug for asset selection.
 		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( (string) $_GET['page'] ) ) : '';

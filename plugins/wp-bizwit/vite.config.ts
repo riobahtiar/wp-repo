@@ -24,9 +24,8 @@ export default defineConfig( {
 	base: './',
 	build: {
 		outDir: 'build',
-		// false: `npm run build` cleans once, runs webpack, then Vite — wiping
-		// here would delete legacy `wp-bizwit-admin.*` that PHP still enqueues.
-		emptyOutDir: false,
+		// Vite owns build/ entirely (no dual webpack pipeline).
+		emptyOutDir: true,
 		// Explicit path so the file is `build/manifest.json` (not `.vite/`).
 		manifest: 'manifest.json',
 		rollupOptions: {

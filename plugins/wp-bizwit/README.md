@@ -114,7 +114,8 @@ src/
   Repositories/   All $wpdb access lives here
   Support/        Money, Settings, Capabilities
   Admin/          Menu, Screens, WP_List_Table subclasses, view templates
-resources/        SCSS and JS entry points, compiled by @wordpress/scripts
+resources/        Vue/Vite entries (admin, screens, ui, styles)
+build/            Vite production assets + manifest.json
 languages/        Translation template and the id_ID catalogue
 tests/php/        PHPUnit tests
 ```

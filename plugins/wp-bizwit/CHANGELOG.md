@@ -17,6 +17,11 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   first-party. Removed unused Abilities API scaffold (no implementations) and
   simplified `Loader` to actions, filters, shortcodes and WP-CLI only.
 - Composer package renamed to `wp-bizwit/wp-bizwit`.
+- **Vite is the sole asset pipeline** (plan 07 Phase 6). Retired webpack /
+  `@wordpress/scripts` admin and empty public-frontend entries. Shared product
+  CSS (tiles, progressive disclosure sections, status pills, …) lives in
+  `resources/styles/admin.css` and is enqueued via the Vite `admin` entry on
+  every BizWit screen. `npm run build` is `vue-tsc --noEmit && vite build`.
 
 ### Added
 - **Frontend architecture** ([docs/frontend-architecture.md](docs/frontend-architecture.md))
@@ -24,8 +29,8 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   for rich admin UI; Livewire and Roots Acorn explicitly out of scope for the
   distributable plugin; performance budgets and wordpress.org packaging rules.
 - **Vite 8 + Vue 3 + Tailwind v4 toolchain** (plan 07 Phase 1): multi-entry
-  build (`admin`, `dashboard`), dual-pipeline with legacy webpack into `build/`,
-  `build/manifest.json`, scoped admin CSS under `.wp-bizwit`.
+  build (`admin`, `dashboard`), `build/manifest.json`, scoped admin CSS under
+  `.wp-bizwit`.
 - **PHP asset bridge** (plan 07 Phase 2): `Admin\Assets` enqueues Vite entries
   from `build/manifest.json` on BizWit screens only; localizes `wpBizwitConfig`.
 - **REST foundation** (plan 07 Phase 3): `GET /wp-bizwit/v1/health` plus TS
@@ -38,7 +43,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   loads health over REST (skeleton / error + retry), shows version, region, and
   a MoneyText sample.
 
-Next up: plan 07 Phase 6+ (retire webpack admin path, budgets), then
+Next up: plan 07 Phase 7+ (bundle budgets), then
 [Projects](plans/01-projects.md).
 
 ## [0.3.0] — 2026-07-27

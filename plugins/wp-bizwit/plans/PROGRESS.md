@@ -32,7 +32,7 @@ a migration. Do not run a real business on this yet.
 | Import / export | 🔒 Deferred | [Plan](05-import-export.md) — gated on 1.0 GA |
 | Reports | ⬜ Not started | Not yet planned |
 | REST API | 🟡 Health only | `GET /wp-bizwit/v1/health` + TS client; full CRUD later ([07](07-frontend-modernization.md)) |
-| Frontend (Vue/Vite/Tailwind) | 🟡 Phases 0–5 done | Tooling, asset bridge, REST health, design-system seed (`@ui/*`), dashboard pilot island; webpack dual-pipeline until Phase 6 · [Architecture](../docs/frontend-architecture.md) · [Plan 07](07-frontend-modernization.md) |
+| Frontend (Vue/Vite/Tailwind) | 🟡 Phases 0–6 done | Tooling, asset bridge, REST health, design-system seed (`@ui/*`), dashboard pilot island; **Vite sole asset pipeline** (webpack retired) · [Architecture](../docs/frontend-architecture.md) · [Plan 07](07-frontend-modernization.md) |
 
 Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferred
 

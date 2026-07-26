@@ -299,9 +299,10 @@ changed freely.
 clearly earns its place. When a runtime PHP library is added, prefix it into
 `vendor-prefixed/` with Strauss so it cannot clash with other plugins.
 
-Dev tools (PHPStan, WPCS, PHPUnit, `@wordpress/scripts`) may use Composer/npm
-packages that are widely used, actively maintained (updated within ~8 months),
-and from known maintainers — see [`docs/development.md`](docs/development.md#dependency-policy).
+Dev tools (PHPStan, WPCS, PHPUnit, Vite, Vitest, `@wordpress/env`) may use
+Composer/npm packages that are widely used, actively maintained (updated within
+~8 months), and from known maintainers — see
+[`docs/development.md`](docs/development.md#dependency-policy).
 
 ### Architecture & Source Layout
 
@@ -309,19 +310,20 @@ and from known maintainers — see [`docs/development.md`](docs/development.md#d
 - **Main plugin file (`wp-bizwit.php`) only bootstraps**. Never place business logic here.
 - **Loader pattern**: Register hooks, filters, shortcodes and CLI commands via `Loader`. Do not register hooks in constructors.
 
-### Asset management (target stack)
+### Asset management
 
 Interactive product UI uses **Vue 3 + Vite 8 + Tailwind v4**. Full decisions:
 [`docs/frontend-architecture.md`](docs/frontend-architecture.md). Implementation:
 [`plans/07-frontend-modernization.md`](plans/07-frontend-modernization.md).
 
 - **Do not** add Livewire, Roots Acorn, or a second SPA framework to this plugin.
-- **Assets (target)**: `resources/admin/`, `resources/screens/`, `resources/ui/`,
-  `resources/styles/` → `npm run build` → `build/` (manifest enqueued from PHP).
-- **Legacy**: webpack / `@wordpress/scripts` may still exist until plan 07 Phase 6
-  removes them — do not add new jQuery admin features on the legacy path.
+- **Assets**: `resources/admin/`, `resources/screens/`, `resources/ui/`,
+  `resources/styles/` → `npm run build` → `build/` (Vite sole owner; manifest
+  enqueued from PHP via `Admin\Assets`).
+- **Shared admin entry** loads on every BizWit screen (styles + tiny JS). Screen
+  islands (e.g. dashboard) are extra entries only on their page.
 - **Scope CSS** under `.wp-bizwit` so Tailwind never restyles core wp-admin.
-- **Enqueue by screen** — never load the invoice bundle on every BizWit page.
+- **Enqueue by screen** for heavy islands — never load the invoice bundle on every BizWit page.
 
 **Design system (`resources/ui/`):** import shared components via the `@ui`
 alias (resolved in `vite.config.ts` / `tsconfig.json`):
@@ -340,7 +342,7 @@ Unit tests: `npm run test:unit` (Vitest).
 ### Quality Assurance
 
 - **PHP**: PHPStan (`phpstan.neon`), PHPCS (`phpcs.xml`)
-- **JS**: ESLint (`.eslintrc`)
+- **JS/TS**: `vue-tsc` typecheck (via `npm run build` / `typecheck`), Vitest
 - **CI/CD**: GitHub Actions in `.github/workflows/`
 
 ### Key primitives
@@ -349,12 +351,14 @@ Unit tests: `npm run test:unit` (Vitest).
 
 **Composer scripts:** `phpstan`, `phpcs`, `phpcbf`, `i18n:extract`, `i18n:compile`
 
-**NPM scripts:** `dev` (Vite HMR), `build` (clean + legacy webpack + Vite), `build:legacy`, `build:assets`, `start:legacy`, `test:unit` (Vitest), `lint:js`, `lint:style`, `format`, `create-block`, `env:*`
+**NPM scripts:** `dev` (Vite HMR), `build` (typecheck + Vite), `build:assets`,
+`typecheck`, `test:unit` (Vitest), `env:*`, `test:php`
 
 ### Feature quick reference
 
-- **Blocks** (optional): `npm run create-block`. Registration is automatic when
-  `build/Blocks` exists; `tests/php/BlockRegistrationTest.php` guards built blocks.
+- **Blocks** (optional): none ship today. `WP_BizWit::register_blocks()` no-ops
+  unless `build/Blocks` + `build/blocks-manifest.php` exist;
+  `tests/php/BlockRegistrationTest.php` skips when empty.
 - **i18n**: Indonesian (`id_ID`) is a shipped, complete translation — **an
   untranslated new string is unfinished**. Prefer global `wp` for extract/compile;
   see [`docs/development.md`](docs/development.md#translations).

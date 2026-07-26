@@ -31,11 +31,11 @@ jobs:
           key: ${{ needs.setup.outputs.node-cache-key }}
           fail-on-cache-miss: true
 
-      - name: Lint JS
-        run: npm run lint:js
+      - name: Typecheck
+        run: npm run typecheck
 
-      - name: Lint Style
-        run: npm run lint:style
+      - name: Unit tests (Vitest)
+        run: npm run test:unit
 
       - name: Build assets
         run: npm run build

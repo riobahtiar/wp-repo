@@ -449,16 +449,20 @@ and shows `MoneyText` sample using settings currency — progressive, low risk.
 
 ### Phase 6 — Retire legacy admin webpack entry
 
-- [ ] **6.1** Move any needed legacy SCSS rules into Tailwind or plain CSS under
-      `.wp-bizwit`.
-- [ ] **6.2** Remove `webpack.config.js` admin entries **or** entire webpack if
-      no blocks.
-- [ ] **6.3** Drop `@wordpress/scripts` if unused; keep `@wordpress/env` for
+- [x] **6.1** Move any needed legacy SCSS rules into Tailwind or plain CSS under
+      `.wp-bizwit`. (Ported into `resources/styles/admin.css`; progressive
+      disclosure section styles preserved.)
+- [x] **6.2** Remove `webpack.config.js` admin entries **or** entire webpack if
+      no blocks. (Deleted `webpack.config.js`; no blocks.)
+- [x] **6.3** Drop `@wordpress/scripts` if unused; keep `@wordpress/env` for
       tests.
-- [ ] **6.4** Delete empty `resources/admin/js/app.js` jQuery stub if replaced.
-- [ ] **6.5** Update `WP_BizWit::enqueue_entrypoint` — delete or narrow to
-      Assets.php only.
-- [ ] **6.6** `npm run build` + smoke all admin pages.
+- [x] **6.4** Delete empty `resources/admin/js/app.js` jQuery stub if replaced.
+      (Also removed empty frontend webpack entry + SCSS.)
+- [x] **6.5** Update `WP_BizWit::enqueue_entrypoint` — delete or narrow to
+      Assets.php only. (`enqueue_entrypoint` removed; `Assets` enqueues `admin`
+      on every BizWit screen + `dashboard` on the dashboard.)
+- [x] **6.6** `npm run build` + smoke all admin pages. (`emptyOutDir: true`;
+      build is Vite-only.)
 
 **Acceptance:** Single asset pipeline; docs mention only Vite.
 

@@ -1,5 +1,5 @@
 /**
- * Shared admin entry — styles and future app shell bootstrap.
- * Enqueued only on BizWit screens (Phase 2).
+ * Shared admin entry — product styles under `.wp-bizwit` (and future shell bootstrap).
+ * Enqueued on every BizWit admin screen via Admin\Assets.
  */
 import '@/styles/admin.css';

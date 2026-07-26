@@ -21,7 +21,7 @@ use WP_BizWit\Repositories\Stats_Repository;
 use WP_BizWit\Rest\Controllers\Health_Controller;
 
 /**
- * Boots the plugin: locale, schema check, admin menu, public assets, blocks.
+ * Boots the plugin: locale, schema check, admin menu, Vite assets, blocks.
  */
 class WP_BizWit {
 
@@ -38,7 +38,7 @@ class WP_BizWit {
 	protected Loader $loader;
 
 	/**
-	 * Wire locale, schema, admin and public hooks.
+	 * Wire locale, schema, admin and REST hooks.
 	 */
 	public function __construct() {
 
@@ -47,7 +47,6 @@ class WP_BizWit {
 		$this->define_schema_hooks();
 		$this->define_admin_hooks();
 		$this->define_rest_hooks();
-		$this->define_public_hooks();
 
 		$this->loader->add_action( 'init', $this, 'register_blocks' );
 	}
@@ -89,16 +88,8 @@ class WP_BizWit {
 	 */
 	private function define_admin_hooks(): void {
 
-		// Legacy webpack admin CSS/JS (wp-bizwit-admin.*) until Phase 6 retires it.
-		add_action(
-			'admin_enqueue_scripts',
-			function () {
-				$this->enqueue_entrypoint( 'wp-bizwit-admin' );
-			},
-			100
-		);
-
-		// Vite product UI: only the entry for the current BizWit screen (see Assets).
+		// Vite product UI: shared admin entry on every BizWit screen; screen-
+		// specific entries (dashboard, …) are selected inside Assets::enqueue.
 		$this->loader->add_action( 'admin_enqueue_scripts', new Assets(), 'enqueue', 110 );
 
 		$clients = new Client_Repository();
@@ -131,20 +122,6 @@ class WP_BizWit {
 	}
 
 	/**
-	 * Register public-facing asset hooks.
-	 */
-	private function define_public_hooks(): void {
-
-		add_action(
-			'wp_enqueue_scripts',
-			function () {
-				$this->enqueue_entrypoint( 'wp-bizwit-frontend' );
-			},
-			100
-		);
-	}
-
-	/**
 	 * Run the loader to execute all of the hooks with WordPress.
 	 */
 	public function run(): void {
@@ -158,65 +135,6 @@ class WP_BizWit {
 	 */
 	public function get_loader(): Loader {
 		return $this->loader;
-	}
-
-	/**
-	 * Enqueue a webpack entrypoint
-	 *
-	 * @param string              $entry Name of the entrypoint defined in webpack.config.js.
-	 * @param array<string,mixed> $localize_data Array of associated data. See https://developer.wordpress.org/reference/functions/wp_localize_script/ .
-	 */
-	private function enqueue_entrypoint( string $entry, array $localize_data = array() ): void {
-
-		// Try to get WordPress filesystem. If not possible load it.
-		global $wp_filesystem;
-		if ( ! is_a( $wp_filesystem, 'WP_Filesystem_Base' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/file.php'; // @phpstan-ignore requireOnce.fileNotFound
-			WP_Filesystem();
-		}
-
-		$filesystem = new \WP_Filesystem_Direct( false );
-
-		$asset_file = WP_BIZWIT_PATH . "/build/{$entry}.asset.php";
-		if ( ! $filesystem->exists( $asset_file ) ) {
-			return;
-		}
-
-		$asset = require $asset_file;
-		if ( ! isset( $asset['dependencies'], $asset['version'] ) ) {
-			return;
-		}
-
-		if ( $filesystem->exists( WP_BIZWIT_PATH . "build/{$entry}.js" ) ) {
-			wp_enqueue_script(
-				self::PLUGIN_NAME . "/{$entry}",
-				WP_BIZWIT_URL . "build/{$entry}.js",
-				$asset['dependencies'],
-				$asset['version'],
-				true
-			);
-
-			// Potentially add localize data
-			if ( ! empty( $localize_data ) ) {
-				wp_localize_script(
-					self::PLUGIN_NAME . "/{$entry}",
-					str_replace( '-', '_', self::PLUGIN_NAME ),
-					$localize_data
-				);
-			}
-
-			// Load JSON translations
-			wp_set_script_translations( self::PLUGIN_NAME . "/{$entry}", 'wp-bizwit', WP_BIZWIT_PATH . 'languages/' );
-		}
-
-		if ( $filesystem->exists( WP_BIZWIT_PATH . "build/{$entry}.css" ) ) {
-			wp_enqueue_style(
-				self::PLUGIN_NAME . "/{$entry}",
-				WP_BIZWIT_URL . "build/{$entry}.css",
-				array(),
-				$asset['version']
-			);
-		}
 	}
 
 	/**

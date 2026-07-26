@@ -37,7 +37,7 @@ first, record-keeping only (no payment processing), region ≠ locale.
 | Toolchain (lint/transform/minify) | **OXC** family via Vite/Rolldown; optional Oxlint | No |
 | Data from PHP | **Custom REST** under `wp-bizwit/v1` (+ nonces / cookies for cookie auth) | N/A |
 | Domain / security / documents | **Existing PHP** (`Repositories`, `Money`, `Region`, screens) | PHP as today |
-| Gutenberg blocks (if ever needed) | Optional; keep `@wordpress/scripts` only for blocks | Block assets if any |
+| Gutenberg blocks (if ever needed) | Optional; not in the current Vite pipeline — add a dedicated path only if blocks return | Block assets if any |
 
 ### Explicitly rejected for the distributable plugin
 
