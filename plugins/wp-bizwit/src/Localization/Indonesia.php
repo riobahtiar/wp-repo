@@ -139,6 +139,11 @@ class Indonesia extends Region {
 			'postal_code'        => __( 'Kode Pos', 'wp-bizwit' ),
 			'payment_terms_days' => __( 'Termin pembayaran', 'wp-bizwit' ),
 			'phone'              => __( 'Telepon / WhatsApp', 'wp-bizwit' ),
+			'budget'             => __( 'Anggaran', 'wp-bizwit' ),
+			'billing_type'       => __( 'Jenis penagihan', 'wp-bizwit' ),
+			'termin'             => __( 'Termin', 'wp-bizwit' ),
+			'retensi'            => __( 'Retensi (%)', 'wp-bizwit' ),
+			'project_code'       => __( 'Kode proyek / SPK', 'wp-bizwit' ),
 		);
 	}
 
@@ -153,6 +158,9 @@ class Indonesia extends Region {
 			'tax_id'             => __( 'Nomor Pokok Wajib Pajak. 16 digit (berbasis NIK) atau 15 digit format lama. Wajib dicantumkan pada faktur pajak.', 'wp-bizwit' ),
 			'registration_no'    => __( 'Nomor Induk Berusaha dari sistem OSS, 13 digit. Menggantikan SIUP dan TDP.', 'wp-bizwit' ),
 			'payment_terms_days' => __( 'Jumlah hari sejak tanggal faktur sampai jatuh tempo. Umumnya 14 atau 30 hari.', 'wp-bizwit' ),
+			'budget'             => __( 'Nilai kontrak atau total yang disepakati untuk proyek ini.', 'wp-bizwit' ),
+			'retensi'            => __( 'Persentase yang ditahan sampai serah terima akhir. Diterapkan saat penagihan.', 'wp-bizwit' ),
+			'project_code'       => __( 'Nomor SPK, kontrak, atau referensi internal (opsional).', 'wp-bizwit' ),
 		);
 	}
 

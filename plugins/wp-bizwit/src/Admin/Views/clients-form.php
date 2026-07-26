@@ -18,7 +18,10 @@
  * @var array<string, mixed> $data View data supplied by Clients_Screen.
  */
 
+use WP_BizWit\Admin\Screens\Projects_Screen;
 use WP_BizWit\Localization\Region;
+use WP_BizWit\Repositories\Project_Repository;
+use WP_BizWit\Support\Capabilities;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -345,3 +348,63 @@ foreach ( $meta_fields as $meta_key => $definition ) {
 
 	<?php submit_button( $is_edit ? __( 'Update client', 'wp-bizwit' ) : __( 'Add client', 'wp-bizwit' ) ); ?>
 </form>
+
+<?php
+$client_projects = is_array( $data['client_projects'] ?? null ) ? $data['client_projects'] : array();
+$client_id       = (int) $field( 'id', '0' );
+if ( $is_edit && $client_id > 0 && current_user_can( Capabilities::MANAGE_PROJECTS ) ) :
+	$new_project_url = add_query_arg(
+		array(
+			'page'      => Projects_Screen::SLUG,
+			'action'    => 'new',
+			'client_id' => $client_id,
+		),
+		admin_url( 'admin.php' )
+	);
+	$statuses        = Project_Repository::statuses();
+	?>
+	<hr />
+	<h2><?php esc_html_e( 'Projects', 'wp-bizwit' ); ?></h2>
+	<?php if ( array() === $client_projects ) : ?>
+		<p><?php esc_html_e( 'No projects yet for this client.', 'wp-bizwit' ); ?></p>
+	<?php else : ?>
+		<table class="widefat striped" style="max-width: 40rem;">
+			<thead>
+				<tr>
+					<th scope="col"><?php esc_html_e( 'Name', 'wp-bizwit' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Status', 'wp-bizwit' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $client_projects as $project_row ) : ?>
+					<?php
+					$project_id  = (int) ( $project_row['id'] ?? 0 );
+					$edit_url    = add_query_arg(
+						array(
+							'page'    => Projects_Screen::SLUG,
+							'action'  => 'edit',
+							'project' => $project_id,
+						),
+						admin_url( 'admin.php' )
+					);
+					$status_slug = (string) ( $project_row['status'] ?? '' );
+					?>
+					<tr>
+						<td>
+							<a href="<?php echo esc_url( $edit_url ); ?>">
+								<?php echo esc_html( (string) ( $project_row['name'] ?? '' ) ); ?>
+							</a>
+						</td>
+						<td><?php echo esc_html( $statuses[ $status_slug ] ?? $status_slug ); ?></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	<?php endif; ?>
+	<p>
+		<a class="button" href="<?php echo esc_url( $new_project_url ); ?>">
+			<?php esc_html_e( 'Add project for this client', 'wp-bizwit' ); ?>
+		</a>
+	</p>
+	<?php
+endif;

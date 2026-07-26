@@ -12,6 +12,7 @@ use WP_BizWit\Admin\Notices;
 use WP_BizWit\Admin\Tables\Clients_Table;
 use WP_BizWit\Localization\Regions;
 use WP_BizWit\Repositories\Client_Repository;
+use WP_BizWit\Repositories\Project_Repository;
 use WP_BizWit\Support\Capabilities;
 use WP_BizWit\Support\Money;
 use WP_BizWit\Support\Settings;
@@ -43,12 +44,21 @@ class Clients_Screen extends Screen {
 	private Client_Repository $clients;
 
 	/**
+	 * Projects repository for the related list on the edit screen.
+	 *
+	 * @var Project_Repository
+	 */
+	private Project_Repository $projects;
+
+	/**
 	 * Set up the screen.
 	 *
-	 * @param Client_Repository $clients Client repository.
+	 * @param Client_Repository  $clients  Client repository.
+	 * @param Project_Repository $projects Project repository.
 	 */
-	public function __construct( Client_Repository $clients ) {
-		$this->clients = $clients;
+	public function __construct( Client_Repository $clients, Project_Repository $projects ) {
+		$this->clients  = $clients;
+		$this->projects = $projects;
 	}
 
 	/**
@@ -157,27 +167,41 @@ class Clients_Screen extends Screen {
 			$client = $record;
 		}
 
-		$region = Regions::current();
+		$region   = Regions::current();
+		$projects = array();
+
+		if ( 'edit' === $action && isset( $client['id'] ) ) {
+			$projects = $this->projects->query(
+				array(
+					'client_id' => (int) $client['id'],
+					'per_page'  => 100,
+					'page'      => 1,
+					'orderby'   => 'name',
+					'order'     => 'ASC',
+				)
+			)['items'];
+		}
 
 		$this->view(
 			'clients-form',
 			array(
-				'client'      => $client,
-				'meta'        => Client_Repository::meta( $client ),
-				'is_edit'     => 'edit' === $action,
-				'region'      => $region,
-				'handles_tax' => Settings::handles_tax(),
-				'meta_fields' => $region->meta_fields(),
-				'provinces'   => $region->provinces(),
-				'types'       => Client_Repository::types(),
-				'statuses'    => Client_Repository::statuses(),
-				'currencies'  => Money::currencies(),
-				'defaults'    => array(
+				'client'          => $client,
+				'meta'            => Client_Repository::meta( $client ),
+				'is_edit'         => 'edit' === $action,
+				'region'          => $region,
+				'handles_tax'     => Settings::handles_tax(),
+				'meta_fields'     => $region->meta_fields(),
+				'provinces'       => $region->provinces(),
+				'types'           => Client_Repository::types(),
+				'statuses'        => Client_Repository::statuses(),
+				'currencies'      => Money::currencies(),
+				'client_projects' => $projects,
+				'defaults'        => array(
 					'currency'           => Settings::currency(),
 					'payment_terms_days' => (int) Settings::get( 'payment_terms_days', 30 ),
 				),
-				'nonce_field' => self::FORM_NONCE,
-				'list_url'    => $this->page_url( self::SLUG ),
+				'nonce_field'     => self::FORM_NONCE,
+				'list_url'        => $this->page_url( self::SLUG ),
 			)
 		);
 	}

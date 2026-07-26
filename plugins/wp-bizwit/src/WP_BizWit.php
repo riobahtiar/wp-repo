@@ -17,6 +17,7 @@ use WP_BizWit\Admin\Screens\Projects_Screen;
 use WP_BizWit\Admin\Screens\Settings_Screen;
 use WP_BizWit\Database\Installer;
 use WP_BizWit\Repositories\Client_Repository;
+use WP_BizWit\Repositories\Project_Repository;
 use WP_BizWit\Repositories\Stats_Repository;
 use WP_BizWit\Rest\Controllers\Health_Controller;
 
@@ -27,7 +28,7 @@ class WP_BizWit {
 
 
 	const PLUGIN_NAME    = 'wp-bizwit';
-	const PLUGIN_VERSION = '0.3.0';
+	const PLUGIN_VERSION = '0.4.0';
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -92,16 +93,17 @@ class WP_BizWit {
 		// specific entries (dashboard, …) are selected inside Assets::enqueue.
 		$this->loader->add_action( 'admin_enqueue_scripts', new Assets(), 'enqueue', 110 );
 
-		$clients = new Client_Repository();
-		$stats   = new Stats_Repository();
+		$clients  = new Client_Repository();
+		$projects = new Project_Repository();
+		$stats    = new Stats_Repository();
 
 		// Screens are handed their dependencies here rather than reaching for
 		// globals internally. That is what keeps them testable in isolation and
 		// keeps the wiring for the whole admin area visible in one place.
 		$menu = new Menu(
 			new Dashboard_Screen( $stats ),
-			new Clients_Screen( $clients ),
-			new Projects_Screen(),
+			new Clients_Screen( $clients, $projects ),
+			new Projects_Screen( $projects, $clients ),
 			new Invoices_Screen(),
 			new Payments_Screen(),
 			new Settings_Screen()
