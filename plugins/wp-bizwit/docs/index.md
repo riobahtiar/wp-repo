@@ -22,11 +22,13 @@ PHP: `composer install` inside this package. Details in [development.md](develop
 |----------|----------------|
 | [indonesia.md](indonesia.md) | The Indonesian profile: NPWP, NIB, PKP, PPN, PPh 23, bea meterai, terbilang, document numbering, and the glossary |
 | [culture.md](culture.md) | Designing for Indonesian users: names, tone, WhatsApp, documents, the Lebaran calendar, payment behaviour |
-| [data-model.md](data-model.md) | The seven database tables, why custom tables, and the rules the schema depends on |
+| [data-model.md](data-model.md) | The database tables, why custom tables, and the rules the schema depends on |
 | [development.md](development.md) | Build, lint, test, translation workflow, monorepo npm, dependency policy, tooling traps |
 | [i18n.md](i18n.md) | **English source + id_ID catalogue** — WordPress i18n rules, locale switching, domain terms |
 | [frontend-architecture.md](frontend-architecture.md) | Vue 3 + Vite + Tailwind decisions, performance budgets, REST conventions, wordpress.org packaging — **read before any interactive UI work** |
 | [performance.md](performance.md) | Measured gzip baselines, re-measure commands, soft bundle gate |
+| [upgrade.md](upgrade.md) | Schema freeze (1.0+), upgrade path, uninstall |
+| [security-self-review.md](security-self-review.md) | 1.0 security checklist sign-off |
 
 ## The two things that shape every decision here
 
@@ -72,10 +74,10 @@ paperwork, so it is never done.
 
 ## Current state
 
-**Built** — all seven tables with versioned migrations, capabilities and roles,
-admin menu, dashboard, full Clients CRUD, settings, the regional profile layer,
-and a complete Indonesian translation.
+**1.0.0 GA** — nine custom tables (including activity), capabilities and roles,
+dashboard (checklist, ageing, activity), full Clients / Projects / Invoices /
+Payments, document layout builder, settings, regional profile layer, Indonesian
+translation, and a frozen schema for additive migrations only.
 
-**Placeholder** — Projects, Invoices and Payments screens show an honest "not
-built yet" panel. Their tables and the Indonesian rules that govern them already
-exist, so no migration is needed when the interfaces land.
+See [upgrade.md](upgrade.md), [security-self-review.md](security-self-review.md)
+and [plans/PROGRESS.md](../plans/PROGRESS.md).

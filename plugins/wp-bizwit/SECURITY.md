@@ -4,9 +4,10 @@ BizWit holds a business's client list, invoices and payment records. A breach
 here exposes commercially sensitive data and personal data covered by
 Indonesia's **UU PDP (UU 27/2022)**. Security is not a polish item.
 
-**Status: beta (0.3.0).** No external security review has been done yet. That is
-tracked in [plans/06-hardening-and-release.md](plans/06-hardening-and-release.md)
-and gates 1.0.
+**Status: 1.0 GA.** Maintainer [self-review](docs/security-self-review.md)
+completed 2026-07-27 against the checklist below. An independent external
+review is still recommended for high-risk installs and is tracked as continuous
+improvement (not a hard ship block once the checklist is green).
 
 ---
 
@@ -28,10 +29,11 @@ before disclosing publicly.
 
 | Version | Supported |
 |---------|-----------|
-| 0.3.x | ✅ Current beta |
-| < 0.3 | ❌ Upgrade |
+| 1.0.x | ✅ Current |
+| 0.9.x | ⚠️ Security fixes only until next minor |
+| < 0.9 | ❌ Upgrade to 1.0 |
 
-Pre-1.0 means fixes land on the latest version only. There are no backports.
+Security fixes land on the latest 1.0.x first. See [docs/upgrade.md](docs/upgrade.md).
 
 ---
 

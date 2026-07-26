@@ -21,7 +21,7 @@ msgstr "WP BizWit"
 #. Description of the plugin
 #: wp-bizwit.php
 msgid "Business administration for Indonesian companies and UMKM: clients, projects, invoices and receipts (kwitansi) with NPWP, NIB, PKP/PPN, PPh 23, terbilang and stamp duty. Record-keeping only — never processes payments."
-msgstr ""
+msgstr "Administrasi bisnis untuk perusahaan dan UMKM Indonesia: klien, proyek, faktur dan kwitansi dengan NPWP, NIB, PKP/PPN, PPh 23, terbilang dan bea meterai. Hanya pencatatan — tidak memproses pembayaran."
 
 #. translators: %s: Vite entry name (e.g. dashboard).
 #: src/Admin/Assets.php:537
@@ -176,7 +176,7 @@ msgstr "Tipe"
 #: src/Admin/Tables/Projects_Table.php:76
 #: src/Admin/Views/clients-form.php:281
 #: src/Admin/Views/clients-form.php:383
-#: src/Admin/Views/dashboard.php:157
+#: src/Admin/Views/dashboard.php:159
 #: src/Admin/Views/invoices-form.php:221
 #: src/Admin/Views/projects-form.php:148
 #: src/Documents/Merge_Fields.php:39
@@ -254,7 +254,7 @@ msgstr "%s yang lalu"
 #: src/Admin/Tables/Invoices_Table.php:77
 #: src/Admin/Tables/Payments_Table.php:69
 #: src/Admin/Tables/Projects_Table.php:75
-#: src/Admin/Views/dashboard.php:156
+#: src/Admin/Views/dashboard.php:158
 #: src/Admin/Views/invoices-form.php:190
 #: src/Admin/Views/projects-form.php:115
 msgid "Client"
@@ -549,7 +549,7 @@ msgstr "Tahap penagihan berurutan yang jumlahnya sama dengan anggaran"
 msgid "Each row is one stage (uang muka, termin 1, retensi, …). Amounts use the project currency. Empty rows are ignored."
 msgstr "Setiap baris adalah satu tahap (uang muka, termin 1, retensi, …). Jumlah memakai mata uang proyek. Baris kosong diabaikan."
 
-#: src/Admin/Views/dashboard.php:116
+#: src/Admin/Views/dashboard.php:117
 #: src/Admin/Views/invoices-print.php:251
 #: src/Admin/Views/projects-form.php:286
 #: src/Documents/Document_Blocks.php:272
@@ -1445,7 +1445,7 @@ msgid "That invoice no longer exists."
 msgstr "Faktur itu sudah tidak ada."
 
 #: src/Admin/Tables/Invoices_Table.php:76
-#: src/Admin/Views/dashboard.php:155
+#: src/Admin/Views/dashboard.php:157
 msgid "Number"
 msgstr "Nomor"
 
@@ -1462,7 +1462,7 @@ msgid "Due date"
 msgstr "Jatuh tempo"
 
 #: src/Admin/Tables/Invoices_Table.php:81
-#: src/Admin/Views/dashboard.php:158
+#: src/Admin/Views/dashboard.php:160
 #: src/Admin/Views/invoices-form.php:426
 #: src/Admin/Views/invoices-print.php:288
 #: src/Documents/Document_Blocks.php:338
@@ -2409,35 +2409,35 @@ msgstr "Umur piutang"
 msgid "Unpaid invoice balances by how long past the due date."
 msgstr "Saldo faktur belum lunas berdasarkan lama lewat jatuh tempo."
 
-#: src/Admin/Views/dashboard.php:115
+#: src/Admin/Views/dashboard.php:116
 msgid "Bucket"
 msgstr "Kelompok"
 
-#: src/Admin/Views/dashboard.php:121
+#: src/Admin/Views/dashboard.php:122
 msgid "Current (not overdue)"
 msgstr "Berjalan (belum lewat tempo)"
 
-#: src/Admin/Views/dashboard.php:125
+#: src/Admin/Views/dashboard.php:126
 msgid "1–30 days overdue"
 msgstr "1–30 hari lewat tempo"
 
-#: src/Admin/Views/dashboard.php:129
+#: src/Admin/Views/dashboard.php:130
 msgid "31–60 days overdue"
 msgstr "31–60 hari lewat tempo"
 
-#: src/Admin/Views/dashboard.php:133
+#: src/Admin/Views/dashboard.php:134
 msgid "61+ days overdue"
 msgstr "61+ hari lewat tempo"
 
-#: src/Admin/Views/dashboard.php:139
+#: src/Admin/Views/dashboard.php:140
 msgid "Total outstanding"
 msgstr "Total tertunggak"
 
-#: src/Admin/Views/dashboard.php:151
+#: src/Admin/Views/dashboard.php:152
 msgid "Recent invoices"
 msgstr "Faktur terbaru"
 
-#: src/Admin/Views/dashboard.php:178
+#: src/Admin/Views/dashboard.php:180
 msgid "View all invoices"
 msgstr "Lihat semua faktur"
 
@@ -2703,11 +2703,11 @@ msgstr "Reset bawaan"
 msgid "Bank transfer details"
 msgstr "Detail transfer bank"
 
-#: src/Admin/Views/dashboard.php:186
+#: src/Admin/Views/dashboard.php:188
 msgid "Recent activity"
 msgstr "Aktivitas terbaru"
 
-#: src/Admin/Views/dashboard.php:188
+#: src/Admin/Views/dashboard.php:190
 msgid "Who changed clients, projects, invoices and payments — kept for one year."
 msgstr "Siapa mengubah klien, proyek, faktur, dan pembayaran — disimpan satu tahun."
 
@@ -2788,3 +2788,11 @@ msgstr "Pembayaran %s diperbarui"
 #, php-format
 msgid "Payment #%d deleted"
 msgstr "Pembayaran #%d dihapus"
+
+#: src/Admin/Views/dashboard.php:113
+msgid "Receivables ageing by overdue bucket"
+msgstr "Umur piutang menurut bucket keterlambatan"
+
+#: src/Admin/Views/dashboard.php:154
+msgid "Recently updated invoices"
+msgstr "Faktur yang baru diperbarui"

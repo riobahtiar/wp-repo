@@ -104,12 +104,13 @@ $currency        = (string) ( $data['ageing_currency'] ?? 'IDR' );
 <?php endif; ?>
 
 <?php if ( null !== $ageing ) : ?>
-	<div class="wp-bizwit-panel">
-		<h2><?php esc_html_e( 'Receivables ageing', 'wp-bizwit' ); ?></h2>
-		<p class="description">
+	<div class="wp-bizwit-panel" role="region" aria-labelledby="wp-bizwit-ageing-title">
+		<h2 id="wp-bizwit-ageing-title"><?php esc_html_e( 'Receivables ageing', 'wp-bizwit' ); ?></h2>
+		<p class="description" id="wp-bizwit-ageing-desc">
 			<?php esc_html_e( 'Unpaid invoice balances by how long past the due date.', 'wp-bizwit' ); ?>
 		</p>
-		<table class="widefat striped wp-bizwit-ageing">
+		<table class="widefat striped wp-bizwit-ageing" aria-describedby="wp-bizwit-ageing-desc">
+			<caption class="screen-reader-text"><?php esc_html_e( 'Receivables ageing by overdue bucket', 'wp-bizwit' ); ?></caption>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Bucket', 'wp-bizwit' ); ?></th>
@@ -147,9 +148,10 @@ $currency        = (string) ( $data['ageing_currency'] ?? 'IDR' );
 <?php if ( array() !== $recent || array() !== $activity ) : ?>
 	<div class="wp-bizwit-dashboard-cols">
 		<?php if ( array() !== $recent ) : ?>
-			<div class="wp-bizwit-panel">
-				<h2><?php esc_html_e( 'Recent invoices', 'wp-bizwit' ); ?></h2>
+			<div class="wp-bizwit-panel" role="region" aria-labelledby="wp-bizwit-recent-inv-title">
+				<h2 id="wp-bizwit-recent-inv-title"><?php esc_html_e( 'Recent invoices', 'wp-bizwit' ); ?></h2>
 				<table class="widefat striped">
+					<caption class="screen-reader-text"><?php esc_html_e( 'Recently updated invoices', 'wp-bizwit' ); ?></caption>
 					<thead>
 						<tr>
 							<th scope="col"><?php esc_html_e( 'Number', 'wp-bizwit' ); ?></th>
@@ -182,16 +184,18 @@ $currency        = (string) ( $data['ageing_currency'] ?? 'IDR' );
 		<?php endif; ?>
 
 		<?php if ( array() !== $activity ) : ?>
-			<div class="wp-bizwit-panel">
-				<h2><?php esc_html_e( 'Recent activity', 'wp-bizwit' ); ?></h2>
-				<p class="description">
+			<div class="wp-bizwit-panel" role="region" aria-labelledby="wp-bizwit-activity-title">
+				<h2 id="wp-bizwit-activity-title"><?php esc_html_e( 'Recent activity', 'wp-bizwit' ); ?></h2>
+				<p class="description" id="wp-bizwit-activity-desc">
 					<?php esc_html_e( 'Who changed clients, projects, invoices and payments — kept for one year.', 'wp-bizwit' ); ?>
 				</p>
-				<ul class="wp-bizwit-activity">
+				<ul class="wp-bizwit-activity" aria-describedby="wp-bizwit-activity-desc">
 					<?php foreach ( $activity as $row ) : ?>
 						<li>
 							<span class="wp-bizwit-activity__summary"><?php echo esc_html( (string) $row['summary'] ); ?></span>
-							<span class="wp-bizwit-activity__when muted"><?php echo esc_html( (string) $row['when'] ); ?></span>
+							<span class="wp-bizwit-activity__when muted">
+								<time><?php echo esc_html( (string) $row['when'] ); ?></time>
+							</span>
 						</li>
 					<?php endforeach; ?>
 				</ul>

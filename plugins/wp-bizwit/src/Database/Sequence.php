@@ -100,6 +100,9 @@ class Sequence {
 
 		$table = Schema::table( Schema::SEQUENCES );
 		$value = max( 1, $value );
+		// next_value stores the *last allocated* number; next() returns last+1.
+		// So to make the next allocation equal $value, persist $value - 1.
+		$last = $value - 1;
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$result = $wpdb->query(
@@ -108,8 +111,8 @@ class Sequence {
 				VALUES (%s, %d)
 				ON DUPLICATE KEY UPDATE next_value = %d",
 				$key,
-				$value,
-				$value
+				$last,
+				$last
 			)
 		);
 		// phpcs:enable

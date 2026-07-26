@@ -3,8 +3,9 @@
 What is actually true of the codebase right now. Update this in the same commit
 as the work it describes — a tracker that lags is worse than none.
 
-**Current version: 0.9.0 — RC.** Pre-1.0: external security review and formal
-a11y AA still open; schema may still change until 1.0 freeze.
+**Current version: 1.0.0 — GA.** Schema is frozen for additive-only changes.
+External security review remains recommended for high-risk installs
+([docs/security-self-review.md](../docs/security-self-review.md)).
 
 **Git / tooling:** package lives in monorepo `wp-content/` (`wp-repo`). JS:
 `npm install` + `npm run -w wp-bizwit …` from monorepo root. See package
@@ -16,16 +17,15 @@ a11y AA still open; schema may still change until 1.0 freeze.
 
 | Area | Status | Notes |
 |------|--------|-------|
-| Database schema (9 tables) | ✅ Done | + `bizwit_activity` (1.5.0) |
+| Database schema (9 tables) | ✅ Done | + `bizwit_activity` (1.5.0) · freeze at 1.0 |
 | Versioned migrations | ✅ Done | `Installer` `1.5.0` |
-| **Audit trail** | ✅ Done | Activity log + dashboard · [06](06-hardening-and-release.md) |
 | Capabilities and roles | ✅ Done | + template CPT caps |
 | Regional profile layer | ✅ Done | Indonesia + generic |
 | Indonesian translation | ✅ Done | Catalogue kept in step with features |
 | Money handling | ✅ Done | Integer minor units, terbilang |
 | Atomic document numbering | ✅ Done | Invoice + receipt sequences |
 | Settings screen | ✅ Done | Progressive disclosure, tax optional |
-| **Dashboard** | ✅ Done | Checklist, tiles, ageing, recent, quick actions |
+| **Dashboard** | ✅ Done | Checklist, tiles, ageing, activity, recent |
 | **Clients** | ✅ Done | Full CRUD + empty state |
 | Client contacts | ⬜ Not started | Table exists, no UI |
 | **Projects** | ✅ Done | Termin, retensi · [01](01-projects.md) |
@@ -34,7 +34,8 @@ a11y AA still open; schema may still change until 1.0 freeze.
 | Printable documents | ✅ Done | Layout builder + kwitansi HTML |
 | **Document templates** | ✅ Done | Vue A4 layout builder |
 | **Onboarding** | ✅ Done | Dismissible checklist · [04](04-ux-and-onboarding.md) |
-| Import / export | 🔒 Deferred | [05](05-import-export.md) |
+| **Audit trail** | ✅ Done | Activity log · [06](06-hardening-and-release.md) |
+| Import / export | 🔒 Deferred | [05](05-import-export.md) — unblocked post-1.0 |
 | Reports | 🟡 Partial | Ageing on dashboard only |
 | REST API | 🟡 Health only | |
 | Frontend (Vue/Vite/Tailwind) | ✅ Foundation | Template builder + dashboard pilot |
@@ -47,18 +48,18 @@ Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferre
 |-------|-------|
 | PHPCS | ✅ 0 errors in plugin code |
 | PHPStan level 6 | ✅ 0 errors |
-| PHPUnit | 🟡 + activity trail & stats cache bust (wp-env) |
+| PHPUnit | ✅ Repos, sequence, upgrade, screen auth, mass assignment, activity |
 | Vitest | 🟡 `formatMoney` only |
 | Bundle budgets | ✅ Soft gate |
-| Accessibility | 🟡 Skip link, notice focus, dirty forms, focus-visible; formal AA later |
-| Security review | 🟡 Documented in SECURITY.md |
+| Accessibility | 🟡 Skip link, landmarks, captions, focus-visible; formal AA optional later |
+| Security review | ✅ Self-review closed · external optional |
 | Browser testing | ⬜ Manual smoke on local |
+| Schema freeze | ✅ Additive-only from 1.0 · [upgrade.md](../docs/upgrade.md) |
 
-## Route to 1.0
+## Route past 1.0
 
-1. ~~0.3–0.6 — Foundation through payments + templates~~ ✅
-2. ~~0.7.0 — Onboarding, dashboard, empty states~~ ✅
-3. ~~0.8.0 — Test coverage, a11y hardening~~ ✅
-4. ~~`0.9.0` — Security + performance RC~~ ✅ (audit trail, stats cache, index; external review still open)
-5. `1.0.0` — GA (freeze schema, external security review, a11y AA, upgrade test)
-6. post-1.0 — Import / export
+1. ~~0.3–0.9 — Foundation through RC~~ ✅
+2. ~~1.0.0 — GA~~ ✅
+3. post-1.0 — Import / export · [05](05-import-export.md)
+4. post-1.0 — External security review (enterprise)
+5. post-1.0 — Client contacts UI, richer reports

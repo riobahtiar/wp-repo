@@ -149,12 +149,11 @@ $(command -v wp) i18n make-mo languages/ && $(command -v wp) i18n make-php langu
 
 ## Status
 
-**0.6.0 — beta.** Pre-1.0 on purpose: onboarding/reports are thin and the schema
-may still change. Do not run a real business on this yet.
+**1.0.0 — GA.** Clients, projects, invoices, payments (kwitansi), document
+templates, onboarding, audit trail and Indonesian defaults are in place. The
+schema is frozen for additive-only changes — see [docs/upgrade.md](docs/upgrade.md).
 
-Clients, projects, invoices and payments (with printable kwitansi) are
-implemented. Import and export are deliberately deferred until after 1.0 — see
-[plans/05-import-export.md](plans/05-import-export.md).
+Import/export is still deferred: [plans/05-import-export.md](plans/05-import-export.md).
 
 Live status: [plans/PROGRESS.md](plans/PROGRESS.md).
 

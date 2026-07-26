@@ -11,6 +11,29 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-07-27
+
+First stable release. Schema freeze (additive migrations only). Security
+self-review closed; dashboard performance tooling and expanded tests.
+
+### Added
+- **Security self-review** document (`docs/security-self-review.md`) against
+  SECURITY.md checklist.
+- **Upgrade guide** (`docs/upgrade.md`) and schema stability promise.
+- **PHPUnit:** `SequenceTest`, `InstallerUpgradeTest`, `ScreenAuthTest`,
+  `MassAssignmentTest` (orderby whitelist, caps, atomic numbering).
+- **Dashboard benchmark** CLI: `bin/benchmark-dashboard.php` (cold/warm timings).
+- A11y: region landmarks and table captions on dashboard panels.
+
+### Changed
+- Version **1.0.0**. Pre-1.0 “schema may change freely” note retired; see
+  upgrade guide for additive-only policy.
+- SECURITY.md status: 1.0 GA; support matrix updated.
+
+### Fixed
+- Indonesian catalogue: plugin description and remaining activity/dashboard
+  strings.
+
 ## [0.9.0] — 2026-07-27
 
 Security and performance RC: audit trail, dashboard cache, index for ageing.
