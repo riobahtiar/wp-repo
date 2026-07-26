@@ -48,8 +48,8 @@ $field = static function ( string $key, string $fallback = '' ) use ( $project )
 
 $currency = $field( 'currency', (string) ( $defaults['currency'] ?? 'IDR' ) );
 $billing  = $field( 'billing_type', (string) ( $defaults['billing'] ?? Project_Repository::BILLING_FIXED ) );
-$rate     = Money::to_decimal( (int) ( $project['rate_minor'] ?? 0 ), $currency );
-$budget   = Money::to_decimal( (int) ( $project['budget_minor'] ?? 0 ), $currency );
+$rate     = Money::to_input( (int) ( $project['rate_minor'] ?? 0 ), $currency );
+$budget   = Money::to_input( (int) ( $project['budget_minor'] ?? 0 ), $currency );
 $retensi  = $field( 'retensi_percent', '0' );
 // Trim trailing zeros for a cleaner input.
 $retensi = rtrim( rtrim( number_format( (float) $retensi, 4, '.', '' ), '0' ), '.' );
@@ -57,18 +57,20 @@ if ( '' === $retensi ) {
 	$retensi = '0';
 }
 
-$show_termin = ( Project_Repository::BILLING_TERMIN === $billing ) || array() !== $terms;
-
-// Ensure at least three blank rows beyond existing terms for quick entry.
-$blank_rows = 3;
-$form_terms = $terms;
-for ( $i = 0; $i < $blank_rows; $i++ ) {
-	$form_terms[] = array(
-		'name'         => '',
-		'amount_minor' => 0,
-		'notes'        => '',
-	);
+$show_termin   = ( Project_Repository::BILLING_TERMIN === $billing ) || array() !== $terms;
+$show_rate     = in_array( $billing, array( Project_Repository::BILLING_HOURLY, Project_Repository::BILLING_RETAINER ), true );
+$money_example = Money::to_input( 1500000, $currency );
+if ( '' === $money_example ) {
+	$money_example = '1.500.000';
 }
+
+// One blank row for new entry (existing stages already listed).
+$form_terms   = $terms;
+$form_terms[] = array(
+	'name'         => '',
+	'amount_minor' => 0,
+	'notes'        => '',
+);
 ?>
 
 <h1 class="wp-heading-inline">
@@ -176,11 +178,13 @@ for ( $i = 0; $i < $blank_rows; $i++ ) {
 					</select>
 				</td>
 			</tr>
-			<tr>
+			<tr id="wp-bizwit-rate-row" <?php echo $show_rate ? '' : 'hidden'; ?>>
 				<th scope="row"><label for="wp-bizwit-project-rate"><?php esc_html_e( 'Rate', 'wp-bizwit' ); ?></label></th>
 				<td>
-					<input type="text" id="wp-bizwit-project-rate" name="rate" class="regular-text"
-						inputmode="decimal" value="<?php echo esc_attr( '0' === $rate ? '' : $rate ); ?>" />
+					<input type="text" id="wp-bizwit-project-rate" name="rate" class="wp-bizwit-money-input"
+						inputmode="decimal" autocomplete="off"
+						placeholder="<?php echo esc_attr( $money_example ); ?>"
+						value="<?php echo esc_attr( $rate ); ?>" />
 					<p class="description"><?php esc_html_e( 'Hourly or retainer rate. Leave blank when not applicable.', 'wp-bizwit' ); ?></p>
 				</td>
 			</tr>
@@ -189,9 +193,27 @@ for ( $i = 0; $i < $blank_rows; $i++ ) {
 					<label for="wp-bizwit-project-budget"><?php echo esc_html( $region->field_label( 'budget', __( 'Budget', 'wp-bizwit' ) ) ); ?></label>
 				</th>
 				<td>
-					<input type="text" id="wp-bizwit-project-budget" name="budget" class="regular-text"
-						inputmode="decimal" value="<?php echo esc_attr( '0' === $budget ? '' : $budget ); ?>" />
-					<p class="description"><?php echo esc_html( $region->field_description( 'budget', __( 'Contract or agreed total for this project.', 'wp-bizwit' ) ) ); ?></p>
+					<input type="text" id="wp-bizwit-project-budget" name="budget" class="wp-bizwit-money-input"
+						inputmode="decimal" autocomplete="off"
+						placeholder="<?php echo esc_attr( $money_example ); ?>"
+						value="<?php echo esc_attr( $budget ); ?>" />
+					<p class="description">
+						<?php
+						echo esc_html(
+							$region->field_description(
+								'budget',
+								__( 'Contract or agreed total for this project.', 'wp-bizwit' )
+							)
+						);
+						?>
+						<?php
+						printf(
+							/* translators: %s: example amount with grouping, e.g. 1.500.000 */
+							esc_html__( ' Example: %s', 'wp-bizwit' ),
+							esc_html( $money_example )
+						);
+						?>
+					</p>
 				</td>
 			</tr>
 			<tr>
@@ -226,57 +248,70 @@ for ( $i = 0; $i < $blank_rows; $i++ ) {
 			<span class="wp-bizwit-section__title"><?php echo esc_html( $region->field_label( 'termin', __( 'Termin stages', 'wp-bizwit' ) ) ); ?></span>
 			<span class="wp-bizwit-section__hint"><?php esc_html_e( 'Ordered billing stages that sum to the budget', 'wp-bizwit' ); ?></span>
 		</summary>
-		<table class="form-table" role="presentation">
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Stages', 'wp-bizwit' ); ?></th>
-				<td>
-					<table class="widefat striped" style="max-width: 48rem;">
-						<thead>
-							<tr>
-								<th scope="col"><?php esc_html_e( 'Name', 'wp-bizwit' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'Amount', 'wp-bizwit' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'Notes', 'wp-bizwit' ); ?></th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php foreach ( $form_terms as $index => $term_row ) : ?>
-								<?php
-								$term_amount = Money::to_decimal( (int) ( $term_row['amount_minor'] ?? 0 ), $currency );
-								$term_amount = '0' === $term_amount ? '' : $term_amount;
-								?>
-								<tr>
-									<td>
-										<input type="text" name="terms[<?php echo esc_attr( (string) $index ); ?>][name]" class="regular-text"
-											value="<?php echo esc_attr( (string) ( $term_row['name'] ?? '' ) ); ?>"
-											placeholder="<?php esc_attr_e( 'e.g. Termin 1 — DP', 'wp-bizwit' ); ?>" />
-									</td>
-									<td>
-										<input type="text" name="terms[<?php echo esc_attr( (string) $index ); ?>][amount]" class="regular-text"
-											inputmode="decimal" value="<?php echo esc_attr( $term_amount ); ?>" />
-									</td>
-									<td>
-										<input type="text" name="terms[<?php echo esc_attr( (string) $index ); ?>][notes]" class="regular-text"
-											value="<?php echo esc_attr( (string) ( $term_row['notes'] ?? '' ) ); ?>" />
-									</td>
-								</tr>
-							<?php endforeach; ?>
-						</tbody>
-					</table>
-					<p class="description"><?php esc_html_e( 'Empty rows are ignored. Leave all empty if you will add stages later.', 'wp-bizwit' ); ?></p>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Budget check', 'wp-bizwit' ); ?></th>
-				<td>
-					<label for="wp-bizwit-terms-override">
-						<input type="checkbox" id="wp-bizwit-terms-override" name="terms_sum_override" value="1"
-							<?php checked( ! empty( $project['terms_sum_override'] ) ); ?> />
-						<?php esc_html_e( 'Allow termin total to differ from the project budget', 'wp-bizwit' ); ?>
-					</label>
-					<p class="description"><?php esc_html_e( 'When unchecked, the stage amounts must add up to the budget.', 'wp-bizwit' ); ?></p>
-				</td>
-			</tr>
-		</table>
+
+		<div class="wp-bizwit-termin-panel">
+			<p class="description wp-bizwit-termin-lede">
+				<?php esc_html_e( 'Each row is one stage (uang muka, termin 1, retensi, …). Amounts use the project currency. Empty rows are ignored.', 'wp-bizwit' ); ?>
+			</p>
+
+			<table class="wp-bizwit-terms-table widefat striped">
+				<thead>
+					<tr>
+						<th scope="col" class="wp-bizwit-terms-table__num">#</th>
+						<th scope="col" class="wp-bizwit-terms-table__name"><?php esc_html_e( 'Name', 'wp-bizwit' ); ?></th>
+						<th scope="col" class="wp-bizwit-terms-table__amount"><?php esc_html_e( 'Amount', 'wp-bizwit' ); ?></th>
+						<th scope="col" class="wp-bizwit-terms-table__notes"><?php esc_html_e( 'Notes', 'wp-bizwit' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $form_terms as $index => $term_row ) : ?>
+						<?php
+						$term_amount = Money::to_input( (int) ( $term_row['amount_minor'] ?? 0 ), $currency );
+						$is_blank    = '' === (string) ( $term_row['name'] ?? '' ) && 0 === (int) ( $term_row['amount_minor'] ?? 0 );
+						?>
+						<tr class="<?php echo $is_blank ? 'wp-bizwit-terms-table__blank' : ''; ?>">
+							<td class="wp-bizwit-terms-table__num">
+								<span class="wp-bizwit-terms-table__index"><?php echo esc_html( (string) ( (int) $index + 1 ) ); ?></span>
+							</td>
+							<td class="wp-bizwit-terms-table__name">
+								<input type="text" name="terms[<?php echo esc_attr( (string) $index ); ?>][name]"
+									class="widefat"
+									value="<?php echo esc_attr( (string) ( $term_row['name'] ?? '' ) ); ?>"
+									placeholder="<?php esc_attr_e( 'e.g. Termin 1 — DP', 'wp-bizwit' ); ?>"
+									autocomplete="off" />
+							</td>
+							<td class="wp-bizwit-terms-table__amount">
+								<input type="text" name="terms[<?php echo esc_attr( (string) $index ); ?>][amount]"
+									class="wp-bizwit-money-input widefat"
+									inputmode="decimal" autocomplete="off"
+									placeholder="<?php echo esc_attr( $money_example ); ?>"
+									value="<?php echo esc_attr( $term_amount ); ?>" />
+							</td>
+							<td class="wp-bizwit-terms-table__notes">
+								<input type="text" name="terms[<?php echo esc_attr( (string) $index ); ?>][notes]"
+									class="widefat"
+									value="<?php echo esc_attr( (string) ( $term_row['notes'] ?? '' ) ); ?>"
+									placeholder="<?php esc_attr_e( 'Optional', 'wp-bizwit' ); ?>"
+									autocomplete="off" />
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+
+			<p class="description">
+				<?php esc_html_e( 'To add another stage, save and edit again, or fill the empty row at the bottom before saving.', 'wp-bizwit' ); ?>
+			</p>
+
+			<div class="wp-bizwit-termin-check">
+				<label for="wp-bizwit-terms-override">
+					<input type="checkbox" id="wp-bizwit-terms-override" name="terms_sum_override" value="1"
+						<?php checked( ! empty( $project['terms_sum_override'] ) ); ?> />
+					<?php esc_html_e( 'Allow termin total to differ from the project budget', 'wp-bizwit' ); ?>
+				</label>
+				<p class="description"><?php esc_html_e( 'When unchecked, the stage amounts must add up to the budget.', 'wp-bizwit' ); ?></p>
+			</div>
+		</div>
 	</details>
 
 	<details class="wp-bizwit-section">
@@ -301,14 +336,20 @@ for ( $i = 0; $i < $blank_rows; $i++ ) {
 (function () {
 	var select = document.getElementById('wp-bizwit-billing-type');
 	var section = document.getElementById('wp-bizwit-termin-section');
-	if (!select || !section) {
+	var rateRow = document.getElementById('wp-bizwit-rate-row');
+	if (!select) {
 		return;
 	}
 	function sync() {
-		if (select.value === 'termin') {
+		var v = select.value;
+		if (section && v === 'termin') {
 			section.open = true;
+		}
+		if (rateRow) {
+			rateRow.hidden = !(v === 'hourly' || v === 'retainer');
 		}
 	}
 	select.addEventListener('change', sync);
+	sync();
 })();
 </script>

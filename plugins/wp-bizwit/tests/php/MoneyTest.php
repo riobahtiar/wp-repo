@@ -78,6 +78,24 @@ class MoneyTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Form inputs show region-grouped amounts for IDR (not raw 1000000).
+	 */
+	public function test_to_input_groups_idr_for_forms(): void {
+		update_option(
+			Settings::OPTION,
+			array(
+				'region'   => 'id',
+				'currency' => 'IDR',
+			)
+		);
+		Regions::reset();
+
+		$this->assertSame( '', Money::to_input( 0, 'IDR' ) );
+		$this->assertSame( '1.500.000', Money::to_input( 1500000, 'IDR' ) );
+		$this->assertSame( 1500000, Money::to_minor( Money::to_input( 1500000, 'IDR' ), 'IDR' ) );
+	}
+
+	/**
 	 * Currencies without a minor unit are not divided by one hundred.
 	 *
 	 * IDR is treated as zero-decimal deliberately: sen has not circulated for

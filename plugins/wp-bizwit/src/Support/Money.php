@@ -117,7 +117,7 @@ class Money {
 	 * Convert integer minor units into a plain decimal string.
 	 *
 	 * Returns an unformatted string suitable for a form input value, not for
-	 * display. Use format() for display.
+	 * display. Use format() for display, or to_input() for locale-friendly fields.
 	 *
 	 * @param int    $minor    Amount in minor units.
 	 * @param string $currency ISO 4217 currency code.
@@ -132,6 +132,30 @@ class Money {
 		}
 
 		return number_format( $minor / ( 10 ** $decimals ), $decimals, '.', '' );
+	}
+
+	/**
+	 * Format minor units for a form input using the active region's separators.
+	 *
+	 * Indonesian users type and read `1.000.000`, not `1000000`. to_minor()
+	 * already accepts multi-separator grouping, so this is the round-trip pair.
+	 * Returns empty string for zero so placeholders stay visible.
+	 *
+	 * @param int    $minor    Amount in minor units.
+	 * @param string $currency ISO 4217 currency code.
+	 *
+	 * @return string Grouped amount without currency symbol, or ''.
+	 */
+	public static function to_input( int $minor, string $currency = 'USD' ): string {
+		if ( 0 === $minor ) {
+			return '';
+		}
+
+		$currency = strtoupper( $currency );
+		$decimals = self::decimals( $currency );
+		$value    = 0 === $decimals ? (float) $minor : $minor / ( 10 ** $decimals );
+
+		return Regions::current()->format_number( $value, $decimals );
 	}
 
 	/**

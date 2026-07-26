@@ -178,6 +178,92 @@
 		font-size: 13px;
 	}
 
+	/* Money fields: wide enough for 9-digit rupiah with grouping. */
+	.wp-bizwit-money-input {
+		width: 12em;
+		max-width: 100%;
+		font-variant-numeric: tabular-nums;
+	}
+
+	/*
+	 * Termin stages: full-width panel inside details — not nested in form-table
+	 * th/td, which squeezed columns and left a lonely "Stages" label.
+	 */
+	.wp-bizwit-termin-panel {
+		padding: 12px 16px 16px;
+		max-width: 100%;
+	}
+
+	.wp-bizwit-termin-lede {
+		margin: 0 0 12px;
+	}
+
+	.wp-bizwit-terms-table {
+		width: 100%;
+		max-width: 52rem;
+		border: 1px solid var(--wp-bizwit-border);
+		border-radius: 4px;
+		border-collapse: collapse;
+		table-layout: fixed;
+	}
+
+	.wp-bizwit-terms-table th,
+	.wp-bizwit-terms-table td {
+		padding: 10px 12px;
+		vertical-align: middle;
+	}
+
+	.wp-bizwit-terms-table thead th {
+		font-weight: 600;
+		background: #f6f7f7;
+		border-bottom: 1px solid var(--wp-bizwit-border);
+	}
+
+	.wp-bizwit-terms-table__num {
+		width: 2.5rem;
+		text-align: center;
+		color: var(--wp-bizwit-muted);
+	}
+
+	.wp-bizwit-terms-table__name {
+		width: 36%;
+	}
+
+	.wp-bizwit-terms-table__amount {
+		width: 28%;
+	}
+
+	.wp-bizwit-terms-table__notes {
+		width: auto;
+	}
+
+	.wp-bizwit-terms-table .wp-bizwit-money-input {
+		width: 100%;
+		max-width: none;
+	}
+
+	.wp-bizwit-terms-table__blank td {
+		background: #fcfcfc;
+	}
+
+	.wp-bizwit-terms-table__index {
+		font-size: 12px;
+		font-weight: 600;
+	}
+
+	.wp-bizwit-termin-check {
+		margin-top: 16px;
+		padding-top: 12px;
+		border-top: 1px solid var(--wp-bizwit-border);
+	}
+
+	.wp-bizwit-termin-check label {
+		display: inline-flex;
+		align-items: flex-start;
+		gap: 8px;
+		font-weight: 500;
+	}
+
 	.wp-bizwit-lede {
 		max-width: 900px;
 		font-size: 14px;
