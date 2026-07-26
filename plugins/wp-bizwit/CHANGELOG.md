@@ -11,6 +11,22 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.8.0] — 2026-07-27
+
+Test coverage expansion and accessibility hardening for admin screens.
+
+### Added
+- **PHPUnit:** `ClientRepositoryTest`, `LayoutTest`, `OnboardingTest`,
+  `StatsRepositoryTest` (ageing buckets, delete guards, layout sanitize/render).
+- **Skip link** to main BizWit content; notices use `role=alert|status` and
+  receive focus after PRG redirects.
+- **Dirty-form guard** (progressive enhancement) on product forms.
+- **Visible `:focus-visible`** styles for controls inside `.wp-bizwit`.
+- Empty states announce with `role="status"`.
+
+### Changed
+- Version **0.8.0**.
+
 ## [0.7.0] — 2026-07-27
 
 Onboarding and dashboard UX: setup checklist, empty states, receivables ageing.

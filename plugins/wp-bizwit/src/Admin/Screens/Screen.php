@@ -60,9 +60,15 @@ abstract class Screen {
 			);
 		}
 
+		// Skip link for keyboard users (visible on focus via admin CSS).
+		echo '<a class="wp-bizwit-skip-link screen-reader-text" href="#wp-bizwit-main">'
+			. esc_html__( 'Skip to BizWit content', 'wp-bizwit' )
+			. '</a>';
 		echo '<div class="wrap wp-bizwit">';
 		Notices::render();
+		echo '<main id="wp-bizwit-main" class="wp-bizwit-main" tabindex="-1">';
 		$this->render();
+		echo '</main>';
 		echo '</div>';
 	}
 

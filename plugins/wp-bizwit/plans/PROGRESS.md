@@ -3,9 +3,8 @@
 What is actually true of the codebase right now. Update this in the same commit
 as the work it describes — a tracker that lags is worse than none.
 
-**Current version: 0.7.0 — beta.** Pre-1.0 on purpose: accessibility and
-security hardening are incomplete, and the schema may still change. Do not run
-a real business on this yet.
+**Current version: 0.8.0 — beta.** Pre-1.0 on purpose: full a11y audit and
+external security review are still open, and the schema may still change.
 
 **Git / tooling:** package lives in monorepo `wp-content/` (`wp-repo`). JS:
 `npm install` + `npm run -w wp-bizwit …` from monorepo root. See package
@@ -47,10 +46,10 @@ Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferre
 |-------|-------|
 | PHPCS | ✅ 0 errors in plugin code |
 | PHPStan level 6 | ✅ 0 errors |
-| PHPUnit | 🟡 Core repos covered (wp-env) |
+| PHPUnit | 🟡 Expanded: clients, layout, onboarding, stats (wp-env) |
 | Vitest | 🟡 `formatMoney` only |
 | Bundle budgets | ✅ Soft gate |
-| Accessibility | 🟡 Improved labels/empty states; no formal AA audit |
+| Accessibility | 🟡 Skip link, notice focus, dirty forms, focus-visible; formal AA later |
 | Security review | 🟡 Documented in SECURITY.md |
 | Browser testing | ⬜ Manual smoke on local |
 
@@ -58,7 +57,7 @@ Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferre
 
 1. ~~0.3–0.6 — Foundation through payments + templates~~ ✅
 2. ~~0.7.0 — Onboarding, dashboard, empty states~~ ✅
-3. `0.8.0` — Test coverage, accessibility pass
+3. ~~0.8.0 — Test coverage, a11y hardening~~ ✅
 4. `0.9.0` — Security + performance RC
 5. `1.0.0` — GA
 6. post-1.0 — Import / export

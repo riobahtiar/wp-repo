@@ -520,6 +520,44 @@
 		margin: 0 var(--bw-space-1);
 	}
 
+	/* Accessibility */
+
+	.wp-bizwit-skip-link:focus {
+		position: fixed;
+		top: 8px;
+		left: 8px;
+		z-index: 100000;
+		clip: auto;
+		width: auto;
+		height: auto;
+		padding: 8px 12px;
+		background: #fff;
+		border: 2px solid var(--bw-color-primary);
+		border-radius: var(--bw-radius);
+		color: var(--bw-color-text);
+		text-decoration: none;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	}
+
+	.wp-bizwit-main:focus {
+		outline: none;
+	}
+
+	.wp-bizwit-main:focus-visible {
+		outline: 2px solid var(--bw-color-primary);
+		outline-offset: 2px;
+	}
+
+	/* Visible focus for primary controls inside our root */
+	.wp-bizwit a:focus-visible,
+	.wp-bizwit button:focus-visible,
+	.wp-bizwit input:focus-visible,
+	.wp-bizwit select:focus-visible,
+	.wp-bizwit textarea:focus-visible {
+		outline: 2px solid var(--bw-color-primary);
+		outline-offset: 2px;
+	}
+
 	/* Status pills */
 
 	.wp-bizwit-status {

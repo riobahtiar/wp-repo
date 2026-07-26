@@ -165,7 +165,7 @@ class Payments_Table extends WP_List_Table {
 	 * @return void
 	 */
 	public function no_items(): void {
-		echo '<div class="wp-bizwit-empty">';
+		echo '<div class="wp-bizwit-empty" role="status">';
 		echo '<p>' . esc_html__( 'No payments recorded yet. When money arrives in the bank, record it here against an invoice.', 'wp-bizwit' ) . '</p>';
 		if ( current_user_can( Capabilities::MANAGE_PAYMENTS ) ) {
 			$url = add_query_arg(

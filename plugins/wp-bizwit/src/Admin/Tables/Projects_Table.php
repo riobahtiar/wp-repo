@@ -204,7 +204,7 @@ class Projects_Table extends WP_List_Table {
 	 * @return void
 	 */
 	public function no_items(): void {
-		echo '<div class="wp-bizwit-empty">';
+		echo '<div class="wp-bizwit-empty" role="status">';
 		echo '<p>' . esc_html__( 'No projects yet. Record the work you are doing for a client so you can invoice from it later.', 'wp-bizwit' ) . '</p>';
 		if ( current_user_can( Capabilities::MANAGE_PROJECTS ) ) {
 			$url = add_query_arg(

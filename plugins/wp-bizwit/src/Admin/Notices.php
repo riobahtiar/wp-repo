@@ -73,9 +73,15 @@ class Notices {
 
 		delete_transient( $key );
 
+		$type = (string) $notice['type'];
+		// Errors and warnings are announced to assistive tech; success/info are polite status.
+		$role = in_array( $type, array( 'error', 'warning' ), true ) ? 'alert' : 'status';
+
 		printf(
-			'<div class="notice notice-%1$s is-dismissible"><p>%2$s</p></div>',
-			esc_attr( (string) $notice['type'] ),
+			'<div class="notice notice-%1$s is-dismissible" role="%2$s" aria-live="%3$s"><p id="wp-bizwit-admin-notice">%4$s</p></div>',
+			esc_attr( $type ),
+			esc_attr( $role ),
+			'error' === $type ? 'assertive' : 'polite',
 			esc_html( (string) $notice['message'] )
 		);
 	}

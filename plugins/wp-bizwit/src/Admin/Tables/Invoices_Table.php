@@ -223,7 +223,7 @@ class Invoices_Table extends WP_List_Table {
 	 * @return void
 	 */
 	public function no_items(): void {
-		echo '<div class="wp-bizwit-empty">';
+		echo '<div class="wp-bizwit-empty" role="status">';
 		echo '<p>' . esc_html__( 'No invoices yet. Issue an invoice for a client — tax fields only appear if your business is set up to charge them.', 'wp-bizwit' ) . '</p>';
 		if ( current_user_can( Capabilities::MANAGE_INVOICES ) ) {
 			$url = add_query_arg(

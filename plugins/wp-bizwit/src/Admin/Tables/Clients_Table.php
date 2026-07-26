@@ -183,7 +183,7 @@ class Clients_Table extends WP_List_Table {
 	 * @return void
 	 */
 	public function no_items(): void {
-		echo '<div class="wp-bizwit-empty">';
+		echo '<div class="wp-bizwit-empty" role="status">';
 		echo '<p>' . esc_html__( 'No clients yet. Add the people and companies you work with — a name is enough to start.', 'wp-bizwit' ) . '</p>';
 		if ( current_user_can( Capabilities::MANAGE_CLIENTS ) ) {
 			$url = add_query_arg(

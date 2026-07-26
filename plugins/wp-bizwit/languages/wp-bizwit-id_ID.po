@@ -2604,3 +2604,7 @@ msgstr "Terbitkan faktur pertama"
 #: src/Support/Onboarding.php:101
 msgid "Review the invoice document template"
 msgstr "Tinjau template dokumen faktur"
+
+#: src/Admin/Screens/Screen.php:65
+msgid "Skip to BizWit content"
+msgstr "Loncat ke konten BizWit"
