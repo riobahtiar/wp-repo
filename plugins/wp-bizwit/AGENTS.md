@@ -1,9 +1,14 @@
 ## AI Coding Agent Instructions for WP BizWit
 This plugin is a modern WordPress plugin with strict conventions and automated workflows. Follow these guidelines.
 
+This package lives in the **wp-repo monorepo** (`wp-content/` git root). Monorepo
+layout, Turbo commands, and package allowlisting: [`../../AGENTS.md`](../../AGENTS.md)
+and [`../../README.md`](../../README.md). From the monorepo root you can run
+`npm run bizwit -- <script>` or `turbo run build --filter=wp-bizwit`.
+
 For install-wide WordPress conventions (security rules, `dbDelta` gotchas, WP-CLI
-patterns, the Herd/Dbngin environment), see the `AGENTS.md` at the WordPress root.
-This file covers what is specific to WP BizWit.
+patterns, the Herd/Dbngin environment), see the `AGENTS.md` at the WordPress install
+root (parent of `wp-content`). This file covers what is specific to WP BizWit.
 
 **Longer-form documentation lives in [`docs/`](docs/)** — read it before making
 non-trivial changes:

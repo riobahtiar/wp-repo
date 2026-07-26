@@ -1,0 +1,94 @@
+name: Release wp-bizwit
+
+# Tag format: wp-bizwit/v0.3.0  or  wp-bizwit/v0.3.0-beta.1
+on:
+  push:
+    tags:
+      - 'wp-bizwit/v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: plugins/wp-bizwit
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: wp-cli
+
+      - name: Install workspaces (root)
+        working-directory: .
+        run: npm ci
+
+      - name: Composer install (prod)
+        run: |
+          mkdir -p vendor-prefixed bin
+          composer install --no-dev --prefer-dist --no-progress --optimize-autoloader --classmap-authoritative
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Parse tag
+        id: meta
+        working-directory: .
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          # wp-bizwit/v0.3.0 → 0.3.0
+          VERSION="${TAG#wp-bizwit/v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          if [[ "$VERSION" =~ -(alpha|beta|rc) ]]; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+            echo "make_latest=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+            echo "make_latest=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bump version strings
+        run: |
+          VERSION="${{ steps.meta.outputs.version }}"
+          sed -i -E "s/(const PLUGIN_VERSION = ')[^']*(';)/\1${VERSION}\2/" src/WP_BizWit.php
+          sed -i -E "s/([[:blank:]]*\*[[:blank:]]*Version:[[:blank:]]*).*/\1${VERSION}/" wp-bizwit.php
+          sed -i -E "s/Stable tag: .*/Stable tag: ${VERSION}/" README.txt
+
+      - name: Install dist-archive
+        run: wp package install wp-cli/dist-archive-command:v3.1.0
+
+      - name: Start wp-env & compile translations
+        run: |
+          npm run env:start
+          npm run env:cli composer run i18n:compile
+
+      - name: Build zip
+        run: |
+          VERSION="${{ steps.meta.outputs.version }}"
+          wp dist-archive . "./wp-bizwit-${VERSION}.zip" --plugin-dirname=wp-bizwit
+
+      - name: Stop wp-env
+        if: always()
+        run: npm run env:stop
+
+      - name: GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.meta.outputs.tag }}
+          name: wp-bizwit ${{ steps.meta.outputs.version }}
+          allowUpdates: true
+          omitBodyDuringUpdate: true
+          artifacts: "plugins/wp-bizwit/wp-bizwit-${{ steps.meta.outputs.version }}.zip"
+          prerelease: ${{ steps.meta.outputs.prerelease }}
+          makeLatest: ${{ steps.meta.outputs.make_latest }}

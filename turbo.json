@@ -1,0 +1,54 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "resources/**",
+        "vite.config.*",
+        "tsconfig*.json",
+        "package.json",
+        "package-lock.json"
+      ],
+      "outputs": ["build/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "typecheck": {
+      "inputs": [
+        "resources/**",
+        "tsconfig*.json",
+        "vite.config.*",
+        "package.json"
+      ],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "test:unit": {
+      "inputs": ["resources/**", "vitest.config.*", "vite.config.*", "package.json"],
+      "outputs": []
+    },
+    "lint": {
+      "inputs": ["src/**", "phpcs.xml", "composer.json", "composer.lock"],
+      "outputs": []
+    },
+    "phpcs": {
+      "inputs": ["src/**", "phpcs.xml", "composer.json", "composer.lock"],
+      "outputs": []
+    },
+    "phpstan": {
+      "inputs": ["src/**", "phpstan.neon", "composer.json", "composer.lock"],
+      "outputs": []
+    },
+    "check:bundle-size": {
+      "dependsOn": ["build"],
+      "outputs": []
+    }
+  }
+}

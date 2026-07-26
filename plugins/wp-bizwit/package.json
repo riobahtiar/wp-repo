@@ -1,5 +1,8 @@
 {
   "name": "wp-bizwit",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Business administration for Indonesian companies and UMKM — clients, projects, invoices and payment receipts inside wp-admin.",
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^20.19.43",
@@ -20,6 +23,11 @@
     "typecheck": "vue-tsc --noEmit",
     "build:assets": "vite build",
     "preview": "vite preview",
+    "lint": "composer run phpcs",
+    "phpcs": "composer run phpcs",
+    "phpstan": "composer run phpstan",
+    "composer:install": "composer install --prefer-dist --no-interaction",
+    "test": "npm run test:unit",
     "env:start": "wp-env start --update",
     "env:stop": "wp-env stop",
     "env:destroy": "wp-env destroy",

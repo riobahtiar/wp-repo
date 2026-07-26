@@ -1,0 +1,49 @@
+# =============================================================================
+# WP monorepo (wp-content as repo root)
+# Track only first-party packages + root tooling. Everything else is host noise
+# (stock themes, uploads, third-party plugins, core language packs).
+# =============================================================================
+
+# Ignore all by default
+/*
+
+# --- Monorepo root (allowlist) ------------------------------------------------
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/AGENTS.md
+!/package.json
+!/package-lock.json
+!/turbo.json
+!/.npmrc
+!/.nvmrc
+!/.editorconfig
+!/.github/
+
+# Workspace install artefacts (even if a parent rule re-includes them)
+node_modules/
+.turbo/
+npm-debug.log*
+yarn-error.log*
+.DS_Store
+
+# --- First-party plugins (allowlist) ------------------------------------------
+!/plugins/
+/plugins/*
+!/plugins/wp-bizwit/
+
+# Nested package rules (vendor, node_modules, build, …) live in each package’s
+# own .gitignore — e.g. plugins/wp-bizwit/.gitignore.
+
+# --- Future first-party themes (uncomment when you add one) -------------------
+# !/themes/
+# /themes/*
+# !/themes/<your-theme>/
+
+# --- Never commit WordPress host state ----------------------------------------
+# (redundant with /* but explicit for safety if the allowlist grows)
+/uploads/
+/upgrade/
+/cache/
+/mu-plugins/
+/languages/

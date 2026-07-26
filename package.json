@@ -1,0 +1,29 @@
+{
+  "name": "wp-repo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "WordPress monorepo — first-party plugins and themes for Indonesian businesses (companies & UMKM).",
+  "packageManager": "npm@11.16.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "plugins/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:unit": "turbo run test:unit",
+    "lint": "turbo run lint",
+    "phpstan": "turbo run phpstan",
+    "phpcs": "turbo run phpcs",
+    "check": "turbo run typecheck lint phpstan test:unit build",
+    "bizwit": "npm run -w wp-bizwit --",
+    "prepare:php": "npm run -w wp-bizwit -- composer:install"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4"
+  }
+}
