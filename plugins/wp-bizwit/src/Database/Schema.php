@@ -81,6 +81,13 @@ class Schema {
 	public const SEQUENCES = 'bizwit_sequences';
 
 	/**
+	 * Unprefixed table name for the activity / audit trail.
+	 *
+	 * @var string
+	 */
+	public const ACTIVITY = 'bizwit_activity';
+
+	/**
 	 * Resolve an unprefixed table constant to its real, prefixed table name.
 	 *
 	 * @param string $table One of the class constants, e.g. self::CLIENTS.
@@ -108,6 +115,7 @@ class Schema {
 			self::INVOICE_ITEMS,
 			self::PAYMENTS,
 			self::SEQUENCES,
+			self::ACTIVITY,
 		);
 	}
 
@@ -135,6 +143,7 @@ class Schema {
 			self::invoice_items_sql( $collate ),
 			self::payments_sql( $collate ),
 			self::sequences_sql( $collate ),
+			self::activity_sql( $collate ),
 		);
 	}
 
@@ -309,7 +318,8 @@ class Schema {
 			KEY project_id (project_id),
 			KEY status (status),
 			KEY issue_date (issue_date),
-			KEY due_date (due_date)
+			KEY due_date (due_date),
+			KEY status_due (status,due_date)
 		) {$collate};";
 	}
 
@@ -392,6 +402,36 @@ class Schema {
 			sequence_key varchar(64) NOT NULL,
 			next_value bigint(20) unsigned NOT NULL DEFAULT 1,
 			PRIMARY KEY  (sequence_key)
+		) {$collate};";
+	}
+
+	/**
+	 * Schema for the activity / audit trail.
+	 *
+	 * Summaries are short human-readable strings written at event time (in the
+	 * actor's locale). Meta holds only field *keys* that changed — never tax IDs,
+	 * addresses or other personal data payloads (UU PDP).
+	 *
+	 * @param string $collate Charset and collation clause.
+	 *
+	 * @return string SQL statement.
+	 */
+	private static function activity_sql( string $collate ): string {
+		$table = self::table( self::ACTIVITY );
+
+		return "CREATE TABLE {$table} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			actor_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			entity_type varchar(32) NOT NULL DEFAULT '',
+			entity_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			action varchar(32) NOT NULL DEFAULT '',
+			summary varchar(191) NOT NULL DEFAULT '',
+			meta longtext NOT NULL,
+			created_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY entity (entity_type,entity_id),
+			KEY created_at (created_at),
+			KEY actor_id (actor_id)
 		) {$collate};";
 	}
 }

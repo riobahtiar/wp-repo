@@ -447,6 +447,50 @@
 		font-size: 1.1em;
 	}
 
+	.wp-bizwit-dashboard-cols {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: var(--bw-space-4);
+		max-width: 1100px;
+		margin: var(--bw-space-5) 0;
+	}
+
+	.wp-bizwit-dashboard-cols .wp-bizwit-panel {
+		max-width: none;
+		margin: 0;
+	}
+
+	.wp-bizwit-activity {
+		list-style: none;
+		margin: var(--bw-space-3) 0 0;
+		padding: 0;
+	}
+
+	.wp-bizwit-activity li {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: var(--bw-space-2);
+		padding: var(--bw-space-2) 0;
+		border-bottom: 1px solid var(--bw-color-border-soft);
+		font-size: 13px;
+	}
+
+	.wp-bizwit-activity li:last-child {
+		border-bottom: 0;
+	}
+
+	.wp-bizwit-activity__summary {
+		flex: 1 1 12rem;
+		color: var(--bw-color-text);
+	}
+
+	.wp-bizwit-activity__when {
+		flex: 0 0 auto;
+		color: var(--bw-color-text-muted);
+		white-space: nowrap;
+	}
+
 	.wp-bizwit-quick {
 		display: flex;
 		flex-wrap: wrap;

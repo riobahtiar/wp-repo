@@ -3,8 +3,8 @@
 What is actually true of the codebase right now. Update this in the same commit
 as the work it describes — a tracker that lags is worse than none.
 
-**Current version: 0.8.2 — beta.** Pre-1.0 on purpose: full a11y audit and
-external security review are still open, and the schema may still change.
+**Current version: 0.9.0 — RC.** Pre-1.0: external security review and formal
+a11y AA still open; schema may still change until 1.0 freeze.
 
 **Git / tooling:** package lives in monorepo `wp-content/` (`wp-repo`). JS:
 `npm install` + `npm run -w wp-bizwit …` from monorepo root. See package
@@ -16,8 +16,9 @@ external security review are still open, and the schema may still change.
 
 | Area | Status | Notes |
 |------|--------|-------|
-| Database schema (8 tables) | ✅ Done | Payments withholding cols (1.4.0) |
-| Versioned migrations | ✅ Done | `Installer` `1.4.0` |
+| Database schema (9 tables) | ✅ Done | + `bizwit_activity` (1.5.0) |
+| Versioned migrations | ✅ Done | `Installer` `1.5.0` |
+| **Audit trail** | ✅ Done | Activity log + dashboard · [06](06-hardening-and-release.md) |
 | Capabilities and roles | ✅ Done | + template CPT caps |
 | Regional profile layer | ✅ Done | Indonesia + generic |
 | Indonesian translation | ✅ Done | Catalogue kept in step with features |
@@ -46,7 +47,7 @@ Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferre
 |-------|-------|
 | PHPCS | ✅ 0 errors in plugin code |
 | PHPStan level 6 | ✅ 0 errors |
-| PHPUnit | 🟡 Expanded: clients, layout, onboarding, stats (wp-env) |
+| PHPUnit | 🟡 + activity trail & stats cache bust (wp-env) |
 | Vitest | 🟡 `formatMoney` only |
 | Bundle budgets | ✅ Soft gate |
 | Accessibility | 🟡 Skip link, notice focus, dirty forms, focus-visible; formal AA later |
@@ -58,6 +59,6 @@ Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferre
 1. ~~0.3–0.6 — Foundation through payments + templates~~ ✅
 2. ~~0.7.0 — Onboarding, dashboard, empty states~~ ✅
 3. ~~0.8.0 — Test coverage, a11y hardening~~ ✅
-4. `0.9.0` — Security + performance RC
-5. `1.0.0` — GA
+4. ~~`0.9.0` — Security + performance RC~~ ✅ (audit trail, stats cache, index; external review still open)
+5. `1.0.0` — GA (freeze schema, external security review, a11y AA, upgrade test)
 6. post-1.0 — Import / export

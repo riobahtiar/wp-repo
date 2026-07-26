@@ -8,6 +8,7 @@
 namespace WP_BizWit\Cron;
 
 use WP_BizWit\Repositories\Invoice_Repository;
+use WP_BizWit\Repositories\Stats_Repository;
 
 /**
  * Schedules and runs overdue invoice status updates.
@@ -55,6 +56,10 @@ class Overdue_Invoices {
 	 */
 	public function run(): void {
 		$updated = ( new Invoice_Repository() )->mark_overdue();
+
+		if ( $updated > 0 ) {
+			Stats_Repository::bust_cache();
+		}
 
 		/**
 		 * Fires after overdue invoices were marked.

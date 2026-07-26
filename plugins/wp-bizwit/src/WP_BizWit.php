@@ -20,6 +20,7 @@ use WP_BizWit\Database\Installer;
 use WP_BizWit\Documents\Default_Templates;
 use WP_BizWit\Documents\Document_Blocks;
 use WP_BizWit\Documents\Template_Post_Type;
+use WP_BizWit\Repositories\Activity_Repository;
 use WP_BizWit\Repositories\Client_Repository;
 use WP_BizWit\Repositories\Invoice_Repository;
 use WP_BizWit\Repositories\Payment_Repository;
@@ -35,7 +36,7 @@ class WP_BizWit {
 
 
 	const PLUGIN_NAME    = 'wp-bizwit';
-	const PLUGIN_VERSION = '0.8.1';
+	const PLUGIN_VERSION = '0.9.0';
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -136,12 +137,16 @@ class WP_BizWit {
 		$invoices = new Invoice_Repository();
 		$payments = new Payment_Repository();
 		$stats    = new Stats_Repository();
+		$activity = new Activity_Repository();
+
+		// Audit trail + stats-cache invalidation — listen to repository actions.
+		$activity->register_hooks();
 
 		// Screens are handed their dependencies here rather than reaching for
 		// globals internally. That is what keeps them testable in isolation and
 		// keeps the wiring for the whole admin area visible in one place.
 		$menu = new Menu(
-			new Dashboard_Screen( $stats ),
+			new Dashboard_Screen( $stats, $activity ),
 			new Clients_Screen( $clients, $projects ),
 			new Projects_Screen( $projects, $clients ),
 			new Invoices_Screen( $invoices, $clients, $projects ),

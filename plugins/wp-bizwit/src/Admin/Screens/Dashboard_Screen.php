@@ -9,6 +9,7 @@ namespace WP_BizWit\Admin\Screens;
 
 use WP_BizWit\Admin\Notices;
 use WP_BizWit\Documents\Template_Post_Type;
+use WP_BizWit\Repositories\Activity_Repository;
 use WP_BizWit\Repositories\Client_Repository;
 use WP_BizWit\Repositories\Stats_Repository;
 use WP_BizWit\Support\Capabilities;
@@ -37,12 +38,21 @@ class Dashboard_Screen extends Screen {
 	private Stats_Repository $stats;
 
 	/**
+	 * Audit trail.
+	 *
+	 * @var Activity_Repository
+	 */
+	private Activity_Repository $activity;
+
+	/**
 	 * Set up the screen.
 	 *
-	 * @param Stats_Repository $stats Aggregate query source.
+	 * @param Stats_Repository    $stats    Aggregate query source.
+	 * @param Activity_Repository $activity Audit trail.
 	 */
-	public function __construct( Stats_Repository $stats ) {
-		$this->stats = $stats;
+	public function __construct( Stats_Repository $stats, Activity_Repository $activity ) {
+		$this->stats    = $stats;
+		$this->activity = $activity;
 	}
 
 	/**
@@ -153,6 +163,30 @@ class Dashboard_Screen extends Screen {
 			);
 		}
 
+		// Who changed what — any BizWit capability can see the trail of their work.
+		$activity_display = array();
+		if (
+			current_user_can( Capabilities::MANAGE_CLIENTS )
+			|| current_user_can( Capabilities::MANAGE_PROJECTS )
+			|| current_user_can( Capabilities::MANAGE_INVOICES )
+			|| current_user_can( Capabilities::MANAGE_PAYMENTS )
+		) {
+			foreach ( $this->activity->recent( 10 ) as $row ) {
+				$when               = (string) ( $row['created_at'] ?? '' );
+				$ts                 = '' !== $when ? strtotime( $when ) : false;
+				$activity_display[] = array(
+					'summary' => (string) ( $row['summary'] ?? '' ),
+					'when'    => false !== $ts
+						? sprintf(
+							/* translators: %s: human time difference */
+							__( '%s ago', 'wp-bizwit' ),
+							human_time_diff( $ts, (int) current_time( 'timestamp' ) ) // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+						)
+						: $when,
+				);
+			}
+		}
+
 		$quick = array();
 		if ( current_user_can( Capabilities::MANAGE_CLIENTS ) ) {
 			$quick[] = array(
@@ -196,6 +230,7 @@ class Dashboard_Screen extends Screen {
 				'ageing'          => $ageing,
 				'ageing_currency' => $currency,
 				'recent_invoices' => $recent_display,
+				'recent_activity' => $activity_display,
 				'quick_actions'   => $quick,
 			)
 		);

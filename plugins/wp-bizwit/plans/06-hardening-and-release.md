@@ -1,6 +1,6 @@
 # Plan 06 — Hardening and 1.0 Release
 
-**Status:** Planned · **Target:** 0.8.0 – 1.0.0
+**Status:** In progress (0.9.0 RC shipped: activity + stats cache) · **Target:** 0.9.0 – 1.0.0
 
 ## Goal
 
@@ -67,11 +67,11 @@ finds what the author was already thinking about.
 - [ ] Screen capability and nonce tests
 - [ ] Sequence concurrency test
 - [ ] Indonesian fixture dataset
-- [ ] `bizwit_activity` table and repository writes
-- [ ] Activity retention and pruning
+- [x] `bizwit_activity` table and repository writes
+- [x] Activity retention and pruning
 - [ ] Benchmark at 10k / 50k rows
-- [ ] Index review
-- [ ] Dashboard aggregate caching
+- [x] Index review (status_due on invoices)
+- [x] Dashboard aggregate caching
 - [ ] Security self-review against SECURITY.md
 - [ ] External security review
 - [ ] Accessibility audit and fixes

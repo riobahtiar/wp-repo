@@ -16,6 +16,7 @@ if ( ! defined( 'WPINC' ) ) {
 $tiles           = is_array( $data['tiles'] ?? null ) ? $data['tiles'] : array();
 $checklist_steps = is_array( $data['checklist_steps'] ?? null ) ? $data['checklist_steps'] : array();
 $recent          = is_array( $data['recent_invoices'] ?? null ) ? $data['recent_invoices'] : array();
+$activity        = is_array( $data['recent_activity'] ?? null ) ? $data['recent_activity'] : array();
 $quick           = is_array( $data['quick_actions'] ?? null ) ? $data['quick_actions'] : array();
 $ageing          = is_array( $data['ageing'] ?? null ) ? $data['ageing'] : null;
 $currency        = (string) ( $data['ageing_currency'] ?? 'IDR' );
@@ -143,38 +144,59 @@ $currency        = (string) ( $data['ageing_currency'] ?? 'IDR' );
 	</div>
 <?php endif; ?>
 
-<?php if ( array() !== $recent ) : ?>
-	<div class="wp-bizwit-panel">
-		<h2><?php esc_html_e( 'Recent invoices', 'wp-bizwit' ); ?></h2>
-		<table class="widefat striped">
-			<thead>
-				<tr>
-					<th scope="col"><?php esc_html_e( 'Number', 'wp-bizwit' ); ?></th>
-					<th scope="col"><?php esc_html_e( 'Client', 'wp-bizwit' ); ?></th>
-					<th scope="col"><?php esc_html_e( 'Status', 'wp-bizwit' ); ?></th>
-					<th scope="col" class="num"><?php esc_html_e( 'Total', 'wp-bizwit' ); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ( $recent as $row ) : ?>
-					<tr>
-						<td>
-							<a href="<?php echo esc_url( (string) $row['url'] ); ?>">
-								<?php echo esc_html( (string) $row['number'] ); ?>
-							</a>
-						</td>
-						<td><?php echo esc_html( (string) $row['client'] ); ?></td>
-						<td><?php echo esc_html( (string) $row['status'] ); ?></td>
-						<td class="num"><?php echo esc_html( (string) $row['total'] ); ?></td>
-					</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
-		<p>
-			<a href="<?php echo esc_url( (string) $data['invoices_url'] ); ?>">
-				<?php esc_html_e( 'View all invoices', 'wp-bizwit' ); ?>
-			</a>
-		</p>
+<?php if ( array() !== $recent || array() !== $activity ) : ?>
+	<div class="wp-bizwit-dashboard-cols">
+		<?php if ( array() !== $recent ) : ?>
+			<div class="wp-bizwit-panel">
+				<h2><?php esc_html_e( 'Recent invoices', 'wp-bizwit' ); ?></h2>
+				<table class="widefat striped">
+					<thead>
+						<tr>
+							<th scope="col"><?php esc_html_e( 'Number', 'wp-bizwit' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Client', 'wp-bizwit' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Status', 'wp-bizwit' ); ?></th>
+							<th scope="col" class="num"><?php esc_html_e( 'Total', 'wp-bizwit' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ( $recent as $row ) : ?>
+							<tr>
+								<td>
+									<a href="<?php echo esc_url( (string) $row['url'] ); ?>">
+										<?php echo esc_html( (string) $row['number'] ); ?>
+									</a>
+								</td>
+								<td><?php echo esc_html( (string) $row['client'] ); ?></td>
+								<td><?php echo esc_html( (string) $row['status'] ); ?></td>
+								<td class="num"><?php echo esc_html( (string) $row['total'] ); ?></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+				<p>
+					<a href="<?php echo esc_url( (string) $data['invoices_url'] ); ?>">
+						<?php esc_html_e( 'View all invoices', 'wp-bizwit' ); ?>
+					</a>
+				</p>
+			</div>
+		<?php endif; ?>
+
+		<?php if ( array() !== $activity ) : ?>
+			<div class="wp-bizwit-panel">
+				<h2><?php esc_html_e( 'Recent activity', 'wp-bizwit' ); ?></h2>
+				<p class="description">
+					<?php esc_html_e( 'Who changed clients, projects, invoices and payments — kept for one year.', 'wp-bizwit' ); ?>
+				</p>
+				<ul class="wp-bizwit-activity">
+					<?php foreach ( $activity as $row ) : ?>
+						<li>
+							<span class="wp-bizwit-activity__summary"><?php echo esc_html( (string) $row['summary'] ); ?></span>
+							<span class="wp-bizwit-activity__when muted"><?php echo esc_html( (string) $row['when'] ); ?></span>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+		<?php endif; ?>
 	</div>
 <?php endif; ?>
 

@@ -11,6 +11,23 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.9.0] — 2026-07-27
+
+Security and performance RC: audit trail, dashboard cache, index for ageing.
+
+### Added
+- **Activity audit trail** (`bizwit_activity`): who created/updated/deleted
+  clients, projects, invoices and payments, with short summaries. Written from
+  repository actions (not screens). Retention **365 days** with daily prune.
+  Surfaces as **Recent activity** on the dashboard.
+- **Dashboard stats cache**: aggregate tiles and ageing use a short-lived
+  transient (120s), busted on every business write and overdue cron pass.
+- Composite index `status_due` on invoices for ageing / open-balance queries.
+- Schema version **1.5.0**. PHPUnit: `ActivityRepositoryTest`.
+
+### Changed
+- Version **0.9.0** (RC toward 1.0).
+
 ## [0.8.2] — 2026-07-27
 
 Document print preview language and print-dialog spacing.
