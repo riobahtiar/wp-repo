@@ -27,7 +27,6 @@ jobs:
         with:
           path: |
             node_modules
-            build
           key: ${{ needs.setup.outputs.node-cache-key }}
           fail-on-cache-miss: true
 
@@ -39,6 +38,9 @@ jobs:
 
       - name: Build assets
         run: npm run build
+
+      - name: Bundle size check (soft)
+        run: npm run check:bundle-size
 
   test-php:
     runs-on: ubuntu-latest
@@ -94,7 +96,6 @@ jobs:
         with:
           path: |
             node_modules
-            build
           key: ${{ needs.setup.outputs.node-cache-key }}
           fail-on-cache-miss: true
 

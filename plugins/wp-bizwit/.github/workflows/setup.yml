@@ -30,7 +30,8 @@ jobs:
         id: cache-keys
         run: |
           echo "php-key=php-${{ inputs.mode }}-${{ runner.os }}-${{ hashFiles('composer.lock', 'composer.json') }}" >> $GITHUB_OUTPUT
-          echo "node-key=node-${{ inputs.mode }}-${{ runner.os }}-${{ hashFiles('package-lock.json') }}" >> $GITHUB_OUTPUT
+          # node_modules only — never cache build/ with package-lock alone (stale assets).
+          echo "node-key=node-${{ inputs.mode }}-${{ runner.os }}-${{ hashFiles('package-lock.json', 'package.json') }}" >> $GITHUB_OUTPUT
 
       - name: PHP Dependencies cache
         uses: actions/cache@v5
@@ -50,7 +51,6 @@ jobs:
         with:
           path: |
             node_modules
-            build
           key: ${{ steps.cache-keys.outputs.node-key }}
           restore-keys: |
             node-${{ inputs.mode }}-${{ runner.os }}-
@@ -62,8 +62,9 @@ jobs:
         with:
           php-version: '8.2'
 
+      # Prod always needs Node for a fresh asset build (even when node_modules is cached).
       - name: Setup Node
-        if: steps.node-cache.outputs.cache-hit != 'true'
+        if: steps.node-cache.outputs.cache-hit != 'true' || inputs.mode == 'prod'
         uses: actions/setup-node@v6
         with:
           node-version: '24'
@@ -84,9 +85,18 @@ jobs:
         if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm ci
 
-      # This cache is basically just for transport to deploy job.
-      # Caches currently cannot be reused between branches and pull requests/releases.
-      # See https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching#restrictions-for-accessing-a-cache
+      # Always rebuild for prod. Caching build/ keyed only on package-lock could
+      # ship stale JS/CSS after Vue/CSS source changes. Artifact transports the
+      # fresh build to the deploy job.
       - name: Build assets (prod only)
-        if: inputs.mode == 'prod' && steps.node-cache.outputs.cache-hit != 'true'
+        if: inputs.mode == 'prod'
         run: npm run build
+
+      - name: Upload production build
+        if: inputs.mode == 'prod'
+        uses: actions/upload-artifact@v4
+        with:
+          name: wp-bizwit-frontend-build
+          path: build/
+          retention-days: 2
+          if-no-files-found: error
