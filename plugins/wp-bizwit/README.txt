@@ -38,8 +38,9 @@ currency and payment terms.
 milestone or retainer billing.
 
 **Invoices and receipts.** Issue invoices with line items, tax and discounts,
-using gap-free sequential numbering with your own prefix. Record the payments
-you receive and issue matching receipts.
+numbered the Indonesian way as 007/INV/BW/VII/2026 or as a simple prefixed
+sequence. Record the payments you receive and issue matching kwitansi, complete
+with the amount in terbilang.
 
 **Built to keep the numbers right.** Every amount is stored as an integer in the
 currency's minor unit rather than as a floating point number, so totals cannot

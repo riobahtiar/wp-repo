@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-26T16:56:21+00:00\n"
+"POT-Creation-Date: 2026-07-26T17:27:45+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-bizwit\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #. Description of the plugin
 #: wp-bizwit.php
-msgid "WordPress Plugins for Business and Administration. Manage clients, projects, invoices and payment records. Record keeping only, no payment processing."
+msgid "WordPress Plugins for Business and Administration. Kelola klien, proyek, faktur dan kwitansi untuk perusahaan dan UMKM Indonesia — lengkap dengan NPWP, NIB, status PKP, PPN, PPh 23, terbilang dan bea meterai. Hanya pencatatan, tanpa pemrosesan pembayaran."
 msgstr ""
 
 #: src/Admin/Menu.php:66

@@ -23,9 +23,9 @@ Built on the [JUVO WordPress Plugin Boilerplate](https://github.com/JUVOJustin/w
 
 | | |
 |---|---|
-| **Clients** | Individuals, companies, government entities and other organisations, with legal name, tax ID, registration number, address, currency and payment terms |
-| **Projects** | Work per client, billed fixed-price, hourly, by milestone or on retainer |
-| **Invoices** | Line items, tax, discounts, gap-free sequential numbering |
+| **Clients** | Perorangan, perusahaan, instansi pemerintah and organisations, with legal name, NPWP, NIB, address, currency and payment terms |
+| **Projects** | Work per client, billed fixed-price, hourly, by termin or on retainer |
+| **Invoices** | Line items, tax, discounts, race-free sequential numbering |
 | **Payments** | Recorded receipts against invoices, including partial payments |
 
 ## Untuk pengguna Indonesia
@@ -94,11 +94,15 @@ npm run build
 | `./vendor/bin/phpcbf` | Auto-fix coding standard violations |
 | `./vendor/bin/phpstan analyse --memory-limit=1G` | Static analysis at level 6 |
 | `npm run test:php` | PHPUnit suite in the wp-env container |
-| `composer run i18n:extract` | Regenerate the translation template |
 
 PHPStan's parallel workers exhaust the default 128M limit, hence the explicit
 `--memory-limit`. A `Child process error (exit code 255)` is that, not a code
 problem.
+
+The `composer run i18n:*` scripts do not work in this checkout — Composer's
+`PATH` shadows the global WP-CLI with a dev-dependency copy that lacks the i18n
+commands. Use the `$(command -v wp)` form in
+[docs/development.md](docs/development.md#translations).
 
 ## Layout
 
@@ -122,7 +126,14 @@ appear:
 $(command -v wp) i18n make-mo languages/ && $(command -v wp) i18n make-php languages/
 ```
 
-See [`AGENTS.md`](AGENTS.md) for the conventions this codebase relies on.
+## Documentation
+
+| Document | Covers |
+|----------|--------|
+| [docs/indonesia.md](docs/indonesia.md) | The Indonesian profile: NPWP, NIB, PKP, PPN, PPh 23, bea meterai, terbilang, document numbering, glossary |
+| [docs/data-model.md](docs/data-model.md) | The seven tables, why custom tables, migrations, atomic numbering |
+| [docs/development.md](docs/development.md) | Build, lint, test, translation workflow, tooling traps |
+| [AGENTS.md](AGENTS.md) | Conventions this codebase relies on (also read as `CLAUDE.md`) |
 
 ## Status
 

@@ -2,8 +2,18 @@
 This plugin is a modern WordPress plugin with strict conventions and automated workflows. Follow these guidelines.
 
 For install-wide WordPress conventions (security rules, `dbDelta` gotchas, WP-CLI
-patterns, the Herd/Dbngin environment), see the `CLAUDE.md` at the WordPress root.
+patterns, the Herd/Dbngin environment), see the `AGENTS.md` at the WordPress root.
 This file covers what is specific to WP BizWit.
+
+**Longer-form documentation lives in [`docs/`](docs/)** — read it before making
+non-trivial changes:
+
+| Document | Read it before |
+|----------|----------------|
+| [`docs/indonesia.md`](docs/indonesia.md) | Touching any user-facing wording, tax logic, money or document numbering |
+| [`docs/culture.md`](docs/culture.md) | Designing any form, copy, notification or printable document |
+| [`docs/data-model.md`](docs/data-model.md) | Changing the schema or adding a repository |
+| [`docs/development.md`](docs/development.md) | Running the tooling, or adding translatable strings |
 
 ---
 
@@ -17,6 +27,31 @@ default regional profile and IDR the default currency; a fresh install already
 speaks the right vocabulary without anyone finding a setting. Other regions are
 supported through the same abstraction, but Indonesian correctness wins any
 design argument.
+
+That priority reaches past tax rules into how the software behaves for the
+people using it. Full detail in [`docs/culture.md`](docs/culture.md); the parts
+that bite most often:
+
+- **Never require a surname.** Many Indonesians have a single legal name. A
+  mandatory "last name" field locks out a large share of the population. This is
+  why `display_name` and `legal_name` are single fields.
+- **Name fields carry titles** — `Drs. H. Bambang Suryanto, S.E., M.M.` is one
+  person's formal name. Do not strip punctuation or use short column widths.
+- **Copy uses `Anda`, never `kamu`**, and prefixes requests with `Silakan` or
+  `Mohon`. Indonesian business UI is politer than English business UI, and the
+  markers are not optional.
+- **Domain terms stay Indonesian** even in an English interface — faktur,
+  kwitansi, NPWP, PPN, termin, meterai. Translating them invents words nobody
+  uses.
+- **Phone is not optional metadata.** Indonesian B2B runs on WhatsApp; documents
+  are forwarded as PDFs. Accept `08xx` and `+62` without mangling either.
+- **Printable output needs room for a signature, the company cap and meterai**,
+  plus the bank transfer details, on A4.
+- **Money is large and dot-grouped**: `Rp 1.500.000`. Nine digits is normal, so
+  do not size columns or inputs for four.
+- **Lebaran moves everything.** Expect one to two weeks where collections stop.
+  Do not treat a long outstanding period as an error state, and never hardcode a
+  holiday calendar.
 
 **Hard scope boundary: this plugin never processes, moves, or holds money.** It
 is a record-keeping system. There is no gateway integration, no card handling, no
@@ -284,7 +319,7 @@ Tests:
 
 - **Blocks**: Run `npm run create-block`. Registration is automatic; `tests/php/BlockRegistrationTest.php` generically guards that every built block is loaded (via `/wp/v2/block-types`) and its assets exist. Use the `wp-plugin-bp` skill for block guidance.
 - **Abilities API**: Implement interfaces in `src/Abilities/`, register via Loader. `tests/php/AbilityRegistrationTest.php` generically guards that every `Ability_Interface` implementation (and its category) is registered. Use the `wp-plugin-bp` skill for ability guidance.
-- **i18n**: Extract with `composer run i18n:extract`, compile with `composer run i18n:compile`. Use the `wp-plugin-bp` skill for translation work.
+- **i18n**: Indonesian (`id_ID`) is a shipped, complete translation and the primary audience's language — **an untranslated new string is an unfinished string**. The Composer scripts are broken in this checkout; use the `$(command -v wp)` commands in [`docs/development.md`](docs/development.md#translations).
 - **wp-env**: Start with `npm run env:start`. Use the `wp-plugin-bp` skill when tests are involved.
 - **Testing**: Run application tests with `npm run test:php`. Use the `wp-plugin-bp` skill for testing guidance.
 - **Plugin upgrades**: Use the `wp-plugin-bp` skill or ask naturally to sync with upstream project conventions.
@@ -298,3 +333,15 @@ When adding new primitives, patterns, or documentation to this plugin:
 
 1. Update `docs/` with detailed implementation guides
 2. Update @AGENTS.md with high-level reference
+3. Add the Indonesian translation for any new user-facing string
+4. If the change touches wording, tax logic, money or documents, check it against
+   [`docs/indonesia.md`](docs/indonesia.md) before considering it done
+
+### The two rules that override everything else here
+
+1. **Indonesian companies and UMKM are the primary users.** When a design choice
+   has to favour one audience, it favours Indonesia. Other regions are supported
+   through `Localization\Region`, not by diluting the default.
+2. **BizWit never processes, moves, or holds money.** It records payments that
+   happened elsewhere. A request to add payment processing is a change of
+   product, not a feature — raise it as one.
