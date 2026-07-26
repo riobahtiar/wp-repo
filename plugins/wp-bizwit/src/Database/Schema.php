@@ -46,6 +46,13 @@ class Schema {
 	public const PROJECTS = 'bizwit_projects';
 
 	/**
+	 * Unprefixed table name for project billing stages (termin).
+	 *
+	 * @var string
+	 */
+	public const PROJECT_TERMS = 'bizwit_project_terms';
+
+	/**
 	 * Unprefixed table name for invoice headers.
 	 *
 	 * @var string
@@ -96,6 +103,7 @@ class Schema {
 			self::CLIENTS,
 			self::CLIENT_CONTACTS,
 			self::PROJECTS,
+			self::PROJECT_TERMS,
 			self::INVOICES,
 			self::INVOICE_ITEMS,
 			self::PAYMENTS,
@@ -122,6 +130,7 @@ class Schema {
 			self::clients_sql( $collate ),
 			self::client_contacts_sql( $collate ),
 			self::projects_sql( $collate ),
+			self::project_terms_sql( $collate ),
 			self::invoices_sql( $collate ),
 			self::invoice_items_sql( $collate ),
 			self::payments_sql( $collate ),
@@ -218,6 +227,8 @@ class Schema {
 			currency varchar(3) NOT NULL DEFAULT 'USD',
 			rate_minor bigint(20) NOT NULL DEFAULT 0,
 			budget_minor bigint(20) NOT NULL DEFAULT 0,
+			retensi_percent decimal(7,4) NOT NULL DEFAULT 0.0000,
+			terms_sum_override tinyint(1) NOT NULL DEFAULT 0,
 			starts_on date DEFAULT NULL,
 			ends_on date DEFAULT NULL,
 			description longtext NOT NULL,
@@ -228,6 +239,32 @@ class Schema {
 			KEY client_id (client_id),
 			KEY status (status),
 			KEY code (code)
+		) {$collate};";
+	}
+
+	/**
+	 * Schema for ordered billing stages (termin) on a project.
+	 *
+	 * @param string $collate Charset and collation clause.
+	 *
+	 * @return string SQL statement.
+	 */
+	private static function project_terms_sql( string $collate ): string {
+		$table = self::table( self::PROJECT_TERMS );
+
+		return "CREATE TABLE {$table} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			project_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			sort_order smallint(5) unsigned NOT NULL DEFAULT 0,
+			name varchar(191) NOT NULL DEFAULT '',
+			amount_minor bigint(20) NOT NULL DEFAULT 0,
+			percent decimal(7,4) NOT NULL DEFAULT 0.0000,
+			notes text NOT NULL,
+			created_at datetime NOT NULL,
+			updated_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY project_id (project_id),
+			KEY sort_order (sort_order)
 		) {$collate};";
 	}
 
