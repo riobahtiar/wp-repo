@@ -204,7 +204,23 @@ class Projects_Table extends WP_List_Table {
 	 * @return void
 	 */
 	public function no_items(): void {
-		esc_html_e( 'No projects found. Add your first project to get started.', 'wp-bizwit' );
+		echo '<div class="wp-bizwit-empty">';
+		echo '<p>' . esc_html__( 'No projects yet. Record the work you are doing for a client so you can invoice from it later.', 'wp-bizwit' ) . '</p>';
+		if ( current_user_can( Capabilities::MANAGE_PROJECTS ) ) {
+			$url = add_query_arg(
+				array(
+					'page'   => Projects_Screen::SLUG,
+					'action' => 'new',
+				),
+				admin_url( 'admin.php' )
+			);
+			printf(
+				'<p><a class="button button-primary" href="%s">%s</a></p>',
+				esc_url( $url ),
+				esc_html__( 'Add project', 'wp-bizwit' )
+			);
+		}
+		echo '</div>';
 	}
 
 	/**

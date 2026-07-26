@@ -11,6 +11,24 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-07-27
+
+Onboarding and dashboard UX: setup checklist, empty states, receivables ageing.
+
+### Added
+- **Dismissible setup checklist** on the dashboard (per user): business name,
+  bank details, first client, first invoice, document template.
+- **Receivables ageing** (current / 1–30 / 31–60 / 61+ days) for users with
+  report capability.
+- **Recent invoices** list and **quick actions** (add client, invoice, project,
+  record payment).
+- **Empty states** with primary actions on clients, projects, invoices and
+  payments lists.
+
+### Changed
+- Dashboard “getting started” copy updated for the full product path.
+- Version **0.7.0**.
+
 ## [0.6.2] — 2026-07-27
 
 Document **layout builder** (Vue) replaces the plain Gutenberg edit experience.

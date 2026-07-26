@@ -20,7 +20,7 @@ currently true of the codebase lives in [`PROGRESS.md`](PROGRESS.md).
 | [01-projects.md](01-projects.md) | **Done** (0.4.0) | — |
 | [02-invoices.md](02-invoices.md) | **Done** (0.5.0) | — |
 | [03-payments-receipts.md](03-payments-receipts.md) | **Done** (0.6.0) | — |
-| [04-ux-and-onboarding.md](04-ux-and-onboarding.md) | Partly done | 0.7.0 |
+| [04-ux-and-onboarding.md](04-ux-and-onboarding.md) | **Done** (0.7.0 core; a11y later) | — |
 | [05-import-export.md](05-import-export.md) | **Deferred until 1.0 GA** | post-1.0 |
 | [06-hardening-and-release.md](06-hardening-and-release.md) | Planned | 1.0.0 |
 | [07-frontend-modernization.md](07-frontend-modernization.md) | **Done** (foundation; Plugin Check at RC) | Consumed by 0.4+ |

@@ -35,7 +35,7 @@ class WP_BizWit {
 
 
 	const PLUGIN_NAME    = 'wp-bizwit';
-	const PLUGIN_VERSION = '0.6.2';
+	const PLUGIN_VERSION = '0.7.0';
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power

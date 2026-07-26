@@ -442,6 +442,84 @@
 		border-radius: var(--bw-radius);
 	}
 
+	.wp-bizwit-panel h2 {
+		margin-top: var(--bw-space-4);
+		font-size: 1.1em;
+	}
+
+	.wp-bizwit-quick {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--bw-space-2);
+	}
+
+	.wp-bizwit-ageing .num {
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	/* Setup checklist */
+
+	.wp-bizwit-checklist__list {
+		list-style: none;
+		margin: var(--bw-space-3) 0;
+		padding: 0;
+	}
+
+	.wp-bizwit-checklist__list li {
+		display: flex;
+		align-items: flex-start;
+		gap: var(--bw-space-2);
+		padding: var(--bw-space-2) 0;
+		border-bottom: 1px solid var(--bw-color-border-soft);
+	}
+
+	.wp-bizwit-checklist__list li:last-child {
+		border-bottom: 0;
+	}
+
+	.wp-bizwit-checklist__mark {
+		flex: 0 0 1.25rem;
+		font-weight: 700;
+		line-height: 1.4;
+	}
+
+	.wp-bizwit-checklist__list .is-done .wp-bizwit-checklist__mark {
+		color: #00a32a;
+	}
+
+	.wp-bizwit-checklist__list .is-done .wp-bizwit-checklist__label {
+		color: var(--bw-color-text-muted);
+		text-decoration: line-through;
+	}
+
+	.wp-bizwit-checklist__dismiss {
+		margin-bottom: 0;
+	}
+
+	.wp-bizwit-checklist__dismiss a {
+		color: var(--bw-color-text-muted);
+		font-size: 12px;
+	}
+
+	/* List empty states */
+
+	.wp-bizwit-empty {
+		max-width: 32rem;
+		margin: var(--bw-space-6) auto;
+		padding: var(--bw-space-5);
+		text-align: center;
+	}
+
+	.wp-bizwit-empty p {
+		margin: 0 0 var(--bw-space-3);
+		color: var(--bw-color-text-muted);
+	}
+
+	.wp-bizwit-empty .button {
+		margin: 0 var(--bw-space-1);
+	}
+
 	/* Status pills */
 
 	.wp-bizwit-status {

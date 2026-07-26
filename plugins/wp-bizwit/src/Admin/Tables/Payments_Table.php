@@ -165,7 +165,23 @@ class Payments_Table extends WP_List_Table {
 	 * @return void
 	 */
 	public function no_items(): void {
-		esc_html_e( 'No payments recorded yet.', 'wp-bizwit' );
+		echo '<div class="wp-bizwit-empty">';
+		echo '<p>' . esc_html__( 'No payments recorded yet. When money arrives in the bank, record it here against an invoice.', 'wp-bizwit' ) . '</p>';
+		if ( current_user_can( Capabilities::MANAGE_PAYMENTS ) ) {
+			$url = add_query_arg(
+				array(
+					'page'   => Payments_Screen::SLUG,
+					'action' => 'new',
+				),
+				admin_url( 'admin.php' )
+			);
+			printf(
+				'<p><a class="button button-primary" href="%s">%s</a></p>',
+				esc_url( $url ),
+				esc_html__( 'Record payment', 'wp-bizwit' )
+			);
+		}
+		echo '</div>';
 	}
 
 	/**

@@ -1,6 +1,6 @@
 # Plan 04 — UX and Onboarding
 
-**Status:** Partly done · **Target:** 0.7.0
+**Status:** Done (core UX) · **Target:** 0.7.0 · Remaining: a11y audit, dirty-form guard
 
 ## Goal
 
@@ -62,16 +62,17 @@ slow networks must get skeletons and small chunks, not a multi‑hundred‑KB wa
 
 ## Tasks
 
-- [ ] Empty state component used by every list table
-- [ ] Dismissible setup checklist, stored per user
-- [ ] Dashboard ageing summary (needs invoices)
-- [ ] Recent activity feed (needs an audit trail — see PROGRESS gaps)
+- [x] Empty state with primary action on every list table
+- [x] Dismissible setup checklist, stored per user
+- [x] Dashboard ageing summary (current / 1–30 / 31–60 / 61+)
+- [x] Recent invoices on dashboard (full audit trail still later)
 - [ ] Inline field-level errors, keeping submitted values on failure
 - [ ] Accessibility audit against WCAG 2.1 AA, then fixes
 - [ ] Responsive review of list tables at mobile widths
-- [ ] Shared print stylesheet
+- [x] Print stylesheet on invoice/kwitansi renderers (shared tokens still optional)
 - [ ] Confirm-before-leaving on dirty forms (progressive enhancement)
-- [ ] Indonesian translation for every new string
+- [x] Indonesian translation for new strings (catalogue update at release)
+- [x] Quick actions on dashboard
 
 ## Acceptance criteria
 
