@@ -424,6 +424,111 @@ class Invoice_Repository extends Repository {
 	}
 
 	/**
+	 * Recompute paid_minor and payment-driven status from settlement totals.
+	 *
+	 * Called by Payment_Repository after create/update/delete. Does not use the
+	 * user-facing transition map — settlement is a system recompute (e.g. paid
+	 * can return to partial when a payment is deleted).
+	 *
+	 * @param int $invoice_id  Invoice id.
+	 * @param int $paid_minor  Sum of bank received + withheld for this invoice.
+	 *
+	 * @return true|WP_Error True on success.
+	 */
+	public function apply_settlement( int $invoice_id, int $paid_minor ) {
+		$existing = $this->find( $invoice_id );
+
+		if ( null === $existing ) {
+			return new WP_Error( 'wp_bizwit_not_found', __( 'That invoice no longer exists.', 'wp-bizwit' ) );
+		}
+
+		$paid_minor = max( 0, $paid_minor );
+		$current    = (string) $existing['status'];
+		$total      = (int) $existing['total_minor'];
+		$status     = Invoice_Status::from_payment_amounts( $total, $paid_minor, $current );
+
+		// Still open and past due → overdue (unless void/draft).
+		if (
+			! in_array( $status, array( Invoice_Status::VOID, Invoice_Status::DRAFT, Invoice_Status::PAID ), true )
+			&& $paid_minor < $total
+			&& ! empty( $existing['due_date'] )
+			&& (string) $existing['due_date'] < (string) current_time( 'Y-m-d' )
+		) {
+			$status = Invoice_Status::OVERDUE;
+		}
+
+		$update = array(
+			'paid_minor' => $paid_minor,
+			'status'     => $status,
+			'updated_at' => $this->now(),
+		);
+
+		if ( ! $this->update_row( $invoice_id, $update, $this->formats( $update ) ) ) {
+			return new WP_Error( 'wp_bizwit_update_failed', __( 'The invoice could not be updated.', 'wp-bizwit' ) );
+		}
+
+		if ( $current !== $status ) {
+			do_action( 'wp_bizwit_invoice_transitioned', $invoice_id, $current, $status );
+		}
+
+		/**
+		 * Fires after settlement amounts were applied to an invoice.
+		 *
+		 * @param int    $invoice_id Invoice id.
+		 * @param int    $paid_minor Settled amount in minor units.
+		 * @param string $status     Resulting status.
+		 */
+		do_action( 'wp_bizwit_invoice_settlement_applied', $invoice_id, $paid_minor, $status );
+
+		return true;
+	}
+
+	/**
+	 * Invoices that may receive a payment (open, not draft/void).
+	 *
+	 * @param int $client_id Optional client filter (0 = all).
+	 *
+	 * @return array<int, string> Invoice id mapped to label (number · client · balance).
+	 */
+	public function open_options( int $client_id = 0 ): array {
+		$table   = $this->table();
+		$clients = Schema::table( Schema::CLIENTS );
+		$where   = 'i.status NOT IN (%s, %s)';
+		$params  = array( Invoice_Status::DRAFT, Invoice_Status::VOID );
+
+		if ( $client_id > 0 ) {
+			$where   .= ' AND i.client_id = %d';
+			$params[] = $client_id;
+		}
+
+		$sql = "SELECT i.id, i.invoice_number, i.total_minor, i.paid_minor, i.currency, c.display_name AS client_name
+			FROM `{$table}` i
+			LEFT JOIN `{$clients}` c ON c.id = i.client_id
+			WHERE {$where}
+			ORDER BY i.issue_date DESC, i.id DESC
+			LIMIT 500";
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
+		$rows = $this->db()->get_results( $this->db()->prepare( $sql, $params ), ARRAY_A );
+		// phpcs:enable
+
+		$options = array();
+		foreach ( (array) $rows as $row ) {
+			$balance = Invoice_Totals::balance_minor( (int) $row['total_minor'], (int) $row['paid_minor'] );
+			$label   = sprintf(
+				/* translators: 1: invoice number, 2: client name, 3: balance formatted */
+				__( '%1$s — %2$s (balance %3$s)', 'wp-bizwit' ),
+				(string) $row['invoice_number'],
+				(string) ( $row['client_name'] ?? '' ),
+				Money::format( $balance, (string) $row['currency'] )
+			);
+			$options[ (int) $row['id'] ] = $label;
+		}
+
+		return $options;
+	}
+
+	/**
 	 * Delete only draft invoices that never received a permanent number.
 	 *
 	 * @param int $id Invoice id.

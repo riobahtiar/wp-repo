@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP BizWit 0.5.0\n"
+"Project-Id-Version: WP BizWit 0.6.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-bizwit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-26T21:24:14+00:00\n"
+"POT-Creation-Date: 2026-07-26T22:08:42+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-bizwit\n"
@@ -51,7 +51,7 @@ msgid "Invoices"
 msgstr ""
 
 #: src/Admin/Menu.php:70
-#: src/Admin/Screens/Payments_Screen.php:41
+#: src/Admin/Views/payments-list.php:29
 msgid "Payments"
 msgstr ""
 
@@ -162,40 +162,41 @@ msgstr[1] ""
 #: src/Admin/Screens/Invoices_Screen.php:421
 #: src/Repositories/Invoice_Repository.php:266
 #: src/Repositories/Invoice_Repository.php:363
-#: src/Repositories/Invoice_Repository.php:437
+#: src/Repositories/Invoice_Repository.php:442
+#: src/Repositories/Invoice_Repository.php:542
 msgid "That invoice no longer exists."
 msgstr ""
 
-#: src/Admin/Screens/Payments_Screen.php:50
-msgid "Record payments that have already been received elsewhere, and issue the matching receipt."
+#. translators: %s: overpaid amount
+#: src/Admin/Screens/Payments_Screen.php:265
+#, php-format
+msgid "Payment saved. This invoice is overpaid by %s — treat the excess as credit."
 msgstr ""
 
-#: src/Admin/Screens/Payments_Screen.php:60
-msgid "Payments recorded against an invoice, including partial payments."
+#: src/Admin/Screens/Payments_Screen.php:273
+msgid "Payment updated."
 msgstr ""
 
-#: src/Admin/Screens/Payments_Screen.php:61
-msgid "Sequential receipt numbering, independent of invoice numbering."
+#: src/Admin/Screens/Payments_Screen.php:274
+msgid "Payment recorded."
 msgstr ""
 
-#: src/Admin/Screens/Payments_Screen.php:62
-msgid "Payment method and external reference, for reconciliation against a bank statement."
+#: src/Admin/Screens/Payments_Screen.php:297
+msgid "Payment deleted. Invoice balance recalculated."
 msgstr ""
 
-#: src/Admin/Screens/Payments_Screen.php:66
-msgid "Receipts (kwitansi) with the amount in words, as expected on client-signed documents."
-msgstr ""
+#. translators: %d: number of payments
+#: src/Admin/Screens/Payments_Screen.php:337
+#, php-format
+msgid "%d payment deleted."
+msgid_plural "%d payments deleted."
+msgstr[0] ""
+msgstr[1] ""
 
-#: src/Admin/Screens/Payments_Screen.php:67
-msgid "Stamp duty reminder for receipts above the threshold."
-msgstr ""
-
-#: src/Admin/Screens/Payments_Screen.php:68
-msgid "Local payment methods: bank transfer, QRIS, e-wallet, virtual account, and SP2D for government agencies."
-msgstr ""
-
-#: src/Admin/Screens/Payments_Screen.php:71
-msgid "This plugin never processes or moves money. It records payments that happened elsewhere."
+#: src/Admin/Screens/Payments_Screen.php:362
+#: src/Repositories/Payment_Repository.php:230
+#: src/Repositories/Payment_Repository.php:300
+msgid "That payment no longer exists."
 msgstr ""
 
 #: src/Admin/Screens/Projects_Screen.php:227
@@ -211,7 +212,7 @@ msgid "Project deleted."
 msgstr ""
 
 #: src/Admin/Screens/Projects_Screen.php:310
-#: src/Repositories/Invoice_Repository.php:517
+#: src/Repositories/Invoice_Repository.php:622
 #: src/Repositories/Project_Repository.php:401
 #: src/Repositories/Project_Repository.php:460
 msgid "That project no longer exists."
@@ -249,8 +250,8 @@ msgstr ""
 #: src/Admin/Tables/Projects_Table.php:74
 #: src/Admin/Views/clients-form.php:145
 #: src/Admin/Views/clients-form.php:382
-#: src/Admin/Views/projects-form.php:109
-#: src/Admin/Views/projects-form.php:264
+#: src/Admin/Views/projects-form.php:130
+#: src/Admin/Views/projects-form.php:285
 msgid "Name"
 msgstr ""
 
@@ -264,8 +265,8 @@ msgstr ""
 #: src/Admin/Tables/Projects_Table.php:76
 #: src/Admin/Views/clients-form.php:281
 #: src/Admin/Views/clients-form.php:383
-#: src/Admin/Views/invoices-form.php:201
-#: src/Admin/Views/projects-form.php:127
+#: src/Admin/Views/invoices-form.php:221
+#: src/Admin/Views/projects-form.php:148
 msgid "Status"
 msgstr ""
 
@@ -311,6 +312,7 @@ msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:239
 #: src/Admin/Tables/Invoices_Table.php:276
+#: src/Admin/Tables/Payments_Table.php:228
 #: src/Admin/Tables/Projects_Table.php:267
 msgid "Edit"
 msgstr ""
@@ -321,6 +323,8 @@ msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:244
 #: src/Admin/Tables/Invoices_Table.php:311
+#: src/Admin/Tables/Payments_Table.php:105
+#: src/Admin/Tables/Payments_Table.php:238
 #: src/Admin/Tables/Projects_Table.php:272
 msgid "Delete"
 msgstr ""
@@ -341,30 +345,31 @@ msgid "Number"
 msgstr ""
 
 #: src/Admin/Tables/Invoices_Table.php:77
+#: src/Admin/Tables/Payments_Table.php:69
 #: src/Admin/Tables/Projects_Table.php:75
-#: src/Admin/Views/invoices-form.php:170
-#: src/Admin/Views/projects-form.php:94
+#: src/Admin/Views/invoices-form.php:190
+#: src/Admin/Views/projects-form.php:115
 msgid "Client"
 msgstr ""
 
 #: src/Admin/Tables/Invoices_Table.php:79
-#: src/Admin/Views/invoices-form.php:233
+#: src/Admin/Views/invoices-form.php:253
 msgid "Issue date"
 msgstr ""
 
 #: src/Admin/Tables/Invoices_Table.php:80
-#: src/Admin/Views/invoices-form.php:241
+#: src/Admin/Views/invoices-form.php:261
 msgid "Due date"
 msgstr ""
 
 #: src/Admin/Tables/Invoices_Table.php:81
-#: src/Admin/Views/invoices-form.php:406
+#: src/Admin/Views/invoices-form.php:426
 #: src/Admin/Views/invoices-print.php:278
 msgid "Total"
 msgstr ""
 
 #: src/Admin/Tables/Invoices_Table.php:82
-#: src/Admin/Views/invoices-form.php:425
+#: src/Admin/Views/invoices-form.php:445
 #: src/Admin/Views/invoices-print.php:297
 msgid "Balance"
 msgstr ""
@@ -396,6 +401,7 @@ msgstr ""
 #: src/Admin/Tables/Invoices_Table.php:280
 #: src/Admin/Views/invoices-form.php:131
 #: src/Admin/Views/invoices-print.php:160
+#: src/Admin/Views/payments-print.php:133
 msgid "Print"
 msgstr ""
 
@@ -407,13 +413,54 @@ msgstr ""
 msgid "Void this invoice? The number is kept for your records."
 msgstr ""
 
+#: src/Admin/Tables/Payments_Table.php:68
+#: src/Admin/Views/payments-print.php:152
+msgid "Receipt"
+msgstr ""
+
+#: src/Admin/Tables/Payments_Table.php:70
+#: src/Admin/Views/invoices-print.php:185
+#: src/Admin/Views/payments-form.php:124
+msgid "Invoice"
+msgstr ""
+
+#: src/Admin/Tables/Payments_Table.php:71
+msgid "Date"
+msgstr ""
+
+#: src/Admin/Tables/Payments_Table.php:72
+#: src/Admin/Views/payments-form.php:181
+msgid "Method"
+msgstr ""
+
+#: src/Admin/Tables/Payments_Table.php:73
+msgid "Received"
+msgstr ""
+
+#: src/Admin/Tables/Payments_Table.php:74
+msgid "Withheld"
+msgstr ""
+
+#: src/Admin/Tables/Payments_Table.php:168
+msgid "No payments recorded yet."
+msgstr ""
+
+#: src/Admin/Tables/Payments_Table.php:232
+#: src/Admin/Views/payments-form.php:65
+msgid "Print receipt"
+msgstr ""
+
+#: src/Admin/Tables/Payments_Table.php:237
+msgid "Delete this payment? The invoice balance will be recalculated."
+msgstr ""
+
 #: src/Admin/Tables/Projects_Table.php:77
 #: src/Admin/Views/clients-form.php:240
 msgid "Billing"
 msgstr ""
 
 #: src/Admin/Tables/Projects_Table.php:78
-#: src/Admin/Views/projects-form.php:194
+#: src/Admin/Views/projects-form.php:215
 #: src/Localization/Indonesia.php:142
 msgid "Budget"
 msgstr ""
@@ -447,8 +494,8 @@ msgid "Back to clients"
 msgstr ""
 
 #: src/Admin/Views/clients-form.php:145
-#: src/Admin/Views/projects-form.php:94
-#: src/Admin/Views/projects-form.php:109
+#: src/Admin/Views/projects-form.php:115
+#: src/Admin/Views/projects-form.php:130
 msgid "required"
 msgstr ""
 
@@ -503,8 +550,8 @@ msgid "Currently %1$s, %2$d days"
 msgstr ""
 
 #: src/Admin/Views/clients-form.php:255
-#: src/Admin/Views/invoices-form.php:249
-#: src/Admin/Views/projects-form.php:171
+#: src/Admin/Views/invoices-form.php:269
+#: src/Admin/Views/projects-form.php:192
 #: src/Admin/Views/settings.php:95
 msgid "Currency"
 msgstr ""
@@ -557,9 +604,11 @@ msgid "Company number, agency code or other official identifier."
 msgstr ""
 
 #: src/Admin/Views/clients-form.php:342
-#: src/Admin/Views/invoices-form.php:445
+#: src/Admin/Views/invoices-form.php:465
 #: src/Admin/Views/invoices-print.php:331
-#: src/Admin/Views/projects-form.php:266
+#: src/Admin/Views/payments-form.php:204
+#: src/Admin/Views/payments-print.php:227
+#: src/Admin/Views/projects-form.php:287
 msgid "Notes"
 msgstr ""
 
@@ -629,153 +678,164 @@ msgstr ""
 msgid "Back to invoices"
 msgstr ""
 
+#: src/Admin/Views/invoices-form.php:151
+#: src/Admin/Views/payments-form.php:56
+#: src/Admin/Views/payments-form.php:214
+#: src/Admin/Views/payments-list.php:32
+msgid "Record payment"
+msgstr ""
+
 #. translators: %s: invoice status label
-#: src/Admin/Views/invoices-form.php:144
+#: src/Admin/Views/invoices-form.php:164
 #, php-format
 msgid "This invoice is %s. Line items and amounts are locked. You can still update status, due date, notes and terms — or void the invoice."
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:161
+#: src/Admin/Views/invoices-form.php:181
 msgid "Number:"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:174
-#: src/Admin/Views/projects-form.php:98
+#: src/Admin/Views/invoices-form.php:194
+#: src/Admin/Views/projects-form.php:119
 msgid "— Select client —"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:185
+#: src/Admin/Views/invoices-form.php:205
 msgid "Project"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:189
+#: src/Admin/Views/invoices-form.php:209
 msgid "— No project —"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:196
+#: src/Admin/Views/invoices-form.php:216
 msgid "Optional. Link this invoice to a project when billing staged work."
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:265
+#: src/Admin/Views/invoices-form.php:285
 msgid "Line items"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:271
+#: src/Admin/Views/invoices-form.php:291
 #: src/Admin/Views/invoices-print.php:234
-#: src/Admin/Views/projects-form.php:325
-#: src/Admin/Views/projects-form.php:331
+#: src/Admin/Views/projects-form.php:346
+#: src/Admin/Views/projects-form.php:352
 msgid "Description"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:272
+#: src/Admin/Views/invoices-form.php:292
 #: src/Admin/Views/invoices-print.php:235
 msgid "Qty"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:273
+#: src/Admin/Views/invoices-form.php:293
 #: src/Admin/Views/invoices-print.php:236
 msgid "Unit"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:274
+#: src/Admin/Views/invoices-form.php:294
 #: src/Admin/Views/invoices-print.php:237
 msgid "Unit price"
 msgstr ""
 
 #. translators: %s: tax label e.g. PPN
-#: src/Admin/Views/invoices-form.php:281
+#: src/Admin/Views/invoices-form.php:301
 #, php-format
 msgid "%s %%"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:288
+#: src/Admin/Views/invoices-form.php:308
 msgid "Line total"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:312
+#: src/Admin/Views/invoices-form.php:332
 msgid "pcs"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:335
+#: src/Admin/Views/invoices-form.php:355
 msgid "Leave a description blank to drop that row. Save to recompute totals. Amounts use whole rupiah when the currency is IDR."
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:343
+#: src/Admin/Views/invoices-form.php:363
 msgid "Totals"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:349
-#: src/Admin/Views/invoices-form.php:395
+#: src/Admin/Views/invoices-form.php:369
+#: src/Admin/Views/invoices-form.php:415
 #: src/Admin/Views/invoices-print.php:267
 msgid "Discount"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:353
+#: src/Admin/Views/invoices-form.php:373
 msgid "Header discount applied after line totals (before tax scaling)."
 msgstr ""
 
 #. translators: %s: withholding label e.g. PPh 23
-#: src/Admin/Views/invoices-form.php:366
+#: src/Admin/Views/invoices-form.php:386
 #, php-format
 msgid "Client withholds %s on this invoice"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:374
+#: src/Admin/Views/invoices-form.php:394
 msgid "Rate (%)"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:379
+#: src/Admin/Views/invoices-form.php:399
 msgid "Shown as gross, withheld and net expected so bank credits can be reconciled."
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:390
+#: src/Admin/Views/invoices-form.php:410
 #: src/Admin/Views/invoices-print.php:262
 msgid "Subtotal"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:415
+#: src/Admin/Views/invoices-form.php:435
 #: src/Admin/Views/invoices-print.php:287
 msgid "Net expected"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:421
+#: src/Admin/Views/invoices-form.php:441
 #: src/Admin/Views/invoices-print.php:293
 #: src/Support/Invoice_Status.php:36
 msgid "Paid"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:432
+#: src/Admin/Views/invoices-form.php:452
 msgid "Totals are calculated when you save."
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:439
+#: src/Admin/Views/invoices-form.php:459
 msgid "Notes and terms"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:453
+#: src/Admin/Views/invoices-form.php:473
 #: src/Admin/Views/invoices-print.php:338
 msgid "Terms"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:465
+#: src/Admin/Views/invoices-form.php:485
 msgid "Update invoice"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:465
+#: src/Admin/Views/invoices-form.php:485
+#: src/Admin/Views/projects-form.php:101
 msgid "Create invoice"
 msgstr ""
 
 #: src/Admin/Views/invoices-list.php:49
+#: src/Admin/Views/payments-list.php:47
 #: src/Admin/Views/projects-list.php:48
 msgid "Filter by client"
 msgstr ""
 
 #: src/Admin/Views/invoices-list.php:51
+#: src/Admin/Views/payments-list.php:49
 #: src/Admin/Views/projects-list.php:50
 msgid "All clients"
 msgstr ""
 
 #: src/Admin/Views/invoices-list.php:59
+#: src/Admin/Views/payments-list.php:67
 #: src/Admin/Views/projects-list.php:58
 msgid "Filter"
 msgstr ""
@@ -799,15 +859,12 @@ msgid "Invoice %s"
 msgstr ""
 
 #: src/Admin/Views/invoices-print.php:162
+#: src/Admin/Views/payments-print.php:135
 msgid "Use your browser’s print dialog to save as PDF (A4)."
 msgstr ""
 
 #: src/Admin/Views/invoices-print.php:166
 msgid "VOID"
-msgstr ""
-
-#: src/Admin/Views/invoices-print.php:185
-msgid "Invoice"
 msgstr ""
 
 #. translators: 1: issue date, 2: due date
@@ -827,12 +884,13 @@ msgid "Project: %s"
 msgstr ""
 
 #: src/Admin/Views/invoices-print.php:241
-#: src/Admin/Views/projects-form.php:265
+#: src/Admin/Views/projects-form.php:286
 msgid "Amount"
 msgstr ""
 
 #. translators: %s: amount in words
 #: src/Admin/Views/invoices-print.php:309
+#: src/Admin/Views/payments-print.php:179
 #, php-format
 msgid "In words: %s"
 msgstr ""
@@ -856,7 +914,150 @@ msgid "For %s"
 msgstr ""
 
 #: src/Admin/Views/invoices-print.php:364
+#: src/Admin/Views/payments-print.php:263
 msgid "Signature and company stamp"
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:56
+msgid "Edit payment"
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:60
+#: src/Admin/Views/payments-missing.php:19
+msgid "Back to payments"
+msgstr ""
+
+#. translators: 1: total, 2: paid, 3: balance
+#: src/Admin/Views/payments-form.php:85
+#, php-format
+msgid "Total %1$s · Settled %2$s · Balance %3$s"
+msgstr ""
+
+#. translators: %s: credit amount
+#: src/Admin/Views/payments-form.php:98
+#, php-format
+msgid "(overpaid by %s)"
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:116
+msgid "Receipt:"
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:128
+msgid "— Select invoice —"
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:147
+msgid "Date received"
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:155
+msgid "Amount received (bank)"
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:159
+msgid "What actually arrived in your account."
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:170
+msgid "Withheld by the client and remitted on your behalf. Counts toward settling the invoice even though it is not in your bank."
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:173
+msgid "Withholding certificate ref."
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:195
+#: src/Admin/Views/payments-print.php:201
+msgid "Reference"
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:199
+msgid "Bank transfer ref, VA number, or other reconciliation hint."
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:214
+msgid "Update payment"
+msgstr ""
+
+#: src/Admin/Views/payments-list.php:38
+msgid "Record money that has already arrived. BizWit never processes or moves funds."
+msgstr ""
+
+#: src/Admin/Views/payments-list.php:57
+msgid "Filter by method"
+msgstr ""
+
+#: src/Admin/Views/payments-list.php:59
+msgid "All methods"
+msgstr ""
+
+#: src/Admin/Views/payments-list.php:68
+msgid "Search payments"
+msgstr ""
+
+#: src/Admin/Views/payments-missing.php:15
+msgid "Payment not found"
+msgstr ""
+
+#: src/Admin/Views/payments-missing.php:16
+msgid "That payment does not exist or was deleted."
+msgstr ""
+
+#. translators: %s: receipt number
+#: src/Admin/Views/payments-print.php:58
+#, php-format
+msgid "Receipt %s"
+msgstr ""
+
+#: src/Admin/Views/payments-print.php:152
+msgid "Kwitansi"
+msgstr ""
+
+#. translators: %s: payer / client name
+#: src/Admin/Views/payments-print.php:163
+#, php-format
+msgid "Received from: %s"
+msgstr ""
+
+#: src/Admin/Views/payments-print.php:171
+msgid "The sum of"
+msgstr ""
+
+#: src/Admin/Views/payments-print.php:191
+msgid "For invoice"
+msgstr ""
+
+#: src/Admin/Views/payments-print.php:196
+msgid "Payment method"
+msgstr ""
+
+#: src/Admin/Views/payments-print.php:207
+msgid "Received in bank"
+msgstr ""
+
+#: src/Admin/Views/payments-print.php:216
+msgid "Withholding certificate"
+msgstr ""
+
+#: src/Admin/Views/payments-print.php:221
+msgid "Settled toward invoice"
+msgstr ""
+
+#. translators: 1: threshold amount, 2: meterai amount
+#: src/Admin/Views/payments-print.php:239
+#, php-format
+msgid "Stamp duty (bea meterai) of %2$s may apply on documents above %1$s — affix meterai here as required."
+msgstr ""
+
+#: src/Admin/Views/payments-print.php:250
+msgid "Payer"
+msgstr ""
+
+#. translators: %s: business name
+#: src/Admin/Views/payments-print.php:257
+#, php-format
+msgid "Received by %s"
 msgstr ""
 
 #: src/Admin/Views/placeholder.php:22
@@ -872,7 +1073,7 @@ msgid "Edit project"
 msgstr ""
 
 #: src/Admin/Views/projects-form.php:77
-#: src/Admin/Views/projects-form.php:340
+#: src/Admin/Views/projects-form.php:361
 #: src/Admin/Views/projects-list.php:35
 msgid "Add project"
 msgstr ""
@@ -882,100 +1083,100 @@ msgstr ""
 msgid "Back to projects"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:118
+#: src/Admin/Views/projects-form.php:139
 msgid "Code"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:123
+#: src/Admin/Views/projects-form.php:144
 msgid "Optional internal or contract reference."
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:140
+#: src/Admin/Views/projects-form.php:161
 #: src/Localization/Indonesia.php:143
 msgid "Billing type"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:156
+#: src/Admin/Views/projects-form.php:177
 msgid "Billing details"
 msgstr ""
 
 #. translators: 1: currency code, 2: billing type label
-#: src/Admin/Views/projects-form.php:161
+#: src/Admin/Views/projects-form.php:182
 #, php-format
 msgid "%1$s · %2$s"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:183
+#: src/Admin/Views/projects-form.php:204
 msgid "Rate"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:189
+#: src/Admin/Views/projects-form.php:210
 msgid "Hourly or retainer rate. Leave blank when not applicable."
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:206
+#: src/Admin/Views/projects-form.php:227
 msgid "Contract or agreed total for this project."
 msgstr ""
 
 #. translators: %s: example amount with grouping, e.g. 1.500.000
-#: src/Admin/Views/projects-form.php:213
+#: src/Admin/Views/projects-form.php:234
 #, php-format
 msgid " Example: %s"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:222
+#: src/Admin/Views/projects-form.php:243
 msgid "Retention %"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:227
+#: src/Admin/Views/projects-form.php:248
 msgid "Percentage held back until final acceptance. Applied when invoicing."
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:231
+#: src/Admin/Views/projects-form.php:252
 msgid "Start date"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:238
+#: src/Admin/Views/projects-form.php:259
 msgid "End date"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:250
+#: src/Admin/Views/projects-form.php:271
 msgid "Termin stages"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:251
+#: src/Admin/Views/projects-form.php:272
 msgid "Ordered billing stages that sum to the budget"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:257
+#: src/Admin/Views/projects-form.php:278
 msgid "Each row is one stage (uang muka, termin 1, retensi, …). Amounts use the project currency. Empty rows are ignored."
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:283
+#: src/Admin/Views/projects-form.php:304
 msgid "e.g. Termin 1 — DP"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:297
+#: src/Admin/Views/projects-form.php:318
 msgid "Optional"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:307
+#: src/Admin/Views/projects-form.php:328
 msgid "Fill the empty row to add a stage, then save. To add more, save and open the project again."
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:314
+#: src/Admin/Views/projects-form.php:335
 msgid "Allow termin total to differ from the project budget"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:316
+#: src/Admin/Views/projects-form.php:337
 msgid "When unchecked, the stage amounts must add up to the budget."
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:326
+#: src/Admin/Views/projects-form.php:347
 msgid "Internal notes about the work"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:340
+#: src/Admin/Views/projects-form.php:361
 msgid "Update project"
 msgstr ""
 
@@ -1678,42 +1879,81 @@ msgstr ""
 
 #: src/Repositories/Invoice_Repository.php:310
 #: src/Repositories/Invoice_Repository.php:371
-#: src/Repositories/Invoice_Repository.php:590
+#: src/Repositories/Invoice_Repository.php:695
 msgid "That status change is not allowed for this invoice."
 msgstr ""
 
 #: src/Repositories/Invoice_Repository.php:323
 #: src/Repositories/Invoice_Repository.php:400
-#: src/Repositories/Invoice_Repository.php:608
+#: src/Repositories/Invoice_Repository.php:467
+#: src/Repositories/Invoice_Repository.php:713
 msgid "The invoice could not be updated."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:443
+#. translators: 1: invoice number, 2: client name, 3: balance formatted
+#: src/Repositories/Invoice_Repository.php:520
+#, php-format
+msgid "%1$s — %2$s (balance %3$s)"
+msgstr ""
+
+#: src/Repositories/Invoice_Repository.php:548
 msgid "Only draft invoices can be deleted. Void a sent invoice to keep the number for your records."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:451
+#: src/Repositories/Invoice_Repository.php:556
 msgid "This invoice has payment records and cannot be deleted."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:460
+#: src/Repositories/Invoice_Repository.php:565
 msgid "The invoice could not be deleted."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:660
+#: src/Repositories/Invoice_Repository.php:765
 msgid "Add at least one line item with a description."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:695
+#: src/Repositories/Invoice_Repository.php:800
 msgid "Please choose a client for this invoice."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:701
+#: src/Repositories/Invoice_Repository.php:806
 msgid "That project does not belong to the selected client."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:811
+#: src/Repositories/Invoice_Repository.php:916
 msgid "The invoice lines could not be saved."
+msgstr ""
+
+#: src/Repositories/Payment_Repository.php:171
+msgid "Could not allocate a receipt number. Please try again."
+msgstr ""
+
+#: src/Repositories/Payment_Repository.php:190
+msgid "The payment could not be saved."
+msgstr ""
+
+#: src/Repositories/Payment_Repository.php:257
+msgid "The payment could not be updated."
+msgstr ""
+
+#: src/Repositories/Payment_Repository.php:314
+msgid "The payment could not be deleted."
+msgstr ""
+
+#: src/Repositories/Payment_Repository.php:408
+msgid "Please choose an invoice for this payment."
+msgstr ""
+
+#: src/Repositories/Payment_Repository.php:413
+msgid "Payments cannot be recorded against a void invoice."
+msgstr ""
+
+#: src/Repositories/Payment_Repository.php:416
+msgid "Send the invoice before recording a payment."
+msgstr ""
+
+#: src/Repositories/Payment_Repository.php:446
+msgid "Enter an amount received and/or a withheld amount."
 msgstr ""
 
 #: src/Repositories/Project_Repository.php:104

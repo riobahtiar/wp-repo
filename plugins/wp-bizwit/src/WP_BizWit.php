@@ -19,6 +19,7 @@ use WP_BizWit\Cron\Overdue_Invoices;
 use WP_BizWit\Database\Installer;
 use WP_BizWit\Repositories\Client_Repository;
 use WP_BizWit\Repositories\Invoice_Repository;
+use WP_BizWit\Repositories\Payment_Repository;
 use WP_BizWit\Repositories\Project_Repository;
 use WP_BizWit\Repositories\Stats_Repository;
 use WP_BizWit\Rest\Controllers\Health_Controller;
@@ -30,7 +31,7 @@ class WP_BizWit {
 
 
 	const PLUGIN_NAME    = 'wp-bizwit';
-	const PLUGIN_VERSION = '0.5.0';
+	const PLUGIN_VERSION = '0.6.0';
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -117,6 +118,7 @@ class WP_BizWit {
 		$clients  = new Client_Repository();
 		$projects = new Project_Repository();
 		$invoices = new Invoice_Repository();
+		$payments = new Payment_Repository();
 		$stats    = new Stats_Repository();
 
 		// Screens are handed their dependencies here rather than reaching for
@@ -127,7 +129,7 @@ class WP_BizWit {
 			new Clients_Screen( $clients, $projects ),
 			new Projects_Screen( $projects, $clients ),
 			new Invoices_Screen( $invoices, $clients, $projects ),
-			new Payments_Screen(),
+			new Payments_Screen( $payments, $invoices, $clients ),
 			new Settings_Screen()
 		);
 

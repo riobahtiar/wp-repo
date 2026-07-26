@@ -11,6 +11,29 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.6.0] — 2026-07-27
+
+Payments and kwitansi: record money that already arrived, settle invoices, print receipts.
+
+### Added
+- **Payments** ([plan 03](plans/03-payments-receipts.md)): list with client/method
+  filters; record/edit form; delete with invoice recalculation.
+- **`Payment_Repository`**: bank amount + withheld (PPh 23) both count toward
+  settlement; `invoices.paid_minor` always recomputed from payments.
+- **Invoice status sync**: partial / paid (and overdue when still open past due)
+  via `Invoice_Repository::apply_settlement()`.
+- **Receipt numbering** on its own `Sequence` key (`receipt:YYYY`).
+- **Printable kwitansi** (A4 HTML): terbilang, method, invoice ref, meterai
+  reminder above Rp 5.000.000 when enabled.
+- Schema **1.4.0**: `withheld_minor`, `withholding_ref` on payments.
+- Links: **Record payment** from a non-draft invoice; prefill from invoice
+  balance / invoice withholding.
+- Overpayment allowed with a credit warning.
+- Tests: `PaymentRepositoryTest`.
+
+### Changed
+- Version **0.6.0**. Payments placeholder replaced with full recording UI.
+
 ## [0.5.0] — 2026-07-27
 
 Invoices end-to-end: list, editor, status machine, print, PPN/PPh 23 rules.

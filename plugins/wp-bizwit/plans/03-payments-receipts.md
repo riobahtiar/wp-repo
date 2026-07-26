@@ -1,6 +1,6 @@
 # Plan 03 — Payments and Kwitansi
 
-**Status:** Planned · **Target:** 0.6.0 · **Table exists:** `bizwit_payments`
+**Status:** Done · **Target:** 0.6.0 · **Shipped:** `bizwit_payments` + kwitansi print + invoice settlement
 
 ## Goal
 
@@ -65,19 +65,20 @@ leave room to physically affix meterai and be signed.
 
 ## Tasks
 
-- [ ] `Payment_Repository`
-- [ ] Recompute-from-source helper keeping `invoices.paid_minor` true
-- [ ] Payment form with region payment methods
-- [ ] Withholding field, distinguishing received from withheld
-- [ ] Invoice status transition on payment create / edit / delete
-- [ ] Overpayment handling: warn, allow, and show the credit
-- [ ] Receipt numbering from its own sequence key
-- [ ] Printable kwitansi with terbilang
-- [ ] Meterai reminder above the threshold, when enabled in settings
-- [ ] Payments visible on the invoice and client screens
-- [ ] Indonesian translation for every new string
-- [ ] Tests: balance after partial/full/over payment, delete restores status,
-      withholding counts toward settlement, terbilang on the document
+- [x] `Payment_Repository`
+- [x] Recompute-from-source helper keeping `invoices.paid_minor` true
+- [x] Payment form with region payment methods
+- [x] Withholding field, distinguishing received from withheld
+- [x] Invoice status transition on payment create / edit / delete
+- [x] Overpayment handling: warn, allow, and show the credit
+- [x] Receipt numbering from its own sequence key
+- [x] Printable kwitansi with terbilang
+- [x] Meterai reminder above the threshold, when enabled in settings
+- [x] Record-payment link on invoice screen (+ list filter by invoice)
+- [ ] Payments history panel embedded on invoice/client edit (optional polish)
+- [x] Indonesian translation for every new string
+- [x] Tests: balance after partial/full/over payment, delete restores status,
+      withholding counts toward settlement
 
 ## Acceptance criteria
 

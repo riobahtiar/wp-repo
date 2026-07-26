@@ -131,6 +131,26 @@ $statuses = is_array( $data['statuses'] ?? null ) ? $data['statuses'] : array();
 		<?php esc_html_e( 'Print', 'wp-bizwit' ); ?>
 	</a>
 <?php endif; ?>
+<?php
+if (
+	$is_edit
+	&& ! empty( $invoice['id'] )
+	&& Invoice_Status::DRAFT !== $invoice_status
+	&& Invoice_Status::VOID !== $invoice_status
+) :
+	$pay_url = add_query_arg(
+		array(
+			'page'       => 'wp-bizwit-payments',
+			'action'     => 'new',
+			'invoice_id' => (int) $invoice['id'],
+		),
+		admin_url( 'admin.php' )
+	);
+	?>
+	<a href="<?php echo esc_url( $pay_url ); ?>" class="page-title-action">
+		<?php esc_html_e( 'Record payment', 'wp-bizwit' ); ?>
+	</a>
+<?php endif; ?>
 
 <hr class="wp-header-end" />
 
