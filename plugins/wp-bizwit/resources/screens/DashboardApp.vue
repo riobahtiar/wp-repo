@@ -1,0 +1,137 @@
+<script setup lang="ts">
+/**
+ * Dashboard pilot island — proves PHP → enqueue → Vue → REST → design system.
+ */
+import { onMounted, ref } from 'vue';
+
+import { apiGet } from '@/app/api/client';
+import AppShell from '@ui/AppShell.vue';
+import Button from '@ui/Button.vue';
+import EmptyState from '@ui/EmptyState.vue';
+import MoneyText from '@ui/MoneyText.vue';
+
+interface HealthResponse {
+	ok: boolean;
+	version: string;
+	region: string;
+}
+
+type LoadState = 'loading' | 'ready' | 'error';
+
+const state = ref< LoadState >( 'loading' );
+const health = ref< HealthResponse | null >( null );
+const errorMessage = ref( '' );
+
+const currency =
+	typeof window !== 'undefined' && window.wpBizwitConfig?.currency
+		? window.wpBizwitConfig.currency
+		: 'IDR';
+
+/** Sample amount for MoneyText pilot (Rp 1.500.000 when currency is IDR). */
+const demoAmountMinor = 1_500_000;
+
+async function loadHealth(): Promise< void > {
+	state.value = 'loading';
+	errorMessage.value = '';
+	health.value = null;
+
+	try {
+		const data = await apiGet< HealthResponse >( 'health' );
+		health.value = data;
+		state.value = 'ready';
+	} catch ( err ) {
+		errorMessage.value =
+			err instanceof Error ? err.message : 'Gagal memuat status sistem.';
+		state.value = 'error';
+	}
+}
+
+onMounted( () => {
+	void loadHealth();
+} );
+</script>
+
+<template>
+	<AppShell
+		title="Status sistem"
+		description="Panel percontohan Vue — memastikan REST dan format uang berjalan."
+	>
+		<!-- Loading skeleton -->
+		<div
+			v-if="state === 'loading'"
+			class="rounded-[var(--bw-radius)] border border-[var(--bw-color-border)] bg-[var(--bw-color-surface)] p-5"
+			aria-busy="true"
+			aria-live="polite"
+		>
+			<p class="m-0 mb-4 text-sm text-[var(--bw-color-text-muted)]">
+				Memuat…
+			</p>
+			<div class="flex flex-col gap-3">
+				<div
+					class="h-4 w-2/5 max-w-xs animate-pulse rounded bg-[var(--bw-color-surface-muted)]"
+				/>
+				<div
+					class="h-4 w-1/3 max-w-[12rem] animate-pulse rounded bg-[var(--bw-color-surface-muted)]"
+				/>
+				<div
+					class="h-4 w-1/2 max-w-sm animate-pulse rounded bg-[var(--bw-color-surface-muted)]"
+				/>
+			</div>
+		</div>
+
+		<!-- Error -->
+		<EmptyState
+			v-else-if="state === 'error'"
+			title="Tidak dapat memuat status"
+			:description="
+				errorMessage ||
+				'Silakan coba lagi. Pastikan Anda masih masuk dan memiliki izin BizWit.'
+			"
+		>
+			<Button variant="primary" type="button" @click="loadHealth">
+				Coba lagi
+			</Button>
+		</EmptyState>
+
+		<!-- Ready -->
+		<div
+			v-else-if="state === 'ready' && health"
+			class="rounded-[var(--bw-radius)] border border-[var(--bw-color-border)] bg-[var(--bw-color-surface)] p-5 shadow-sm"
+		>
+			<dl class="m-0 grid gap-3 text-sm sm:grid-cols-2">
+				<div>
+					<dt class="m-0 font-medium text-[var(--bw-color-text-muted)]">
+						Versi
+					</dt>
+					<dd class="m-0 mt-0.5 text-[var(--bw-color-text)]">
+						{{ health.version }}
+					</dd>
+				</div>
+				<div>
+					<dt class="m-0 font-medium text-[var(--bw-color-text-muted)]">
+						Wilayah
+					</dt>
+					<dd class="m-0 mt-0.5 text-[var(--bw-color-text)]">
+						{{ health.region }}
+					</dd>
+				</div>
+				<div class="sm:col-span-2">
+					<dt class="m-0 font-medium text-[var(--bw-color-text-muted)]">
+						Contoh format uang
+					</dt>
+					<dd class="m-0 mt-0.5 text-base text-[var(--bw-color-text)]">
+						<MoneyText
+							:amount-minor="demoAmountMinor"
+							:currency="currency"
+						/>
+						<span
+							class="ml-2 text-xs text-[var(--bw-color-text-muted)]"
+						>
+							({{ demoAmountMinor }} minor · {{ currency }})
+						</span>
+					</dd>
+				</div>
+			</dl>
+		</div>
+	</AppShell>
+</template>

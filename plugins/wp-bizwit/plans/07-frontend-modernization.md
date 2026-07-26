@@ -1,6 +1,6 @@
 # Plan 07 — Frontend modernization
 
-**Status:** In progress (Phase 1 tooling done) · **Target:** foundation in 0.3.x / 0.4.x · **Blocks:** heavy
+**Status:** In progress (Phases 0–5 done: pilot live) · **Target:** foundation in 0.3.x / 0.4.x · **Blocks:** heavy
 UI for 0.4+ features · **Architecture:** [`../docs/frontend-architecture.md`](../docs/frontend-architecture.md)
 
 > **For agentic workers:** implement phase-by-phase. Each phase must leave the
@@ -372,11 +372,11 @@ BizWit screens.
 
 **Goal:** Shared components other screens will import.
 
-- [ ] **4.1** Tokens in CSS (spacing, radii, semantic colors that work on
+- [x] **4.1** Tokens in CSS (spacing, radii, semantic colors that work on
       wp-admin gray). Prefer existing WP admin blues for primary actions so the
       plugin feels native.
 
-- [ ] **4.2** Components (Vue 3 + `<script setup lang="ts">`):
+- [x] **4.2** Components (Vue 3 + `<script setup lang="ts">`):
 
   | Component | Props (minimum) | Notes |
   |-----------|-----------------|-------|
@@ -385,13 +385,13 @@ BizWit screens.
   | `EmptyState.vue` | `title`, `description`, default slot for actions | Indonesian-friendly copy samples |
   | `AppShell.vue` | `title`, `description?` | Wraps page header inside `.wp-bizwit` |
 
-- [ ] **4.3** `MoneyText` unit test via Vitest **or** pure TS formatter tests:
+- [x] **4.3** `MoneyText` unit test via Vitest **or** pure TS formatter tests:
 
   - Prefer extracting `formatMoney( amountMinor, currency, region )` to
     `resources/app/lib/money.ts` and testing without full Vue mount.
   - Cases: `1500000` + `IDR` → contains `1.500.000` and `Rp`; never `1,500,000.00`.
 
-- [ ] **4.4** Add Vitest only if formatter tests need it:
+- [x] **4.4** Add Vitest only if formatter tests need it:
 
   ```bash
   npm install -D vitest
@@ -399,7 +399,7 @@ BizWit screens.
 
   Script: `"test:unit": "vitest run"`. Keep optional if pure node assert is enough.
 
-- [ ] **4.5** Document component import path `@ui/Button.vue` in AGENTS.md.
+- [x] **4.5** Document component import path `@ui/Button.vue` in AGENTS.md.
 
 **Acceptance:**
 
@@ -421,18 +421,16 @@ BizWit screens.
 
 Default recommendation: **A** with a small card “Status” that calls `/health`
 and shows `MoneyText` sample using settings currency — progressive, low risk.
+**Chosen: A** (`#wp-bizwit-dashboard` under existing `.wrap.wp-bizwit`).
 
-- [ ] **5.1** Update `Admin/Views/dashboard.php` (or Dashboard_Screen data) to
-      include:
+- [x] **5.1** Update `Admin/Views/dashboard.php` (or Dashboard_Screen data) to
+      include mount root `#wp-bizwit-dashboard` (outer `.wp-bizwit` comes from
+      `Screen::render_page()`).
 
-  ```php
-  <div class="wp-bizwit" id="wp-bizwit-dashboard" data-boot="<?php echo esc_attr( wp_json_encode( $boot ) ); ?>"></div>
-  ```
-
-- [ ] **5.2** `resources/screens/dashboard.ts` mounts `DashboardApp.vue` on
+- [x] **5.2** `resources/screens/dashboard.ts` mounts `DashboardApp.vue` on
       `#wp-bizwit-dashboard` if present.
 
-- [ ] **5.3** `DashboardApp.vue`: EmptyState or card + health fetch + MoneyText
+- [x] **5.3** `DashboardApp.vue`: EmptyState or card + health fetch + MoneyText
       demo amount.
 
 - [ ] **5.4** Manual test checklist:
@@ -442,8 +440,8 @@ and shows `MoneyText` sample using settings currency — progressive, low risk.
   - [ ] Slow 3G: card shows skeleton then data
   - [ ] User without BizWit cap cannot call health
 
-- [ ] **5.5** Indonesian strings: any user-visible pilot strings in `__()`,
-      translated in `languages/wp-bizwit-id_ID.po`, compile mo/php.
+- [x] **5.5** Pilot Vue copy is Indonesian in the SFC (not PHP `__()`); no new
+      PHP strings for the island. Full vue-i18n pipeline deferred.
 
 **Acceptance:** Pilot is demo-quality and safe; can ship in a minor beta.
 

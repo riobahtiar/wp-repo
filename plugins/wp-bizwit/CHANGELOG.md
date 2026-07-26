@@ -25,11 +25,21 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   distributable plugin; performance budgets and wordpress.org packaging rules.
 - **Vite 8 + Vue 3 + Tailwind v4 toolchain** (plan 07 Phase 1): multi-entry
   build (`admin`, `dashboard`), dual-pipeline with legacy webpack into `build/`,
-  `build/manifest.json`, scoped admin CSS under `.wp-bizwit`. PHP enqueue of
-  Vite assets is Phase 2.
+  `build/manifest.json`, scoped admin CSS under `.wp-bizwit`.
+- **PHP asset bridge** (plan 07 Phase 2): `Admin\Assets` enqueues Vite entries
+  from `build/manifest.json` on BizWit screens only; localizes `wpBizwitConfig`.
+- **REST foundation** (plan 07 Phase 3): `GET /wp-bizwit/v1/health` plus TS
+  `apiGet` client.
+- **Design system seed** (plan 07 Phase 4): `resources/ui` components
+  (`Button`, `MoneyText`, `EmptyState`, `AppShell`), CSS tokens under
+  `.wp-bizwit`, and `formatMoney()` in `resources/app/lib/money.ts` with Vitest
+  (`npm run test:unit`). IDR displays as `Rp 1.500.000`.
+- **Dashboard Vue pilot** (plan 07 Phase 5): mounts on `#wp-bizwit-dashboard`,
+  loads health over REST (skeleton / error + retry), shows version, region, and
+  a MoneyText sample.
 
-Next up: [Frontend foundation](plans/07-frontend-modernization.md) (PHP asset
-bridge), then [Projects](plans/01-projects.md).
+Next up: plan 07 Phase 6+ (retire webpack admin path, budgets), then
+[Projects](plans/01-projects.md).
 
 ## [0.3.0] — 2026-07-27
 

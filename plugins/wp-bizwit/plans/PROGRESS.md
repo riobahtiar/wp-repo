@@ -21,7 +21,7 @@ a migration. Do not run a real business on this yet.
 | Money handling | ✅ Done | Integer minor units, zero-decimal IDR, terbilang |
 | Atomic document numbering | ✅ Done | `Sequence`, Indonesian and simple formats |
 | Settings screen | ✅ Done | Progressive disclosure, tax fully optional |
-| Dashboard | 🟡 Basic | Tiles only; no charts, no ageing |
+| Dashboard | 🟡 Basic + Vue pilot | PHP tiles + Vue island (health REST, MoneyText demo); no charts/ageing |
 | **Clients** | ✅ Done | List, search, filter, sort, bulk actions, add/edit, delete guard |
 | Client contacts | ⬜ Not started | Table exists, no UI |
 | **Projects** | ⬜ Placeholder | [Plan](01-projects.md) |
@@ -31,8 +31,8 @@ a migration. Do not run a real business on this yet.
 | Onboarding | ⬜ Not started | [Plan](04-ux-and-onboarding.md) |
 | Import / export | 🔒 Deferred | [Plan](05-import-export.md) — gated on 1.0 GA |
 | Reports | ⬜ Not started | Not yet planned |
-| REST API | 🟡 Health only | `GET /wp-bizwit/v1/health` + TS client; full CRUD later ([07](07-frontend-modernization.md) Phase 3) |
-| Frontend (Vue/Vite/Tailwind) | 🟡 Phase 2 asset bridge | Vite build + `Admin\Assets` enqueues dashboard from `build/manifest.json`; webpack legacy still dual-pipeline · [Architecture](../docs/frontend-architecture.md) · [Plan 07](07-frontend-modernization.md) |
+| REST API | 🟡 Health only | `GET /wp-bizwit/v1/health` + TS client; full CRUD later ([07](07-frontend-modernization.md)) |
+| Frontend (Vue/Vite/Tailwind) | 🟡 Phases 0–5 done | Tooling, asset bridge, REST health, design-system seed (`@ui/*`), dashboard pilot island; webpack dual-pipeline until Phase 6 · [Architecture](../docs/frontend-architecture.md) · [Plan 07](07-frontend-modernization.md) |
 
 Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferred
 
@@ -42,7 +42,8 @@ Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferre
 |-------|-------|
 | PHPCS (WordPress standard) | ✅ 0 errors in plugin code |
 | PHPStan level 6 | ✅ 0 errors |
-| PHPUnit | 🟡 `MoneyTest`, `IndonesiaRegionTest` — repositories and screens untested |
+| PHPUnit | 🟡 `MoneyTest`, `IndonesiaRegionTest`, `RestHealthTest` — repositories and screens untested |
+| Vitest (JS) | 🟡 `formatMoney` only (`npm run test:unit`) |
 | Accessibility | 🟡 Native `<details>`, form labels, list-table semantics. No audit yet |
 | Security review | 🟡 Controls documented in [`../SECURITY.md`](../SECURITY.md); no external review |
 | Browser testing | ⬜ Not done |

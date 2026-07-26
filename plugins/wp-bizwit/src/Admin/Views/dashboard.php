@@ -58,5 +58,8 @@ $tiles = is_array( $data['tiles'] ?? null ) ? $data['tiles'] : array();
 	</ol>
 </div>
 
-<?php // Mount root for the Vite dashboard island (resources/screens/dashboard.ts). ?>
-<div id="wp-bizwit-dashboard"></div>
+<?php
+// Mount root for the Vite dashboard island (resources/screens/DashboardApp.vue).
+// Outer `.wrap.wp-bizwit` is printed by Screen::render_page(); do not nest another.
+?>
+<div id="wp-bizwit-dashboard" class="wp-bizwit-dashboard-mount"></div>
