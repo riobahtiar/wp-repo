@@ -11,6 +11,24 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.6.2] — 2026-07-27
+
+Document **layout builder** (Vue) replaces the plain Gutenberg edit experience.
+
+### Added
+- **A4 canvas builder** on Template edit: component palette, Header/Body/Footer
+  zones, and a properties panel per component.
+- Components: heading, text, data field, line items, totals, bank, signature,
+  spacer, divider, columns — each with style controls (size, weight, colour,
+  alignment, margins, toggles).
+- Layout stored as JSON (`_wp_bizwit_layout`); print uses `Layout_Renderer`
+  (labels still follow the site language).
+
+### Changed
+- Template CPT no longer uses the block editor for layout; Vue builder is the
+  design surface. Gutenberg document blocks remain for legacy content.
+- Version **0.6.2**.
+
 ## [0.6.1] — 2026-07-27
 
 Gutenberg document Template designer (Header / Body / Footer) integrated with invoices.

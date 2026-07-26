@@ -51,8 +51,9 @@ class Assets {
 	 * @var array<string, string>
 	 */
 	private const ENTRY_SOURCES = array(
-		'admin'     => 'resources/admin/main.ts',
-		'dashboard' => 'resources/screens/dashboard.ts',
+		'admin'             => 'resources/admin/main.ts',
+		'dashboard'         => 'resources/screens/dashboard.ts',
+		'template-builder'  => 'resources/screens/template-builder.ts',
 	);
 
 	/**

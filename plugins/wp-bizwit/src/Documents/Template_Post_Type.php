@@ -1,18 +1,17 @@
 <?php
 /**
- * Document template custom post type (Gutenberg).
+ * Document template custom post type + layout builder admin.
  *
  * @package WP_BizWit
  */
 
 namespace WP_BizWit\Documents;
 
-use WP_BizWit\Admin\Screens\Dashboard_Screen;
 use WP_BizWit\Support\Capabilities;
 use WP_Post;
 
 /**
- * Registers the Template CPT under the BizWit menu and editor behaviour.
+ * Registers the Template CPT and the Vue layout-builder edit UI.
  */
 class Template_Post_Type {
 
@@ -45,18 +44,17 @@ class Template_Post_Type {
 	public function register(): void {
 		add_action( 'init', array( $this, 'register_post_type' ) );
 		add_action( 'init', array( $this, 'register_meta' ) );
-		add_action( 'init', array( $this, 'register_block_category' ) );
-		add_filter( 'block_categories_all', array( $this, 'filter_block_categories' ), 10, 2 );
-		add_filter( 'block_editor_settings_all', array( $this, 'editor_settings' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		add_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_meta' ), 10, 2 );
 		add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'columns' ) );
 		add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'column_content' ), 10, 2 );
 		add_filter( 'enter_title_here', array( $this, 'title_placeholder' ), 10, 2 );
+		add_filter( 'use_block_editor_for_post_type', array( $this, 'disable_block_editor' ), 10, 2 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_builder' ) );
 	}
 
 	/**
-	 * Register the CPT.
+	 * Register the CPT (classic title + layout builder meta box).
 	 *
 	 * @return void
 	 */
@@ -82,82 +80,37 @@ class Template_Post_Type {
 				'labels'              => $labels,
 				'public'              => false,
 				'show_ui'             => true,
-				// Menu entry is added explicitly in Admin\Menu so it always
-				// appears under BizWit when the user can manage settings.
 				'show_in_menu'        => false,
 				'show_in_rest'        => true,
 				'rest_base'           => 'bizwit-templates',
-				// IMPORTANT: do not reuse an existing primitive (e.g.
-				// bizwit_manage_invoices) as a meta capability name while
-				// map_meta_cap is true — WordPress then treats that string as
-				// edit_post and maps has_cap() to do_not_allow without a post ID.
-				// Use a dedicated capability type so meta caps are unique.
 				'capability_type'     => array( 'bizwit_template', 'bizwit_templates' ),
 				'map_meta_cap'        => true,
 				'hierarchical'        => false,
-				'supports'            => array( 'title', 'editor', 'revisions', 'custom-fields' ),
+				// Title only — layout is edited in the Vue builder meta box.
+				'supports'            => array( 'title', 'custom-fields' ),
 				'has_archive'         => false,
 				'rewrite'             => false,
 				'query_var'           => false,
 				'exclude_from_search' => true,
 				'delete_with_user'    => false,
-				'template'            => self::default_block_template(),
-				'template_lock'       => false,
 			)
 		);
 	}
 
 	/**
-	 * Default Gutenberg structure: Header, Body, Footer sections.
+	 * Never use the block editor for templates.
 	 *
-	 * @return array<int, array<int, mixed>>
+	 * @param bool   $use       Whether to use block editor.
+	 * @param string $post_type Post type.
+	 *
+	 * @return bool
 	 */
-	public static function default_block_template(): array {
-		return array(
-			array(
-				'wp-bizwit/section',
-				array( 'area' => 'header' ),
-				array(
-					array(
-						'core/heading',
-						array(
-							'level'   => 2,
-							'content' => __( 'Header', 'wp-bizwit' ),
-						),
-					),
-				),
-			),
-			array(
-				'wp-bizwit/section',
-				array( 'area' => 'body' ),
-				array(
-					array(
-						'core/heading',
-						array(
-							'level'   => 2,
-							'content' => __( 'Body', 'wp-bizwit' ),
-						),
-					),
-				),
-			),
-			array(
-				'wp-bizwit/section',
-				array( 'area' => 'footer' ),
-				array(
-					array(
-						'core/heading',
-						array(
-							'level'   => 2,
-							'content' => __( 'Footer', 'wp-bizwit' ),
-						),
-					),
-				),
-			),
-		);
+	public function disable_block_editor( bool $use, string $post_type ): bool {
+		return self::POST_TYPE === $post_type ? false : $use;
 	}
 
 	/**
-	 * Register post meta for REST / sidebar.
+	 * Register post meta for REST / settings.
 	 *
 	 * @return void
 	 */
@@ -196,61 +149,49 @@ class Template_Post_Type {
 				},
 			)
 		);
+
+		register_post_meta(
+			self::POST_TYPE,
+			Layout::META_KEY,
+			array(
+				'type'          => 'string',
+				'single'        => true,
+				'default'       => '',
+				'show_in_rest'  => false,
+				'auth_callback' => static function (): bool {
+					return current_user_can( Capabilities::MANAGE_TEMPLATES );
+				},
+			)
+		);
 	}
 
 	/**
-	 * Register block category (legacy filter still used by some WP versions).
+	 * Enqueue the Vue layout builder on template edit screens.
+	 *
+	 * @param string $hook Admin hook.
 	 *
 	 * @return void
 	 */
-	public function register_block_category(): void {
-		// Category is added via filter_block_categories.
-	}
-
-	/**
-	 * Add BizWit category for document blocks.
-	 *
-	 * @param array<int, array<string, mixed>> $categories Categories.
-	 * @param mixed                            $context    Editor context.
-	 *
-	 * @return array<int, array<string, mixed>>
-	 */
-	public function filter_block_categories( array $categories, $context = null ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
-		$categories[] = array(
-			'slug'  => 'wp-bizwit',
-			'title' => __( 'BizWit documents', 'wp-bizwit' ),
-			'icon'  => 'portfolio',
-		);
-
-		return $categories;
-	}
-
-	/**
-	 * Encourage the three-section structure for templates.
-	 *
-	 * @param array<string, mixed> $settings Editor settings.
-	 * @param mixed                $context  Editor context.
-	 *
-	 * @return array<string, mixed>
-	 */
-	public function editor_settings( array $settings, $context ): array {
-		$post = null;
-		if ( is_object( $context ) && isset( $context->post ) && $context->post instanceof WP_Post ) {
-			$post = $context->post;
+	public function enqueue_builder( string $hook ): void {
+		if ( ! in_array( $hook, array( 'post.php', 'post-new.php' ), true ) ) {
+			return;
 		}
 
-		if ( ! $post instanceof WP_Post || self::POST_TYPE !== $post->post_type ) {
-			return $settings;
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || self::POST_TYPE !== $screen->post_type ) {
+			return;
 		}
 
-		// Soft guidance: new posts get the default template from CPT args.
-		$settings['bizwitDocumentTemplate'] = true;
+		if ( ! current_user_can( Capabilities::MANAGE_TEMPLATES ) ) {
+			return;
+		}
 
-		return $settings;
+		$assets = new \WP_BizWit\Admin\Assets();
+		$assets->enqueue_entry( 'template-builder' );
 	}
 
 	/**
-	 * Side meta box for document type and default flag.
+	 * Meta boxes: settings + layout builder mount.
 	 *
 	 * @return void
 	 */
@@ -258,21 +199,30 @@ class Template_Post_Type {
 		add_meta_box(
 			'wp-bizwit-template-settings',
 			__( 'Template settings', 'wp-bizwit' ),
-			array( $this, 'render_meta_box' ),
+			array( $this, 'render_settings_box' ),
 			self::POST_TYPE,
 			'side',
+			'high'
+		);
+
+		add_meta_box(
+			'wp-bizwit-layout-builder',
+			__( 'Document layout', 'wp-bizwit' ),
+			array( $this, 'render_builder_box' ),
+			self::POST_TYPE,
+			'normal',
 			'high'
 		);
 	}
 
 	/**
-	 * Meta box markup.
+	 * Settings side box.
 	 *
 	 * @param WP_Post $post Post.
 	 *
 	 * @return void
 	 */
-	public function render_meta_box( WP_Post $post ): void {
+	public function render_settings_box( WP_Post $post ): void {
 		wp_nonce_field( 'wp_bizwit_template_meta', 'wp_bizwit_template_meta_nonce' );
 
 		$doc_type   = (string) get_post_meta( $post->ID, self::META_DOC_TYPE, true );
@@ -304,13 +254,139 @@ class Template_Post_Type {
 			</label>
 		</p>
 		<p class="description">
-			<?php esc_html_e( 'Design the Header, Body and Footer with Gutenberg. Field labels follow the site language when the document is printed.', 'wp-bizwit' ); ?>
+			<?php esc_html_e( 'Build the layout on the canvas. Field labels follow the site language when the document is printed.', 'wp-bizwit' ); ?>
 		</p>
 		<?php
 	}
 
 	/**
-	 * Persist meta box fields.
+	 * Layout builder mount point + hidden JSON field.
+	 *
+	 * @param WP_Post $post Post.
+	 *
+	 * @return void
+	 */
+	public function render_builder_box( WP_Post $post ): void {
+		$layout = Layout::get_for_post( (int) $post->ID );
+		// New posts get the sample invoice layout so the canvas is never empty.
+		$has = false;
+		foreach ( array( 'header', 'body', 'footer' ) as $zone ) {
+			if ( ! empty( $layout['sections'][ $zone ]['components'] ) ) {
+				$has = true;
+				break;
+			}
+		}
+		if ( ! $has ) {
+			$layout = Layout::default_invoice();
+		}
+
+		$payload = array(
+			'layout'        => $layout,
+			'fields'        => Merge_Fields::catalogue(),
+			'componentMeta' => self::component_palette(),
+			'zones'         => array(
+				'header' => __( 'Header', 'wp-bizwit' ),
+				'body'   => __( 'Body', 'wp-bizwit' ),
+				'footer' => __( 'Footer', 'wp-bizwit' ),
+			),
+			'i18n'          => array(
+				'palette'       => __( 'Components', 'wp-bizwit' ),
+				'properties'    => __( 'Properties', 'wp-bizwit' ),
+				'canvas'        => __( 'Canvas (A4)', 'wp-bizwit' ),
+				'selectHint'    => __( 'Select a component on the canvas to edit its properties.', 'wp-bizwit' ),
+				'add'           => __( 'Add', 'wp-bizwit' ),
+				'remove'        => __( 'Remove', 'wp-bizwit' ),
+				'moveUp'        => __( 'Move up', 'wp-bizwit' ),
+				'moveDown'      => __( 'Move down', 'wp-bizwit' ),
+				'duplicate'     => __( 'Duplicate', 'wp-bizwit' ),
+				'emptyZone'     => __( 'Drop or add components here', 'wp-bizwit' ),
+				'field'         => __( 'Data field', 'wp-bizwit' ),
+				'showLabel'     => __( 'Show label', 'wp-bizwit' ),
+				'align'         => __( 'Alignment', 'wp-bizwit' ),
+				'fontSize'      => __( 'Font size', 'wp-bizwit' ),
+				'fontWeight'    => __( 'Weight', 'wp-bizwit' ),
+				'color'         => __( 'Colour', 'wp-bizwit' ),
+				'marginTop'     => __( 'Margin top', 'wp-bizwit' ),
+				'marginBottom'  => __( 'Margin bottom', 'wp-bizwit' ),
+				'content'       => __( 'Text', 'wp-bizwit' ),
+				'height'        => __( 'Height', 'wp-bizwit' ),
+				'showTax'       => __( 'Show tax column', 'wp-bizwit' ),
+				'showTerbilang' => __( 'Show amount in words', 'wp-bizwit' ),
+				'showTitle'     => __( 'Show title', 'wp-bizwit' ),
+				'gap'           => __( 'Column gap', 'wp-bizwit' ),
+				'left'          => __( 'Left', 'wp-bizwit' ),
+				'center'        => __( 'Center', 'wp-bizwit' ),
+				'right'         => __( 'Right', 'wp-bizwit' ),
+				'resetDefault'  => __( 'Reset to default layout', 'wp-bizwit' ),
+			),
+			'defaultLayout' => Layout::default_invoice(),
+		);
+		?>
+		<input type="hidden" name="wp_bizwit_layout_json" id="wp-bizwit-layout-json" value="<?php echo esc_attr( (string) wp_json_encode( $layout ) ); ?>" />
+		<div
+			id="wp-bizwit-template-builder"
+			class="wp-bizwit"
+			data-config="<?php echo esc_attr( (string) wp_json_encode( $payload ) ); ?>"
+		></div>
+		<style>
+			#wp-bizwit-layout-builder .inside { margin: 0; padding: 0; }
+			#wp-bizwit-layout-builder .postbox-header { display: none; }
+		</style>
+		<?php
+	}
+
+	/**
+	 * Component catalogue for the builder palette.
+	 *
+	 * @return array<string, array{label: string, description: string}>
+	 */
+	public static function component_palette(): array {
+		return array(
+			'heading'    => array(
+				'label'       => __( 'Heading', 'wp-bizwit' ),
+				'description' => __( 'Static title text', 'wp-bizwit' ),
+			),
+			'text'       => array(
+				'label'       => __( 'Text', 'wp-bizwit' ),
+				'description' => __( 'Free paragraph', 'wp-bizwit' ),
+			),
+			'field'      => array(
+				'label'       => __( 'Data field', 'wp-bizwit' ),
+				'description' => __( 'Invoice / business value', 'wp-bizwit' ),
+			),
+			'line_items' => array(
+				'label'       => __( 'Line items', 'wp-bizwit' ),
+				'description' => __( 'Invoice rows table', 'wp-bizwit' ),
+			),
+			'totals'     => array(
+				'label'       => __( 'Totals', 'wp-bizwit' ),
+				'description' => __( 'Subtotal, tax, total', 'wp-bizwit' ),
+			),
+			'bank'       => array(
+				'label'       => __( 'Bank details', 'wp-bizwit' ),
+				'description' => __( 'Payment account block', 'wp-bizwit' ),
+			),
+			'signature'  => array(
+				'label'       => __( 'Signature', 'wp-bizwit' ),
+				'description' => __( 'Sign and stamp area', 'wp-bizwit' ),
+			),
+			'spacer'     => array(
+				'label'       => __( 'Spacer', 'wp-bizwit' ),
+				'description' => __( 'Vertical space', 'wp-bizwit' ),
+			),
+			'divider'    => array(
+				'label'       => __( 'Divider', 'wp-bizwit' ),
+				'description' => __( 'Horizontal rule', 'wp-bizwit' ),
+			),
+			'columns'    => array(
+				'label'       => __( 'Columns', 'wp-bizwit' ),
+				'description' => __( 'Two side-by-side columns', 'wp-bizwit' ),
+			),
+		);
+	}
+
+	/**
+	 * Persist settings + layout JSON.
 	 *
 	 * @param int     $post_id Post id.
 	 * @param WP_Post $post    Post.
@@ -346,6 +422,16 @@ class Template_Post_Type {
 
 		if ( $is_default ) {
 			$this->clear_other_defaults( $post_id, $doc_type );
+		}
+
+		if ( isset( $_POST['wp_bizwit_layout_json'] ) ) {
+			$raw = wp_unslash( $_POST['wp_bizwit_layout_json'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			if ( is_string( $raw ) && '' !== $raw ) {
+				$decoded = json_decode( $raw, true );
+				if ( is_array( $decoded ) ) {
+					Layout::save_for_post( $post_id, $decoded );
+				}
+			}
 		}
 	}
 
@@ -479,7 +565,6 @@ class Template_Post_Type {
 			return $query->posts[0];
 		}
 
-		// Fallback: any published template of that type.
 		$query = new \WP_Query(
 			array(
 				'post_type'      => self::POST_TYPE,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Renders printable documents from Gutenberg templates.
+ * Renders printable documents from layout templates.
  *
  * @package WP_BizWit
  */
@@ -18,8 +18,8 @@ class Document_Renderer {
 	/**
 	 * Render a full invoice HTML document (standalone page).
 	 *
-	 * Uses the default invoice template when available; otherwise falls back
-	 * to the legacy PHP view path handled by the caller.
+	 * Prefers the layout-builder JSON on the default invoice template.
+	 * Falls back to Gutenberg post_content, then null for legacy PHP view.
 	 *
 	 * @param array<string, mixed>             $invoice Invoice row.
 	 * @param array<int, array<string, mixed>> $items   Line items.
@@ -50,6 +50,10 @@ class Document_Renderer {
 			)
 		);
 
+		if ( '' === trim( $body ) ) {
+			return null;
+		}
+
 		$status         = (string) ( $invoice['status'] ?? '' );
 		$document_title = sprintf(
 			/* translators: %s: invoice number */
@@ -77,7 +81,7 @@ class Document_Renderer {
 		<div class="void-banner"><?php esc_html_e( 'VOID', 'wp-bizwit' ); ?></div>
 	<?php endif; ?>
 	<div class="wp-bizwit-document__content">
-		<?php echo $body; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from blocks with escaped fields. ?>
+		<?php echo $body; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Renderer escapes field values. ?>
 	</div>
 </body>
 </html>
@@ -86,7 +90,7 @@ class Document_Renderer {
 	}
 
 	/**
-	 * Render template post_content with document context.
+	 * Render template body with document context.
 	 *
 	 * @param WP_Post              $template Template post.
 	 * @param string               $type     Document type.
@@ -97,12 +101,25 @@ class Document_Renderer {
 	public function render_template( WP_Post $template, string $type, array $data ): string {
 		Document_Context::set( $type, $data );
 
-		// Ensure blocks are available and translations follow the current locale.
-		$content = (string) $template->post_content;
-		$html    = do_blocks( $content );
+		$layout         = Layout::get_for_post( (int) $template->ID );
+		$has_components = false;
+		foreach ( array( 'header', 'body', 'footer' ) as $zone ) {
+			$comps = $layout['sections'][ $zone ]['components'] ?? array();
+			if ( is_array( $comps ) && array() !== $comps ) {
+				$has_components = true;
+				break;
+			}
+		}
+
+		if ( $has_components ) {
+			$html = ( new Layout_Renderer() )->render( $layout );
+		} else {
+			// Legacy Gutenberg post_content fallback.
+			$html = do_blocks( (string) $template->post_content );
+		}
 
 		/**
-		 * Filters rendered document HTML after blocks run.
+		 * Filters rendered document HTML.
 		 *
 		 * @param string  $html     Rendered HTML.
 		 * @param WP_Post $template Template post.
@@ -143,23 +160,14 @@ body {
 	font-weight: 700;
 	letter-spacing: 0.08em;
 }
-.wp-bizwit-doc-section { margin-bottom: 8mm; }
-.wp-bizwit-doc-section--header {
-	border-bottom: 1px solid #c3c4c7;
-	padding-bottom: 6mm;
-	margin-bottom: 8mm;
-}
-.wp-bizwit-doc-section--footer { margin-top: 10mm; }
-.wp-block-columns { display: flex; gap: 12mm; flex-wrap: wrap; }
-.wp-block-column { flex: 1; min-width: 40%; }
-.wp-bizwit-field { display: inline; }
-.wp-bizwit-field-row { margin: 1mm 0; }
+.wp-bizwit-doc-section { margin-bottom: 6mm; }
+.wp-bizwit-doc-section--header { padding-bottom: 4mm; }
+.wp-bizwit-doc-section--footer { margin-top: 6mm; }
 .wp-bizwit-field-label { color: #646970; font-weight: 600; margin-right: 2mm; }
-.wp-bizwit-field-placeholder { color: #646970; font-style: italic; }
 table.wp-bizwit-lines {
 	width: 100%;
 	border-collapse: collapse;
-	margin: 6mm 0;
+	margin: 4mm 0;
 }
 table.wp-bizwit-lines th,
 table.wp-bizwit-lines td {
@@ -179,7 +187,7 @@ table.wp-bizwit-totals .num { text-align: right; white-space: nowrap; }
 table.wp-bizwit-totals {
 	width: 70mm;
 	margin-left: auto;
-	margin-bottom: 6mm;
+	margin-bottom: 4mm;
 	border-collapse: collapse;
 }
 table.wp-bizwit-totals td { padding: 1.5mm 2mm; }
@@ -188,11 +196,12 @@ table.wp-bizwit-totals .grand td {
 	border-top: 1px solid #1d2327;
 	padding-top: 3mm;
 }
+.wp-bizwit-c-totals-wrap { width: 100%; }
 .wp-bizwit-sign {
 	display: flex;
 	justify-content: space-between;
 	gap: 20mm;
-	margin-top: 16mm;
+	margin-top: 8mm;
 }
 .wp-bizwit-sign-box {
 	width: 45%;
@@ -202,7 +211,7 @@ table.wp-bizwit-totals .grand td {
 	font-size: 9pt;
 	color: #646970;
 }
-h1, h2, h3 { margin: 0 0 3mm; }
+h1, h2, h3, h4 { margin: 0 0 2mm; }
 @media print {
 	body { padding: 0; }
 	.no-print { display: none !important; }

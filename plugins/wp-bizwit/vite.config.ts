@@ -59,6 +59,10 @@ export default defineConfig( async () => {
 						rootDir,
 						'resources/screens/dashboard.ts'
 					),
+					'template-builder': path.resolve(
+						rootDir,
+						'resources/screens/template-builder.ts'
+					),
 				},
 				// Do not ship a second copy of @wordpress/i18n — use core's.
 				external: [ '@wordpress/i18n' ],

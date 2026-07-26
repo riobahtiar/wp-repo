@@ -35,7 +35,7 @@ class WP_BizWit {
 
 
 	const PLUGIN_NAME    = 'wp-bizwit';
-	const PLUGIN_VERSION = '0.6.1';
+	const PLUGIN_VERSION = '0.6.2';
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -170,6 +170,7 @@ class WP_BizWit {
 	 */
 	private function define_document_hooks(): void {
 		( new Template_Post_Type() )->register();
+		// Legacy Gutenberg document blocks remain registered for older content.
 		( new Document_Blocks() )->register();
 
 		// Seed sample default invoice template after CPT exists (admin only).
