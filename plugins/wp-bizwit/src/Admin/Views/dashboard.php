@@ -57,3 +57,6 @@ $tiles = is_array( $data['tiles'] ?? null ) ? $data['tiles'] : array();
 		<li><?php esc_html_e( 'Projects, invoices and payments are next on the roadmap.', 'wp-bizwit' ); ?></li>
 	</ol>
 </div>
+
+<?php // Mount root for the Vite dashboard island (resources/screens/dashboard.ts). ?>
+<div id="wp-bizwit-dashboard"></div>

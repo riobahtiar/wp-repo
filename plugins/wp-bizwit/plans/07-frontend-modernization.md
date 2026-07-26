@@ -267,7 +267,7 @@ server for HMR during local work.
 **Goal:** WordPress enqueues Vite production builds from the manifest; only on
 BizWit screens.
 
-- [ ] **2.1** Create `src/Admin/Assets.php`:
+- [x] **2.1** Create `src/Admin/Assets.php`:
 
   Responsibilities:
 
@@ -291,26 +291,26 @@ BizWit screens.
 
   - Fail soft if manifest missing (admin notice for admins when `WP_DEBUG`).
 
-- [ ] **2.2** Wire `Assets` from `WP_BizWit::define_admin_hooks()` (or `Menu`)
+- [x] **2.2** Wire `Assets` from `WP_BizWit::define_admin_hooks()` (or `Menu`)
       instead of/in addition to raw `enqueue_entrypoint()` for new entries.
 
-- [ ] **2.3** Screen-conditional load:
+- [x] **2.3** Screen-conditional load:
 
   - Dashboard screen → enqueue `dashboard` entry only.
   - Later: Projects → `projects` entry, etc.
   - Never enqueue all entries on `admin_enqueue_scripts` globally.
 
-- [ ] **2.4** Dev mode (optional but valuable): if `defined('WP_BIZWIT_VITE_DEV')
+- [x] **2.4** Dev mode (optional but valuable): if `defined('WP_BIZWIT_VITE_DEV')
       && WP_BIZWIT_VITE_DEV`, load from `http://localhost:5173/@vite/client` and
       entry TS. Document in `docs/development.md`. Default **off** so production
       and wordpress.org never hit localhost.
 
-- [ ] **2.5** Remove jQuery `ProvidePlugin` dependency from new entries. Leave
-      legacy webpack path only until deleted.
+- [x] **2.5** Remove jQuery `ProvidePlugin` dependency from new entries. Leave
+      legacy webpack path only until deleted. (Phase 1 already had no jQuery on Vite entries.)
 
 - [ ] **2.6** Update deploy workflow if needed so `npm run build` uses Vite.
 
-- [ ] **2.7** Smoke:
+- [x] **2.7** Smoke:
 
   ```bash
   npm run build

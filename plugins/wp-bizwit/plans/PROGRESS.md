@@ -32,7 +32,7 @@ a migration. Do not run a real business on this yet.
 | Import / export | 🔒 Deferred | [Plan](05-import-export.md) — gated on 1.0 GA |
 | Reports | ⬜ Not started | Not yet planned |
 | REST API | ⬜ Not started | Starts with health in [07](07-frontend-modernization.md) |
-| Frontend (Vue/Vite/Tailwind) | 🟡 Phase 1 tooling | Vite/Vue/Tailwind build green; dual-pipeline with webpack; PHP enqueue still Phase 2 · [Architecture](../docs/frontend-architecture.md) · [Plan 07](07-frontend-modernization.md) |
+| Frontend (Vue/Vite/Tailwind) | 🟡 Phase 2 asset bridge | Vite build + `Admin\Assets` enqueues dashboard from `build/manifest.json`; webpack legacy still dual-pipeline · [Architecture](../docs/frontend-architecture.md) · [Plan 07](07-frontend-modernization.md) |
 
 Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferred
 

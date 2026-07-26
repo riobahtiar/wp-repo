@@ -183,6 +183,7 @@ src/
   Support/        Money, Settings, Capabilities
   Admin/
     Menu.php      Registers pages, wires each screen's load- hook
+    Assets.php    Enqueues Vite entries from build/manifest.json (screen-scoped)
     Screens/      One class per screen, extending Screen
     Tables/       WP_List_Table subclasses
     Views/        Templates. Receive a single $data array — no extract()

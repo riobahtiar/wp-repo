@@ -32,6 +32,33 @@ Until plan 07 Phase 6 retires webpack, **both** toolchains write into `build/`:
 
 Do not run a bare `vite build` with `emptyOutDir: true` against a populated `build/` — that deletes the legacy assets PHP still loads.
 
+### PHP enqueue (Vite product UI)
+
+`src/Admin/Assets.php` is the bridge from WordPress to the Vite build:
+
+| Concern | Detail |
+|---------|--------|
+| Manifest | `build/manifest.json` (Vite `build.manifest: 'manifest.json'`) |
+| Logical entries | `admin` → `resources/admin/main.ts`, `dashboard` → `resources/screens/dashboard.ts` |
+| When | `admin_enqueue_scripts` priority 110; only on BizWit screens (`page` starts with `wp-bizwit`) |
+| Dashboard | Enqueues the `dashboard` entry only |
+| Handles | `wp-bizwit/{entry}` scripts (type=module) + matching styles |
+| Config | `wpBizwitConfig`: `restUrl`, `restNonce`, `pluginUrl`, `version`, `locale`, `region`, `currency` |
+| Missing build | Soft-fail; with `WP_DEBUG` admins see a notice to run `npm run build` |
+| Legacy | Webpack `wp-bizwit-admin` still enqueued separately until Phase 6 |
+
+#### Optional Vite HMR (dev only)
+
+Default is **off**. In `wp-config.php` (local only):
+
+```php
+define( 'WP_BIZWIT_VITE_DEV', true );
+// Optional if the dev server is not on the default origin:
+// define( 'WP_BIZWIT_VITE_ORIGIN', 'http://localhost:5173' );
+```
+
+Then run `npm run dev` and load a BizWit screen. Production and wordpress.org builds must **never** set this constant — they always load hashed files from `build/` via the manifest.
+
 ### CSS scope strategy
 
 Tailwind v4 utilities are nested under `.wp-bizwit` in `resources/styles/admin.css` (no global preflight). App markup must live inside `<div class="wrap wp-bizwit">`. Theme tokens as CSS variables are fine on the wrapper; never restyle `#wpadminbar` / `#adminmenu`. Details: [frontend-architecture.md](frontend-architecture.md).
@@ -49,6 +76,7 @@ src/
   Support/        Money, Settings, Capabilities
   Admin/
     Menu.php      Registers pages, wires each screen's load- hook
+    Assets.php    Enqueues Vite entries from build/manifest.json (screen-scoped)
     Screens/      One class per screen, extending Screen
     Tables/       WP_List_Table subclasses
     Views/        Templates. Receive a single $data array — no extract()

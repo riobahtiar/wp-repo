@@ -7,6 +7,7 @@
 
 namespace WP_BizWit;
 
+use WP_BizWit\Admin\Assets;
 use WP_BizWit\Admin\Menu;
 use WP_BizWit\Admin\Screens\Clients_Screen;
 use WP_BizWit\Admin\Screens\Dashboard_Screen;
@@ -86,6 +87,7 @@ class WP_BizWit {
 	 */
 	private function define_admin_hooks(): void {
 
+		// Legacy webpack admin CSS/JS (wp-bizwit-admin.*) until Phase 6 retires it.
 		add_action(
 			'admin_enqueue_scripts',
 			function () {
@@ -93,6 +95,9 @@ class WP_BizWit {
 			},
 			100
 		);
+
+		// Vite product UI: only the entry for the current BizWit screen (see Assets).
+		$this->loader->add_action( 'admin_enqueue_scripts', new Assets(), 'enqueue', 110 );
 
 		$clients = new Client_Repository();
 		$stats   = new Stats_Repository();
