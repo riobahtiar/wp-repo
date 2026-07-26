@@ -134,12 +134,23 @@ $(command -v wp) i18n make-mo languages/ && $(command -v wp) i18n make-php langu
 | [docs/data-model.md](docs/data-model.md) | The seven tables, why custom tables, migrations, atomic numbering |
 | [docs/development.md](docs/development.md) | Build, lint, test, translation workflow, tooling traps |
 | [AGENTS.md](AGENTS.md) | Conventions this codebase relies on (also read as `CLAUDE.md`) |
+| [SECURITY.md](SECURITY.md) | Threat model, contributor rules, reporting a vulnerability |
+| [CHANGELOG.md](CHANGELOG.md) | What shipped, when |
+| [plans/](plans/) | Unbuilt features and the reasoning behind them |
+| [plans/PROGRESS.md](plans/PROGRESS.md) | What is actually true of the codebase right now |
 
 ## Status
 
+**0.3.0 — beta.** Pre-1.0 on purpose: three of six admin screens are
+placeholders and the schema may still change. Do not run a real business on this
+yet.
+
 Clients are fully implemented. Projects, invoices and payments have their schema
 in place and render a placeholder screen; no migration is needed when their
-interfaces land.
+interfaces land. Import and export are deliberately deferred until after 1.0 —
+see [plans/05-import-export.md](plans/05-import-export.md) for why.
+
+Live status: [plans/PROGRESS.md](plans/PROGRESS.md).
 
 ## License
 

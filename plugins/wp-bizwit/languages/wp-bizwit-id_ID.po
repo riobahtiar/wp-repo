@@ -55,19 +55,19 @@ msgstr "Pengaturan"
 msgid "BizWit"
 msgstr "BizWit"
 
-#: src/Admin/Screens/Clients_Screen.php:215
+#: src/Admin/Screens/Clients_Screen.php:216
 msgid "Client updated."
 msgstr "Klien diperbarui."
 
-#: src/Admin/Screens/Clients_Screen.php:216
+#: src/Admin/Screens/Clients_Screen.php:217
 msgid "Client added."
 msgstr "Klien ditambahkan."
 
-#: src/Admin/Screens/Clients_Screen.php:238
+#: src/Admin/Screens/Clients_Screen.php:239
 msgid "Client deleted."
 msgstr "Klien dihapus."
 
-#: src/Admin/Screens/Clients_Screen.php:298
+#: src/Admin/Screens/Clients_Screen.php:299
 #: src/Repositories/Client_Repository.php:280
 #: src/Repositories/Client_Repository.php:320
 msgid "That client no longer exists."
@@ -75,14 +75,14 @@ msgstr "Klien tersebut sudah tidak ada."
 
 #. translators: %d: number of clients
 #, php-format
-#: src/Admin/Screens/Clients_Screen.php:319
+#: src/Admin/Screens/Clients_Screen.php:320
 msgid "%d client archived."
 msgid_plural "%d clients archived."
 msgstr[0] "%d klien diarsipkan."
 
 #. translators: %d: number of clients
 #, php-format
-#: src/Admin/Screens/Clients_Screen.php:321
+#: src/Admin/Screens/Clients_Screen.php:322
 msgid "%d client deleted."
 msgid_plural "%d clients deleted."
 msgstr[0] "%d klien dihapus."
@@ -203,206 +203,217 @@ msgstr "Akses ditolak"
 msgid "Settings saved."
 msgstr "Pengaturan disimpan."
 
-#: src/Admin/Tables/Clients_Table.php:68
-#: src/Admin/Views/clients-form.php:66
+#: src/Admin/Tables/Clients_Table.php:69
+#: src/Admin/Views/clients-form.php:142
 msgid "Name"
 msgstr "Nama"
 
-#: src/Admin/Tables/Clients_Table.php:69
-#: src/Admin/Views/clients-form.php:75
+#: src/Admin/Tables/Clients_Table.php:70
+#: src/Admin/Views/clients-form.php:165
 msgid "Type"
 msgstr "Jenis"
 
-#: src/Admin/Tables/Clients_Table.php:70
-#: src/Admin/Views/clients-form.php:87
+#: src/Admin/Tables/Clients_Table.php:71
+#: src/Admin/Views/clients-form.php:275
 msgid "Status"
 msgstr "Status"
 
-#: src/Admin/Tables/Clients_Table.php:71
-#: src/Admin/Views/clients-form.php:179
+#: src/Admin/Tables/Clients_Table.php:72
+#: src/Admin/Views/clients-form.php:151
+#: src/Admin/Views/settings.php:83
 msgid "Email"
 msgstr "Email"
 
-#: src/Admin/Tables/Clients_Table.php:72
-#: src/Admin/Views/clients-form.php:186
+#: src/Admin/Tables/Clients_Table.php:73
+#: src/Admin/Views/clients-form.php:158
+#: src/Admin/Views/settings.php:87
 msgid "Phone"
 msgstr "Telepon"
 
-#: src/Admin/Tables/Clients_Table.php:73
+#: src/Admin/Tables/Clients_Table.php:74
 msgid "Location"
 msgstr "Lokasi"
 
-#: src/Admin/Tables/Clients_Table.php:74
+#: src/Admin/Tables/Clients_Table.php:75
 msgid "Last updated"
 msgstr "Terakhir diperbarui"
 
-#: src/Admin/Tables/Clients_Table.php:109
+#: src/Admin/Tables/Clients_Table.php:110
 msgid "All"
 msgstr "Semua"
 
-#: src/Admin/Tables/Clients_Table.php:138
+#: src/Admin/Tables/Clients_Table.php:139
 msgid "Archive"
 msgstr "Arsipkan"
 
-#: src/Admin/Tables/Clients_Table.php:139
+#: src/Admin/Tables/Clients_Table.php:140
 msgid "Delete permanently"
 msgstr "Hapus permanen"
 
-#: src/Admin/Tables/Clients_Table.php:185
+#: src/Admin/Tables/Clients_Table.php:186
 msgid "No clients found. Add your first client to get started."
 msgstr "Belum ada klien. Tambahkan klien pertama Anda untuk memulai."
 
-#: src/Admin/Tables/Clients_Table.php:238
+#: src/Admin/Tables/Clients_Table.php:239
 msgid "Edit"
 msgstr "Ubah"
 
-#: src/Admin/Tables/Clients_Table.php:242
+#: src/Admin/Tables/Clients_Table.php:243
 msgid "Permanently delete this client? This cannot be undone."
 msgstr "Hapus klien ini secara permanen? Tindakan ini tidak dapat dibatalkan."
 
-#: src/Admin/Tables/Clients_Table.php:243
+#: src/Admin/Tables/Clients_Table.php:244
 msgid "Delete"
 msgstr "Hapus"
 
+#: src/Admin/Tables/Clients_Table.php:332
+msgid "Open in WhatsApp"
+msgstr "Buka di WhatsApp"
+
 #. translators: %s: human readable time difference, e.g. "2 hours"
 #, php-format
-#: src/Admin/Tables/Clients_Table.php:344
+#: src/Admin/Tables/Clients_Table.php:377
 msgid "%s ago"
 msgstr "%s yang lalu"
 
-#: src/Admin/Views/clients-form.php:48
+#: src/Admin/Views/clients-form.php:125
 msgid "Edit client"
 msgstr "Ubah klien"
 
-#: src/Admin/Views/clients-form.php:48
-#: src/Admin/Views/clients-form.php:322
+#: src/Admin/Views/clients-form.php:125
+#: src/Admin/Views/clients-form.php:346
 #: src/Admin/Views/clients-list.php:36
 #: src/Admin/Views/dashboard.php:21
 msgid "Add client"
 msgstr "Tambah klien"
 
-#: src/Admin/Views/clients-form.php:52
+#: src/Admin/Views/clients-form.php:129
 #: src/Admin/Views/clients-missing.php:21
 msgid "Back to clients"
 msgstr "Kembali ke daftar klien"
 
-#: src/Admin/Views/clients-form.php:62
-msgid "Identity"
-msgstr "Identitas"
-
-#: src/Admin/Views/clients-form.php:66
+#: src/Admin/Views/clients-form.php:142
 msgid "required"
 msgstr "wajib diisi"
 
-#: src/Admin/Views/clients-form.php:71
-msgid "How this client appears throughout BizWit and on documents."
-msgstr "Nama yang ditampilkan di seluruh BizWit dan pada dokumen."
+#: src/Admin/Views/clients-form.php:147
+msgid "A single name is fine. This is how the client appears throughout BizWit and on documents."
+msgstr "Satu kata nama sudah cukup. Nama inilah yang tampil di seluruh BizWit dan pada dokumen."
 
-#: src/Admin/Views/clients-form.php:96
-msgid "Archive a client instead of deleting it to keep its invoices and payments intact."
-msgstr "Arsipkan klien alih-alih menghapusnya agar faktur dan pembayarannya tetap tersimpan."
-
-#: src/Admin/Views/clients-form.php:100
-msgid "Legal name"
-msgstr "Nama resmi"
-
-#: src/Admin/Views/clients-form.php:105
-msgid "Registered name, if it differs from the name above. Used on invoices."
-msgstr "Nama terdaftar, bila berbeda dengan nama di atas. Dipakai pada faktur."
-
-#: src/Admin/Views/clients-form.php:110
-msgid "Tax ID"
-msgstr "Nomor pajak"
-
-#: src/Admin/Views/clients-form.php:121
-#: src/Admin/Views/settings.php:118
-msgid "Registration number"
-msgstr "Nomor registrasi"
-
-#: src/Admin/Views/clients-form.php:126
-msgid "Company number, agency code or other official identifier."
-msgstr "Nomor perusahaan, kode instansi, atau identitas resmi lainnya."
-
-#: src/Admin/Views/clients-form.php:176
-msgid "Contact"
-msgstr "Kontak"
-
-#: src/Admin/Views/clients-form.php:193
-msgid "Website"
-msgstr "Situs web"
-
-#: src/Admin/Views/clients-form.php:201
-#: src/Admin/Views/clients-form.php:204
+#: src/Admin/Views/clients-form.php:180
+#: src/Admin/Views/clients-form.php:185
+#: src/Admin/Views/settings.php:91
 msgid "Address"
 msgstr "Alamat"
 
-#: src/Admin/Views/clients-form.php:211
+#: src/Admin/Views/clients-form.php:181
+msgid "Needed on printed invoices and receipts"
+msgstr "Diperlukan pada faktur dan kwitansi cetak"
+
+#: src/Admin/Views/clients-form.php:189
 msgid "Address line 2"
 msgstr "Alamat baris 2"
 
-#: src/Admin/Views/clients-form.php:239
+#: src/Admin/Views/clients-form.php:198
 msgid "City"
 msgstr "Kota"
 
-#: src/Admin/Views/clients-form.php:246
+#: src/Admin/Views/clients-form.php:202
 msgid "State or province"
 msgstr "Provinsi"
 
-#: src/Admin/Views/clients-form.php:250
+#: src/Admin/Views/clients-form.php:206
 msgid "— Select —"
 msgstr "— Pilih —"
 
-#: src/Admin/Views/clients-form.php:264
+#: src/Admin/Views/clients-form.php:219
 msgid "Postal code"
 msgstr "Kode pos"
 
-#: src/Admin/Views/clients-form.php:271
-#: src/Admin/Views/settings.php:107
+#: src/Admin/Views/clients-form.php:223
+#: src/Admin/Views/settings.php:331
 msgid "Country"
 msgstr "Negara"
 
-#: src/Admin/Views/clients-form.php:275
+#: src/Admin/Views/clients-form.php:227
 msgid "Two-letter ISO 3166-1 country code."
 msgstr "Kode negara ISO 3166-1 dua huruf."
 
-#: src/Admin/Views/clients-form.php:280
+#: src/Admin/Views/clients-form.php:235
 msgid "Billing"
 msgstr "Penagihan"
 
-#: src/Admin/Views/clients-form.php:283
+#. translators: 1: currency code, 2: number of days
+#, php-format
+#: src/Admin/Views/clients-form.php:240
+msgid "Currently %1$s, %2$d days"
+msgstr "Saat ini %1$s, %2$d hari"
+
+#: src/Admin/Views/clients-form.php:249
+#: src/Admin/Views/settings.php:95
 msgid "Currency"
 msgstr "Mata uang"
 
-#: src/Admin/Views/clients-form.php:295
-msgid "Invoices for this client default to this currency."
-msgstr "Faktur untuk klien ini memakai mata uang ini secara bawaan."
-
-#: src/Admin/Views/clients-form.php:299
+#: src/Admin/Views/clients-form.php:264
+#: src/Admin/Views/settings.php:104
 msgid "Payment terms"
 msgstr "Termin pembayaran"
 
-#: src/Admin/Views/clients-form.php:303
-#: src/Admin/Views/settings.php:201
+#: src/Admin/Views/clients-form.php:268
+#: src/Admin/Views/settings.php:106
 msgid "days"
 msgstr "hari"
 
-#: src/Admin/Views/clients-form.php:305
+#: src/Admin/Views/clients-form.php:270
 msgid "Used to calculate the due date on new invoices."
 msgstr "Dipakai untuk menghitung tanggal jatuh tempo pada faktur baru."
 
-#: src/Admin/Views/clients-form.php:311
+#: src/Admin/Views/clients-form.php:284
+msgid "Archive a client instead of deleting it to keep its invoices and payments intact."
+msgstr "Arsipkan klien alih-alih menghapusnya agar faktur dan pembayarannya tetap tersimpan."
+
+#: src/Admin/Views/clients-form.php:292
+msgid "Legal and tax identity"
+msgstr "Identitas legal dan pajak"
+
+#: src/Admin/Views/clients-form.php:293
+msgid "Only needed if you invoice a registered entity"
+msgstr "Hanya diperlukan bila Anda menagih badan usaha"
+
+#: src/Admin/Views/clients-form.php:297
+msgid "Legal name"
+msgstr "Nama resmi"
+
+#: src/Admin/Views/clients-form.php:301
+msgid "Registered name, if it differs from the name above. Used on invoices."
+msgstr "Nama terdaftar, bila berbeda dengan nama di atas. Dipakai pada faktur."
+
+#: src/Admin/Views/clients-form.php:306
+msgid "Tax ID"
+msgstr "Nomor pajak"
+
+#: src/Admin/Views/clients-form.php:316
+#: src/Admin/Views/settings.php:214
+msgid "Registration number"
+msgstr "Nomor registrasi"
+
+#: src/Admin/Views/clients-form.php:320
+msgid "Company number, agency code or other official identifier."
+msgstr "Nomor perusahaan, kode instansi, atau identitas resmi lainnya."
+
+#: src/Admin/Views/clients-form.php:333
 msgid "Notes"
 msgstr "Catatan"
 
-#: src/Admin/Views/clients-form.php:314
+#: src/Admin/Views/clients-form.php:334
+msgid "Never shown to the client"
+msgstr "Tidak pernah ditampilkan kepada klien"
+
+#: src/Admin/Views/clients-form.php:338
 msgid "Internal notes"
 msgstr "Catatan internal"
 
-#: src/Admin/Views/clients-form.php:317
-msgid "Never shown to the client."
-msgstr "Tidak pernah ditampilkan kepada klien."
-
-#: src/Admin/Views/clients-form.php:322
+#: src/Admin/Views/clients-form.php:346
 msgid "Update client"
 msgstr "Perbarui klien"
 
@@ -446,239 +457,239 @@ msgstr "Rencana untuk halaman ini:"
 msgid "The database tables behind this screen already exist, so nothing needs migrating when the interface lands."
 msgstr "Tabel basis data untuk halaman ini sudah tersedia, sehingga tidak ada migrasi saat antarmukanya nanti dirilis."
 
-#: src/Admin/Views/settings.php:38
+#: src/Admin/Views/settings.php:46
 msgid "BizWit Settings"
 msgstr "Pengaturan BizWit"
 
-#: src/Admin/Views/settings.php:44
-msgid "Business profile"
-msgstr "Profil usaha"
+#: src/Admin/Views/settings.php:49
+msgid "Fill in the basics below and you can start adding clients. Everything else is optional and grouped into the sections underneath."
+msgstr "Isi bagian dasar di bawah ini, lalu Anda sudah bisa menambahkan klien. Selebihnya bersifat opsional dan dikelompokkan pada bagian di bawahnya."
 
-#: src/Admin/Views/settings.php:47
-msgid "Business region"
-msgstr "Wilayah usaha"
+#: src/Admin/Views/settings.php:56
+msgid "The basics"
+msgstr "Dasar"
 
-#. translators: %s: name of the active regional profile
-#, php-format
-#: src/Admin/Views/settings.php:60
-msgid "Sets the terminology, tax fields, address fields and document numbering used throughout BizWit. Currently active: %s."
-msgstr "Menentukan istilah, kolom pajak, kolom alamat, dan penomoran dokumen di seluruh BizWit. Sedang aktif: %s."
+#: src/Admin/Views/settings.php:59
+msgid "You are"
+msgstr "Anda adalah"
 
-#: src/Admin/Views/settings.php:66
-msgid "This is separate from the interface language, which follows your WordPress site language."
-msgstr "Pengaturan ini terpisah dari bahasa antarmuka, yang mengikuti bahasa situs WordPress Anda."
+#: src/Admin/Views/settings.php:62
+msgid "Business type"
+msgstr "Jenis usaha"
 
 #: src/Admin/Views/settings.php:72
-msgid "Skala usaha"
-msgstr "Skala usaha"
+msgid "Only changes which fields BizWit shows by default. Nothing is ever locked away — every field stays reachable in the sections below."
+msgstr "Hanya mengubah kolom yang ditampilkan BizWit secara bawaan. Tidak ada yang dikunci — semua kolom tetap dapat diakses pada bagian di bawah."
 
-#: src/Admin/Views/settings.php:81
-msgid "Klasifikasi menurut PP 7/2021, berdasarkan modal usaha atau hasil penjualan tahunan."
-msgstr "Klasifikasi menurut PP 7/2021, berdasarkan modal usaha atau hasil penjualan tahunan."
+#: src/Admin/Views/settings.php:76
+msgid "Your name or business name"
+msgstr "Nama Anda atau nama usaha"
 
-#: src/Admin/Views/settings.php:87
-msgid "Your business"
-msgstr "Usaha Anda"
+#: src/Admin/Views/settings.php:79
+msgid "Appears at the top of every invoice and receipt you issue."
+msgstr "Tampil di bagian atas setiap faktur dan kwitansi yang Anda terbitkan."
 
-#: src/Admin/Views/settings.php:88
-msgid "These details appear on the invoices and receipts you issue."
-msgstr "Data ini muncul pada faktur dan kwitansi yang Anda terbitkan."
+#: src/Admin/Views/settings.php:113
+msgid "Where clients pay you"
+msgstr "Tujuan pembayaran klien"
 
-#: src/Admin/Views/settings.php:91
-msgid "Business name"
-msgstr "Nama usaha"
+#: src/Admin/Views/settings.php:118
+msgid "Not set yet"
+msgstr "Belum diisi"
 
-#: src/Admin/Views/settings.php:95
-msgid "Business email"
-msgstr "Email usaha"
-
-#: src/Admin/Views/settings.php:99
-msgid "Business phone"
-msgstr "Telepon usaha"
-
-#: src/Admin/Views/settings.php:103
-msgid "Business address"
-msgstr "Alamat usaha"
-
-#: src/Admin/Views/settings.php:110
-msgid "Two-letter ISO 3166-1 code. Used to detect your region automatically."
-msgstr "Kode ISO 3166-1 dua huruf. Dipakai untuk mendeteksi wilayah usaha Anda secara otomatis."
-
-#: src/Admin/Views/settings.php:114
-msgid "Your tax ID"
-msgstr "NPWP Anda"
-
-#: src/Admin/Views/settings.php:123
-#: src/Localization/Region.php:147
-msgid "Tax"
-msgstr "Pajak"
-
-#: src/Admin/Views/settings.php:127
-msgid "Status perpajakan"
-msgstr "Status perpajakan"
-
-#. translators: %s: formatted PKP registration threshold, e.g. Rp 4.800.000.000
-#, php-format
-#: src/Admin/Views/settings.php:140
-msgid "Hanya PKP yang boleh memungut PPN. Usaha dengan peredaran bruto sampai %s umumnya belum wajib dikukuhkan sebagai PKP."
-msgstr "Hanya PKP yang boleh memungut PPN. Usaha dengan peredaran bruto sampai %s umumnya belum wajib dikukuhkan sebagai PKP."
-
-#: src/Admin/Views/settings.php:146
-msgid "PPh Final UMKM 0,5% dihitung dari peredaran bruto Anda sendiri, bukan ditambahkan ke tagihan klien. BizWit tidak akan mencantumkannya pada faktur."
-msgstr "PPh Final UMKM 0,5% dihitung dari peredaran bruto Anda sendiri, bukan ditambahkan ke tagihan klien. BizWit tidak akan mencantumkannya pada faktur."
-
-#: src/Admin/Views/settings.php:152
-msgid "Tax label"
-msgstr "Label pajak"
-
-#: src/Admin/Views/settings.php:155
-msgid "What the tax is called on your documents, for example PPN, VAT or GST."
-msgstr "Sebutan pajak pada dokumen Anda, misalnya PPN, VAT, atau GST."
-
-#: src/Admin/Views/settings.php:159
-msgid "Default tax rate"
-msgstr "Tarif pajak bawaan"
-
-#: src/Admin/Views/settings.php:163
-msgid "Applied to new invoice lines. Only used when your tax status allows you to charge tax. Confirm the current rate with your tax consultant."
-msgstr "Diterapkan pada baris faktur baru. Hanya dipakai bila status perpajakan Anda memperbolehkan pemungutan pajak. Pastikan tarif yang berlaku kepada konsultan pajak Anda."
-
-#: src/Admin/Views/settings.php:168
-msgid "Withholding tax"
-msgstr "Pajak dipotong (PPh)"
-
-#: src/Admin/Views/settings.php:171
-msgid "Withholding rate"
-msgstr "Tarif pemotongan"
-
-#: src/Admin/Views/settings.php:174
-msgid "Klien badan biasanya memotong PPh 23 atas jasa dan menyetorkannya atas nama Anda, sehingga dana yang masuk ke rekening lebih kecil dari nilai faktur. Nilai ini dipakai untuk mencatat selisih tersebut."
-msgstr "Klien badan biasanya memotong PPh 23 atas jasa dan menyetorkannya atas nama Anda, sehingga dana yang masuk ke rekening lebih kecil dari nilai faktur. Nilai ini dipakai untuk mencatat selisih tersebut."
-
-#: src/Admin/Views/settings.php:176
-msgid "Used when a client withholds tax at source and remits it on your behalf."
-msgstr "Dipakai bila klien memotong pajak di sumber dan menyetorkannya atas nama Anda."
-
-#: src/Admin/Views/settings.php:183
-msgid "Money"
-msgstr "Keuangan"
-
-#: src/Admin/Views/settings.php:186
-msgid "Default currency"
-msgstr "Mata uang bawaan"
-
-#: src/Admin/Views/settings.php:198
-msgid "Default payment terms"
-msgstr "Termin pembayaran bawaan"
-
-#: src/Admin/Views/settings.php:206
-msgid "Bank account"
-msgstr "Rekening bank"
-
-#: src/Admin/Views/settings.php:209
+#: src/Admin/Views/settings.php:125
 msgid "Rekening tujuan transfer yang dicantumkan pada faktur. Hampir semua pembayaran antarperusahaan di Indonesia dilakukan lewat transfer bank."
 msgstr "Rekening tujuan transfer yang dicantumkan pada faktur. Hampir semua pembayaran antarperusahaan di Indonesia dilakukan lewat transfer bank."
 
-#: src/Admin/Views/settings.php:211
+#: src/Admin/Views/settings.php:127
 msgid "Shown on invoices so clients know where to send payment."
 msgstr "Ditampilkan pada faktur agar klien tahu ke mana harus membayar."
 
-#: src/Admin/Views/settings.php:216
+#: src/Admin/Views/settings.php:132
 msgid "Bank name"
 msgstr "Nama bank"
 
-#: src/Admin/Views/settings.php:220
+#: src/Admin/Views/settings.php:136
 msgid "Account number"
 msgstr "Nomor rekening"
 
-#: src/Admin/Views/settings.php:224
+#: src/Admin/Views/settings.php:140
 msgid "Account holder"
 msgstr "Atas nama"
 
-#: src/Admin/Views/settings.php:228
+#: src/Admin/Views/settings.php:144
 msgid "Branch"
 msgstr "Cabang"
 
-#: src/Admin/Views/settings.php:233
+#: src/Admin/Views/settings.php:152
+#: src/Localization/Region.php:164
+msgid "Tax"
+msgstr "Pajak"
+
+#: src/Admin/Views/settings.php:156
+msgid "Many freelancers and small businesses do not need any of this. Leave it switched off and BizWit will not show a single tax field anywhere."
+msgstr "Banyak pekerja lepas dan usaha kecil tidak memerlukan bagian ini. Biarkan nonaktif dan BizWit tidak akan menampilkan satu pun kolom pajak."
+
+#: src/Admin/Views/settings.php:160
+msgid "Status perpajakan"
+msgstr "Status perpajakan"
+
+#: src/Admin/Views/settings.php:160
+msgid "Tax handling"
+msgstr "Penanganan pajak"
+
+#. translators: %s: formatted PKP registration threshold
+#, php-format
+#: src/Admin/Views/settings.php:174
+msgid "Hanya PKP yang boleh memungut PPN. Usaha dengan peredaran bruto sampai %s umumnya belum wajib dikukuhkan sebagai PKP."
+msgstr "Hanya PKP yang boleh memungut PPN. Usaha dengan peredaran bruto sampai %s umumnya belum wajib dikukuhkan sebagai PKP."
+
+#: src/Admin/Views/settings.php:180
+msgid "PPh Final UMKM 0,5% dihitung dari peredaran bruto Anda sendiri, bukan ditambahkan ke tagihan klien. BizWit tidak akan mencantumkannya pada faktur."
+msgstr "PPh Final UMKM 0,5% dihitung dari peredaran bruto Anda sendiri, bukan ditambahkan ke tagihan klien. BizWit tidak akan mencantumkannya pada faktur."
+
+#: src/Admin/Views/settings.php:186
+msgid "Tax label"
+msgstr "Label pajak"
+
+#: src/Admin/Views/settings.php:189
+msgid "Default tax rate"
+msgstr "Tarif pajak bawaan"
+
+#: src/Admin/Views/settings.php:191
+msgid "What the tax is called on your documents and the rate applied to new invoice lines. Only used when your tax status allows you to charge tax. Confirm the current rate with your tax consultant."
+msgstr "Sebutan pajak pada dokumen Anda dan tarif yang diterapkan pada baris faktur baru. Hanya dipakai bila status perpajakan Anda memperbolehkan pemungutan pajak. Pastikan tarif yang berlaku kepada konsultan pajak Anda."
+
+#: src/Admin/Views/settings.php:196
+msgid "Withholding tax"
+msgstr "Pajak dipotong (PPh)"
+
+#: src/Admin/Views/settings.php:199
+msgid "Withholding rate"
+msgstr "Tarif pemotongan"
+
+#: src/Admin/Views/settings.php:202
+msgid "Klien badan biasanya memotong PPh 23 atas jasa dan menyetorkannya atas nama Anda, sehingga dana yang masuk ke rekening lebih kecil dari nilai faktur."
+msgstr "Klien badan biasanya memotong PPh 23 atas jasa dan menyetorkannya atas nama Anda, sehingga dana yang masuk ke rekening lebih kecil dari nilai faktur."
+
+#: src/Admin/Views/settings.php:204
+msgid "Used when a client withholds tax at source and remits it on your behalf."
+msgstr "Dipakai bila klien memotong pajak di sumber dan menyetorkannya atas nama Anda."
+
+#: src/Admin/Views/settings.php:210
+msgid "Your tax ID"
+msgstr "NPWP Anda"
+
+#: src/Admin/Views/settings.php:222
 msgid "Document numbering"
 msgstr "Penomoran dokumen"
 
-#: src/Admin/Views/settings.php:236
-#: src/Admin/Views/settings.php:239
+#: src/Admin/Views/settings.php:227
+#: src/Admin/Views/settings.php:230
 msgid "Number format"
 msgstr "Format nomor"
 
 #. translators: %s: an example document number
 #, php-format
-#: src/Admin/Views/settings.php:245
+#: src/Admin/Views/settings.php:236
 msgid "Regional house style (%s)"
 msgstr "Format lokal (%s)"
 
 #. translators: %s: an example document number
 #, php-format
-#: src/Admin/Views/settings.php:256
+#: src/Admin/Views/settings.php:247
 msgid "Simple prefixed sequence (%s)"
 msgstr "Urutan sederhana berawalan (%s)"
 
-#: src/Admin/Views/settings.php:264
+#: src/Admin/Views/settings.php:255
 msgid "Format Indonesia menyusun nomor sebagai urutan/jenis/kode usaha/bulan romawi/tahun, sehingga bulan dan tahun terbaca langsung dari nomornya."
 msgstr "Format Indonesia menyusun nomor sebagai urutan/jenis/kode usaha/bulan romawi/tahun, sehingga bulan dan tahun terbaca langsung dari nomornya."
 
-#: src/Admin/Views/settings.php:270
+#: src/Admin/Views/settings.php:261
 msgid "Business code"
 msgstr "Kode usaha"
 
-#: src/Admin/Views/settings.php:273
+#: src/Admin/Views/settings.php:264
 msgid "Short code for your business, used inside regional document numbers."
 msgstr "Kode singkat usaha Anda, dipakai di dalam nomor dokumen format lokal."
 
-#: src/Admin/Views/settings.php:277
+#: src/Admin/Views/settings.php:268
+msgid "Prefixes"
+msgstr "Awalan"
+
+#: src/Admin/Views/settings.php:270
 msgid "Invoice prefix"
 msgstr "Awalan faktur"
 
-#: src/Admin/Views/settings.php:281
+#: src/Admin/Views/settings.php:271
 msgid "Receipt prefix"
 msgstr "Awalan kwitansi"
 
-#: src/Admin/Views/settings.php:285
+#: src/Admin/Views/settings.php:272
 msgid "Number padding"
 msgstr "Jumlah digit nomor"
 
-#: src/Admin/Views/settings.php:288
-msgid "Digits to pad sequential numbers to. A padding of 3 gives 007."
-msgstr "Banyaknya digit nomor urut. Nilai 3 menghasilkan 007."
+#: src/Admin/Views/settings.php:273
+msgid "Invoice prefix, receipt prefix, and how many digits to pad the sequence to."
+msgstr "Awalan faktur, awalan kwitansi, dan jumlah digit nomor urut."
 
-#: src/Admin/Views/settings.php:293
+#: src/Admin/Views/settings.php:278
 msgid "Bea meterai"
 msgstr "Bea meterai"
 
-#: src/Admin/Views/settings.php:297
+#: src/Admin/Views/settings.php:282
 msgid "Ingatkan kebutuhan meterai pada kwitansi bernilai besar"
 msgstr "Ingatkan kebutuhan meterai pada kwitansi bernilai besar"
 
 #. translators: 1: threshold amount, 2: duty amount
 #, php-format
-#: src/Admin/Views/settings.php:303
+#: src/Admin/Views/settings.php:288
 msgid "Berdasarkan UU 10/2020, dokumen yang menyebut nilai uang di atas %1$s dikenai bea meterai %2$s."
 msgstr "Berdasarkan UU 10/2020, dokumen yang menyebut nilai uang di atas %1$s dikenai bea meterai %2$s."
 
-#: src/Admin/Views/settings.php:314
-msgid "Data"
-msgstr "Data"
+#: src/Admin/Views/settings.php:302
+msgid "Advanced"
+msgstr "Lanjutan"
 
-#: src/Admin/Views/settings.php:317
+#: src/Admin/Views/settings.php:307
+msgid "Business region"
+msgstr "Wilayah usaha"
+
+#. translators: %s: name of the active regional profile
+#, php-format
+#: src/Admin/Views/settings.php:320
+msgid "Sets the terminology, tax fields, address fields and document numbering used throughout BizWit. Currently active: %s."
+msgstr "Menentukan istilah, kolom pajak, kolom alamat, dan penomoran dokumen di seluruh BizWit. Sedang aktif: %s."
+
+#: src/Admin/Views/settings.php:326
+msgid "This is separate from the interface language, which follows your WordPress site language."
+msgstr "Pengaturan ini terpisah dari bahasa antarmuka, yang mengikuti bahasa situs WordPress Anda."
+
+#: src/Admin/Views/settings.php:334
+msgid "Two-letter ISO 3166-1 code. Used to detect your region automatically."
+msgstr "Kode ISO 3166-1 dua huruf. Dipakai untuk mendeteksi wilayah usaha Anda secara otomatis."
+
+#: src/Admin/Views/settings.php:339
+msgid "Skala usaha"
+msgstr "Skala usaha"
+
+#: src/Admin/Views/settings.php:348
+msgid "Klasifikasi menurut PP 7/2021, berdasarkan modal usaha atau hasil penjualan tahunan."
+msgstr "Klasifikasi menurut PP 7/2021, berdasarkan modal usaha atau hasil penjualan tahunan."
+
+#: src/Admin/Views/settings.php:353
 msgid "On uninstall"
 msgstr "Saat plugin dihapus permanen"
 
-#: src/Admin/Views/settings.php:321
+#: src/Admin/Views/settings.php:357
 msgid "Delete all BizWit data when the plugin is uninstalled"
 msgstr "Hapus seluruh data BizWit saat plugin dihapus permanen"
 
-#: src/Admin/Views/settings.php:324
+#: src/Admin/Views/settings.php:360
 msgid "Off by default. Deactivating the plugin never touches your data; only uninstalling with this box ticked does."
 msgstr "Nonaktif secara bawaan. Menonaktifkan plugin tidak pernah menyentuh data Anda; hanya penghapusan permanen dengan kotak ini tercentang yang menghapusnya."
 
-#: src/Admin/Views/settings.php:330
+#: src/Admin/Views/settings.php:367
 msgid "Save settings"
 msgstr "Simpan pengaturan"
 
@@ -707,7 +718,7 @@ msgid "Indonesia"
 msgstr "Indonesia"
 
 #: src/Localization/Indonesia.php:118
-#: src/Localization/Indonesia.php:225
+#: src/Localization/Indonesia.php:231
 msgid "Perorangan"
 msgstr "Perorangan"
 
@@ -716,7 +727,7 @@ msgid "Perusahaan (PT / CV / UD)"
 msgstr "Perusahaan (PT / CV / UD)"
 
 #: src/Localization/Indonesia.php:120
-#: src/Localization/Indonesia.php:224
+#: src/Localization/Indonesia.php:230
 msgid "Instansi Pemerintah"
 msgstr "Instansi Pemerintah"
 
@@ -760,207 +771,215 @@ msgstr "Kode Pos"
 msgid "Termin pembayaran"
 msgstr "Termin pembayaran"
 
-#: src/Localization/Indonesia.php:151
+#: src/Localization/Indonesia.php:141
+msgid "Telepon / WhatsApp"
+msgstr "Telepon / WhatsApp"
+
+#: src/Localization/Indonesia.php:152
 msgid "Nama badan usaha sesuai akta pendirian, jika berbeda dengan nama panggilan di atas. Nama inilah yang dicantumkan pada faktur."
 msgstr "Nama badan usaha sesuai akta pendirian, jika berbeda dengan nama panggilan di atas. Nama inilah yang dicantumkan pada faktur."
 
-#: src/Localization/Indonesia.php:152
+#: src/Localization/Indonesia.php:153
 msgid "Nomor Pokok Wajib Pajak. 16 digit (berbasis NIK) atau 15 digit format lama. Wajib dicantumkan pada faktur pajak."
 msgstr "Nomor Pokok Wajib Pajak. 16 digit (berbasis NIK) atau 15 digit format lama. Wajib dicantumkan pada faktur pajak."
 
-#: src/Localization/Indonesia.php:153
+#: src/Localization/Indonesia.php:154
 msgid "Nomor Induk Berusaha dari sistem OSS, 13 digit. Menggantikan SIUP dan TDP."
 msgstr "Nomor Induk Berusaha dari sistem OSS, 13 digit. Menggantikan SIUP dan TDP."
 
-#: src/Localization/Indonesia.php:154
+#: src/Localization/Indonesia.php:155
 msgid "Jumlah hari sejak tanggal faktur sampai jatuh tempo. Umumnya 14 atau 30 hari."
 msgstr "Jumlah hari sejak tanggal faktur sampai jatuh tempo. Umumnya 14 atau 30 hari."
 
-#: src/Localization/Indonesia.php:166
+#: src/Localization/Indonesia.php:167
 msgid "Bentuk badan usaha"
 msgstr "Bentuk badan usaha"
 
-#: src/Localization/Indonesia.php:169
+#: src/Localization/Indonesia.php:171
 msgid "Menentukan bagaimana nama klien ditulis pada faktur dan kwitansi."
 msgstr "Menentukan bagaimana nama klien ditulis pada faktur dan kwitansi."
 
-#: src/Localization/Indonesia.php:172
+#: src/Localization/Indonesia.php:174
 msgid "NIK"
 msgstr "NIK"
 
-#: src/Localization/Indonesia.php:175
+#: src/Localization/Indonesia.php:178
 msgid "Nomor Induk Kependudukan, 16 digit. Untuk klien perorangan, NIK kini juga berfungsi sebagai NPWP."
 msgstr "Nomor Induk Kependudukan, 16 digit. Untuk klien perorangan, NIK kini juga berfungsi sebagai NPWP."
 
-#: src/Localization/Indonesia.php:178
+#: src/Localization/Indonesia.php:181
 msgid "Pengusaha Kena Pajak (PKP)"
 msgstr "Pengusaha Kena Pajak (PKP)"
 
-#: src/Localization/Indonesia.php:180
+#: src/Localization/Indonesia.php:185
 msgid "Centang bila klien berstatus PKP dan dapat menerima faktur pajak."
 msgstr "Centang bila klien berstatus PKP dan dapat menerima faktur pajak."
 
-#: src/Localization/Indonesia.php:183
+#: src/Localization/Indonesia.php:188
 msgid "RT / RW"
 msgstr "RT / RW"
 
-#: src/Localization/Indonesia.php:188
+#: src/Localization/Indonesia.php:193
 msgid "Kelurahan / Desa"
 msgstr "Kelurahan / Desa"
 
-#: src/Localization/Indonesia.php:193
+#: src/Localization/Indonesia.php:198
 msgid "Kecamatan"
 msgstr "Kecamatan"
 
-#: src/Localization/Indonesia.php:198
+#: src/Localization/Indonesia.php:203
 msgid "Satuan Kerja / Unit"
 msgstr "Satuan Kerja / Unit"
 
-#: src/Localization/Indonesia.php:201
+#: src/Localization/Indonesia.php:207
 msgid "Untuk klien instansi pemerintah: nama satker yang menerbitkan SPK atau kontrak."
 msgstr "Untuk klien instansi pemerintah: nama satker yang menerbitkan SPK atau kontrak."
 
-#: src/Localization/Indonesia.php:213
+#: src/Localization/Indonesia.php:219
 msgid "— Tidak ditentukan —"
 msgstr "— Tidak ditentukan —"
 
-#: src/Localization/Indonesia.php:214
+#: src/Localization/Indonesia.php:220
 msgid "PT (Perseroan Terbatas)"
 msgstr "PT (Perseroan Terbatas)"
 
-#: src/Localization/Indonesia.php:215
+#: src/Localization/Indonesia.php:221
 msgid "PT Perorangan"
 msgstr "PT Perorangan"
 
-#: src/Localization/Indonesia.php:216
+#: src/Localization/Indonesia.php:222
 msgid "CV (Commanditaire Vennootschap)"
 msgstr "CV (Commanditaire Vennootschap)"
 
-#: src/Localization/Indonesia.php:217
+#: src/Localization/Indonesia.php:223
 msgid "Firma"
 msgstr "Firma"
 
-#: src/Localization/Indonesia.php:218
+#: src/Localization/Indonesia.php:224
 msgid "UD (Usaha Dagang)"
 msgstr "UD (Usaha Dagang)"
 
-#: src/Localization/Indonesia.php:219
+#: src/Localization/Indonesia.php:225
 msgid "Koperasi"
 msgstr "Koperasi"
 
-#: src/Localization/Indonesia.php:220
+#: src/Localization/Indonesia.php:226
 msgid "Yayasan"
 msgstr "Yayasan"
 
-#: src/Localization/Indonesia.php:221
+#: src/Localization/Indonesia.php:227
 msgid "Perkumpulan"
 msgstr "Perkumpulan"
 
-#: src/Localization/Indonesia.php:222
+#: src/Localization/Indonesia.php:228
 msgid "BUMN"
 msgstr "BUMN"
 
-#: src/Localization/Indonesia.php:223
+#: src/Localization/Indonesia.php:229
 msgid "BUMD"
 msgstr "BUMD"
 
-#: src/Localization/Indonesia.php:239
+#: src/Localization/Indonesia.php:245
 msgid "Usaha Mikro"
 msgstr "Usaha Mikro"
 
-#: src/Localization/Indonesia.php:240
+#: src/Localization/Indonesia.php:246
 msgid "Usaha Kecil"
 msgstr "Usaha Kecil"
 
-#: src/Localization/Indonesia.php:241
+#: src/Localization/Indonesia.php:247
 msgid "Usaha Menengah"
 msgstr "Usaha Menengah"
 
-#: src/Localization/Indonesia.php:242
+#: src/Localization/Indonesia.php:248
 msgid "Usaha Besar"
 msgstr "Usaha Besar"
 
-#: src/Localization/Indonesia.php:253
+#: src/Localization/Indonesia.php:259
+msgid "Tidak menangani pajak di BizWit"
+msgstr "Tidak menangani pajak di BizWit"
+
+#: src/Localization/Indonesia.php:260
 msgid "UMKM — PPh Final 0,5% (PP 55/2022)"
 msgstr "UMKM — PPh Final 0,5% (PP 55/2022)"
 
-#: src/Localization/Indonesia.php:254
+#: src/Localization/Indonesia.php:261
 msgid "Non-PKP — tanpa PPN"
 msgstr "Non-PKP — tanpa PPN"
 
-#: src/Localization/Indonesia.php:255
+#: src/Localization/Indonesia.php:262
 msgid "PKP — memungut PPN"
 msgstr "PKP — memungut PPN"
 
-#: src/Localization/Indonesia.php:266
+#: src/Localization/Indonesia.php:301
 msgid "Transfer Bank"
 msgstr "Transfer Bank"
 
-#: src/Localization/Indonesia.php:267
+#: src/Localization/Indonesia.php:302
 msgid "Tunai"
 msgstr "Tunai"
 
-#: src/Localization/Indonesia.php:268
+#: src/Localization/Indonesia.php:303
 msgid "QRIS"
 msgstr "QRIS"
 
-#: src/Localization/Indonesia.php:269
+#: src/Localization/Indonesia.php:304
 msgid "E-Wallet (GoPay / OVO / DANA / ShopeePay)"
 msgstr "E-Wallet (GoPay / OVO / DANA / ShopeePay)"
 
-#: src/Localization/Indonesia.php:270
+#: src/Localization/Indonesia.php:305
 msgid "Virtual Account"
 msgstr "Virtual Account"
 
-#: src/Localization/Indonesia.php:271
+#: src/Localization/Indonesia.php:306
 msgid "Cek / Giro"
 msgstr "Cek / Giro"
 
-#: src/Localization/Indonesia.php:272
+#: src/Localization/Indonesia.php:307
 msgid "Kartu Kredit / Debit"
 msgstr "Kartu Kredit / Debit"
 
-#: src/Localization/Indonesia.php:273
+#: src/Localization/Indonesia.php:308
 msgid "SP2D (pembayaran instansi pemerintah)"
 msgstr "SP2D (pembayaran instansi pemerintah)"
 
-#: src/Localization/Indonesia.php:274
+#: src/Localization/Indonesia.php:309
 msgid "Kompensasi / Potongan"
 msgstr "Kompensasi / Potongan"
 
-#: src/Localization/Indonesia.php:275
+#: src/Localization/Indonesia.php:310
 msgid "Lainnya"
 msgstr "Lainnya"
 
-#: src/Localization/Indonesia.php:334
+#: src/Localization/Indonesia.php:369
 msgid "PPN"
 msgstr "PPN"
 
-#: src/Localization/Indonesia.php:525
+#: src/Localization/Indonesia.php:560
 msgid "Pembayaran dianggap lunas setelah dana diterima di rekening yang tercantum."
 msgstr "Pembayaran dianggap lunas setelah dana diterima di rekening yang tercantum."
 
-#: src/Localization/Indonesia.php:526
+#: src/Localization/Indonesia.php:561
 msgid "Mohon cantumkan nomor faktur pada berita transfer."
 msgstr "Mohon cantumkan nomor faktur pada berita transfer."
 
-#: src/Localization/Region.php:112
+#: src/Localization/Region.php:129
 msgid "Bank transfer"
 msgstr "Transfer bank"
 
-#: src/Localization/Region.php:113
+#: src/Localization/Region.php:130
 msgid "Cash"
 msgstr "Tunai"
 
-#: src/Localization/Region.php:114
+#: src/Localization/Region.php:131
 msgid "Card"
 msgstr "Kartu"
 
-#: src/Localization/Region.php:115
+#: src/Localization/Region.php:132
 msgid "Cheque"
 msgstr "Cek"
 
-#: src/Localization/Region.php:116
+#: src/Localization/Region.php:133
 msgid "Other"
 msgstr "Lainnya"
 
@@ -1019,3 +1038,19 @@ msgstr "Manajer BizWit"
 #: src/Support/Capabilities.php:123
 msgid "BizWit Staff"
 msgstr "Staf BizWit"
+
+#: src/Support/Settings.php:183
+msgid "Individual — freelancer, home business, professional"
+msgstr "Perorangan — pekerja lepas, usaha rumahan, profesional"
+
+#: src/Support/Settings.php:184
+msgid "Registered entity — PT, CV, UD, koperasi, yayasan"
+msgstr "Badan usaha — PT, CV, UD, koperasi, yayasan"
+
+#: src/Support/Settings.php:248
+msgid "Not handling tax"
+msgstr "Tidak menangani pajak"
+
+#: src/Support/Settings.php:254
+msgid "Tax enabled"
+msgstr "Pajak aktif"

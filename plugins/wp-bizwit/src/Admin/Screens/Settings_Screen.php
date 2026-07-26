@@ -81,7 +81,7 @@ class Settings_Screen extends Screen {
 
 		$regime = sanitize_key( wp_unslash( $_POST['tax_regime'] ?? '' ) );
 		if ( ! array_key_exists( $regime, Indonesia::tax_regimes() ) ) {
-			$regime = Indonesia::REGIME_UMKM_FINAL;
+			$regime = Settings::REGIME_NONE;
 		}
 
 		$scale = sanitize_key( wp_unslash( $_POST['business_scale'] ?? '' ) );
@@ -90,6 +90,11 @@ class Settings_Screen extends Screen {
 		}
 
 		$number_format = sanitize_key( wp_unslash( $_POST['number_format'] ?? 'regional' ) );
+
+		$business_type = sanitize_key( wp_unslash( $_POST['business_type'] ?? '' ) );
+		if ( ! array_key_exists( $business_type, Settings::business_types() ) ) {
+			$business_type = Settings::TYPE_PERSONAL;
+		}
 
 		$settings = array(
 			'business_name'            => sanitize_text_field( wp_unslash( $_POST['business_name'] ?? '' ) ),
@@ -101,6 +106,7 @@ class Settings_Screen extends Screen {
 			'tax_id'                   => sanitize_text_field( wp_unslash( $_POST['tax_id'] ?? '' ) ),
 			'business_reg_no'          => sanitize_text_field( wp_unslash( $_POST['business_reg_no'] ?? '' ) ),
 			'region'                   => $region,
+			'business_type'            => $business_type,
 			'business_scale'           => $scale,
 			'tax_regime'               => $regime,
 			'currency'                 => $currency,
@@ -148,7 +154,10 @@ class Settings_Screen extends Screen {
 				'region'         => $region,
 				'is_indonesia'   => $region instanceof Indonesia,
 				'region_choices' => Regions::choices(),
+				'business_types' => Settings::business_types(),
 				'tax_regimes'    => Indonesia::tax_regimes(),
+				'handles_tax'    => Settings::handles_tax(),
+				'tax_summary'    => Settings::tax_summary(),
 				'scales'         => Indonesia::business_scales(),
 				'sample_number'  => Settings::document_number( 'invoice', 1 ),
 				'nonce_field'    => self::FORM_NONCE,

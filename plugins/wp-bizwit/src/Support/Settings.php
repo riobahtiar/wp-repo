@@ -27,6 +27,30 @@ class Settings {
 	public const OPTION = 'wp_bizwit_settings';
 
 	/**
+	 * An individual: freelancer, home worker, professional, sole trader.
+	 *
+	 * @var string
+	 */
+	public const TYPE_PERSONAL = 'perorangan';
+
+	/**
+	 * A registered entity: PT, CV, UD, koperasi, yayasan, instansi.
+	 *
+	 * @var string
+	 */
+	public const TYPE_ENTITY = 'badan_usaha';
+
+	/**
+	 * Tax regime meaning "this business does not handle tax in BizWit".
+	 *
+	 * Not every user has a tax obligation to record. A freelance photographer
+	 * billing individuals wants an invoice and a receipt, not a PPN field.
+	 *
+	 * @var string
+	 */
+	public const REGIME_NONE = 'none';
+
+	/**
 	 * Default values for every known setting.
 	 *
 	 * @return array<string, mixed> Default settings.
@@ -43,11 +67,20 @@ class Settings {
 			'tax_id'                   => '',
 			'business_reg_no'          => '',
 
+			// Who is running this. A freelancer, home worker or professional has
+			// no NIB, no company stamp and often no tax to declare here, so the
+			// default is the simplest setup rather than the most complete one.
+			'business_type'            => self::TYPE_PERSONAL,
+
 			// Regional profile. 'auto' resolves to Indonesia unless the business
 			// details say otherwise - see Localization\Regions.
 			'region'                   => 'auto',
 			'business_scale'           => 'kecil',
-			'tax_regime'               => 'umkm_final',
+
+			// Tax is off until someone turns it on. A plugin that assumes every
+			// user has a tax obligation makes the majority of its users dismiss
+			// fields that will never apply to them.
+			'tax_regime'               => self::REGIME_NONE,
 
 			// Money. Defaults target an Indonesian UMKM.
 			'currency'                 => 'IDR',
@@ -141,6 +174,44 @@ class Settings {
 	}
 
 	/**
+	 * Business types offered in settings.
+	 *
+	 * @return array<string, string> Type slug mapped to label.
+	 */
+	public static function business_types(): array {
+		return array(
+			self::TYPE_PERSONAL => __( 'Individual — freelancer, home business, professional', 'wp-bizwit' ),
+			self::TYPE_ENTITY   => __( 'Registered entity — PT, CV, UD, koperasi, yayasan', 'wp-bizwit' ),
+		);
+	}
+
+	/**
+	 * Whether the user runs a registered entity rather than working as an individual.
+	 *
+	 * Drives which fields are worth showing by default. It never hides a field
+	 * permanently: an individual who does need an NPWP can still open the
+	 * advanced section and fill it in.
+	 *
+	 * @return bool True for a registered entity.
+	 */
+	public static function is_entity(): bool {
+		return self::TYPE_ENTITY === (string) self::get( 'business_type', self::TYPE_PERSONAL );
+	}
+
+	/**
+	 * Whether this business records tax at all.
+	 *
+	 * When false, every tax field, column and document line is hidden. This is
+	 * the difference between a plugin a freelancer can use in five minutes and
+	 * one they abandon at the settings screen.
+	 *
+	 * @return bool True when tax handling is enabled.
+	 */
+	public static function handles_tax(): bool {
+		return self::REGIME_NONE !== (string) self::get( 'tax_regime', self::REGIME_NONE );
+	}
+
+	/**
 	 * Whether the business charges sales tax on its invoices.
 	 *
 	 * Only a PKP may charge PPN. A business on the UMKM final regime pays 0.5%
@@ -150,7 +221,7 @@ class Settings {
 	 * @return bool True when invoices should carry a tax line.
 	 */
 	public static function charges_sales_tax(): bool {
-		return Indonesia::REGIME_PKP === (string) self::get( 'tax_regime', Indonesia::REGIME_UMKM_FINAL );
+		return Indonesia::REGIME_PKP === (string) self::get( 'tax_regime', self::REGIME_NONE );
 	}
 
 	/**
@@ -162,6 +233,25 @@ class Settings {
 	 */
 	public static function effective_tax_rate(): string {
 		return self::charges_sales_tax() ? (string) self::get( 'default_tax_rate', '11' ) : '0';
+	}
+
+	/**
+	 * Summarise the current tax setup for a settings section heading.
+	 *
+	 * Shown in a collapsed accordion summary so the user can see the state
+	 * without opening it.
+	 *
+	 * @return string Translated one-line summary.
+	 */
+	public static function tax_summary(): string {
+		if ( ! self::handles_tax() ) {
+			return __( 'Not handling tax', 'wp-bizwit' );
+		}
+
+		$regimes = Indonesia::tax_regimes();
+		$regime  = (string) self::get( 'tax_regime', self::REGIME_NONE );
+
+		return $regimes[ $regime ] ?? __( 'Tax enabled', 'wp-bizwit' );
 	}
 
 	/**

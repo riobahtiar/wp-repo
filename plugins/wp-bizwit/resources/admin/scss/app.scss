@@ -55,6 +55,97 @@
 		border-radius: 4px;
 	}
 
+	/*
+	 * Progressive disclosure sections.
+	 *
+	 * Built on native <details> rather than a JS accordion, so a collapsed
+	 * section still works with the keyboard, screen readers, browser find-in-page
+	 * and printing. The summary carries a hint showing the current state, so a
+	 * closed section is informative rather than merely hidden.
+	 */
+	.wp-bizwit-section {
+		max-width: 900px;
+		margin: 16px 0;
+		background: #fff;
+		border: 1px solid var(--wp-bizwit-border);
+		border-radius: 4px;
+
+		> summary {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: baseline;
+			gap: 10px;
+			padding: 14px 16px;
+			cursor: pointer;
+			list-style: none;
+			user-select: none;
+
+			&::-webkit-details-marker {
+				display: none;
+			}
+
+			/* Disclosure triangle, rotated by the open state below. */
+			&::before {
+				content: "";
+				flex: 0 0 auto;
+				width: 0;
+				height: 0;
+				border-top: 5px solid transparent;
+				border-bottom: 5px solid transparent;
+				border-left: 6px solid var(--wp-bizwit-muted);
+				transition: transform 0.15s ease;
+			}
+
+			&:hover .wp-bizwit-section__title {
+				color: #2271b1;
+			}
+
+			&:focus-visible {
+				outline: 2px solid #2271b1;
+				outline-offset: -2px;
+			}
+		}
+
+		&[open] > summary::before {
+			transform: rotate(90deg);
+		}
+
+		&[open] > summary {
+			border-bottom: 1px solid var(--wp-bizwit-border);
+		}
+
+		> :not(summary) {
+			padding: 0 16px;
+		}
+
+		> .form-table {
+			padding: 0 16px 8px;
+		}
+	}
+
+	.wp-bizwit-section__title {
+		font-weight: 600;
+	}
+
+	.wp-bizwit-section__hint {
+		color: var(--wp-bizwit-muted);
+		font-size: 13px;
+	}
+
+	.wp-bizwit-lede {
+		max-width: 900px;
+		font-size: 14px;
+	}
+
+	.wp-bizwit-radio {
+		display: inline-block;
+		margin: 2px 0;
+	}
+
+	.wp-bizwit-inline-label {
+		margin-left: 16px;
+	}
+
 	/* Status pills in the clients list table. */
 	.wp-bizwit-status {
 		display: inline-block;

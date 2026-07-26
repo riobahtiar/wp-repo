@@ -14,6 +14,9 @@ non-trivial changes:
 | [`docs/culture.md`](docs/culture.md) | Designing any form, copy, notification or printable document |
 | [`docs/data-model.md`](docs/data-model.md) | Changing the schema or adding a repository |
 | [`docs/development.md`](docs/development.md) | Running the tooling, or adding translatable strings |
+| [`SECURITY.md`](SECURITY.md) | **Any change that touches data.** Contains the review checklist |
+| [`plans/`](plans/) | Starting work on an unbuilt feature — the plan states the traps |
+| [`plans/PROGRESS.md`](plans/PROGRESS.md) | Checking what is actually built before assuming |
 
 ---
 

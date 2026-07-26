@@ -166,6 +166,7 @@ class Clients_Screen extends Screen {
 				'meta'        => Client_Repository::meta( $client ),
 				'is_edit'     => 'edit' === $action,
 				'region'      => $region,
+				'handles_tax' => Settings::handles_tax(),
 				'meta_fields' => $region->meta_fields(),
 				'provinces'   => $region->provinces(),
 				'types'       => Client_Repository::types(),

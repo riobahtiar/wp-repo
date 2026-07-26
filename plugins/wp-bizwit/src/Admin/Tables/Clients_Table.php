@@ -9,6 +9,7 @@ namespace WP_BizWit\Admin\Tables;
 
 use WP_List_Table;
 use WP_BizWit\Admin\Screens\Clients_Screen;
+use WP_BizWit\Localization\Regions;
 use WP_BizWit\Repositories\Client_Repository;
 use WP_BizWit\Support\Capabilities;
 
@@ -299,6 +300,38 @@ class Clients_Table extends WP_List_Table {
 		}
 
 		return sprintf( '<a href="mailto:%1$s">%1$s</a>', esc_attr( $email ) );
+	}
+
+	/**
+	 * Phone column, linked to the region's messaging app where there is one.
+	 *
+	 * A phone number in an Indonesian client record is far more useful as a
+	 * WhatsApp link than as text, because that is where the conversation about
+	 * an unpaid invoice actually happens.
+	 *
+	 * @param array<string, mixed> $item Row data.
+	 *
+	 * @return string Cell markup.
+	 */
+	public function column_phone( array $item ): string {
+		$phone = (string) $item['phone'];
+
+		if ( '' === $phone ) {
+			return '&mdash;';
+		}
+
+		$messaging = Regions::current()->messaging_url( $phone );
+
+		if ( '' === $messaging ) {
+			return sprintf( '<a href="tel:%1$s">%2$s</a>', esc_attr( $phone ), esc_html( $phone ) );
+		}
+
+		return sprintf(
+			'<a href="%1$s" target="_blank" rel="noopener noreferrer" title="%2$s">%3$s</a>',
+			esc_url( $messaging ),
+			esc_attr__( 'Open in WhatsApp', 'wp-bizwit' ),
+			esc_html( $phone )
+		);
 	}
 
 	/**

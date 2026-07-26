@@ -138,6 +138,7 @@ class Indonesia extends Region {
 			'state'              => __( 'Provinsi', 'wp-bizwit' ),
 			'postal_code'        => __( 'Kode Pos', 'wp-bizwit' ),
 			'payment_terms_days' => __( 'Termin pembayaran', 'wp-bizwit' ),
+			'phone'              => __( 'Telepon / WhatsApp', 'wp-bizwit' ),
 		);
 	}
 
@@ -165,18 +166,22 @@ class Indonesia extends Region {
 			'legal_form' => array(
 				'label'       => __( 'Bentuk badan usaha', 'wp-bizwit' ),
 				'type'        => 'select',
+				'advanced'    => true,
 				'options'     => self::legal_forms(),
 				'description' => __( 'Menentukan bagaimana nama klien ditulis pada faktur dan kwitansi.', 'wp-bizwit' ),
 			),
 			'nik'        => array(
 				'label'       => __( 'NIK', 'wp-bizwit' ),
 				'type'        => 'text',
+				'advanced'    => true,
 				'maxlength'   => 16,
 				'description' => __( 'Nomor Induk Kependudukan, 16 digit. Untuk klien perorangan, NIK kini juga berfungsi sebagai NPWP.', 'wp-bizwit' ),
 			),
 			'is_pkp'     => array(
 				'label'       => __( 'Pengusaha Kena Pajak (PKP)', 'wp-bizwit' ),
 				'type'        => 'checkbox',
+				'advanced'    => true,
+				'tax_only'    => true,
 				'description' => __( 'Centang bila klien berstatus PKP dan dapat menerima faktur pajak.', 'wp-bizwit' ),
 			),
 			'rt_rw'      => array(
@@ -197,6 +202,7 @@ class Indonesia extends Region {
 			'satker'     => array(
 				'label'       => __( 'Satuan Kerja / Unit', 'wp-bizwit' ),
 				'type'        => 'text',
+				'advanced'    => true,
 				'maxlength'   => 191,
 				'description' => __( 'Untuk klien instansi pemerintah: nama satker yang menerbitkan SPK atau kontrak.', 'wp-bizwit' ),
 			),
@@ -250,10 +256,39 @@ class Indonesia extends Region {
 	 */
 	public static function tax_regimes(): array {
 		return array(
+			Settings::REGIME_NONE   => __( 'Tidak menangani pajak di BizWit', 'wp-bizwit' ),
 			self::REGIME_UMKM_FINAL => __( 'UMKM — PPh Final 0,5% (PP 55/2022)', 'wp-bizwit' ),
 			self::REGIME_NON_PKP    => __( 'Non-PKP — tanpa PPN', 'wp-bizwit' ),
 			self::REGIME_PKP        => __( 'PKP — memungut PPN', 'wp-bizwit' ),
 		);
+	}
+
+	/**
+	 * Build a WhatsApp link for an Indonesian phone number.
+	 *
+	 * WhatsApp carries a large share of Indonesian business communication, so a
+	 * phone number in a client record is more useful as a link than as text.
+	 * Domestic numbers are written `08xx...`; wa.me needs the country code with
+	 * no leading zero and no punctuation.
+	 *
+	 * @param string $phone Phone number as entered.
+	 *
+	 * @return string wa.me URL, or '' when the number is unusable.
+	 */
+	public function messaging_url( string $phone ): string {
+		$digits = (string) preg_replace( '/\D/', '', $phone );
+
+		if ( str_starts_with( $digits, '0' ) ) {
+			$digits = '62' . substr( $digits, 1 );
+		}
+
+		if ( ! str_starts_with( $digits, '62' ) ) {
+			// Not recognisably Indonesian; leave it to the plain tel: link.
+			return '';
+		}
+
+		// Shortest plausible Indonesian mobile is 62 + 9 digits.
+		return strlen( $digits ) < 11 ? '' : 'https://wa.me/' . $digits;
 	}
 
 	/**

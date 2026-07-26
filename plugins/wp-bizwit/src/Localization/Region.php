@@ -96,10 +96,27 @@ abstract class Region {
 	 * adding a second country's profile later does not widen the table for
 	 * everyone. These are paperwork fields, not fields anyone filters a list by.
 	 *
-	 * @return array<string, array{label: string, type: string, description?: string, maxlength?: int, options?: array<string, string>}> Field key mapped to definition.
+	 * Two optional flags control progressive disclosure in the client form:
+	 * `advanced` hides the field behind a collapsed section, and `tax_only`
+	 * removes it entirely when the business is not handling tax. Neither ever
+	 * makes a field unreachable - a freelancer who does need an NPWP can open
+	 * the section and fill it in.
+	 *
+	 * @return array<string, array{label: string, type: string, description?: string, maxlength?: int, options?: array<string, string>, advanced?: bool, tax_only?: bool}> Field key mapped to definition.
 	 */
 	public function meta_fields(): array {
 		return array();
+	}
+
+	/**
+	 * A messaging deep link for a phone number, where the region has one.
+	 *
+	 * @param string $phone Phone number as entered.
+	 *
+	 * @return string URL, or '' when the region has no such convention.
+	 */
+	public function messaging_url( string $phone ): string { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Signature exists for subclasses that provide one.
+		return '';
 	}
 
 	/**
