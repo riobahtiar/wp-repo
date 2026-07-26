@@ -1,0 +1,34 @@
+/*
+ * WP BizWit admin styles — Tailwind CSS v4.
+ *
+ * CRITICAL: These styles must never restyle core wp-admin chrome
+ * (#wpadminbar, #adminmenu, form tables outside our root, etc.).
+ *
+ * Scope strategy (Tailwind v4 has no `important: '.wp-bizwit'` config):
+ *   1. Theme tokens only — CSS variables on :root are harmless.
+ *   2. NO global preflight — element resets would break wp-admin layout.
+ *   3. Utilities nested under `.wp-bizwit` so generated selectors become
+ *      `.wp-bizwit .utility { … }` and only match inside our root wrapper.
+ *   4. `source(none)` disables automatic repo-wide class scanning; only the
+ *      explicit `@source` globs below feed the utility set.
+ *
+ * App markup always lives under `<div class="wrap wp-bizwit">`.
+ * See docs/frontend-architecture.md § "Scoping and coexistence with wp-admin".
+ */
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme) source(none);
+
+/* Content paths for class scanning (entries + future design system). */
+@source "../admin/**/*.{ts,vue}";
+@source "../screens/**/*.{ts,vue}";
+@source "../ui/**/*.{ts,vue}";
+@source "../app/**/*.{ts,vue}";
+
+/* Utilities only apply when an ancestor has .wp-bizwit */
+.wp-bizwit {
+	@import "tailwindcss/utilities.css" layer(utilities) source(none);
+
+	/* Design tokens (CSS variables) land here as the system grows. */
+	box-sizing: border-box;
+}

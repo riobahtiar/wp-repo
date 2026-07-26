@@ -1,12 +1,24 @@
 {
   "name": "wp-bizwit",
   "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^20.19.43",
+    "@vitejs/plugin-vue": "^6.0.8",
     "@wordpress/env": "^11.7.0",
-    "@wordpress/scripts": "^32.1.0"
+    "@wordpress/scripts": "^32.1.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3",
+    "vite": "^8.1.5",
+    "vue-tsc": "^3.3.8"
   },
   "scripts": {
-    "start": "wp-scripts start --blocks-manifest",
-    "build": "wp-scripts build --blocks-manifest",
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "build:assets": "vite build",
+    "preview": "vite preview",
+    "start:legacy": "wp-scripts start --blocks-manifest",
+    "build:legacy": "wp-scripts build --blocks-manifest",
     "lint:style": "wp-scripts lint-style 'resources/**/*.{css,scss,sass}'",
     "lint:js": "wp-scripts lint-js ./resources",
     "lint:fix:js": "wp-scripts lint-js ./resources --fix",
@@ -19,5 +31,8 @@
     "env:destroy": "wp-env destroy",
     "env:cli": "wp-env run cli --env-cwd=wp-content/plugins/wp-bizwit",
     "test:php": "wp-env run tests-cli --env-cwd=wp-content/plugins/wp-bizwit bash -lc 'composer install --working-dir=tests --no-interaction && vendor/bin/phpunit'"
+  },
+  "dependencies": {
+    "vue": "^3.5.40"
   }
 }
