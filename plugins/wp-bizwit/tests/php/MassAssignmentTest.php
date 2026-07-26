@@ -15,6 +15,8 @@ use WP_BizWit\Support\Settings;
 class MassAssignmentTest extends WP_UnitTestCase {
 
 	/**
+	 * Client repository under test.
+	 *
 	 * @var Client_Repository
 	 */
 	private Client_Repository $clients;

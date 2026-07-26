@@ -69,7 +69,7 @@ finds what the author was already thinking about.
 - [ ] Indonesian fixture dataset (partial via samples)
 - [x] `bizwit_activity` table and repository writes
 - [x] Activity retention and pruning
-- [x] Benchmark tool (`bin/benchmark-dashboard.php`; scale manually to 50k)
+- [x] Benchmark tool (`scripts/benchmark-dashboard.php`; scale manually to 50k)
 - [x] Index review (status_due on invoices)
 - [x] Dashboard aggregate caching
 - [x] Security self-review against SECURITY.md

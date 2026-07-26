@@ -41,6 +41,7 @@ class ScreenAuthTest extends WP_UnitTestCase {
 			static function () {
 				return static function ( $message, $title = '', $args = array() ): void {
 					$code = is_array( $args ) && isset( $args['response'] ) ? (int) $args['response'] : 500;
+					// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Test harness, not rendered HTML.
 					throw new WPDieException( (string) $message, $code );
 				};
 			}

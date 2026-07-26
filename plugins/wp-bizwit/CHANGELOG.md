@@ -22,7 +22,7 @@ self-review closed; dashboard performance tooling and expanded tests.
 - **Upgrade guide** (`docs/upgrade.md`) and schema stability promise.
 - **PHPUnit:** `SequenceTest`, `InstallerUpgradeTest`, `ScreenAuthTest`,
   `MassAssignmentTest` (orderby whitelist, caps, atomic numbering).
-- **Dashboard benchmark** CLI: `bin/benchmark-dashboard.php` (cold/warm timings).
+- **Dashboard benchmark** CLI: `scripts/benchmark-dashboard.php` (cold/warm timings).
 - A11y: region landmarks and table captions on dashboard panels.
 
 ### Changed

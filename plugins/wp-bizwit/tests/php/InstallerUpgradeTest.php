@@ -34,7 +34,7 @@ class InstallerUpgradeTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * maybe_install upgrades from an older recorded version (e.g. 1.4.0 → current).
+	 * Maybe_install upgrades from an older recorded version (e.g. 1.4.0 → current).
 	 *
 	 * @return void
 	 */
@@ -58,7 +58,7 @@ class InstallerUpgradeTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * maybe_install is a no-op when already current (does not rewrite the option).
+	 * Maybe_install is a no-op when already current (does not rewrite the option).
 	 *
 	 * @return void
 	 */

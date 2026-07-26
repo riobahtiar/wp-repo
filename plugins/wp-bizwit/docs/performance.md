@@ -63,7 +63,7 @@ Cold vs warm timings (transient cache 120s):
 
 ```bash
 BW_BENCH_CLIENTS=200 BW_BENCH_INVOICES=1000 BW_BENCH_SEED=1 \
-  wp eval-file wp-content/plugins/wp-bizwit/bin/benchmark-dashboard.php
+  wp eval-file wp-content/plugins/wp-bizwit/scripts/benchmark-dashboard.php
 ```
 
 Plan 06 target: each cold aggregate under **500ms** at ~50k invoices. Warm

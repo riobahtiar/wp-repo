@@ -18,11 +18,15 @@ use WP_BizWit\Support\Settings;
 class ActivityRepositoryTest extends WP_UnitTestCase {
 
 	/**
+	 * Activity repository under test.
+	 *
 	 * @var Activity_Repository
 	 */
 	private Activity_Repository $activity;
 
 	/**
+	 * Client repository for fixtures.
+	 *
 	 * @var Client_Repository
 	 */
 	private Client_Repository $clients;
