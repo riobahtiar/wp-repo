@@ -1,0 +1,83 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ *
+ * Everything is scoped under .wp-bizwit, which Screen::render_page() puts on the
+ * wrapper. Admin CSS is loaded on every wp-admin screen, so unscoped rules here
+ * would leak into other plugins' pages.
+ */
+
+.wp-bizwit {
+	--wp-bizwit-border: #dcdcde;
+	--wp-bizwit-muted: #646970;
+
+	.wp-bizwit-tiles {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 16px;
+		margin: 20px 0;
+	}
+
+	.wp-bizwit-tile {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 20px;
+		background: #fff;
+		border: 1px solid var(--wp-bizwit-border);
+		border-radius: 4px;
+		text-decoration: none;
+		color: inherit;
+
+		&:hover,
+		&:focus {
+			border-color: #2271b1;
+		}
+	}
+
+	.wp-bizwit-tile__value {
+		font-size: 28px;
+		font-weight: 600;
+		line-height: 1.2;
+	}
+
+	.wp-bizwit-tile__label {
+		color: var(--wp-bizwit-muted);
+		font-size: 13px;
+	}
+
+	.wp-bizwit-panel {
+		max-width: 780px;
+		margin: 20px 0;
+		padding: 4px 20px 20px;
+		background: #fff;
+		border: 1px solid var(--wp-bizwit-border);
+		border-radius: 4px;
+	}
+
+	/* Status pills in the clients list table. */
+	.wp-bizwit-status {
+		display: inline-block;
+		padding: 2px 8px;
+		border-radius: 10px;
+		font-size: 12px;
+		line-height: 1.6;
+		background: #f0f0f1;
+		color: #3c434a;
+	}
+
+	.wp-bizwit-status--active {
+		background: #edfaef;
+		color: #00654a;
+	}
+
+	.wp-bizwit-status--inactive {
+		background: #fcf9e8;
+		color: #7a5c00;
+	}
+
+	.wp-bizwit-status--archived {
+		background: #f0f0f1;
+		color: var(--wp-bizwit-muted);
+	}
+}

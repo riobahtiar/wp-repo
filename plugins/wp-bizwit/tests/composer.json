@@ -1,0 +1,19 @@
+{
+	"name": "wp-bizwit/test-dependencies",
+	"description": "Test-only dependencies for wp-bizwit. Add premium or private plugins here.",
+	"require": {
+		"composer/installers": "^2.0"
+	},
+	"extra": {
+		"installer-paths": {
+			"setup/plugins/{$name}/": [
+				"type:wordpress-plugin"
+			]
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"composer/installers": true
+		}
+	}
+}

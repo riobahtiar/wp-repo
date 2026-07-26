@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<ruleset>
+
+    <!-- Strip the filepaths down to the relevant bit. -->
+    <arg value="sp"/>
+    <arg name="basepath" value="."/>
+    <arg name="parallel" value="8"/>
+    <arg name="colors"/>
+
+    <!--
+        Only inspect PHP. Scoping by extension here is safer than excluding
+        *.js / *.ts / *.tsx by pattern: exclude-pattern values are unanchored
+        regular expressions, so `*.ts` compiles to `.*.ts` and silently drops
+        every file whose absolute path merely contains "ts" - a checkout under
+        ~/Projects/ excludes the entire codebase.
+    -->
+    <arg name="extensions" value="php"/>
+
+    <!-- Specify the standard to use -->
+    <rule ref="WordPress">
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+        <exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
+        <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
+        <exclude name="Universal.Operators.DisallowShortTernary.Found"/>
+    </rule>
+
+    <!--
+        Directories to ignore. Anchored with ^ and type="relative" so they match
+        a path segment of this project rather than anywhere in the absolute path.
+    -->
+    <exclude-pattern type="relative">^vendor/*</exclude-pattern>
+    <exclude-pattern type="relative">^vendor-prefixed/*</exclude-pattern>
+    <exclude-pattern type="relative">^node_modules/*</exclude-pattern>
+    <exclude-pattern type="relative">^bin/*</exclude-pattern>
+    <exclude-pattern type="relative">^build/*</exclude-pattern>
+    <exclude-pattern type="relative">^\.ddev/*</exclude-pattern>
+    <exclude-pattern type="relative">^\.agents/*</exclude-pattern>
+    <exclude-pattern type="relative">^languages/*</exclude-pattern>
+    <exclude-pattern type="relative">^tests/vendor/*</exclude-pattern>
+
+    <!-- Include all files from the root of the project -->
+    <file>.</file>
+
+</ruleset>
