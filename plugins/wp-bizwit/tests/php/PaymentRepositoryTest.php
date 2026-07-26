@@ -18,21 +18,29 @@ use WP_BizWit\Support\Settings;
 class PaymentRepositoryTest extends WP_UnitTestCase {
 
 	/**
+	 * Payment repository under test.
+	 *
 	 * @var Payment_Repository
 	 */
 	private Payment_Repository $payments;
 
 	/**
+	 * Invoice repository for fixtures.
+	 *
 	 * @var Invoice_Repository
 	 */
 	private Invoice_Repository $invoices;
 
 	/**
+	 * Client repository for fixtures.
+	 *
 	 * @var Client_Repository
 	 */
 	private Client_Repository $clients;
 
 	/**
+	 * Install schema and repositories.
+	 *
 	 * @return void
 	 */
 	public function set_up(): void {
@@ -47,7 +55,9 @@ class PaymentRepositoryTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @return int
+	 * Create a client fixture.
+	 *
+	 * @return int Client id.
 	 */
 	private function make_client(): int {
 		$id = $this->clients->create(
