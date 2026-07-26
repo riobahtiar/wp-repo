@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-26T23:01:09+00:00\n"
+"POT-Creation-Date: 2026-07-26T23:03:28+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-bizwit\n"
@@ -423,8 +423,11 @@ msgstr ""
 #: src/Admin/Views/invoices-form.php:426
 #: src/Admin/Views/invoices-print.php:278
 #: src/Documents/Document_Blocks.php:338
-#: src/Documents/Layout_Renderer.php:265
+#: src/Documents/Document_I18n.php:79
+#: src/Documents/Layout_Renderer.php:268
 #: src/Documents/Merge_Fields.php:48
+#: src/Documents/Template_Post_Type.php:358
+#: src/I18n/Script_Strings.php:41
 msgid "Total"
 msgstr ""
 
@@ -432,7 +435,8 @@ msgstr ""
 #: src/Admin/Views/invoices-form.php:445
 #: src/Admin/Views/invoices-print.php:297
 #: src/Documents/Document_Blocks.php:357
-#: src/Documents/Layout_Renderer.php:284
+#: src/Documents/Document_I18n.php:82
+#: src/Documents/Layout_Renderer.php:287
 #: src/Documents/Merge_Fields.php:51
 msgid "Balance"
 msgstr ""
@@ -486,7 +490,7 @@ msgstr ""
 #: src/Admin/Views/payments-form.php:124
 #: src/Documents/Merge_Fields.php:94
 #: src/Documents/Template_Post_Type.php:235
-#: src/Documents/Template_Post_Type.php:520
+#: src/Documents/Template_Post_Type.php:543
 msgid "Invoice"
 msgstr ""
 
@@ -745,7 +749,10 @@ msgstr ""
 #: src/Admin/Views/invoices-print.php:241
 #: src/Admin/Views/projects-form.php:286
 #: src/Documents/Document_Blocks.php:272
-#: src/Documents/Layout_Renderer.php:192
+#: src/Documents/Document_I18n.php:77
+#: src/Documents/Layout_Renderer.php:195
+#: src/Documents/Template_Post_Type.php:356
+#: src/I18n/Script_Strings.php:39
 msgid "Amount"
 msgstr ""
 
@@ -814,7 +821,7 @@ msgid "Optional. Link this invoice to a project when billing staged work."
 msgstr ""
 
 #: src/Admin/Views/invoices-form.php:285
-#: src/Documents/Template_Post_Type.php:372
+#: src/Documents/Template_Post_Type.php:395
 msgid "Line items"
 msgstr ""
 
@@ -823,28 +830,40 @@ msgstr ""
 #: src/Admin/Views/projects-form.php:346
 #: src/Admin/Views/projects-form.php:352
 #: src/Documents/Document_Blocks.php:265
-#: src/Documents/Layout_Renderer.php:185
+#: src/Documents/Document_I18n.php:73
+#: src/Documents/Layout_Renderer.php:188
+#: src/Documents/Template_Post_Type.php:352
+#: src/I18n/Script_Strings.php:35
 msgid "Description"
 msgstr ""
 
 #: src/Admin/Views/invoices-form.php:292
 #: src/Admin/Views/invoices-print.php:235
 #: src/Documents/Document_Blocks.php:266
-#: src/Documents/Layout_Renderer.php:186
+#: src/Documents/Document_I18n.php:74
+#: src/Documents/Layout_Renderer.php:189
+#: src/Documents/Template_Post_Type.php:353
+#: src/I18n/Script_Strings.php:36
 msgid "Qty"
 msgstr ""
 
 #: src/Admin/Views/invoices-form.php:293
 #: src/Admin/Views/invoices-print.php:236
 #: src/Documents/Document_Blocks.php:267
-#: src/Documents/Layout_Renderer.php:187
+#: src/Documents/Document_I18n.php:75
+#: src/Documents/Layout_Renderer.php:190
+#: src/Documents/Template_Post_Type.php:354
+#: src/I18n/Script_Strings.php:37
 msgid "Unit"
 msgstr ""
 
 #: src/Admin/Views/invoices-form.php:294
 #: src/Admin/Views/invoices-print.php:237
 #: src/Documents/Document_Blocks.php:268
-#: src/Documents/Layout_Renderer.php:188
+#: src/Documents/Document_I18n.php:76
+#: src/Documents/Layout_Renderer.php:191
+#: src/Documents/Template_Post_Type.php:355
+#: src/I18n/Script_Strings.php:38
 msgid "Unit price"
 msgstr ""
 
@@ -868,8 +887,8 @@ msgstr ""
 
 #: src/Admin/Views/invoices-form.php:363
 #: src/Documents/Document_Blocks.php:301
-#: src/Documents/Layout_Renderer.php:225
-#: src/Documents/Template_Post_Type.php:376
+#: src/Documents/Layout_Renderer.php:228
+#: src/Documents/Template_Post_Type.php:399
 msgid "Totals"
 msgstr ""
 
@@ -877,7 +896,8 @@ msgstr ""
 #: src/Admin/Views/invoices-form.php:415
 #: src/Admin/Views/invoices-print.php:267
 #: src/Documents/Document_Blocks.php:327
-#: src/Documents/Layout_Renderer.php:254
+#: src/Documents/Document_I18n.php:80
+#: src/Documents/Layout_Renderer.php:257
 #: src/Documents/Merge_Fields.php:45
 msgid "Discount"
 msgstr ""
@@ -903,15 +923,19 @@ msgstr ""
 #: src/Admin/Views/invoices-form.php:410
 #: src/Admin/Views/invoices-print.php:262
 #: src/Documents/Document_Blocks.php:322
-#: src/Documents/Layout_Renderer.php:249
+#: src/Documents/Document_I18n.php:78
+#: src/Documents/Layout_Renderer.php:252
 #: src/Documents/Merge_Fields.php:44
+#: src/Documents/Template_Post_Type.php:357
+#: src/I18n/Script_Strings.php:40
 msgid "Subtotal"
 msgstr ""
 
 #: src/Admin/Views/invoices-form.php:435
 #: src/Admin/Views/invoices-print.php:287
 #: src/Documents/Document_Blocks.php:347
-#: src/Documents/Layout_Renderer.php:274
+#: src/Documents/Document_I18n.php:83
+#: src/Documents/Layout_Renderer.php:277
 #: src/Documents/Merge_Fields.php:54
 msgid "Net expected"
 msgstr ""
@@ -919,7 +943,8 @@ msgstr ""
 #: src/Admin/Views/invoices-form.php:441
 #: src/Admin/Views/invoices-print.php:293
 #: src/Documents/Document_Blocks.php:353
-#: src/Documents/Layout_Renderer.php:280
+#: src/Documents/Document_I18n.php:81
+#: src/Documents/Layout_Renderer.php:283
 #: src/Documents/Merge_Fields.php:50
 #: src/Support/Invoice_Status.php:36
 msgid "Paid"
@@ -1002,6 +1027,8 @@ msgid "Issued %1$s · Due %2$s"
 msgstr ""
 
 #: src/Admin/Views/invoices-print.php:207
+#: src/Documents/Document_I18n.php:71
+#: src/I18n/Script_Strings.php:33
 msgid "Bill to"
 msgstr ""
 
@@ -1015,13 +1042,15 @@ msgstr ""
 #: src/Admin/Views/invoices-print.php:309
 #: src/Admin/Views/payments-print.php:179
 #: src/Documents/Document_Blocks.php:368
-#: src/Documents/Layout_Renderer.php:295
+#: src/Documents/Layout_Renderer.php:298
 #, php-format
 msgid "In words: %s"
 msgstr ""
 
 #: src/Admin/Views/invoices-print.php:319
-#: src/Documents/Layout_Renderer.php:323
+#: src/Documents/Document_I18n.php:72
+#: src/Documents/Layout_Renderer.php:326
+#: src/I18n/Script_Strings.php:34
 msgid "Payment details"
 msgstr ""
 
@@ -1031,7 +1060,10 @@ msgstr ""
 
 #: src/Admin/Views/invoices-print.php:351
 #: src/Documents/Document_Blocks.php:391
-#: src/Documents/Layout_Renderer.php:340
+#: src/Documents/Document_I18n.php:84
+#: src/Documents/Layout_Renderer.php:343
+#: src/Documents/Template_Post_Type.php:359
+#: src/I18n/Script_Strings.php:42
 #: resources/blocks/document-blocks.js:257
 msgid "Received by"
 msgstr ""
@@ -1039,7 +1071,7 @@ msgstr ""
 #. translators: %s: business name
 #: src/Admin/Views/invoices-print.php:358
 #: src/Documents/Document_Blocks.php:398
-#: src/Documents/Layout_Renderer.php:349
+#: src/Documents/Layout_Renderer.php:352
 #, php-format
 msgid "For %s"
 msgstr ""
@@ -1047,7 +1079,10 @@ msgstr ""
 #: src/Admin/Views/invoices-print.php:364
 #: src/Admin/Views/payments-print.php:263
 #: src/Documents/Document_Blocks.php:404
-#: src/Documents/Layout_Renderer.php:355
+#: src/Documents/Document_I18n.php:86
+#: src/Documents/Layout_Renderer.php:358
+#: src/Documents/Template_Post_Type.php:361
+#: src/I18n/Script_Strings.php:44
 #: resources/blocks/document-blocks.js:270
 msgid "Signature and company stamp"
 msgstr ""
@@ -1560,17 +1595,17 @@ msgid "Save settings"
 msgstr ""
 
 #: src/Documents/Document_Blocks.php:74
-#: src/Documents/Template_Post_Type.php:302
+#: src/Documents/Template_Post_Type.php:315
 msgid "Header"
 msgstr ""
 
 #: src/Documents/Document_Blocks.php:75
-#: src/Documents/Template_Post_Type.php:303
+#: src/Documents/Template_Post_Type.php:316
 msgid "Body"
 msgstr ""
 
 #: src/Documents/Document_Blocks.php:76
-#: src/Documents/Template_Post_Type.php:304
+#: src/Documents/Template_Post_Type.php:317
 msgid "Footer"
 msgstr ""
 
@@ -1602,8 +1637,22 @@ msgid "Signature block"
 msgstr ""
 
 #: src/Documents/Document_Blocks.php:249
-#: src/Documents/Layout_Renderer.php:168
+#: src/Documents/Layout_Renderer.php:171
 msgid "Line items table"
+msgstr ""
+
+#: src/Documents/Document_I18n.php:85
+#: src/Documents/Layout_Renderer.php:344
+#: src/Documents/Template_Post_Type.php:360
+#: src/I18n/Script_Strings.php:43
+msgid "Name & signature"
+msgstr ""
+
+#: src/Documents/Document_I18n.php:87
+#: src/Documents/Document_Renderer.php:163
+#: src/Documents/Document_Renderer.php:171
+#: src/I18n/Script_Strings.php:45
+msgid "package"
 msgstr ""
 
 #: src/Documents/Document_Renderer.php:73
@@ -1619,17 +1668,12 @@ msgid "Payment within 30 days via bank transfer."
 msgstr ""
 
 #: src/Documents/Document_Renderer.php:161
-#: src/Documents/Template_Post_Type.php:289
+#: src/Documents/Template_Post_Type.php:295
 msgid "Website redesign — discovery & UI"
 msgstr ""
 
-#: src/Documents/Document_Renderer.php:163
-#: src/Documents/Document_Renderer.php:171
-msgid "package"
-msgstr ""
-
 #: src/Documents/Document_Renderer.php:169
-#: src/Documents/Template_Post_Type.php:290
+#: src/Documents/Template_Post_Type.php:296
 msgid "Implementation & training"
 msgstr ""
 
@@ -1641,13 +1685,9 @@ msgstr ""
 msgid "Corporate website 2026"
 msgstr ""
 
-#: src/Documents/Layout_Renderer.php:319
-#: src/Documents/Template_Post_Type.php:380
+#: src/Documents/Layout_Renderer.php:322
+#: src/Documents/Template_Post_Type.php:403
 msgid "Bank details"
-msgstr ""
-
-#: src/Documents/Layout_Renderer.php:341
-msgid "Name & signature"
 msgstr ""
 
 #: src/Documents/Merge_Fields.php:29
@@ -1764,17 +1804,17 @@ msgid "Document layout"
 msgstr ""
 
 #: src/Documents/Template_Post_Type.php:236
-#: src/Documents/Template_Post_Type.php:521
+#: src/Documents/Template_Post_Type.php:544
 msgid "Receipt / kwitansi"
 msgstr ""
 
 #: src/Documents/Template_Post_Type.php:237
-#: src/Documents/Template_Post_Type.php:522
+#: src/Documents/Template_Post_Type.php:545
 msgid "General"
 msgstr ""
 
 #: src/Documents/Template_Post_Type.php:241
-#: src/Documents/Template_Post_Type.php:500
+#: src/Documents/Template_Post_Type.php:523
 msgid "Document type"
 msgstr ""
 
@@ -1786,207 +1826,207 @@ msgstr ""
 msgid "Build the layout on the canvas. Field labels follow the site language when the document is printed."
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:307
+#: src/Documents/Template_Post_Type.php:320
 msgid "Document studio"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:308
+#: src/Documents/Template_Post_Type.php:321
 msgid "Design the layout · preview as printed"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:309
+#: src/Documents/Template_Post_Type.php:322
 msgid "Design"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:310
+#: src/Documents/Template_Post_Type.php:323
 msgid "Print preview"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:311
+#: src/Documents/Template_Post_Type.php:324
 msgid "Components"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:312
+#: src/Documents/Template_Post_Type.php:325
 msgid "Click to add into the active section"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:313
+#: src/Documents/Template_Post_Type.php:326
 msgid "Properties"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:314
+#: src/Documents/Template_Post_Type.php:327
 msgid "Select a block on the page to edit it."
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:315
+#: src/Documents/Template_Post_Type.php:328
 msgid "Remove"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:316
+#: src/Documents/Template_Post_Type.php:329
 msgid "Up"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:317
+#: src/Documents/Template_Post_Type.php:330
 msgid "Down"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:318
+#: src/Documents/Template_Post_Type.php:331
 msgid "Duplicate"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:319
+#: src/Documents/Template_Post_Type.php:332
 msgid "Add components to this section"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:320
-#: src/Documents/Template_Post_Type.php:368
+#: src/Documents/Template_Post_Type.php:333
+#: src/Documents/Template_Post_Type.php:391
 #: resources/blocks/document-blocks.js:142
 msgid "Data field"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:321
+#: src/Documents/Template_Post_Type.php:334
 msgid "Show label"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:322
+#: src/Documents/Template_Post_Type.php:335
 msgid "Alignment"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:323
+#: src/Documents/Template_Post_Type.php:336
 msgid "Font size"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:324
+#: src/Documents/Template_Post_Type.php:337
 msgid "Weight"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:325
+#: src/Documents/Template_Post_Type.php:338
 msgid "Colour"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:326
+#: src/Documents/Template_Post_Type.php:339
 msgid "Space above"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:327
+#: src/Documents/Template_Post_Type.php:340
 msgid "Space below"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:328
-#: src/Documents/Template_Post_Type.php:364
+#: src/Documents/Template_Post_Type.php:341
+#: src/Documents/Template_Post_Type.php:387
 msgid "Text"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:329
+#: src/Documents/Template_Post_Type.php:342
 msgid "Height"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:330
+#: src/Documents/Template_Post_Type.php:343
 msgid "Show tax column"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:331
+#: src/Documents/Template_Post_Type.php:344
 msgid "Show amount in words"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:332
+#: src/Documents/Template_Post_Type.php:345
 msgid "Column gap"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:333
+#: src/Documents/Template_Post_Type.php:346
 msgid "Left"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:334
+#: src/Documents/Template_Post_Type.php:347
 msgid "Center"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:335
+#: src/Documents/Template_Post_Type.php:348
 msgid "Right"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:336
+#: src/Documents/Template_Post_Type.php:349
 msgid "Reset default"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:337
+#: src/Documents/Template_Post_Type.php:350
 #: resources/blocks/document-blocks.js:140
 msgid "Field"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:338
+#: src/Documents/Template_Post_Type.php:351
 msgid "Bank transfer details"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:360
+#: src/Documents/Template_Post_Type.php:383
 msgid "Heading"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:361
+#: src/Documents/Template_Post_Type.php:384
 msgid "Static title text"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:365
+#: src/Documents/Template_Post_Type.php:388
 msgid "Free paragraph"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:369
+#: src/Documents/Template_Post_Type.php:392
 msgid "Invoice / business value"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:373
+#: src/Documents/Template_Post_Type.php:396
 msgid "Invoice rows table"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:377
+#: src/Documents/Template_Post_Type.php:400
 msgid "Subtotal, tax, total"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:381
+#: src/Documents/Template_Post_Type.php:404
 msgid "Payment account block"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:384
+#: src/Documents/Template_Post_Type.php:407
 msgid "Signature"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:385
+#: src/Documents/Template_Post_Type.php:408
 msgid "Sign and stamp area"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:388
+#: src/Documents/Template_Post_Type.php:411
 msgid "Spacer"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:389
+#: src/Documents/Template_Post_Type.php:412
 msgid "Vertical space"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:392
+#: src/Documents/Template_Post_Type.php:415
 msgid "Divider"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:393
+#: src/Documents/Template_Post_Type.php:416
 msgid "Horizontal rule"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:396
+#: src/Documents/Template_Post_Type.php:419
 msgid "Columns"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:397
+#: src/Documents/Template_Post_Type.php:420
 msgid "Two side-by-side columns"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:501
+#: src/Documents/Template_Post_Type.php:524
 msgid "Default"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:529
+#: src/Documents/Template_Post_Type.php:552
 msgid "Yes"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:544
+#: src/Documents/Template_Post_Type.php:567
 msgid "Template name"
 msgstr ""
 

@@ -48,9 +48,9 @@ $fmt_date = static function ( string $date ): string {
 	if ( '' === $date || '0000-00-00' === $date ) {
 		return '—';
 	}
-	$ts = strtotime( $date );
+	$formatted = Regions::current()->format_date( $date );
 
-	return false === $ts ? $date : (string) wp_date( get_option( 'date_format' ), $ts );
+	return '' !== $formatted ? $formatted : $date;
 };
 
 $document_title = sprintf(
@@ -66,17 +66,20 @@ $document_title = sprintf(
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title><?php echo esc_html( $document_title ); ?></title>
 	<style>
-		@page { size: A4; margin: 16mm; }
+		/* Keep body padding in print — same breathing room as on-screen (do not zero it). */
+		@page { size: A4; margin: 8mm; }
 		* { box-sizing: border-box; }
+		html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 		body {
 			font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 			font-size: 11pt;
 			color: #1d2327;
 			margin: 0;
-			padding: 12mm;
-			line-height: 1.45;
+			padding: 12mm 14mm 14mm;
+			line-height: 1.5;
+			background: #fff;
 		}
-		h1 { font-size: 18pt; margin: 0 0 2mm; }
+		h1 { font-size: 18pt; margin: 0 0 2.5mm; }
 		.muted { color: #646970; }
 		.header {
 			display: flex;
@@ -88,17 +91,17 @@ $document_title = sprintf(
 		}
 		.box {
 			border: 1px solid #dcdcde;
-			padding: 5mm;
-			margin-bottom: 6mm;
+			padding: 5.5mm;
+			margin-bottom: 7mm;
 		}
 		.amount {
 			font-size: 16pt;
 			font-weight: 700;
 			margin: 4mm 0;
 		}
-		.words { font-style: italic; margin-bottom: 6mm; }
-		table.meta { width: 100%; border-collapse: collapse; margin-bottom: 6mm; }
-		table.meta th, table.meta td { text-align: left; padding: 2mm 2mm 2mm 0; vertical-align: top; }
+		.words { font-style: italic; margin-bottom: 7mm; }
+		table.meta { width: 100%; border-collapse: collapse; margin-bottom: 7mm; }
+		table.meta th, table.meta td { text-align: left; padding: 2.5mm 2.5mm 2.5mm 0; vertical-align: top; }
 		table.meta th { width: 32%; color: #646970; font-weight: 600; }
 		.sign {
 			display: flex;
@@ -108,23 +111,28 @@ $document_title = sprintf(
 		}
 		.sign-box {
 			width: 45%;
-			min-height: 32mm;
+			min-height: 34mm;
 			border-top: 1px solid #c3c4c7;
-			padding-top: 3mm;
+			padding-top: 3.5mm;
 			font-size: 9pt;
 			color: #646970;
 		}
 		.meterai {
 			border: 1px dashed #646970;
-			padding: 4mm;
-			margin-top: 6mm;
+			padding: 4.5mm;
+			margin-top: 7mm;
 			font-size: 9pt;
 			color: #646970;
 			min-height: 18mm;
 		}
 		@media print {
-			body { padding: 0; }
+			html, body {
+				margin: 0 !important;
+				padding: 12mm 14mm 14mm !important;
+				background: #fff !important;
+			}
 			.no-print { display: none !important; }
+			.header, .sign { display: flex !important; }
 		}
 	</style>
 </head>

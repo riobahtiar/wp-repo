@@ -7,6 +7,7 @@
 
 namespace WP_BizWit\Documents;
 
+use WP_BizWit\Localization\Regions;
 use WP_BizWit\Support\Invoice_Status;
 use WP_BizWit\Support\Invoice_Totals;
 use WP_BizWit\Support\Money;
@@ -160,7 +161,11 @@ class Merge_Fields {
 	}
 
 	/**
-	 * Format a Y-m-d date with the site locale date format.
+	 * Format a Y-m-d date for documents (regional style, gettext month names).
+	 *
+	 * Uses the active region formatter so Indonesian paperwork reads
+	 * "15 Juli 2026" when the UI locale is id_ID, and English month names
+	 * when the active language is English — independent of Settings → date format.
 	 *
 	 * @param string $date Date string.
 	 *
@@ -170,9 +175,10 @@ class Merge_Fields {
 		if ( '' === $date || '0000-00-00' === $date ) {
 			return '—';
 		}
-		$ts = strtotime( $date );
 
-		return false === $ts ? $date : (string) wp_date( get_option( 'date_format' ), $ts );
+		$formatted = Regions::current()->format_date( $date );
+
+		return '' !== $formatted ? $formatted : $date;
 	}
 
 	/**

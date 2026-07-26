@@ -3,7 +3,6 @@
  * Document layout builder — design canvas + live print-style preview.
  */
 import { computed, onMounted, reactive, ref, watch } from 'vue';
-import { __ } from '@wordpress/i18n';
 
 type Zone = 'header' | 'body' | 'footer';
 type Mode = 'design' | 'preview';
@@ -24,6 +23,9 @@ interface BuilderConfig {
 	layout: LayoutDoc;
 	fields: Record< string, string >;
 	sampleValues: Record< string, string >;
+	/** English msgid → translated string for the active locale. */
+	chrome: Record< string, string >;
+	locale: string;
 	documentCss: string;
 	componentMeta: Record< string, { label: string; description: string; icon?: string } >;
 	zones: Record< Zone, string >;
@@ -39,39 +41,61 @@ function deepClone< T >( v: T ): T {
 	return JSON.parse( JSON.stringify( v ) ) as T;
 }
 
+function emptyConfig(): BuilderConfig {
+	return {
+		layout: {
+			version: 1,
+			page: { size: 'A4', marginMm: 14 },
+			sections: {
+				header: { components: [] },
+				body: { components: [] },
+				footer: { components: [] },
+			},
+		},
+		fields: {},
+		sampleValues: {},
+		chrome: {},
+		locale: 'en_US',
+		documentCss: '',
+		componentMeta: {},
+		zones: { header: 'Header', body: 'Body', footer: 'Footer' },
+		i18n: {},
+		defaultLayout: {
+			version: 1,
+			page: { size: 'A4', marginMm: 14 },
+			sections: {
+				header: { components: [] },
+				body: { components: [] },
+				footer: { components: [] },
+			},
+		},
+	};
+}
+
 function readConfig(): BuilderConfig {
-	const el = document.getElementById( 'wp-bizwit-template-builder' );
-	const raw = el?.getAttribute( 'data-config' ) || '{}';
-	try {
-		return JSON.parse( raw ) as BuilderConfig;
-	} catch {
-		return {
-			layout: {
-				version: 1,
-				page: { size: 'A4', marginMm: 14 },
-				sections: {
-					header: { components: [] },
-					body: { components: [] },
-					footer: { components: [] },
-				},
-			},
-			fields: {},
-			sampleValues: {},
-			documentCss: '',
-			componentMeta: {},
-			zones: { header: 'Header', body: 'Body', footer: 'Footer' },
-			i18n: {},
-			defaultLayout: {
-				version: 1,
-				page: { size: 'A4', marginMm: 14 },
-				sections: {
-					header: { components: [] },
-					body: { components: [] },
-					footer: { components: [] },
-				},
-			},
-		};
+	// Prefer JSON script node (reliable for large payloads + unicode).
+	const script = document.getElementById( 'wp-bizwit-template-builder-config' );
+	const fromScript = script?.textContent?.trim();
+	if ( fromScript ) {
+		try {
+			return JSON.parse( fromScript ) as BuilderConfig;
+		} catch {
+			// fall through
+		}
 	}
+
+	// Legacy fallback: data-config attribute.
+	const el = document.getElementById( 'wp-bizwit-template-builder' );
+	const raw = el?.getAttribute( 'data-config' ) || '';
+	if ( raw ) {
+		try {
+			return JSON.parse( raw ) as BuilderConfig;
+		} catch {
+			// fall through
+		}
+	}
+
+	return emptyConfig();
 }
 
 const config = readConfig();
@@ -265,6 +289,26 @@ function sampleField( field: string ): string {
 	return config.sampleValues[ field ] || '—';
 }
 
+/** Translate stored English chrome (layout headings) for the active locale. */
+function chrome( text: string ): string {
+	const key = String( text || '' ).trim();
+	if ( ! key ) {
+		return '';
+	}
+	return config.chrome[ key ] || key;
+}
+
+/** Heading / free-text display: translate known chrome, keep custom text as-is. */
+function displayText( content: unknown ): string {
+	return chrome( String( content || '' ) );
+}
+
+/** sprintf-style %s replace for PHP-translated patterns (For %s, In words: %s). */
+function tFormat( key: string, fallback: string, value: string ): string {
+	const pattern = t( key, fallback );
+	return pattern.replace( /%s/g, value );
+}
+
 function styleOf( node: ComponentNode ): Record< string, string > {
 	const p = node.props;
 	const s: Record< string, string > = {};
@@ -448,24 +492,24 @@ const icons: Record< string, string > = {
 								<table class="bw-studio__table">
 									<thead>
 										<tr>
-											<th>{{ __( 'Description', 'wp-bizwit' ) }}</th>
-											<th class="num">{{ __( 'Qty', 'wp-bizwit' ) }}</th>
-											<th class="num">{{ __( 'Unit price', 'wp-bizwit' ) }}</th>
-											<th class="num">{{ __( 'Amount', 'wp-bizwit' ) }}</th>
+											<th>{{ t( 'colDescription', 'Description' ) }}</th>
+											<th class="num">{{ t( 'colQty', 'Qty' ) }}</th>
+											<th class="num">{{ t( 'colUnitPrice', 'Unit price' ) }}</th>
+											<th class="num">{{ t( 'colAmount', 'Amount' ) }}</th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
-											<td>{{ sampleField( '_item1' ) || 'Website redesign' }}</td>
+											<td>{{ sampleField( '_item1' ) }}</td>
 											<td class="num">1</td>
-											<td class="num">{{ sampleField( '_price1' ) || 'Rp 10.000.000' }}</td>
-											<td class="num">{{ sampleField( '_price1' ) || 'Rp 10.000.000' }}</td>
+											<td class="num">{{ sampleField( '_price1' ) }}</td>
+											<td class="num">{{ sampleField( '_price1' ) }}</td>
 										</tr>
 										<tr>
-											<td>{{ sampleField( '_item2' ) || 'Implementation' }}</td>
+											<td>{{ sampleField( '_item2' ) }}</td>
 											<td class="num">1</td>
-											<td class="num">{{ sampleField( '_price2' ) || 'Rp 5.000.000' }}</td>
-											<td class="num">{{ sampleField( '_price2' ) || 'Rp 5.000.000' }}</td>
+											<td class="num">{{ sampleField( '_price2' ) }}</td>
+											<td class="num">{{ sampleField( '_price2' ) }}</td>
 										</tr>
 									</tbody>
 								</table>
@@ -477,16 +521,22 @@ const icons: Record< string, string > = {
 								>
 									<table>
 										<tr>
-											<td>{{ __( 'Subtotal', 'wp-bizwit' ) }}</td>
+											<td>{{ t( 'labelSubtotal', 'Subtotal' ) }}</td>
 											<td class="num">{{ sampleField( 'subtotal' ) }}</td>
 										</tr>
 										<tr class="grand">
-											<td>{{ __( 'Total', 'wp-bizwit' ) }}</td>
+											<td>{{ t( 'labelTotal', 'Total' ) }}</td>
 											<td class="num">{{ sampleField( 'total' ) }}</td>
 										</tr>
 									</table>
 									<p v-if="node.props.showTerbilang !== false" class="bw-studio__words">
-										{{ sampleField( 'total_in_words' ) }}
+										{{
+											tFormat(
+												'labelInWords',
+												'In words: %s',
+												sampleField( 'total_in_words' )
+											)
+										}}
 									</p>
 								</div>
 							</template>
@@ -498,12 +548,18 @@ const icons: Record< string, string > = {
 							<template v-else-if="node.type === 'signature'">
 								<div class="bw-studio__sign">
 									<div>
-										<strong>{{ __( 'Received by', 'wp-bizwit' ) }}</strong>
-										<span>{{ __( 'Name & signature', 'wp-bizwit' ) }}</span>
+										<strong>{{ t( 'labelReceivedBy', 'Received by' ) }}</strong>
+										<span>{{ t( 'labelNameSign', 'Name & signature' ) }}</span>
 									</div>
 									<div>
-										<strong>{{ sampleField( 'business_name' ) }}</strong>
-										<span>{{ __( 'Signature and company stamp', 'wp-bizwit' ) }}</span>
+										<strong>{{
+											tFormat(
+												'labelFor',
+												'For %s',
+												sampleField( 'business_name' ) || '—'
+											)
+										}}</strong>
+										<span>{{ t( 'labelStamp', 'Signature and company stamp' ) }}</span>
 									</div>
 								</div>
 							</template>
@@ -526,8 +582,11 @@ const icons: Record< string, string > = {
 											<template v-if="child.type === 'field'">
 												{{ fieldDisplay( child ) }}
 											</template>
+											<template v-else-if="child.type === 'heading' || child.type === 'text'">
+												{{ displayText( child.props.content ) }}
+											</template>
 											<template v-else>
-												{{ child.props.content || config.componentMeta[ child.type ]?.label }}
+												{{ config.componentMeta[ child.type ]?.label }}
 											</template>
 										</div>
 										<button
@@ -550,8 +609,11 @@ const icons: Record< string, string > = {
 							<template v-else-if="node.type === 'field'">
 								{{ fieldDisplay( node ) }}
 							</template>
+							<template v-else-if="node.type === 'heading' || node.type === 'text'">
+								{{ displayText( node.props.content ) }}
+							</template>
 							<template v-else>
-								{{ node.props.content || config.componentMeta[ node.type ]?.label }}
+								{{ config.componentMeta[ node.type ]?.label }}
 							</template>
 						</div>
 					</section>

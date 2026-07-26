@@ -280,11 +280,17 @@ class Template_Post_Type {
 			$layout = Layout::default_invoice();
 		}
 
-		// Resolve sample merge values for the live print preview (no real invoice).
+		// Sample merge values + chrome strings for the active locale (admin user language).
 		Document_Context::set( 'invoice', Document_Renderer::sample_context() );
 		$sample_values = array();
 		foreach ( array_keys( Merge_Fields::catalogue() ) as $field_key ) {
-			$sample_values[ $field_key ] = wp_strip_all_tags( str_replace( array( '<br />', '<br/>', '<br>' ), "\n", Merge_Fields::resolve( $field_key ) ) );
+			$sample_values[ $field_key ] = wp_strip_all_tags(
+				str_replace(
+					array( '<br />', '<br/>', '<br>' ),
+					"\n",
+					Merge_Fields::resolve( $field_key )
+				)
+			);
 		}
 		$sample_values['_item1']  = __( 'Website redesign — discovery & UI', 'wp-bizwit' );
 		$sample_values['_item2']  = __( 'Implementation & training', 'wp-bizwit' );
@@ -292,10 +298,17 @@ class Template_Post_Type {
 		$sample_values['_price2'] = \WP_BizWit\Support\Money::format( 5000000, \WP_BizWit\Support\Settings::currency() );
 		Document_Context::clear();
 
+		$chrome = array();
+		foreach ( Document_I18n::chrome_msgids() as $msgid ) {
+			$chrome[ $msgid ] = Document_I18n::chrome( $msgid );
+		}
+
 		$payload = array(
 			'layout'        => $layout,
 			'fields'        => Merge_Fields::catalogue(),
 			'sampleValues'  => $sample_values,
+			'chrome'        => $chrome,
+			'locale'        => determine_locale(),
 			'documentCss'   => Document_Styles::css(),
 			'componentMeta' => self::component_palette(),
 			'zones'         => array(
@@ -304,47 +317,67 @@ class Template_Post_Type {
 				'footer' => __( 'Footer', 'wp-bizwit' ),
 			),
 			'i18n'          => array(
-				'studioTitle'     => __( 'Document studio', 'wp-bizwit' ),
-				'studioHint'      => __( 'Design the layout · preview as printed', 'wp-bizwit' ),
-				'modeDesign'      => __( 'Design', 'wp-bizwit' ),
-				'modePreview'     => __( 'Print preview', 'wp-bizwit' ),
-				'palette'         => __( 'Components', 'wp-bizwit' ),
-				'paletteHint'     => __( 'Click to add into the active section', 'wp-bizwit' ),
-				'properties'      => __( 'Properties', 'wp-bizwit' ),
-				'selectHint'      => __( 'Select a block on the page to edit it.', 'wp-bizwit' ),
-				'remove'          => __( 'Remove', 'wp-bizwit' ),
-				'moveUp'          => __( 'Up', 'wp-bizwit' ),
-				'moveDown'        => __( 'Down', 'wp-bizwit' ),
-				'duplicate'       => __( 'Duplicate', 'wp-bizwit' ),
-				'emptyZone'       => __( 'Add components to this section', 'wp-bizwit' ),
-				'field'           => __( 'Data field', 'wp-bizwit' ),
-				'showLabel'       => __( 'Show label', 'wp-bizwit' ),
-				'align'           => __( 'Alignment', 'wp-bizwit' ),
-				'fontSize'        => __( 'Font size', 'wp-bizwit' ),
-				'fontWeight'      => __( 'Weight', 'wp-bizwit' ),
-				'color'           => __( 'Colour', 'wp-bizwit' ),
-				'marginTop'       => __( 'Space above', 'wp-bizwit' ),
-				'marginBottom'    => __( 'Space below', 'wp-bizwit' ),
-				'content'         => __( 'Text', 'wp-bizwit' ),
-				'height'          => __( 'Height', 'wp-bizwit' ),
-				'showTax'         => __( 'Show tax column', 'wp-bizwit' ),
-				'showTerbilang'   => __( 'Show amount in words', 'wp-bizwit' ),
-				'gap'             => __( 'Column gap', 'wp-bizwit' ),
-				'left'            => __( 'Left', 'wp-bizwit' ),
-				'center'          => __( 'Center', 'wp-bizwit' ),
-				'right'           => __( 'Right', 'wp-bizwit' ),
-				'resetDefault'    => __( 'Reset default', 'wp-bizwit' ),
-				'addField'        => __( 'Field', 'wp-bizwit' ),
-				'bankPlaceholder' => __( 'Bank transfer details', 'wp-bizwit' ),
+				'studioTitle'       => __( 'Document studio', 'wp-bizwit' ),
+				'studioHint'        => __( 'Design the layout · preview as printed', 'wp-bizwit' ),
+				'modeDesign'        => __( 'Design', 'wp-bizwit' ),
+				'modePreview'       => __( 'Print preview', 'wp-bizwit' ),
+				'palette'           => __( 'Components', 'wp-bizwit' ),
+				'paletteHint'       => __( 'Click to add into the active section', 'wp-bizwit' ),
+				'properties'        => __( 'Properties', 'wp-bizwit' ),
+				'selectHint'        => __( 'Select a block on the page to edit it.', 'wp-bizwit' ),
+				'remove'            => __( 'Remove', 'wp-bizwit' ),
+				'moveUp'            => __( 'Up', 'wp-bizwit' ),
+				'moveDown'          => __( 'Down', 'wp-bizwit' ),
+				'duplicate'         => __( 'Duplicate', 'wp-bizwit' ),
+				'emptyZone'         => __( 'Add components to this section', 'wp-bizwit' ),
+				'field'             => __( 'Data field', 'wp-bizwit' ),
+				'showLabel'         => __( 'Show label', 'wp-bizwit' ),
+				'align'             => __( 'Alignment', 'wp-bizwit' ),
+				'fontSize'          => __( 'Font size', 'wp-bizwit' ),
+				'fontWeight'        => __( 'Weight', 'wp-bizwit' ),
+				'color'             => __( 'Colour', 'wp-bizwit' ),
+				'marginTop'         => __( 'Space above', 'wp-bizwit' ),
+				'marginBottom'      => __( 'Space below', 'wp-bizwit' ),
+				'content'           => __( 'Text', 'wp-bizwit' ),
+				'height'            => __( 'Height', 'wp-bizwit' ),
+				'showTax'           => __( 'Show tax column', 'wp-bizwit' ),
+				'showTerbilang'     => __( 'Show amount in words', 'wp-bizwit' ),
+				'gap'               => __( 'Column gap', 'wp-bizwit' ),
+				'left'              => __( 'Left', 'wp-bizwit' ),
+				'center'            => __( 'Center', 'wp-bizwit' ),
+				'right'             => __( 'Right', 'wp-bizwit' ),
+				'resetDefault'      => __( 'Reset default', 'wp-bizwit' ),
+				'addField'          => __( 'Field', 'wp-bizwit' ),
+				'bankPlaceholder'   => __( 'Bank transfer details', 'wp-bizwit' ),
+				'colDescription'    => __( 'Description', 'wp-bizwit' ),
+				'colQty'            => __( 'Qty', 'wp-bizwit' ),
+				'colUnit'           => __( 'Unit', 'wp-bizwit' ),
+				'colUnitPrice'      => __( 'Unit price', 'wp-bizwit' ),
+				'colAmount'         => __( 'Amount', 'wp-bizwit' ),
+				'labelSubtotal'     => __( 'Subtotal', 'wp-bizwit' ),
+				'labelTotal'        => __( 'Total', 'wp-bizwit' ),
+				'labelReceivedBy'   => __( 'Received by', 'wp-bizwit' ),
+				'labelNameSign'     => __( 'Name & signature', 'wp-bizwit' ),
+				'labelStamp'        => __( 'Signature and company stamp', 'wp-bizwit' ),
+				/* translators: %s: business name */
+				'labelFor'          => __( 'For %s', 'wp-bizwit' ),
+				/* translators: %s: amount in words */
+				'labelInWords'      => __( 'In words: %s', 'wp-bizwit' ),
 			),
 			'defaultLayout' => Layout::default_invoice(),
 		);
+		$config_json = (string) wp_json_encode(
+			$payload,
+			JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP
+		);
 		?>
 		<input type="hidden" name="wp_bizwit_layout_json" id="wp-bizwit-layout-json" value="<?php echo esc_attr( (string) wp_json_encode( $layout ) ); ?>" />
+		<?php // JSON config as a script node so large CSS/strings are not mangled in a data- attribute. ?>
+		<script type="application/json" id="wp-bizwit-template-builder-config"><?php echo $config_json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON_HEX_TAG|AMP escapes HTML-sensitive chars. ?></script>
 		<div
 			id="wp-bizwit-template-builder"
 			class="wp-bizwit"
-			data-config="<?php echo esc_attr( (string) wp_json_encode( $payload ) ); ?>"
+			data-locale="<?php echo esc_attr( (string) $payload['locale'] ); ?>"
 		></div>
 		<?php
 	}

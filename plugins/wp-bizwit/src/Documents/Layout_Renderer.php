@@ -93,8 +93,7 @@ class Layout_Renderer {
 	 */
 	private function render_heading( array $props ): string {
 		$level   = max( 1, min( 4, (int) ( $props['level'] ?? 3 ) ) );
-		$content = (string) ( $props['content'] ?? '' );
-		// Static headings stored in layout are source language; optional future i18n.
+		$content = Document_I18n::chrome( (string) ( $props['content'] ?? '' ) );
 		return sprintf(
 			'<h%1$d class="wp-bizwit-c-heading" style="%2$s">%3$s</h%1$d>',
 			$level,
@@ -109,7 +108,11 @@ class Layout_Renderer {
 	 * @param array<string, mixed> $props Props.
 	 */
 	private function render_text( array $props ): string {
-		$content = (string) ( $props['content'] ?? '' );
+		// Free text is user-authored; only translate when it matches known chrome.
+		$raw     = (string) ( $props['content'] ?? '' );
+		$content = in_array( trim( $raw ), Document_I18n::chrome_msgids(), true )
+			? Document_I18n::chrome( $raw )
+			: $raw;
 		return sprintf(
 			'<div class="wp-bizwit-c-text" style="%1$s">%2$s</div>',
 			esc_attr( $this->text_style( $props ) ),

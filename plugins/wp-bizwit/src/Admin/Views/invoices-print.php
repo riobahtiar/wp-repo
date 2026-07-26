@@ -12,6 +12,7 @@
  * @var array<string, mixed>|null $project Project row or null.
  */
 
+use WP_BizWit\Localization\Regions;
 use WP_BizWit\Support\Invoice_Status;
 use WP_BizWit\Support\Invoice_Totals;
 use WP_BizWit\Support\Money;
@@ -49,9 +50,9 @@ $fmt_date = static function ( string $date ): string {
 	if ( '' === $date || '0000-00-00' === $date ) {
 		return '—';
 	}
-	$ts = strtotime( $date );
+	$formatted = Regions::current()->format_date( $date );
 
-	return false === $ts ? $date : (string) wp_date( get_option( 'date_format' ), $ts );
+	return '' !== $formatted ? $formatted : $date;
 };
 
 $client_name    = is_array( $client ) ? (string) ( $client['display_name'] ?? '' ) : '';
@@ -73,18 +74,21 @@ $document_title = sprintf(
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title><?php echo esc_html( $document_title ); ?></title>
 	<style>
-		@page { size: A4; margin: 16mm; }
+		/* Keep body padding in print — same breathing room as on-screen (do not zero it). */
+		@page { size: A4; margin: 8mm; }
 		* { box-sizing: border-box; }
+		html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 		body {
 			font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 			font-size: 11pt;
 			color: #1d2327;
 			margin: 0;
-			padding: 12mm;
-			line-height: 1.45;
+			padding: 12mm 14mm 14mm;
+			line-height: 1.5;
+			background: #fff;
 		}
 		h1 { font-size: 18pt; margin: 0 0 4mm; }
-		h2 { font-size: 12pt; margin: 0 0 2mm; font-weight: 600; }
+		h2 { font-size: 12pt; margin: 0 0 2.5mm; font-weight: 600; }
 		.muted { color: #646970; }
 		.header {
 			display: flex;
@@ -104,12 +108,12 @@ $document_title = sprintf(
 		table.lines {
 			width: 100%;
 			border-collapse: collapse;
-			margin-bottom: 6mm;
+			margin-bottom: 7mm;
 		}
 		table.lines th,
 		table.lines td {
 			border-bottom: 1px solid #dcdcde;
-			padding: 2.5mm 2mm;
+			padding: 3mm 2.5mm;
 			text-align: left;
 			vertical-align: top;
 		}
@@ -120,10 +124,10 @@ $document_title = sprintf(
 			margin-left: auto;
 			margin-bottom: 8mm;
 		}
-		.totals td { padding: 1.5mm 2mm; }
-		.totals .grand td { font-weight: 700; border-top: 1px solid #1d2327; padding-top: 3mm; }
+		.totals td { padding: 2mm 2.5mm; }
+		.totals .grand td { font-weight: 700; border-top: 1px solid #1d2327; padding-top: 3.5mm; }
 		.bank, .notes, .sign {
-			margin-top: 6mm;
+			margin-top: 7mm;
 		}
 		.sign {
 			display: flex;
@@ -133,9 +137,9 @@ $document_title = sprintf(
 		}
 		.sign-box {
 			width: 45%;
-			min-height: 32mm;
+			min-height: 34mm;
 			border-top: 1px solid #c3c4c7;
-			padding-top: 3mm;
+			padding-top: 3.5mm;
 			font-size: 9pt;
 			color: #646970;
 		}
@@ -143,15 +147,21 @@ $document_title = sprintf(
 		.void-banner {
 			border: 2px solid #b32d2e;
 			color: #b32d2e;
-			padding: 3mm;
+			padding: 3.5mm;
 			margin-bottom: 6mm;
 			text-align: center;
 			font-weight: 700;
 			letter-spacing: 0.08em;
 		}
 		@media print {
-			body { padding: 0; }
+			html, body {
+				margin: 0 !important;
+				/* Keep the same inner padding as screen preview */
+				padding: 12mm 14mm 14mm !important;
+				background: #fff !important;
+			}
 			.no-print { display: none !important; }
+			.header, .parties, .sign { display: flex !important; }
 		}
 	</style>
 </head>

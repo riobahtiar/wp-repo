@@ -3,7 +3,7 @@
 What is actually true of the codebase right now. Update this in the same commit
 as the work it describes — a tracker that lags is worse than none.
 
-**Current version: 0.8.0 — beta.** Pre-1.0 on purpose: full a11y audit and
+**Current version: 0.8.2 — beta.** Pre-1.0 on purpose: full a11y audit and
 external security review are still open, and the schema may still change.
 
 **Git / tooling:** package lives in monorepo `wp-content/` (`wp-repo`). JS:

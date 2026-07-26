@@ -11,6 +11,23 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.8.2] — 2026-07-27
+
+Document print preview language and print-dialog spacing.
+
+### Fixed
+- **Print / print-preview language** follows the active WordPress locale:
+  document chrome (`Bill to`, table headers, signatures) is translated via
+  `Document_I18n`, builder preview strings are injected from PHP, and
+  document dates use the regional formatter.
+- **Browser print dialog** no longer strips sheet padding (content looked
+  edge-to-edge). Screen preview, print dialog and Save as PDF share the same
+  inner margins and tighter internal spacing for tables, bank block and
+  signatures.
+
+### Changed
+- Version **0.8.2**. Indonesian catalogue filled for studio UI strings.
+
 ## [0.8.1] — 2026-07-27
 
 Document studio polish: print quality and layout builder UX.

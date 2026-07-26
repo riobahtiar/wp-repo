@@ -28,3 +28,18 @@ __( 'Try again', 'wp-bizwit' );
 __( 'Version', 'wp-bizwit' );
 __( 'Region', 'wp-bizwit' );
 __( 'Money format example', 'wp-bizwit' );
+
+// Document chrome (layout headings + print preview tables).
+__( 'Bill to', 'wp-bizwit' );
+__( 'Payment details', 'wp-bizwit' );
+__( 'Description', 'wp-bizwit' );
+__( 'Qty', 'wp-bizwit' );
+__( 'Unit', 'wp-bizwit' );
+__( 'Unit price', 'wp-bizwit' );
+__( 'Amount', 'wp-bizwit' );
+__( 'Subtotal', 'wp-bizwit' );
+__( 'Total', 'wp-bizwit' );
+__( 'Received by', 'wp-bizwit' );
+__( 'Name & signature', 'wp-bizwit' );
+__( 'Signature and company stamp', 'wp-bizwit' );
+__( 'package', 'wp-bizwit' );
