@@ -1,6 +1,6 @@
 # Plan 07 — Frontend modernization
 
-**Status:** In progress (Phases 0–8 done except Plugin Check at RC; Phase 9 handoff open) · **Target:** foundation in 0.3.x / 0.4.x · **Blocks:** heavy
+**Status:** Done (foundation shipped; Plugin Check deferred to RC) · **Target:** foundation in 0.3.x / 0.4.x · **Blocks:** heavy
 UI for 0.4+ features · **Architecture:** [`../docs/frontend-architecture.md`](../docs/frontend-architecture.md)
 
 > **For agentic workers:** implement phase-by-phase. Each phase must leave the
@@ -508,15 +508,17 @@ and shows `MoneyText` sample using settings currency — progressive, low risk.
 
 ### Phase 9 — Handoff to feature plans
 
-- [ ] Update `plans/01-projects.md` with a short “UI” section: termin builder
+- [x] Update `plans/01-projects.md` with a short “UI” section: termin builder
       may use Vue island; list can stay `WP_List_Table` initially.
-- [ ] Update `plans/02-invoices.md`: line-item editor is a Vue screen; budgets
+- [x] Update `plans/02-invoices.md`: line-item editor is a Vue screen; budgets
       apply.
-- [ ] Update `plans/03-payments-receipts.md`: allocation UI Vue; print PHP.
-- [ ] Update `plans/04-ux-and-onboarding.md`: empty states use `@ui/EmptyState`.
-- [ ] PROGRESS.md: mark frontend foundation status.
+- [x] Update `plans/03-payments-receipts.md`: allocation UI Vue; print PHP.
+- [x] Update `plans/04-ux-and-onboarding.md`: empty states use `@ui/EmptyState`.
+- [x] PROGRESS.md: mark frontend foundation status.
 
 **Acceptance:** Feature plans reference the foundation; no conflicting stack.
+**Met** (2026-07-27): plans 01–04 UI sections + PROGRESS; foundation closed for
+feature work. Plugin Check remains RC-only (Phase 8.3).
 
 ---
 

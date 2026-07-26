@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP BizWit 0.3.0\n"
+"Project-Id-Version: WP BizWit 0.4.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-bizwit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-26T18:00:33+00:00\n"
+"POT-Creation-Date: 2026-07-26T20:35:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-bizwit\n"
@@ -24,6 +24,12 @@ msgstr ""
 msgid "WordPress Plugins for Business and Administration. Kelola klien, proyek, faktur dan kwitansi untuk perusahaan dan UMKM Indonesia — lengkap dengan NPWP, NIB, status PKP, PPN, PPh 23, terbilang dan bea meterai. Hanya pencatatan, tanpa pemrosesan pembayaran."
 msgstr ""
 
+#. translators: %s: Vite entry name (e.g. dashboard).
+#: src/Admin/Assets.php:524
+#, php-format
+msgid "WP BizWit: Vite asset manifest is missing or incomplete (entry: %s). Run npm run build."
+msgstr ""
+
 #: src/Admin/Menu.php:66
 msgid "Dashboard"
 msgstr ""
@@ -34,7 +40,8 @@ msgid "Clients"
 msgstr ""
 
 #: src/Admin/Menu.php:68
-#: src/Admin/Screens/Projects_Screen.php:39
+#: src/Admin/Views/clients-form.php:367
+#: src/Admin/Views/projects-list.php:32
 msgid "Projects"
 msgstr ""
 
@@ -58,26 +65,26 @@ msgstr ""
 msgid "BizWit"
 msgstr ""
 
-#: src/Admin/Screens/Clients_Screen.php:216
+#: src/Admin/Screens/Clients_Screen.php:240
 msgid "Client updated."
 msgstr ""
 
-#: src/Admin/Screens/Clients_Screen.php:217
+#: src/Admin/Screens/Clients_Screen.php:241
 msgid "Client added."
 msgstr ""
 
-#: src/Admin/Screens/Clients_Screen.php:239
+#: src/Admin/Screens/Clients_Screen.php:263
 msgid "Client deleted."
 msgstr ""
 
-#: src/Admin/Screens/Clients_Screen.php:299
+#: src/Admin/Screens/Clients_Screen.php:323
 #: src/Repositories/Client_Repository.php:280
 #: src/Repositories/Client_Repository.php:320
 msgid "That client no longer exists."
 msgstr ""
 
 #. translators: %d: number of clients
-#: src/Admin/Screens/Clients_Screen.php:320
+#: src/Admin/Screens/Clients_Screen.php:344
 #, php-format
 msgid "%d client archived."
 msgid_plural "%d clients archived."
@@ -85,7 +92,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of clients
-#: src/Admin/Screens/Clients_Screen.php:322
+#: src/Admin/Screens/Clients_Screen.php:346
 #, php-format
 msgid "%d client deleted."
 msgid_plural "%d clients deleted."
@@ -176,25 +183,39 @@ msgstr ""
 msgid "This plugin never processes or moves money. It records payments that happened elsewhere."
 msgstr ""
 
-#: src/Admin/Screens/Projects_Screen.php:48
-msgid "Track the work you do for each client, and the terms you agreed to bill it under."
+#: src/Admin/Screens/Projects_Screen.php:227
+msgid "Project updated."
 msgstr ""
 
-#: src/Admin/Screens/Projects_Screen.php:58
-msgid "Projects attached to a client, with a project code and status."
+#: src/Admin/Screens/Projects_Screen.php:228
+msgid "Project added."
 msgstr ""
 
-#: src/Admin/Screens/Projects_Screen.php:59
-msgid "Fixed-price, hourly, milestone and retainer billing types."
+#: src/Admin/Screens/Projects_Screen.php:250
+msgid "Project deleted."
 msgstr ""
 
-#: src/Admin/Screens/Projects_Screen.php:60
-msgid "Budget tracking against what has been invoiced so far."
+#: src/Admin/Screens/Projects_Screen.php:310
+#: src/Repositories/Project_Repository.php:401
+#: src/Repositories/Project_Repository.php:460
+msgid "That project no longer exists."
 msgstr ""
 
-#: src/Admin/Screens/Projects_Screen.php:61
-msgid "One-click invoice creation from a project."
-msgstr ""
+#. translators: %d: number of projects
+#: src/Admin/Screens/Projects_Screen.php:347
+#, php-format
+msgid "%d project cancelled."
+msgid_plural "%d projects cancelled."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of projects
+#: src/Admin/Screens/Projects_Screen.php:349
+#, php-format
+msgid "%d project deleted."
+msgid_plural "%d projects deleted."
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/Admin/Screens/Screen.php:57
 msgid "You do not have permission to view this page."
@@ -209,28 +230,35 @@ msgid "Settings saved."
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:69
-#: src/Admin/Views/clients-form.php:142
+#: src/Admin/Tables/Projects_Table.php:74
+#: src/Admin/Views/clients-form.php:145
+#: src/Admin/Views/clients-form.php:374
+#: src/Admin/Views/projects-form.php:107
+#: src/Admin/Views/projects-form.php:236
 msgid "Name"
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:70
-#: src/Admin/Views/clients-form.php:165
+#: src/Admin/Views/clients-form.php:168
 msgid "Type"
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:71
-#: src/Admin/Views/clients-form.php:275
+#: src/Admin/Tables/Projects_Table.php:76
+#: src/Admin/Views/clients-form.php:278
+#: src/Admin/Views/clients-form.php:375
+#: src/Admin/Views/projects-form.php:125
 msgid "Status"
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:72
-#: src/Admin/Views/clients-form.php:151
+#: src/Admin/Views/clients-form.php:154
 #: src/Admin/Views/settings.php:83
 msgid "Email"
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:73
-#: src/Admin/Views/clients-form.php:158
+#: src/Admin/Views/clients-form.php:161
 #: src/Admin/Views/settings.php:87
 msgid "Phone"
 msgstr ""
@@ -240,10 +268,12 @@ msgid "Location"
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:75
+#: src/Admin/Tables/Projects_Table.php:79
 msgid "Last updated"
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:110
+#: src/Admin/Tables/Projects_Table.php:122
 msgid "All"
 msgstr ""
 
@@ -252,6 +282,7 @@ msgid "Archive"
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:140
+#: src/Admin/Tables/Projects_Table.php:152
 msgid "Delete permanently"
 msgstr ""
 
@@ -260,6 +291,7 @@ msgid "No clients found. Add your first client to get started."
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:239
+#: src/Admin/Tables/Projects_Table.php:267
 msgid "Edit"
 msgstr ""
 
@@ -268,6 +300,7 @@ msgid "Permanently delete this client? This cannot be undone."
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:244
+#: src/Admin/Tables/Projects_Table.php:272
 msgid "Delete"
 msgstr ""
 
@@ -277,149 +310,185 @@ msgstr ""
 
 #. translators: %s: human readable time difference, e.g. "2 hours"
 #: src/Admin/Tables/Clients_Table.php:377
+#: src/Admin/Tables/Projects_Table.php:368
 #, php-format
 msgid "%s ago"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:125
+#: src/Admin/Tables/Projects_Table.php:75
+#: src/Admin/Views/projects-form.php:92
+msgid "Client"
+msgstr ""
+
+#: src/Admin/Tables/Projects_Table.php:77
+#: src/Admin/Views/clients-form.php:238
+msgid "Billing"
+msgstr ""
+
+#: src/Admin/Tables/Projects_Table.php:78
+#: src/Admin/Views/projects-form.php:189
+msgid "Budget"
+msgstr ""
+
+#: src/Admin/Tables/Projects_Table.php:151
+msgid "Mark as cancelled"
+msgstr ""
+
+#: src/Admin/Tables/Projects_Table.php:207
+msgid "No projects found. Add your first project to get started."
+msgstr ""
+
+#: src/Admin/Tables/Projects_Table.php:271
+msgid "Permanently delete this project? This cannot be undone."
+msgstr ""
+
+#: src/Admin/Views/clients-form.php:128
 msgid "Edit client"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:125
-#: src/Admin/Views/clients-form.php:346
+#: src/Admin/Views/clients-form.php:128
+#: src/Admin/Views/clients-form.php:349
 #: src/Admin/Views/clients-list.php:36
 #: src/Admin/Views/dashboard.php:21
 msgid "Add client"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:129
+#: src/Admin/Views/clients-form.php:132
 #: src/Admin/Views/clients-missing.php:21
 msgid "Back to clients"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:142
+#: src/Admin/Views/clients-form.php:145
+#: src/Admin/Views/projects-form.php:92
+#: src/Admin/Views/projects-form.php:107
 msgid "required"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:147
+#: src/Admin/Views/clients-form.php:150
 msgid "A single name is fine. This is how the client appears throughout BizWit and on documents."
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:180
-#: src/Admin/Views/clients-form.php:185
+#: src/Admin/Views/clients-form.php:183
+#: src/Admin/Views/clients-form.php:188
 #: src/Admin/Views/settings.php:91
 msgid "Address"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:181
+#: src/Admin/Views/clients-form.php:184
 msgid "Needed on printed invoices and receipts"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:189
+#: src/Admin/Views/clients-form.php:192
 msgid "Address line 2"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:198
+#: src/Admin/Views/clients-form.php:201
 msgid "City"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:202
+#: src/Admin/Views/clients-form.php:205
 msgid "State or province"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:206
+#: src/Admin/Views/clients-form.php:209
 msgid "— Select —"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:219
+#: src/Admin/Views/clients-form.php:222
 msgid "Postal code"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:223
+#: src/Admin/Views/clients-form.php:226
 #: src/Admin/Views/settings.php:331
 msgid "Country"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:227
+#: src/Admin/Views/clients-form.php:230
 msgid "Two-letter ISO 3166-1 country code."
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:235
-msgid "Billing"
-msgstr ""
-
 #. translators: 1: currency code, 2: number of days
-#: src/Admin/Views/clients-form.php:240
+#: src/Admin/Views/clients-form.php:243
 #, php-format
 msgid "Currently %1$s, %2$d days"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:249
+#: src/Admin/Views/clients-form.php:252
+#: src/Admin/Views/projects-form.php:168
 #: src/Admin/Views/settings.php:95
 msgid "Currency"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:264
+#: src/Admin/Views/clients-form.php:267
 #: src/Admin/Views/settings.php:104
 msgid "Payment terms"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:268
+#: src/Admin/Views/clients-form.php:271
 #: src/Admin/Views/settings.php:106
 msgid "days"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:270
+#: src/Admin/Views/clients-form.php:273
 msgid "Used to calculate the due date on new invoices."
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:284
+#: src/Admin/Views/clients-form.php:287
 msgid "Archive a client instead of deleting it to keep its invoices and payments intact."
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:292
+#: src/Admin/Views/clients-form.php:295
 msgid "Legal and tax identity"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:293
+#: src/Admin/Views/clients-form.php:296
 msgid "Only needed if you invoice a registered entity"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:297
+#: src/Admin/Views/clients-form.php:300
 msgid "Legal name"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:301
+#: src/Admin/Views/clients-form.php:304
 msgid "Registered name, if it differs from the name above. Used on invoices."
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:306
+#: src/Admin/Views/clients-form.php:309
 msgid "Tax ID"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:316
+#: src/Admin/Views/clients-form.php:319
 #: src/Admin/Views/settings.php:214
 msgid "Registration number"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:320
+#: src/Admin/Views/clients-form.php:323
 msgid "Company number, agency code or other official identifier."
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:333
+#: src/Admin/Views/clients-form.php:336
+#: src/Admin/Views/projects-form.php:238
 msgid "Notes"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:334
+#: src/Admin/Views/clients-form.php:337
 msgid "Never shown to the client"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:338
+#: src/Admin/Views/clients-form.php:341
 msgid "Internal notes"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:346
+#: src/Admin/Views/clients-form.php:349
 msgid "Update client"
+msgstr ""
+
+#: src/Admin/Views/clients-form.php:369
+msgid "No projects yet for this client."
+msgstr ""
+
+#: src/Admin/Views/clients-form.php:406
+msgid "Add project for this client"
 msgstr ""
 
 #: src/Admin/Views/clients-list.php:51
@@ -460,6 +529,148 @@ msgstr ""
 
 #: src/Admin/Views/placeholder.php:30
 msgid "The database tables behind this screen already exist, so nothing needs migrating when the interface lands."
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:75
+msgid "Edit project"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:75
+#: src/Admin/Views/projects-form.php:297
+#: src/Admin/Views/projects-list.php:35
+msgid "Add project"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:79
+#: src/Admin/Views/projects-missing.php:21
+msgid "Back to projects"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:96
+msgid "— Select client —"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:116
+msgid "Code"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:121
+msgid "Optional internal or contract reference."
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:138
+msgid "Billing type"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:154
+msgid "Billing details"
+msgstr ""
+
+#. translators: 1: currency code, 2: billing type label
+#: src/Admin/Views/projects-form.php:159
+#, php-format
+msgid "%1$s · %2$s"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:180
+msgid "Rate"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:184
+msgid "Hourly or retainer rate. Leave blank when not applicable."
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:194
+msgid "Contract or agreed total for this project."
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:199
+msgid "Retention %"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:204
+msgid "Percentage held back until final acceptance. Applied when invoicing."
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:208
+msgid "Start date"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:215
+msgid "End date"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:226
+msgid "Termin stages"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:227
+msgid "Ordered billing stages that sum to the budget"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:231
+msgid "Stages"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:237
+msgid "Amount"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:251
+msgid "e.g. Termin 1 — DP"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:265
+msgid "Empty rows are ignored. Leave all empty if you will add stages later."
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:269
+msgid "Budget check"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:274
+msgid "Allow termin total to differ from the project budget"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:276
+msgid "When unchecked, the stage amounts must add up to the budget."
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:284
+#: src/Admin/Views/projects-form.php:289
+msgid "Description"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:285
+msgid "Internal notes about the work"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:297
+msgid "Update project"
+msgstr ""
+
+#: src/Admin/Views/projects-list.php:48
+msgid "Filter by client"
+msgstr ""
+
+#: src/Admin/Views/projects-list.php:50
+msgid "All clients"
+msgstr ""
+
+#: src/Admin/Views/projects-list.php:58
+msgid "Filter"
+msgstr ""
+
+#: src/Admin/Views/projects-list.php:59
+msgid "Search projects"
+msgstr ""
+
+#: src/Admin/Views/projects-missing.php:15
+msgid "Project not found"
+msgstr ""
+
+#: src/Admin/Views/projects-missing.php:17
+msgid "That project may have been deleted by someone else, or the link may be out of date."
 msgstr ""
 
 #: src/Admin/Views/settings.php:46
@@ -723,7 +934,7 @@ msgid "Indonesia"
 msgstr ""
 
 #: src/Localization/Indonesia.php:118
-#: src/Localization/Indonesia.php:231
+#: src/Localization/Indonesia.php:239
 msgid "Perorangan"
 msgstr ""
 
@@ -732,7 +943,7 @@ msgid "Perusahaan (PT / CV / UD)"
 msgstr ""
 
 #: src/Localization/Indonesia.php:120
-#: src/Localization/Indonesia.php:230
+#: src/Localization/Indonesia.php:238
 msgid "Instansi Pemerintah"
 msgstr ""
 
@@ -780,191 +991,223 @@ msgstr ""
 msgid "Telepon / WhatsApp"
 msgstr ""
 
-#: src/Localization/Indonesia.php:152
+#: src/Localization/Indonesia.php:142
+msgid "Anggaran"
+msgstr ""
+
+#: src/Localization/Indonesia.php:143
+msgid "Jenis penagihan"
+msgstr ""
+
+#: src/Localization/Indonesia.php:144
+msgid "Termin"
+msgstr ""
+
+#: src/Localization/Indonesia.php:145
+msgid "Retensi (%)"
+msgstr ""
+
+#: src/Localization/Indonesia.php:146
+msgid "Kode proyek / SPK"
+msgstr ""
+
+#: src/Localization/Indonesia.php:157
 msgid "Nama badan usaha sesuai akta pendirian, jika berbeda dengan nama panggilan di atas. Nama inilah yang dicantumkan pada faktur."
 msgstr ""
 
-#: src/Localization/Indonesia.php:153
+#: src/Localization/Indonesia.php:158
 msgid "Nomor Pokok Wajib Pajak. 16 digit (berbasis NIK) atau 15 digit format lama. Wajib dicantumkan pada faktur pajak."
 msgstr ""
 
-#: src/Localization/Indonesia.php:154
+#: src/Localization/Indonesia.php:159
 msgid "Nomor Induk Berusaha dari sistem OSS, 13 digit. Menggantikan SIUP dan TDP."
 msgstr ""
 
-#: src/Localization/Indonesia.php:155
+#: src/Localization/Indonesia.php:160
 msgid "Jumlah hari sejak tanggal faktur sampai jatuh tempo. Umumnya 14 atau 30 hari."
 msgstr ""
 
-#: src/Localization/Indonesia.php:167
+#: src/Localization/Indonesia.php:161
+msgid "Nilai kontrak atau total yang disepakati untuk proyek ini."
+msgstr ""
+
+#: src/Localization/Indonesia.php:162
+msgid "Persentase yang ditahan sampai serah terima akhir. Diterapkan saat penagihan."
+msgstr ""
+
+#: src/Localization/Indonesia.php:163
+msgid "Nomor SPK, kontrak, atau referensi internal (opsional)."
+msgstr ""
+
+#: src/Localization/Indonesia.php:175
 msgid "Bentuk badan usaha"
 msgstr ""
 
-#: src/Localization/Indonesia.php:171
+#: src/Localization/Indonesia.php:179
 msgid "Menentukan bagaimana nama klien ditulis pada faktur dan kwitansi."
 msgstr ""
 
-#: src/Localization/Indonesia.php:174
+#: src/Localization/Indonesia.php:182
 msgid "NIK"
 msgstr ""
 
-#: src/Localization/Indonesia.php:178
+#: src/Localization/Indonesia.php:186
 msgid "Nomor Induk Kependudukan, 16 digit. Untuk klien perorangan, NIK kini juga berfungsi sebagai NPWP."
 msgstr ""
 
-#: src/Localization/Indonesia.php:181
+#: src/Localization/Indonesia.php:189
 msgid "Pengusaha Kena Pajak (PKP)"
 msgstr ""
 
-#: src/Localization/Indonesia.php:185
+#: src/Localization/Indonesia.php:193
 msgid "Centang bila klien berstatus PKP dan dapat menerima faktur pajak."
 msgstr ""
 
-#: src/Localization/Indonesia.php:188
+#: src/Localization/Indonesia.php:196
 msgid "RT / RW"
 msgstr ""
 
-#: src/Localization/Indonesia.php:193
+#: src/Localization/Indonesia.php:201
 msgid "Kelurahan / Desa"
 msgstr ""
 
-#: src/Localization/Indonesia.php:198
+#: src/Localization/Indonesia.php:206
 msgid "Kecamatan"
 msgstr ""
 
-#: src/Localization/Indonesia.php:203
+#: src/Localization/Indonesia.php:211
 msgid "Satuan Kerja / Unit"
 msgstr ""
 
-#: src/Localization/Indonesia.php:207
+#: src/Localization/Indonesia.php:215
 msgid "Untuk klien instansi pemerintah: nama satker yang menerbitkan SPK atau kontrak."
 msgstr ""
 
-#: src/Localization/Indonesia.php:219
+#: src/Localization/Indonesia.php:227
 msgid "— Tidak ditentukan —"
 msgstr ""
 
-#: src/Localization/Indonesia.php:220
+#: src/Localization/Indonesia.php:228
 msgid "PT (Perseroan Terbatas)"
 msgstr ""
 
-#: src/Localization/Indonesia.php:221
+#: src/Localization/Indonesia.php:229
 msgid "PT Perorangan"
 msgstr ""
 
-#: src/Localization/Indonesia.php:222
+#: src/Localization/Indonesia.php:230
 msgid "CV (Commanditaire Vennootschap)"
 msgstr ""
 
-#: src/Localization/Indonesia.php:223
+#: src/Localization/Indonesia.php:231
 msgid "Firma"
 msgstr ""
 
-#: src/Localization/Indonesia.php:224
+#: src/Localization/Indonesia.php:232
 msgid "UD (Usaha Dagang)"
 msgstr ""
 
-#: src/Localization/Indonesia.php:225
+#: src/Localization/Indonesia.php:233
 msgid "Koperasi"
 msgstr ""
 
-#: src/Localization/Indonesia.php:226
+#: src/Localization/Indonesia.php:234
 msgid "Yayasan"
 msgstr ""
 
-#: src/Localization/Indonesia.php:227
+#: src/Localization/Indonesia.php:235
 msgid "Perkumpulan"
 msgstr ""
 
-#: src/Localization/Indonesia.php:228
+#: src/Localization/Indonesia.php:236
 msgid "BUMN"
 msgstr ""
 
-#: src/Localization/Indonesia.php:229
+#: src/Localization/Indonesia.php:237
 msgid "BUMD"
 msgstr ""
 
-#: src/Localization/Indonesia.php:245
+#: src/Localization/Indonesia.php:253
 msgid "Usaha Mikro"
 msgstr ""
 
-#: src/Localization/Indonesia.php:246
+#: src/Localization/Indonesia.php:254
 msgid "Usaha Kecil"
 msgstr ""
 
-#: src/Localization/Indonesia.php:247
+#: src/Localization/Indonesia.php:255
 msgid "Usaha Menengah"
 msgstr ""
 
-#: src/Localization/Indonesia.php:248
+#: src/Localization/Indonesia.php:256
 msgid "Usaha Besar"
 msgstr ""
 
-#: src/Localization/Indonesia.php:259
+#: src/Localization/Indonesia.php:267
 msgid "Tidak menangani pajak di BizWit"
 msgstr ""
 
-#: src/Localization/Indonesia.php:260
+#: src/Localization/Indonesia.php:268
 msgid "UMKM — PPh Final 0,5% (PP 55/2022)"
 msgstr ""
 
-#: src/Localization/Indonesia.php:261
+#: src/Localization/Indonesia.php:269
 msgid "Non-PKP — tanpa PPN"
 msgstr ""
 
-#: src/Localization/Indonesia.php:262
+#: src/Localization/Indonesia.php:270
 msgid "PKP — memungut PPN"
 msgstr ""
 
-#: src/Localization/Indonesia.php:301
+#: src/Localization/Indonesia.php:309
 msgid "Transfer Bank"
 msgstr ""
 
-#: src/Localization/Indonesia.php:302
+#: src/Localization/Indonesia.php:310
 msgid "Tunai"
 msgstr ""
 
-#: src/Localization/Indonesia.php:303
+#: src/Localization/Indonesia.php:311
 msgid "QRIS"
 msgstr ""
 
-#: src/Localization/Indonesia.php:304
+#: src/Localization/Indonesia.php:312
 msgid "E-Wallet (GoPay / OVO / DANA / ShopeePay)"
 msgstr ""
 
-#: src/Localization/Indonesia.php:305
+#: src/Localization/Indonesia.php:313
 msgid "Virtual Account"
 msgstr ""
 
-#: src/Localization/Indonesia.php:306
+#: src/Localization/Indonesia.php:314
 msgid "Cek / Giro"
 msgstr ""
 
-#: src/Localization/Indonesia.php:307
+#: src/Localization/Indonesia.php:315
 msgid "Kartu Kredit / Debit"
 msgstr ""
 
-#: src/Localization/Indonesia.php:308
+#: src/Localization/Indonesia.php:316
 msgid "SP2D (pembayaran instansi pemerintah)"
 msgstr ""
 
-#: src/Localization/Indonesia.php:309
+#: src/Localization/Indonesia.php:317
 msgid "Kompensasi / Potongan"
 msgstr ""
 
-#: src/Localization/Indonesia.php:310
+#: src/Localization/Indonesia.php:318
 msgid "Lainnya"
 msgstr ""
 
-#: src/Localization/Indonesia.php:369
+#: src/Localization/Indonesia.php:377
 msgid "PPN"
 msgstr ""
 
-#: src/Localization/Indonesia.php:560
+#: src/Localization/Indonesia.php:568
 msgid "Pembayaran dianggap lunas setelah dana diterima di rekening yang tercantum."
 msgstr ""
 
-#: src/Localization/Indonesia.php:561
+#: src/Localization/Indonesia.php:569
 msgid "Mohon cantumkan nomor faktur pada berita transfer."
 msgstr ""
 
@@ -993,6 +1236,7 @@ msgid "Detect from business details"
 msgstr ""
 
 #: src/Repositories/Client_Repository.php:103
+#: src/Repositories/Project_Repository.php:118
 msgid "Active"
 msgstr ""
 
@@ -1034,6 +1278,72 @@ msgstr ""
 
 #: src/Repositories/Client_Repository.php:379
 msgid "tax ID"
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:104
+msgid "Fixed price"
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:105
+msgid "Hourly"
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:106
+msgid "Termin (stages)"
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:107
+msgid "Retainer"
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:119
+msgid "On hold"
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:120
+msgid "Completed"
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:121
+msgid "Cancelled"
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:295
+msgid "A valid project is required for termin stages."
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:322
+msgid "The termin stages could not be saved."
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:363
+msgid "The project could not be saved."
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:423
+msgid "The project could not be updated."
+msgstr ""
+
+#. translators: %d: number of invoices
+#: src/Repositories/Project_Repository.php:470
+#, php-format
+msgid "This project still has %d invoice(s). Cancel the project instead of deleting it, so those records keep their history."
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:481
+msgid "The project could not be deleted."
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:504
+msgid "A project name is required."
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:509
+msgid "Please choose a client for this project."
+msgstr ""
+
+#: src/Repositories/Project_Repository.php:527
+msgid "The termin amounts must add up to the project budget. Adjust the stages, the budget, or allow a different total."
 msgstr ""
 
 #: src/Support/Capabilities.php:113

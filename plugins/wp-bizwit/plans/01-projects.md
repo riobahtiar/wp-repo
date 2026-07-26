@@ -1,6 +1,6 @@
 # Plan 01 — Projects
 
-**Status:** Planned · **Target:** 0.4.0 · **Table exists:** `bizwit_projects`
+**Status:** Done · **Target:** 0.4.0 · **Shipped:** `bizwit_projects` + `bizwit_project_terms`
 
 ## Goal
 
@@ -32,11 +32,9 @@ including on the invoice screen.
 ## UI approach
 
 Follow [`../docs/frontend-architecture.md`](../docs/frontend-architecture.md).
-List can stay `WP_List_Table` + PHP form for v1 of this plan. **Termin builder**
-(ordered stages, amounts) is the first good Vue island once
-[07-frontend-modernization.md](07-frontend-modernization.md) Phase 5 is done —
-do not block a minimal PHP projects CRUD on the full design system if foundation
-is mid-flight; prefer foundation first when both are in the same sprint.
+**v1 shipped as `WP_List_Table` + PHP form** (no Vue required). A richer termin
+builder island can land later without changing the schema — stages already live
+in `bizwit_project_terms`.
 
 ## Scope
 
@@ -55,20 +53,21 @@ is mid-flight; prefer foundation first when both are in the same sprint.
 - Task or to-do management. This is not a project management tool.
 - Gantt charts, resourcing, team assignment.
 - File attachments (contracts, SPK, BAST scans) — separate plan if wanted.
+- Drag-and-drop termin reorder / Vue island (optional later).
 
 ## Tasks
 
-- [ ] Add `bizwit_project_terms` to `Schema`, bump `Installer::DB_VERSION`
-- [ ] `Project_Repository` extending `Repository`, with sanitise + validate
-- [ ] Delete guard against invoices, mirroring `Client_Repository::delete()`
-- [ ] `Projects_Table` list table
-- [ ] Replace `Projects_Screen` placeholder with list/add/edit routing
-- [ ] Termin sub-form: add, remove, reorder rows
-- [ ] Validation: termin amounts sum to the project value, or an explicit override
-- [ ] Region labels — proyek, termin, retensi, SPK, nomor kontrak
-- [ ] Show projects on the client edit screen
-- [ ] Indonesian translation for every new string
-- [ ] Tests: repository sanitisation, delete guard, termin sum validation
+- [x] Add `bizwit_project_terms` to `Schema`, bump `Installer::DB_VERSION`
+- [x] `Project_Repository` extending `Repository`, with sanitise + validate
+- [x] Delete guard against invoices, mirroring `Client_Repository::delete()`
+- [x] `Projects_Table` list table
+- [x] Replace `Projects_Screen` placeholder with list/add/edit routing
+- [x] Termin sub-form: add rows (blank rows + replace-all on save)
+- [x] Validation: termin amounts sum to the project value, or an explicit override
+- [x] Region labels — proyek, termin, retensi, SPK, nomor kontrak
+- [x] Show projects on the client edit screen
+- [x] Indonesian translation for every new string (catalogue; compile at release)
+- [x] Tests: repository sanitisation, delete guard, termin sum validation
 
 ## Acceptance criteria
 

@@ -11,57 +11,36 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-07-27
+
+Projects CRUD with termin stages, plus the Vue/Vite frontend foundation closed
+for feature consumption (Plugin Check still deferred to RC).
+
+### Added
+- **Projects** ([plan 01](plans/01-projects.md)): list (`WP_List_Table` with
+  search, status and client filters), add/edit form, statuses (active / on hold /
+  completed / cancelled), billing types (fixed / hourly / termin / retainer).
+- **`bizwit_project_terms` table** and project columns `retensi_percent`,
+  `terms_sum_override` (schema `1.2.0`).
+- **Termin stages** on the project form (PHP rows): ordered name/amount/notes;
+  sum must match budget unless override is checked.
+- **Delete guard** when invoices reference the project; bulk cancel and delete.
+- **Client edit screen** lists that client's projects with links and “add project”.
+- Region labels for anggaran, termin, retensi, SPK / project code (Indonesia).
+- **`ProjectRepositoryTest`**: minimal create, invoice delete guard, termin sum
+  validation and override.
+- **Frontend foundation** (plan 07 Phases 0–8, handoff Phase 9): Vite 8 + Vue 3 +
+  Tailwind v4, `Admin\Assets`, REST health, design-system seed (`@ui/*`),
+  dashboard pilot, performance baselines, wordpress.org packaging notes.
+  Plugin Check deferred to RC.
+
 ### Changed
 - **Monorepo packaging.** Plugin lives in `wp-repo` (`wp-content` git root). JS
   installs from the monorepo root only (single `package-lock.json`, npm
-  workspaces + Turborepo). Nested plugin lockfile and package-local GitHub
-  workflow YAML removed; CI/release run from root.
-- **Detached from the JUVO WordPress Plugin Boilerplate.** The package identity,
-  docs and CI no longer point at upstream scaffold; tooling and patterns are
-  first-party. Removed unused Abilities API scaffold (no implementations) and
-  simplified `Loader` to actions, filters, shortcodes and WP-CLI only.
-- Composer package renamed to `wp-bizwit/wp-bizwit`.
-- **Vite is the sole asset pipeline** (plan 07 Phase 6). Retired webpack /
-  `@wordpress/scripts` admin and empty public-frontend entries. Shared product
-  CSS (tiles, progressive disclosure sections, status pills, …) lives in
-  `resources/styles/admin.css` and is enqueued via the Vite `admin` entry on
-  every BizWit screen. `npm run build` is `vue-tsc --noEmit && vite build`.
-- **Release CI always rebuilds frontend assets** (plan 07 Phase 8). Prod setup
-  no longer skips `npm run build` on a node_modules cache hit; `build/` is
-  transported via artifact instead of a package-lock-only cache (avoids shipping
-  stale JS/CSS).
-
-### Added
-- **Frontend architecture** ([docs/frontend-architecture.md](docs/frontend-architecture.md))
-  and [plan 07](plans/07-frontend-modernization.md): Vue 3 + Vite 8 + Tailwind v4
-  for rich admin UI; Livewire and Roots Acorn explicitly out of scope for the
-  distributable plugin; performance budgets and wordpress.org packaging rules.
-- **Vite 8 + Vue 3 + Tailwind v4 toolchain** (plan 07 Phase 1): multi-entry
-  build (`admin`, `dashboard`), `build/manifest.json`, scoped admin CSS under
-  `.wp-bizwit`.
-- **PHP asset bridge** (plan 07 Phase 2): `Admin\Assets` enqueues Vite entries
-  from `build/manifest.json` on BizWit screens only; localizes `wpBizwitConfig`.
-- **REST foundation** (plan 07 Phase 3): `GET /wp-bizwit/v1/health` plus TS
-  `apiGet` client.
-- **Design system seed** (plan 07 Phase 4): `resources/ui` components
-  (`Button`, `MoneyText`, `EmptyState`, `AppShell`), CSS tokens under
-  `.wp-bizwit`, and `formatMoney()` in `resources/app/lib/money.ts` with Vitest
-  (`npm run test:unit`). IDR displays as `Rp 1.500.000`.
-- **Dashboard Vue pilot** (plan 07 Phase 5): mounts on `#wp-bizwit-dashboard`,
-  loads health over REST (skeleton / error + retry), shows version, region, and
-  a MoneyText sample.
-- **Single Vite pipeline + pilot dashboard** as the product UI foundation
-  (Phases 1–6); multi-entry admin + dashboard islands only.
-- **Performance baselines and soft bundle gate** (plan 07 Phase 7):
-  [docs/performance.md](docs/performance.md), `npm run build:analyze`
-  (`rollup-plugin-visualizer` → `build/stats.html`), and
-  `npm run check:bundle-size` (warns; optional `FAIL_HARD=1`).
-- **wordpress.org packaging notes** (plan 07 Phase 8): checklist in
-  frontend-architecture and development docs; runtime npm is `vue` only (MIT /
-  GPL-compatible); local assets only (no CDN for app JS/CSS).
-
-Next up: plan 07 Phase 9 (feature-plan handoff) and Plugin Check at RC, then
-[Projects](plans/01-projects.md).
+  workspaces + Turborepo).
+- **Vite is the sole asset pipeline.** Shared product CSS in
+  `resources/styles/admin.css`; release CI always rebuilds frontend assets.
+- Schema version option `wp_bizwit_db_version` → `1.2.0`.
 
 ## [0.3.0] — 2026-07-27
 
