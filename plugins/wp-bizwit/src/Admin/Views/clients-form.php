@@ -75,10 +75,10 @@ $meta_row = static function ( string $key, array $definition, array $values ): v
 		<th scope="row"><label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $label ); ?></label></th>
 		<td>
 			<?php if ( 'checkbox' === $kind ) : ?>
-				<label for="<?php echo esc_attr( $id ); ?>">
+				<label class="wp-bizwit-check" for="<?php echo esc_attr( $id ); ?>">
 					<input type="checkbox" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>"
 						value="1" <?php checked( ! empty( $value ) ); ?> />
-					<?php echo esc_html( $label ); ?>
+					<span><?php echo esc_html( $label ); ?></span>
 				</label>
 			<?php elseif ( 'select' === $kind ) : ?>
 				<select id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>">
@@ -183,6 +183,7 @@ foreach ( $meta_fields as $meta_key => $definition ) {
 			<span class="wp-bizwit-section__title"><?php esc_html_e( 'Address', 'wp-bizwit' ); ?></span>
 			<span class="wp-bizwit-section__hint"><?php esc_html_e( 'Needed on printed invoices and receipts', 'wp-bizwit' ); ?></span>
 		</summary>
+		<div class="wp-bizwit-section__body">
 		<table class="form-table" role="presentation">
 			<tr>
 				<th scope="row"><label for="wp-bizwit-address-1"><?php echo esc_html( $region->field_label( 'address_line1', __( 'Address', 'wp-bizwit' ) ) ); ?></label></th>
@@ -231,6 +232,7 @@ foreach ( $meta_fields as $meta_key => $definition ) {
 				</td>
 			</tr>
 		</table>
+	</div>
 	</details>
 
 	<details class="wp-bizwit-section">
@@ -247,6 +249,7 @@ foreach ( $meta_fields as $meta_key => $definition ) {
 				?>
 			</span>
 		</summary>
+		<div class="wp-bizwit-section__body">
 		<table class="form-table" role="presentation">
 			<tr>
 				<th scope="row"><label for="wp-bizwit-currency"><?php esc_html_e( 'Currency', 'wp-bizwit' ); ?></label></th>
@@ -288,6 +291,7 @@ foreach ( $meta_fields as $meta_key => $definition ) {
 				</td>
 			</tr>
 		</table>
+	</div>
 	</details>
 
 	<details class="wp-bizwit-section">
@@ -295,6 +299,7 @@ foreach ( $meta_fields as $meta_key => $definition ) {
 			<span class="wp-bizwit-section__title"><?php esc_html_e( 'Legal and tax identity', 'wp-bizwit' ); ?></span>
 			<span class="wp-bizwit-section__hint"><?php esc_html_e( 'Only needed if you invoice a registered entity', 'wp-bizwit' ); ?></span>
 		</summary>
+		<div class="wp-bizwit-section__body">
 		<table class="form-table" role="presentation">
 			<tr>
 				<th scope="row"><label for="wp-bizwit-legal-name"><?php echo esc_html( $region->field_label( 'legal_name', __( 'Legal name', 'wp-bizwit' ) ) ); ?></label></th>
@@ -329,6 +334,7 @@ foreach ( $meta_fields as $meta_key => $definition ) {
 				<?php $meta_row( (string) $meta_key, $definition, $client_meta ); ?>
 			<?php endforeach; ?>
 		</table>
+	</div>
 	</details>
 
 	<details class="wp-bizwit-section">
@@ -336,6 +342,7 @@ foreach ( $meta_fields as $meta_key => $definition ) {
 			<span class="wp-bizwit-section__title"><?php esc_html_e( 'Notes', 'wp-bizwit' ); ?></span>
 			<span class="wp-bizwit-section__hint"><?php esc_html_e( 'Never shown to the client', 'wp-bizwit' ); ?></span>
 		</summary>
+		<div class="wp-bizwit-section__body">
 		<table class="form-table" role="presentation">
 			<tr>
 				<th scope="row"><label for="wp-bizwit-notes"><?php esc_html_e( 'Internal notes', 'wp-bizwit' ); ?></label></th>
@@ -344,6 +351,7 @@ foreach ( $meta_fields as $meta_key => $definition ) {
 				</td>
 			</tr>
 		</table>
+	</div>
 	</details>
 
 	<?php submit_button( $is_edit ? __( 'Update client', 'wp-bizwit' ) : __( 'Add client', 'wp-bizwit' ) ); ?>

@@ -31,51 +31,394 @@
 
 	/*
 	 * Design tokens — prefer WP admin blues so primary actions feel native.
-	 * Values are local to this tree; they do not pollute :root for other plugins.
 	 */
 	--bw-color-primary: #2271b1;
 	--bw-color-primary-hover: #135e96;
 	--bw-color-text: #1d2327;
 	--bw-color-text-muted: #646970;
 	--bw-color-border: #c3c4c7;
+	--bw-color-border-soft: #dcdcde;
 	--bw-color-surface: #fff;
-	--bw-color-surface-muted: #f0f0f1;
+	--bw-color-surface-muted: #f6f7f7;
 	--bw-radius: 4px;
-	--bw-space-1: 0.25rem;
-	--bw-space-2: 0.5rem;
-	--bw-space-3: 0.75rem;
-	--bw-space-4: 1rem;
-	--bw-space-6: 1.5rem;
+	--bw-space-1: 4px;
+	--bw-space-2: 8px;
+	--bw-space-3: 12px;
+	--bw-space-4: 16px;
+	--bw-space-5: 20px;
+	--bw-space-6: 24px;
+	--bw-label-width: 11.5rem;
 
-	/* Component tokens (legacy SCSS names kept for readability). */
-	--wp-bizwit-border: #dcdcde;
-	--wp-bizwit-muted: #646970;
+	/* Legacy aliases used by older rules. */
+	--wp-bizwit-border: var(--bw-color-border-soft);
+	--wp-bizwit-muted: var(--bw-color-text-muted);
 
 	box-sizing: border-box;
 
-	/* --- Dashboard tiles --- */
+	*,
+	*::before,
+	*::after {
+		box-sizing: inherit;
+	}
+
+	/* =========================================================================
+	 * Forms — top-level and inside sections
+	 * ========================================================================= */
+
+	.wp-bizwit-form {
+		max-width: 56rem;
+	}
+
+	/*
+	 * Override core .form-table spacing only inside our root so th/td line up
+	 * cleanly and descriptions sit tight under controls.
+	 */
+	.form-table {
+		margin: 0 0 var(--bw-space-5);
+		border-collapse: collapse;
+		width: 100%;
+	}
+
+	.form-table th {
+		width: var(--bw-label-width);
+		padding: 0.75rem var(--bw-space-4) 0.75rem 0;
+		font-weight: 600;
+		line-height: 1.4;
+		vertical-align: top;
+		color: var(--bw-color-text);
+	}
+
+	.form-table td {
+		margin-bottom: 0;
+		padding: 0.65rem 0;
+		line-height: 1.4;
+		vertical-align: middle;
+	}
+
+	.form-table td p,
+	.form-table td .description {
+		margin: 0.35rem 0 0;
+		line-height: 1.45;
+		color: var(--bw-color-text-muted);
+	}
+
+	.form-table input.regular-text,
+	.form-table select,
+	.form-table textarea.large-text {
+		max-width: 100%;
+	}
+
+	.form-table input[type="date"] {
+		min-height: 30px;
+	}
+
+	/* Money: room for 9-digit IDR with grouping. */
+	.wp-bizwit-money-input {
+		width: 14em;
+		max-width: 100%;
+		font-variant-numeric: tabular-nums;
+	}
+
+	/* =========================================================================
+	 * Checkbox / radio — optical alignment with label text
+	 * ========================================================================= */
+
+	.wp-bizwit-check {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.625rem;
+		margin: 0;
+		padding: 0;
+		font-weight: 500;
+		line-height: 1.4;
+		cursor: pointer;
+		color: var(--bw-color-text);
+	}
+
+	.wp-bizwit-check input[type="checkbox"],
+	.wp-bizwit-check input[type="radio"] {
+		/* Kill core admin checkbox margins that desync from label baseline. */
+		margin: 0.15em 0 0;
+		padding: 0;
+		width: 1rem;
+		height: 1rem;
+		min-width: 1rem;
+		flex-shrink: 0;
+		vertical-align: top;
+	}
+
+	/* Help text under a checkbox: indent past the box so it aligns with label. */
+	.wp-bizwit-check-block {
+		margin: 0;
+	}
+
+	.wp-bizwit-check-block > .description {
+		margin: 0.4rem 0 0 1.625rem;
+		line-height: 1.45;
+		color: var(--bw-color-text-muted);
+	}
+
+	.wp-bizwit-radio {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin: 0.15rem 0;
+		line-height: 1.4;
+		cursor: pointer;
+	}
+
+	.wp-bizwit-radio input[type="radio"] {
+		margin: 0;
+		width: 1rem;
+		height: 1rem;
+		flex-shrink: 0;
+	}
+
+	.wp-bizwit-inline-label {
+		margin-left: var(--bw-space-4);
+	}
+
+	/* =========================================================================
+	 * Progressive disclosure (accordion cards)
+	 * ========================================================================= */
+
+	.wp-bizwit-section {
+		max-width: 56rem;
+		margin: 0 0 var(--bw-space-3);
+		background: var(--bw-color-surface);
+		border: 1px solid var(--bw-color-border-soft);
+		border-radius: var(--bw-radius);
+		overflow: hidden; /* clip body against radius */
+	}
+
+	.wp-bizwit-section > summary {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 0.75rem;
+		padding: 0.875rem var(--bw-space-5);
+		cursor: pointer;
+		list-style: none;
+		user-select: none;
+		background: var(--bw-color-surface);
+		line-height: 1.35;
+	}
+
+	.wp-bizwit-section > summary::-webkit-details-marker {
+		display: none;
+	}
+
+	/* Disclosure chevron */
+	.wp-bizwit-section > summary::before {
+		content: "";
+		flex: 0 0 auto;
+		width: 0;
+		height: 0;
+		border-top: 5px solid transparent;
+		border-bottom: 5px solid transparent;
+		border-left: 6px solid var(--bw-color-text-muted);
+		transition: transform 0.12s ease;
+	}
+
+	.wp-bizwit-section[open] > summary::before {
+		transform: rotate(90deg);
+	}
+
+	.wp-bizwit-section > summary:hover .wp-bizwit-section__title {
+		color: var(--bw-color-primary);
+	}
+
+	.wp-bizwit-section > summary:focus-visible {
+		outline: 2px solid var(--bw-color-primary);
+		outline-offset: -2px;
+	}
+
+	.wp-bizwit-section[open] > summary {
+		border-bottom: 1px solid var(--bw-color-border-soft);
+		background: var(--bw-color-surface-muted);
+	}
+
+	.wp-bizwit-section__title {
+		font-weight: 600;
+		font-size: 13px;
+		color: var(--bw-color-text);
+	}
+
+	.wp-bizwit-section__hint {
+		color: var(--bw-color-text-muted);
+		font-size: 12px;
+		font-weight: 400;
+	}
+
+	/*
+	 * Single body padding for ALL accordion content (form tables, termin panel,
+	 * freeform). Do not add extra horizontal padding on children.
+	 */
+	.wp-bizwit-section__body {
+		padding: var(--bw-space-4) var(--bw-space-5) var(--bw-space-5);
+	}
+
+	.wp-bizwit-section__body > .form-table {
+		margin: 0;
+	}
+
+	.wp-bizwit-section__body > .form-table th {
+		padding-top: 0.7rem;
+		padding-bottom: 0.7rem;
+	}
+
+	.wp-bizwit-section__body > .form-table td {
+		padding-top: 0.55rem;
+		padding-bottom: 0.55rem;
+	}
+
+	/* First row: less top air so body padding is the only top gap. */
+	.wp-bizwit-section__body > .form-table tr:first-child th,
+	.wp-bizwit-section__body > .form-table tr:first-child td {
+		padding-top: 0.15rem;
+	}
+
+	.wp-bizwit-section__body > .form-table tr:last-child th,
+	.wp-bizwit-section__body > .form-table tr:last-child td {
+		padding-bottom: 0;
+	}
+
+	/* =========================================================================
+	 * Termin stages grid
+	 * ========================================================================= */
+
+	.wp-bizwit-termin-panel {
+		/* Inherits section__body padding when nested; no extra outer pad. */
+		padding: 0;
+		max-width: 100%;
+	}
+
+	.wp-bizwit-termin-lede {
+		margin: 0 0 var(--bw-space-3);
+		line-height: 1.45;
+		color: var(--bw-color-text-muted);
+	}
+
+	.wp-bizwit-terms-table {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		border: 1px solid var(--bw-color-border-soft);
+		border-radius: var(--bw-radius);
+		border-collapse: separate;
+		border-spacing: 0;
+		table-layout: fixed;
+		background: var(--bw-color-surface);
+		overflow: hidden;
+	}
+
+	.wp-bizwit-terms-table th,
+	.wp-bizwit-terms-table td {
+		padding: 0.65rem 0.75rem;
+		vertical-align: middle;
+		border-bottom: 1px solid var(--bw-color-border-soft);
+	}
+
+	.wp-bizwit-terms-table tr:last-child th,
+	.wp-bizwit-terms-table tr:last-child td {
+		border-bottom: 0;
+	}
+
+	.wp-bizwit-terms-table thead th {
+		padding: 0.55rem 0.75rem;
+		font-weight: 600;
+		font-size: 12px;
+		text-transform: none;
+		letter-spacing: 0;
+		color: var(--bw-color-text-muted);
+		background: var(--bw-color-surface-muted);
+	}
+
+	.wp-bizwit-terms-table__num {
+		width: 2.25rem;
+		text-align: center;
+		color: var(--bw-color-text-muted);
+	}
+
+	.wp-bizwit-terms-table__name {
+		width: 34%;
+	}
+
+	.wp-bizwit-terms-table__amount {
+		width: 26%;
+	}
+
+	.wp-bizwit-terms-table__notes {
+		width: auto;
+	}
+
+	.wp-bizwit-terms-table input.widefat,
+	.wp-bizwit-terms-table .wp-bizwit-money-input {
+		width: 100%;
+		max-width: none;
+		margin: 0;
+	}
+
+	.wp-bizwit-terms-table__blank td {
+		background: #fafafa;
+	}
+
+	.wp-bizwit-terms-table__index {
+		font-size: 12px;
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.wp-bizwit-termin-foot {
+		margin-top: var(--bw-space-3);
+	}
+
+	.wp-bizwit-termin-foot > .description {
+		margin: 0 0 var(--bw-space-3);
+		line-height: 1.45;
+	}
+
+	.wp-bizwit-termin-check {
+		margin: 0;
+		padding-top: var(--bw-space-3);
+		border-top: 1px solid var(--bw-color-border-soft);
+	}
+
+	/* =========================================================================
+	 * Misc layout
+	 * ========================================================================= */
+
+	.wp-bizwit-lede {
+		max-width: 56rem;
+		margin: 0 0 var(--bw-space-4);
+		font-size: 14px;
+		line-height: 1.5;
+		color: var(--bw-color-text-muted);
+	}
+
+	/* Dashboard tiles */
 
 	.wp-bizwit-tiles {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: 16px;
-		margin: 20px 0;
+		gap: var(--bw-space-4);
+		margin: var(--bw-space-5) 0;
 	}
 
 	.wp-bizwit-tile {
 		display: flex;
 		flex-direction: column;
-		gap: 4px;
-		padding: 20px;
-		background: #fff;
-		border: 1px solid var(--wp-bizwit-border);
-		border-radius: 4px;
+		gap: var(--bw-space-1);
+		padding: var(--bw-space-5);
+		background: var(--bw-color-surface);
+		border: 1px solid var(--bw-color-border-soft);
+		border-radius: var(--bw-radius);
 		text-decoration: none;
 		color: inherit;
 
 		&:hover,
 		&:focus {
-			border-color: #2271b1;
+			border-color: var(--bw-color-primary);
 		}
 	}
 
@@ -86,199 +429,20 @@
 	}
 
 	.wp-bizwit-tile__label {
-		color: var(--wp-bizwit-muted);
+		color: var(--bw-color-text-muted);
 		font-size: 13px;
 	}
-
-	/* --- Content panels --- */
 
 	.wp-bizwit-panel {
 		max-width: 780px;
-		margin: 20px 0;
-		padding: 4px 20px 20px;
-		background: #fff;
-		border: 1px solid var(--wp-bizwit-border);
-		border-radius: 4px;
+		margin: var(--bw-space-5) 0;
+		padding: var(--bw-space-1) var(--bw-space-5) var(--bw-space-5);
+		background: var(--bw-color-surface);
+		border: 1px solid var(--bw-color-border-soft);
+		border-radius: var(--bw-radius);
 	}
 
-	/*
-	 * Progressive disclosure sections.
-	 *
-	 * Built on native <details> rather than a JS accordion, so a collapsed
-	 * section still works with the keyboard, screen readers, browser find-in-page
-	 * and printing. The summary carries a hint showing the current state, so a
-	 * closed section is informative rather than merely hidden.
-	 */
-	.wp-bizwit-section {
-		max-width: 900px;
-		margin: 16px 0;
-		background: #fff;
-		border: 1px solid var(--wp-bizwit-border);
-		border-radius: 4px;
-
-		> summary {
-			display: flex;
-			flex-wrap: wrap;
-			align-items: baseline;
-			gap: 10px;
-			padding: 14px 16px;
-			cursor: pointer;
-			list-style: none;
-			user-select: none;
-
-			&::-webkit-details-marker {
-				display: none;
-			}
-
-			/* Disclosure triangle, rotated by the open state below. */
-			&::before {
-				content: "";
-				flex: 0 0 auto;
-				width: 0;
-				height: 0;
-				border-top: 5px solid transparent;
-				border-bottom: 5px solid transparent;
-				border-left: 6px solid var(--wp-bizwit-muted);
-				transition: transform 0.15s ease;
-			}
-
-			&:hover .wp-bizwit-section__title {
-				color: #2271b1;
-			}
-
-			&:focus-visible {
-				outline: 2px solid #2271b1;
-				outline-offset: -2px;
-			}
-		}
-
-		&[open] > summary::before {
-			transform: rotate(90deg);
-		}
-
-		&[open] > summary {
-			border-bottom: 1px solid var(--wp-bizwit-border);
-		}
-
-		> :not(summary) {
-			padding: 0 16px;
-		}
-
-		> .form-table {
-			padding: 0 16px 8px;
-		}
-	}
-
-	.wp-bizwit-section__title {
-		font-weight: 600;
-	}
-
-	.wp-bizwit-section__hint {
-		color: var(--wp-bizwit-muted);
-		font-size: 13px;
-	}
-
-	/* Money fields: wide enough for 9-digit rupiah with grouping. */
-	.wp-bizwit-money-input {
-		width: 12em;
-		max-width: 100%;
-		font-variant-numeric: tabular-nums;
-	}
-
-	/*
-	 * Termin stages: full-width panel inside details — not nested in form-table
-	 * th/td, which squeezed columns and left a lonely "Stages" label.
-	 */
-	.wp-bizwit-termin-panel {
-		padding: 12px 16px 16px;
-		max-width: 100%;
-	}
-
-	.wp-bizwit-termin-lede {
-		margin: 0 0 12px;
-	}
-
-	.wp-bizwit-terms-table {
-		width: 100%;
-		max-width: 52rem;
-		border: 1px solid var(--wp-bizwit-border);
-		border-radius: 4px;
-		border-collapse: collapse;
-		table-layout: fixed;
-	}
-
-	.wp-bizwit-terms-table th,
-	.wp-bizwit-terms-table td {
-		padding: 10px 12px;
-		vertical-align: middle;
-	}
-
-	.wp-bizwit-terms-table thead th {
-		font-weight: 600;
-		background: #f6f7f7;
-		border-bottom: 1px solid var(--wp-bizwit-border);
-	}
-
-	.wp-bizwit-terms-table__num {
-		width: 2.5rem;
-		text-align: center;
-		color: var(--wp-bizwit-muted);
-	}
-
-	.wp-bizwit-terms-table__name {
-		width: 36%;
-	}
-
-	.wp-bizwit-terms-table__amount {
-		width: 28%;
-	}
-
-	.wp-bizwit-terms-table__notes {
-		width: auto;
-	}
-
-	.wp-bizwit-terms-table .wp-bizwit-money-input {
-		width: 100%;
-		max-width: none;
-	}
-
-	.wp-bizwit-terms-table__blank td {
-		background: #fcfcfc;
-	}
-
-	.wp-bizwit-terms-table__index {
-		font-size: 12px;
-		font-weight: 600;
-	}
-
-	.wp-bizwit-termin-check {
-		margin-top: 16px;
-		padding-top: 12px;
-		border-top: 1px solid var(--wp-bizwit-border);
-	}
-
-	.wp-bizwit-termin-check label {
-		display: inline-flex;
-		align-items: flex-start;
-		gap: 8px;
-		font-weight: 500;
-	}
-
-	.wp-bizwit-lede {
-		max-width: 900px;
-		font-size: 14px;
-	}
-
-	.wp-bizwit-radio {
-		display: inline-block;
-		margin: 2px 0;
-	}
-
-	.wp-bizwit-inline-label {
-		margin-left: 16px;
-	}
-
-	/* Status pills in the clients list table. */
+	/* Status pills */
 
 	.wp-bizwit-status {
 		display: inline-block;
@@ -295,13 +459,20 @@
 		color: #00654a;
 	}
 
-	.wp-bizwit-status--inactive {
+	.wp-bizwit-status--inactive,
+	.wp-bizwit-status--on_hold {
 		background: #fcf9e8;
 		color: #7a5c00;
 	}
 
-	.wp-bizwit-status--archived {
+	.wp-bizwit-status--archived,
+	.wp-bizwit-status--cancelled {
 		background: #f0f0f1;
-		color: var(--wp-bizwit-muted);
+		color: var(--bw-color-text-muted);
+	}
+
+	.wp-bizwit-status--completed {
+		background: #e7f5fe;
+		color: #0a4b78;
 	}
 }

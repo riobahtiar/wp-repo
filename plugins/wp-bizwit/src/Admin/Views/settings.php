@@ -64,7 +64,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 						<label class="wp-bizwit-radio">
 							<input type="radio" name="business_type" value="<?php echo esc_attr( (string) $type_slug ); ?>"
 								<?php checked( $value( 'business_type' ), (string) $type_slug ); ?> />
-							<?php echo esc_html( (string) $label ); ?>
+							<span><?php echo esc_html( (string) $label ); ?></span>
 						</label>
 						<br />
 					<?php endforeach; ?>
@@ -120,6 +120,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 				?>
 			</span>
 		</summary>
+		<div class="wp-bizwit-section__body">
 		<p class="description">
 			<?php if ( $is_indonesia ) : ?>
 				<?php esc_html_e( 'Rekening tujuan transfer yang dicantumkan pada faktur. Hampir semua pembayaran antarperusahaan di Indonesia dilakukan lewat transfer bank.', 'wp-bizwit' ); ?>
@@ -145,6 +146,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 				<td><input type="text" id="wp-bizwit-bank-branch" name="bank_branch" class="regular-text" value="<?php echo esc_attr( $value( 'bank_branch' ) ); ?>" /></td>
 			</tr>
 		</table>
+	</div>
 	</details>
 
 	<details class="wp-bizwit-section" <?php echo $handles_tax ? 'open' : ''; ?>>
@@ -152,6 +154,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 			<span class="wp-bizwit-section__title"><?php esc_html_e( 'Tax', 'wp-bizwit' ); ?></span>
 			<span class="wp-bizwit-section__hint"><?php echo esc_html( (string) $data['tax_summary'] ); ?></span>
 		</summary>
+		<div class="wp-bizwit-section__body">
 		<p class="description">
 			<?php esc_html_e( 'Many freelancers and small businesses do not need any of this. Leave it switched off and BizWit will not show a single tax field anywhere.', 'wp-bizwit' ); ?>
 		</p>
@@ -215,6 +218,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 				<td><input type="text" id="wp-bizwit-business-reg-no" name="business_reg_no" class="regular-text" value="<?php echo esc_attr( $value( 'business_reg_no' ) ); ?>" /></td>
 			</tr>
 		</table>
+	</div>
 	</details>
 
 	<details class="wp-bizwit-section">
@@ -222,6 +226,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 			<span class="wp-bizwit-section__title"><?php esc_html_e( 'Document numbering', 'wp-bizwit' ); ?></span>
 			<span class="wp-bizwit-section__hint"><code><?php echo esc_html( (string) $data['sample_number'] ); ?></code></span>
 		</summary>
+		<div class="wp-bizwit-section__body">
 		<table class="form-table" role="presentation">
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Number format', 'wp-bizwit' ); ?></th>
@@ -277,24 +282,27 @@ $value = static function ( string $key ) use ( $settings ): string {
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Bea meterai', 'wp-bizwit' ); ?></th>
 					<td>
-						<label for="wp-bizwit-stamp-duty">
-							<input type="checkbox" id="wp-bizwit-stamp-duty" name="apply_stamp_duty" value="1" <?php checked( ! empty( $settings['apply_stamp_duty'] ) ); ?> />
-							<?php esc_html_e( 'Ingatkan kebutuhan meterai pada kwitansi bernilai besar', 'wp-bizwit' ); ?>
-						</label>
-						<p class="description">
-							<?php
-							printf(
-								/* translators: 1: threshold amount, 2: duty amount */
-								esc_html__( 'Berdasarkan UU 10/2020, dokumen yang menyebut nilai uang di atas %1$s dikenai bea meterai %2$s.', 'wp-bizwit' ),
-								'<strong>' . esc_html( Money::format( Indonesia::METERAI_THRESHOLD, 'IDR' ) ) . '</strong>',
-								'<strong>' . esc_html( Money::format( Indonesia::METERAI_AMOUNT, 'IDR' ) ) . '</strong>'
-							);
-							?>
-						</p>
+						<div class="wp-bizwit-check-block">
+							<label class="wp-bizwit-check" for="wp-bizwit-stamp-duty">
+								<input type="checkbox" id="wp-bizwit-stamp-duty" name="apply_stamp_duty" value="1" <?php checked( ! empty( $settings['apply_stamp_duty'] ) ); ?> />
+								<span><?php esc_html_e( 'Ingatkan kebutuhan meterai pada kwitansi bernilai besar', 'wp-bizwit' ); ?></span>
+							</label>
+							<p class="description">
+								<?php
+								printf(
+									/* translators: 1: threshold amount, 2: duty amount */
+									esc_html__( 'Berdasarkan UU 10/2020, dokumen yang menyebut nilai uang di atas %1$s dikenai bea meterai %2$s.', 'wp-bizwit' ),
+									'<strong>' . esc_html( Money::format( Indonesia::METERAI_THRESHOLD, 'IDR' ) ) . '</strong>',
+									'<strong>' . esc_html( Money::format( Indonesia::METERAI_AMOUNT, 'IDR' ) ) . '</strong>'
+								);
+								?>
+							</p>
+						</div>
 					</td>
 				</tr>
 			<?php endif; ?>
 		</table>
+	</div>
 	</details>
 
 	<details class="wp-bizwit-section">
@@ -302,6 +310,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 			<span class="wp-bizwit-section__title"><?php esc_html_e( 'Advanced', 'wp-bizwit' ); ?></span>
 			<span class="wp-bizwit-section__hint"><?php echo esc_html( $region->label() ); ?></span>
 		</summary>
+		<div class="wp-bizwit-section__body">
 		<table class="form-table" role="presentation">
 			<tr>
 				<th scope="row"><label for="wp-bizwit-region"><?php esc_html_e( 'Business region', 'wp-bizwit' ); ?></label></th>
@@ -352,16 +361,19 @@ $value = static function ( string $key ) use ( $settings ): string {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'On uninstall', 'wp-bizwit' ); ?></th>
 				<td>
-					<label for="wp-bizwit-delete-data">
-						<input type="checkbox" id="wp-bizwit-delete-data" name="delete_data_on_uninstall" value="1" <?php checked( ! empty( $settings['delete_data_on_uninstall'] ) ); ?> />
-						<?php esc_html_e( 'Delete all BizWit data when the plugin is uninstalled', 'wp-bizwit' ); ?>
-					</label>
-					<p class="description">
-						<?php esc_html_e( 'Off by default. Deactivating the plugin never touches your data; only uninstalling with this box ticked does.', 'wp-bizwit' ); ?>
-					</p>
+					<div class="wp-bizwit-check-block">
+						<label class="wp-bizwit-check" for="wp-bizwit-delete-data">
+							<input type="checkbox" id="wp-bizwit-delete-data" name="delete_data_on_uninstall" value="1" <?php checked( ! empty( $settings['delete_data_on_uninstall'] ) ); ?> />
+							<span><?php esc_html_e( 'Delete all BizWit data when the plugin is uninstalled', 'wp-bizwit' ); ?></span>
+						</label>
+						<p class="description">
+							<?php esc_html_e( 'Off by default. Deactivating the plugin never touches your data; only uninstalling with this box ticked does.', 'wp-bizwit' ); ?>
+						</p>
+					</div>
 				</td>
 			</tr>
 		</table>
+	</div>
 	</details>
 
 	<?php submit_button( __( 'Save settings', 'wp-bizwit' ) ); ?>
