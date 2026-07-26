@@ -87,27 +87,13 @@ class Template_Post_Type {
 				'show_in_menu'        => false,
 				'show_in_rest'        => true,
 				'rest_base'           => 'bizwit-templates',
-				'capability_type'     => 'post',
+				// IMPORTANT: do not reuse an existing primitive (e.g.
+				// bizwit_manage_invoices) as a meta capability name while
+				// map_meta_cap is true — WordPress then treats that string as
+				// edit_post and maps has_cap() to do_not_allow without a post ID.
+				// Use a dedicated capability type so meta caps are unique.
+				'capability_type'     => array( 'bizwit_template', 'bizwit_templates' ),
 				'map_meta_cap'        => true,
-				// Use MANAGE_INVOICES: templates design invoice/receipt output.
-				// Full map required so edit_published_posts is not left as a
-				// core post cap (which would hide the menu for BizWit users).
-				'capabilities'        => array(
-					'edit_post'              => Capabilities::MANAGE_INVOICES,
-					'read_post'              => Capabilities::MANAGE_INVOICES,
-					'delete_post'            => Capabilities::MANAGE_INVOICES,
-					'edit_posts'             => Capabilities::MANAGE_INVOICES,
-					'edit_others_posts'      => Capabilities::MANAGE_INVOICES,
-					'edit_published_posts'   => Capabilities::MANAGE_INVOICES,
-					'publish_posts'          => Capabilities::MANAGE_INVOICES,
-					'read_private_posts'     => Capabilities::MANAGE_INVOICES,
-					'delete_posts'           => Capabilities::MANAGE_INVOICES,
-					'delete_private_posts'   => Capabilities::MANAGE_INVOICES,
-					'delete_published_posts' => Capabilities::MANAGE_INVOICES,
-					'delete_others_posts'    => Capabilities::MANAGE_INVOICES,
-					'edit_private_posts'     => Capabilities::MANAGE_INVOICES,
-					'create_posts'           => Capabilities::MANAGE_INVOICES,
-				),
 				'hierarchical'        => false,
 				'supports'            => array( 'title', 'editor', 'revisions', 'custom-fields' ),
 				'has_archive'         => false,
@@ -185,7 +171,7 @@ class Template_Post_Type {
 				'default'           => 'invoice',
 				'show_in_rest'      => true,
 				'auth_callback'     => static function (): bool {
-					return current_user_can( Capabilities::MANAGE_INVOICES );
+					return current_user_can( Capabilities::MANAGE_TEMPLATES );
 				},
 				'sanitize_callback' => static function ( $value ): string {
 					$value = sanitize_key( (string) $value );
@@ -203,7 +189,7 @@ class Template_Post_Type {
 				'default'           => false,
 				'show_in_rest'      => true,
 				'auth_callback'     => static function (): bool {
-					return current_user_can( Capabilities::MANAGE_INVOICES );
+					return current_user_can( Capabilities::MANAGE_TEMPLATES );
 				},
 				'sanitize_callback' => static function ( $value ): bool {
 					return (bool) $value;
@@ -342,7 +328,7 @@ class Template_Post_Type {
 			return;
 		}
 
-		if ( ! current_user_can( Capabilities::MANAGE_INVOICES ) ) {
+		if ( ! current_user_can( Capabilities::MANAGE_TEMPLATES ) ) {
 			return;
 		}
 

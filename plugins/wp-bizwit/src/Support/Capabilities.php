@@ -60,6 +60,16 @@ class Capabilities {
 	public const MANAGE_SETTINGS = 'bizwit_manage_settings';
 
 	/**
+	 * Create and edit document templates (Gutenberg).
+	 *
+	 * Primitive collection cap for the bizwit_template CPT
+	 * (capability_type bizwit_template / bizwit_templates).
+	 *
+	 * @var string
+	 */
+	public const MANAGE_TEMPLATES = 'edit_bizwit_templates';
+
+	/**
 	 * Role slug for a user who can do everything in the plugin.
 	 *
 	 * @var string
@@ -86,6 +96,21 @@ class Capabilities {
 			self::MANAGE_PAYMENTS,
 			self::VIEW_REPORTS,
 			self::MANAGE_SETTINGS,
+			// CPT primitives for document templates (capability_type mapping).
+			self::MANAGE_TEMPLATES,
+			'edit_bizwit_template',
+			'edit_others_bizwit_templates',
+			'edit_published_bizwit_templates',
+			'edit_private_bizwit_templates',
+			'publish_bizwit_templates',
+			'read_bizwit_template',
+			'read_private_bizwit_templates',
+			'delete_bizwit_template',
+			'delete_bizwit_templates',
+			'delete_others_bizwit_templates',
+			'delete_published_bizwit_templates',
+			'delete_private_bizwit_templates',
+			'create_bizwit_templates',
 		);
 	}
 
@@ -102,7 +127,7 @@ class Capabilities {
 	 *
 	 * @var string
 	 */
-	public const VERSION = '1.1.0';
+	public const VERSION = '1.2.0';
 
 	/**
 	 * Grant capabilities to administrators and create the plugin's own roles.

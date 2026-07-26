@@ -118,12 +118,11 @@ class Menu {
 
 		// Explicit Template submenu (CPT list). More reliable than depending
 		// only on show_in_menu when parent menus are built in admin_menu.
-		// Same capability as invoices — templates design printable invoices.
 		add_submenu_page(
 			Dashboard_Screen::SLUG,
 			__( 'Template', 'wp-bizwit' ),
 			__( 'Template', 'wp-bizwit' ),
-			Capabilities::MANAGE_INVOICES,
+			Capabilities::MANAGE_TEMPLATES,
 			'edit.php?post_type=' . Template_Post_Type::POST_TYPE
 		);
 	}
