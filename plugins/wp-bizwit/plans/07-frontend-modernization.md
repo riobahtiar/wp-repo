@@ -1,6 +1,6 @@
 # Plan 07 — Frontend modernization
 
-**Status:** Planned · **Target:** foundation in 0.3.x / 0.4.x · **Blocks:** heavy
+**Status:** In progress (Phase 1 tooling done) · **Target:** foundation in 0.3.x / 0.4.x · **Blocks:** heavy
 UI for 0.4+ features · **Architecture:** [`../docs/frontend-architecture.md`](../docs/frontend-architecture.md)
 
 > **For agentic workers:** implement phase-by-phase. Each phase must leave the
@@ -147,7 +147,7 @@ under two minutes from `docs/index.md`. **Met** (pending optional commit).
 **Goal:** `npm run build` produces Vite assets; `npm run dev` runs Vite dev
 server for HMR during local work.
 
-- [ ] **1.1** Add dependencies (dev unless noted):
+- [x] **1.1** Add dependencies (dev unless noted):
 
   ```bash
   cd wp-content/plugins/wp-bizwit
@@ -158,11 +158,12 @@ server for HMR during local work.
   Pin versions that satisfy the project dependency policy (maintained, recent).
   Do **not** add Vuetify/Element Plus.
 
-- [ ] **1.2** Create `vite.config.ts`:
+- [x] **1.2** Create `vite.config.ts`:
 
   - `plugins`: `@vitejs/plugin-vue`, `@tailwindcss/vite`
-  - `build.manifest`: true
+  - `build.manifest`: `'manifest.json'` → `build/manifest.json` (not `.vite/`)
   - `build.outDir`: `build`
+  - `build.emptyOutDir`: **false** — dual-pipeline with webpack; clean once in npm script
   - `build.rollupOptions.input`: multi-entry map
     - `admin`: `resources/admin/main.ts`
     - `dashboard`: `resources/screens/dashboard.ts` (can be stub)
@@ -184,8 +185,8 @@ server for HMR during local work.
     base: './',
     build: {
       outDir: 'build',
-      emptyOutDir: true,
-      manifest: true,
+      emptyOutDir: false, // preserve webpack output after dual-pipeline clean
+      manifest: 'manifest.json',
       rollupOptions: {
         input: {
           admin: path.resolve( __dirname, 'resources/admin/main.ts' ),
@@ -202,10 +203,10 @@ server for HMR during local work.
   } );
   ```
 
-- [ ] **1.3** Add `tsconfig.json` / `tsconfig.node.json` with `strict: true`,
+- [x] **1.3** Add `tsconfig.json` / `tsconfig.node.json` with `strict: true`,
       paths for `@/*` and `@ui/*`.
 
-- [ ] **1.4** Add `resources/styles/admin.css`:
+- [x] **1.4** Add `resources/styles/admin.css`:
 
   ```css
   @import "tailwindcss";
@@ -221,19 +222,21 @@ server for HMR during local work.
   }
   ```
 
-- [ ] **1.5** Stub entries:
+- [x] **1.5** Stub entries:
 
   `resources/admin/main.ts` — import styles only or register nothing.  
   `resources/screens/dashboard.ts` — `createApp` mount helper import, no-op if
-  `#wp-bizwit-dashboard` missing.
+  `#wp-bizwit-dashboard` missing. (render function, not runtime `template:`)
 
-- [ ] **1.6** Update `package.json` scripts:
+- [x] **1.6** Update `package.json` scripts:
 
   ```json
   {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "prebuild:clean": "node -e \"require('fs').rmSync('build',{recursive:true,force:true})\"",
+    "build": "vue-tsc --noEmit && npm run prebuild:clean && npm run build:legacy && vite build",
     "build:assets": "vite build",
+    "build:legacy": "wp-scripts build --blocks-manifest",
     "preview": "vite preview"
   }
   ```
@@ -242,12 +245,12 @@ server for HMR during local work.
   once Vite replaces admin assets (Phase 2). Until then, rename clearly:
   `build:legacy` vs `build` to avoid ambiguity.
 
-- [ ] **1.7** `.gitignore`: ensure `node_modules/` ignored; decide whether
+- [x] **1.7** `.gitignore`: ensure `node_modules/` ignored; decide whether
       `build/` is committed (recommended for wordpress.org release branches /
       tags: **commit built assets on release**, or build in CI before deploy —
       match existing `.github/workflows/deploy.yml` which already builds).
 
-- [ ] **1.8** Run `npm run build` — expect `build/manifest.json` and hashed
+- [x] **1.8** Run `npm run build` — expect `build/manifest.json` and hashed
       assets. Commit tooling + stubs.
 
 **Acceptance:**
@@ -255,6 +258,7 @@ server for HMR during local work.
 - `npm run build` exits 0.
 - No Livewire/Acorn packages.
 - PHPCS/PHPStan still green (PHP untouched or only trivial).
+- Dual-pipeline: both webpack handle files and Vite `manifest.json` + `assets/` present.
 
 ---
 

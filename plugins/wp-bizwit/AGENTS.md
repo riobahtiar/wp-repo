@@ -333,7 +333,7 @@ Interactive product UI uses **Vue 3 + Vite 8 + Tailwind v4**. Full decisions:
 
 **Composer scripts:** `phpstan`, `phpcs`, `phpcbf`, `i18n:extract`, `i18n:compile`
 
-**NPM scripts:** `start`, `build`, `lint:js`, `lint:style`, `format`, `create-block`, `env:*`
+**NPM scripts:** `dev` (Vite HMR), `build` (clean + legacy webpack + Vite), `build:legacy`, `build:assets`, `start:legacy`, `lint:js`, `lint:style`, `format`, `create-block`, `env:*`
 
 ### Feature quick reference
 

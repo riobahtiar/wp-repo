@@ -12,12 +12,29 @@ npm run build
 
 | Command | Purpose |
 |---------|---------|
-| `npm run start` | *(Legacy)* Rebuild assets via `@wordpress/scripts` — retiring in [plan 07](../plans/07-frontend-modernization.md) |
-| `npm run build` | Production asset build (Vite after plan 07 Phase 1) |
+| `npm run dev` | Vite HMR dev server for Vue product UI |
+| `npm run build` | Typecheck, clean `build/`, webpack legacy assets, then Vite (dual pipeline) |
+| `npm run build:legacy` | Webpack / `@wordpress/scripts` only (`wp-bizwit-admin.*`, blocks) |
+| `npm run build:assets` | Vite production build only (no clean, no webpack) |
+| `npm run start:legacy` | Watch mode for webpack legacy assets |
 | `./vendor/bin/phpcs` | WordPress Coding Standards |
 | `./vendor/bin/phpcbf` | Auto-fix coding standard violations |
 | `./vendor/bin/phpstan analyse --memory-limit=1G` | Static analysis at level 6 |
 | `npm run test:php` | PHPUnit suite in the wp-env container |
+
+### Dual-pipeline assets (temporary)
+
+Until plan 07 Phase 6 retires webpack, **both** toolchains write into `build/`:
+
+1. `prebuild:clean` removes `build/` once.
+2. `build:legacy` emits `wp-bizwit-admin.js` / `.css` / `.asset.php` (and any blocks) — still enqueued by PHP today.
+3. Vite builds multi-entry product UI with `emptyOutDir: false` so it **adds** hashed files under `build/assets/` and writes **`build/manifest.json`** without wiping the webpack output.
+
+Do not run a bare `vite build` with `emptyOutDir: true` against a populated `build/` — that deletes the legacy assets PHP still loads.
+
+### CSS scope strategy
+
+Tailwind v4 utilities are nested under `.wp-bizwit` in `resources/styles/admin.css` (no global preflight). App markup must live inside `<div class="wrap wp-bizwit">`. Theme tokens as CSS variables are fine on the wrapper; never restyle `#wpadminbar` / `#adminmenu`. Details: [frontend-architecture.md](frontend-architecture.md).
 
 Interactive UI stack, performance budgets and REST conventions:
 [frontend-architecture.md](frontend-architecture.md).
@@ -35,7 +52,8 @@ src/
     Screens/      One class per screen, extending Screen
     Tables/       WP_List_Table subclasses
     Views/        Templates. Receive a single $data array — no extract()
-resources/        SCSS and JS entry points, compiled by @wordpress/scripts
+resources/        Vue/Vite entries (admin, screens, styles) + legacy webpack SCSS/JS
+build/            Dual output: webpack handle files + Vite assets + manifest.json
 languages/        Translation template and the id_ID catalogue
 tests/php/        PHPUnit tests
 ```

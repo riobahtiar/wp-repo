@@ -13,7 +13,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "prebuild:clean": "node -e \"require('fs').rmSync('build',{recursive:true,force:true})\"",
+    "build": "vue-tsc --noEmit && npm run prebuild:clean && npm run build:legacy && vite build",
     "typecheck": "vue-tsc --noEmit",
     "build:assets": "vite build",
     "preview": "vite preview",

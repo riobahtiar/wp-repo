@@ -23,9 +23,13 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   and [plan 07](plans/07-frontend-modernization.md): Vue 3 + Vite 8 + Tailwind v4
   for rich admin UI; Livewire and Roots Acorn explicitly out of scope for the
   distributable plugin; performance budgets and wordpress.org packaging rules.
+- **Vite 8 + Vue 3 + Tailwind v4 toolchain** (plan 07 Phase 1): multi-entry
+  build (`admin`, `dashboard`), dual-pipeline with legacy webpack into `build/`,
+  `build/manifest.json`, scoped admin CSS under `.wp-bizwit`. PHP enqueue of
+  Vite assets is Phase 2.
 
-Next up: [Frontend foundation](plans/07-frontend-modernization.md) (tooling), then
-[Projects](plans/01-projects.md).
+Next up: [Frontend foundation](plans/07-frontend-modernization.md) (PHP asset
+bridge), then [Projects](plans/01-projects.md).
 
 ## [0.3.0] — 2026-07-27
 
