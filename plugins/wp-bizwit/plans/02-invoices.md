@@ -11,6 +11,14 @@ everything Indonesian paperwork expects.
 This is the most consequential screen in the plugin. A wrong invoice is a
 compliance problem for the user, not a bug report.
 
+## UI approach
+
+Requires the [frontend foundation](07-frontend-modernization.md). The **line-item
+editor** is a Vue screen (dynamic rows, tax preview, money inputs). List can be
+`WP_List_Table`. **Printable faktur** stays server-rendered HTML/PDF — Vue does
+not own document output. Money in JSON is always integer minor units. Stack and
+budgets: [`../docs/frontend-architecture.md`](../docs/frontend-architecture.md).
+
 ## Why it is not trivial
 
 **The arithmetic has real traps.**

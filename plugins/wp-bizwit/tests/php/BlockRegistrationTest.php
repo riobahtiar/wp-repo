@@ -8,8 +8,8 @@
  *   1. WordPress reports it through the editor-facing REST API (/wp/v2/block-types), and
  *   2. each asset file referenced in its block.json exists in the build output.
  *
- * It needs no edits when blocks are added or renamed, and is skipped when no blocks
- * are present (the fresh boilerplate state).
+ * It needs no edits when blocks are added or renamed, and is skipped when no
+ * blocks are present yet.
  *
  * @package WP_BizWit
  */

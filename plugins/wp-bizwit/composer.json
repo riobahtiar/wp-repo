@@ -1,14 +1,17 @@
 {
-    "name": "juvo/wordpress-plugin-boilerplate",
-    "description": "A boilerplate for WordPress plugin development. Supercharged with Autoloading, @wordpress/scripts, PHPStan and PHPCS.",
-    "license": "GPL-3.0-or-later",
+    "name": "wp-bizwit/wp-bizwit",
+    "description": "Business administration for Indonesian companies and UMKM — clients, projects, invoices and payment receipts inside wp-admin.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
-            "name": "Justin Vogt",
-            "email": "mail@justin-vogt.com",
-            "homepage": "https://justin-vogt.com"
+            "name": "Rio",
+            "email": "riomyid@gmail.com"
         }
     ],
+    "require": {
+        "php": ">=8.0"
+    },
     "require-dev": {
         "composer/installers": "^v2",
         "phpstan/phpstan": "^2.1.2",
@@ -47,8 +50,8 @@
         "clean:vendor": [
             "rm -rf vendor && rm -rf vendor-prefixed"
         ],
-        "phpstan": "@php ./vendor/bin/phpstan analyse",
-        "phpstan:ci": "@php ./vendor/bin/phpstan analyse --error-format=checkstyle | cs2pr",
+        "phpstan": "@php ./vendor/bin/phpstan analyse --memory-limit=1G",
+        "phpstan:ci": "@php ./vendor/bin/phpstan analyse --memory-limit=1G --error-format=checkstyle | cs2pr",
         "phpcs": "@php ./vendor/bin/phpcs --report-full",
         "phpcs:ci": "@phpcs --report-checkstyle=./phpcs-report.xml",
         "phpcbf": "@php ./vendor/bin/phpcbf",
@@ -71,12 +74,6 @@
                     "phpstan/phpstan",
                     "szepeviktor/phpstan-wordpress"
                 ]
-            },
-            "exclude_from_prefix": {
-                "packages": [
-                    "timber/timber",
-                    "twig/twig"
-                ]
             }
         }
     },
@@ -89,8 +86,5 @@
             "composer/installers": true,
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
-    },
-    "require": {
-        "php": ">=8.0"
     }
 }

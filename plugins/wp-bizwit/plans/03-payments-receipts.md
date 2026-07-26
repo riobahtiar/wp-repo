@@ -11,6 +11,13 @@ and issue a kwitansi the client can sign.
 records payments. It never initiates, processes, or holds money. No gateway, no
 card handling, no bank API that moves funds.
 
+## UI approach
+
+Allocation / multi-payment UI may be Vue once [07](07-frontend-modernization.md)
+exists. **Kwitansi print** is server-rendered (terbilang, meterai room, signature
+block) — not a client-only PDF. Same stack rules as invoices:
+[`../docs/frontend-architecture.md`](../docs/frontend-architecture.md).
+
 ## Why it is not trivial
 
 **Partial payments are the normal case.** Indonesian B2B pays in termin, so an

@@ -14,8 +14,10 @@ non-trivial changes:
 | [`docs/culture.md`](docs/culture.md) | Designing any form, copy, notification or printable document |
 | [`docs/data-model.md`](docs/data-model.md) | Changing the schema or adding a repository |
 | [`docs/development.md`](docs/development.md) | Running the tooling, or adding translatable strings |
+| [`docs/frontend-architecture.md`](docs/frontend-architecture.md) | **Any interactive admin UI** — Vue/Vite/Tailwind stack, budgets, no Livewire/Acorn |
 | [`SECURITY.md`](SECURITY.md) | **Any change that touches data.** Contains the review checklist |
 | [`plans/`](plans/) | Starting work on an unbuilt feature — the plan states the traps |
+| [`plans/07-frontend-modernization.md`](plans/07-frontend-modernization.md) | Implementing the frontend foundation (phased tasks) |
 | [`plans/PROGRESS.md`](plans/PROGRESS.md) | Checking what is actually built before assuming |
 
 ---
@@ -276,29 +278,48 @@ Tests:
   `--memory-limit=1G`. The symptom is `Child process error (exit code 255)`
   from a parallel worker, which is not a code problem.
 
-- **`phpcs.xml` was changed from the boilerplate default.** Upstream excludes
-  `*.js`, `*.ts` and `*.tsx` by pattern, but PHPCS exclude patterns are
-  unanchored regular expressions: `*.ts` compiles to `.*.ts` and matches any
-  absolute path containing "ts" — including a checkout under `~/Projects/`,
-  which silently excluded every file and made `phpcs` exit 0 having scanned
-  nothing. This plugin scopes by `<arg name="extensions" value="php"/>` and
-  anchors directory excludes with `type="relative"` and a leading `^`. If you
-  sync `phpcs.xml` from upstream, re-apply that fix and verify with
-  `./vendor/bin/phpcs -v` that the "files in queue" count is non-zero.
+- **`phpcs.xml` scopes by PHP extension** and anchors directory excludes with
+  `type="relative"` and a leading `^`. PHPCS exclude patterns are unanchored
+  regexes; a naive `*.ts` exclude can match any path containing "ts" (including
+  `~/Projects/`) and silently scan nothing. If `phpcs` exits 0 with no findings,
+  run `./vendor/bin/phpcs -v` and check the "files in queue" count.
 
 ---
 
+### Ownership and dependencies
+
+This plugin is **self-contained and first-party**. It is not tied to an external
+plugin boilerplate and must not be "synced" from one. Patterns under `src/`
+(Loader, Activator, repositories, screens) are **owned here** and may be
+changed freely.
+
+**Production `composer.json` `require` should stay empty** unless a library
+clearly earns its place. When a runtime PHP library is added, prefix it into
+`vendor-prefixed/` with Strauss so it cannot clash with other plugins.
+
+Dev tools (PHPStan, WPCS, PHPUnit, `@wordpress/scripts`) may use Composer/npm
+packages that are widely used, actively maintained (updated within ~8 months),
+and from known maintainers — see [`docs/development.md`](docs/development.md#dependency-policy).
+
 ### Architecture & Source Layout
 
-- **All plugin logic lives in `src/`**. Organize by feature/context (e.g., `Admin/`, `Frontend/`, `Integrations/`).
+- **All plugin logic lives in `src/`**. Organize by feature/context (e.g., `Admin/`, `Database/`, `Repositories/`).
 - **Main plugin file (`wp-bizwit.php`) only bootstraps**. Never place business logic here.
-- **Loader pattern**: Register hooks, filters, shortcodes, CLI commands, and abilities via the `Loader` class. Do not register hooks in constructors.
+- **Loader pattern**: Register hooks, filters, shortcodes and CLI commands via `Loader`. Do not register hooks in constructors.
 
-### Asset Management
+### Asset management (target stack)
 
-- **Assets**: Place in `resources/admin/` and `resources/frontend/`.
-- **Build**: `@wordpress/scripts` handles compilation. Entry points in `webpack.config.js`.
-- **Scripts**: `npm run start` (watch), `npm run build` (production).
+Interactive product UI uses **Vue 3 + Vite 8 + Tailwind v4**. Full decisions:
+[`docs/frontend-architecture.md`](docs/frontend-architecture.md). Implementation:
+[`plans/07-frontend-modernization.md`](plans/07-frontend-modernization.md).
+
+- **Do not** add Livewire, Roots Acorn, or a second SPA framework to this plugin.
+- **Assets (target)**: `resources/admin/`, `resources/screens/`, `resources/ui/`,
+  `resources/styles/` → `npm run build` → `build/` (manifest enqueued from PHP).
+- **Legacy**: webpack / `@wordpress/scripts` may still exist until plan 07 Phase 6
+  removes them — do not add new jQuery admin features on the legacy path.
+- **Scope CSS** under `.wp-bizwit` so Tailwind never restyles core wp-admin.
+- **Enqueue by screen** — never load the invoice bundle on every BizWit page.
 
 ### Quality Assurance
 
@@ -306,29 +327,24 @@ Tests:
 - **JS**: ESLint (`.eslintrc`)
 - **CI/CD**: GitHub Actions in `.github/workflows/`
 
-### Key Primitives
+### Key primitives
 
-**Loader methods:**
-- `add_action()`, `add_filter()` - WordPress hooks
-- `add_shortcode()` - Shortcode registration
-- `add_cli()` - WP-CLI commands
-- `add_ability()` - Abilities API (WP 6.9+)
+**Loader methods:** `add_action()`, `add_filter()`, `add_shortcode()`, `add_cli()`
 
 **Composer scripts:** `phpstan`, `phpcs`, `phpcbf`, `i18n:extract`, `i18n:compile`
 
 **NPM scripts:** `start`, `build`, `lint:js`, `lint:style`, `format`, `create-block`, `env:*`
 
-### Feature Quick Reference
+### Feature quick reference
 
-- **Blocks**: Run `npm run create-block`. Registration is automatic; `tests/php/BlockRegistrationTest.php` generically guards that every built block is loaded (via `/wp/v2/block-types`) and its assets exist. Use the `wp-plugin-bp` skill for block guidance.
-- **Abilities API**: Implement interfaces in `src/Abilities/`, register via Loader. `tests/php/AbilityRegistrationTest.php` generically guards that every `Ability_Interface` implementation (and its category) is registered. Use the `wp-plugin-bp` skill for ability guidance.
-- **i18n**: Indonesian (`id_ID`) is a shipped, complete translation and the primary audience's language — **an untranslated new string is an unfinished string**. The Composer scripts are broken in this checkout; use the `$(command -v wp)` commands in [`docs/development.md`](docs/development.md#translations).
-- **wp-env**: Start with `npm run env:start`. Use the `wp-plugin-bp` skill when tests are involved.
-- **Testing**: Run application tests with `npm run test:php`. Use the `wp-plugin-bp` skill for testing guidance.
-- **Plugin upgrades**: Use the `wp-plugin-bp` skill or ask naturally to sync with upstream project conventions.
-- **Official WordPress skills**: `.agents/skills/wp-*/` contains focused skills for block development, Interactivity API, PHPStan, project triage, and REST API work. Use the `wp-plugin-bp` skill `wp-skills` workflow to refresh or add official WordPress skills.
-- **Composer setup**: `.agents/` ships in the initial Composer package so setup can run `wp-plugin-bp/scripts/plugin-replace.php`; replacement cleanup removes `.agents/`, then setup asks whether to install agent skills for ongoing work.
-- **Missing skills**: If `wp-plugin-bp` is unavailable in an initialized plugin, install it with `npx skills add https://github.com/JUVOJustin/wordpress-plugin-boilerplate --skill=*`.
+- **Blocks** (optional): `npm run create-block`. Registration is automatic when
+  `build/Blocks` exists; `tests/php/BlockRegistrationTest.php` guards built blocks.
+- **i18n**: Indonesian (`id_ID`) is a shipped, complete translation — **an
+  untranslated new string is unfinished**. Prefer global `wp` for extract/compile;
+  see [`docs/development.md`](docs/development.md#translations).
+- **wp-env**: `npm run env:start`. PHPUnit: `npm run test:php`.
+- **Testing**: Prefer repository and domain tests (`MoneyTest`,
+  `IndonesiaRegionTest`); extend those before changing money or region logic.
 
 ### Maintaining the plugin
 
@@ -339,6 +355,7 @@ When adding new primitives, patterns, or documentation to this plugin:
 3. Add the Indonesian translation for any new user-facing string
 4. If the change touches wording, tax logic, money or documents, check it against
    [`docs/indonesia.md`](docs/indonesia.md) before considering it done
+5. Do not reintroduce an external boilerplate dependency or scaffold sync path
 
 ### The two rules that override everything else here
 

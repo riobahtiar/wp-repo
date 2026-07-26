@@ -7,8 +7,6 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://justin-vogt.com
- * @since             1.0.0
  * @package           WP_BizWit
  *
  * @wordpress-plugin

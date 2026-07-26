@@ -31,7 +31,8 @@ a migration. Do not run a real business on this yet.
 | Onboarding | ⬜ Not started | [Plan](04-ux-and-onboarding.md) |
 | Import / export | 🔒 Deferred | [Plan](05-import-export.md) — gated on 1.0 GA |
 | Reports | ⬜ Not started | Not yet planned |
-| REST API | ⬜ Not started | Not yet planned |
+| REST API | ⬜ Not started | Starts with health in [07](07-frontend-modernization.md) |
+| Frontend (Vue/Vite/Tailwind) | ⬜ Planned | [Architecture](../docs/frontend-architecture.md) · [Plan 07](07-frontend-modernization.md) |
 
 Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferred
 
@@ -64,14 +65,20 @@ Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferre
 
 ## Route to 1.0
 
-1. `0.4.0` — Projects
-2. `0.5.0` — Invoices, with printable output
-3. `0.6.0` — Payments and kwitansi with terbilang and meterai
-4. `0.7.0` — Onboarding, dashboard, UX polish
-5. `0.8.0` — Repository and screen test coverage, accessibility pass
-6. `0.9.0` — Security review, performance pass, release candidate
-7. `1.0.0` — General availability
-8. post-1.0 — Import / export
+1. `0.3.x` — Frontend foundation in parallel ([07](07-frontend-modernization.md)):
+   Vite + Vue 3 + Tailwind v4, REST health, design-system seed, pilot island.
+   Does not replace the domain roadmap; unblocks rich UI for later screens.
+2. `0.4.0` — Projects (list may stay `WP_List_Table`; termin builder may use Vue)
+3. `0.5.0` — Invoices, with printable output (line-item editor is a Vue screen)
+4. `0.6.0` — Payments and kwitansi with terbilang and meterai
+5. `0.7.0` — Onboarding, dashboard, UX polish
+6. `0.8.0` — Repository and screen test coverage, accessibility pass
+7. `0.9.0` — Security review, performance pass (bundle budgets), release candidate
+8. `1.0.0` — General availability
+9. post-1.0 — Import / export
 
 The import/export gate is deliberate: an importer that writes malformed rows into
 a beta schema creates data problems that outlive the beta.
+
+**Stack boundary:** the distributable plugin does **not** use Livewire or Roots
+Acorn. See [`../docs/frontend-architecture.md`](../docs/frontend-architecture.md).

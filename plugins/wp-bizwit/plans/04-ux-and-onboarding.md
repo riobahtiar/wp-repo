@@ -35,9 +35,12 @@ and never block.
 able to find it without being told a section exists. Summaries carrying current
 state is the current answer; it needs testing on real users.
 
-**No JavaScript is a deliberate constraint so far.** Line item repeaters in
-[02-invoices.md](02-invoices.md) will need JS. Where it appears, it must enhance
-a form that already works without it.
+**JavaScript is no longer forbidden — it is constrained.** Product UI uses Vue
+islands per [`../docs/frontend-architecture.md`](../docs/frontend-architecture.md).
+Empty states, skeletons and shared chrome should come from `@ui` components in
+[07-frontend-modernization.md](07-frontend-modernization.md). Progressive
+enhancement still applies: capability checks and critical writes stay on PHP;
+slow networks must get skeletons and small chunks, not a multi‑hundred‑KB wall.
 
 ## Scope
 

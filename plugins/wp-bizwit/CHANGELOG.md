@@ -11,7 +11,21 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-Nothing yet. Next up: [Projects](plans/01-projects.md).
+### Changed
+- **Detached from the JUVO WordPress Plugin Boilerplate.** The package identity,
+  docs and CI no longer point at upstream scaffold; tooling and patterns are
+  first-party. Removed unused Abilities API scaffold (no implementations) and
+  simplified `Loader` to actions, filters, shortcodes and WP-CLI only.
+- Composer package renamed to `wp-bizwit/wp-bizwit`.
+
+### Added
+- **Frontend architecture** ([docs/frontend-architecture.md](docs/frontend-architecture.md))
+  and [plan 07](plans/07-frontend-modernization.md): Vue 3 + Vite 8 + Tailwind v4
+  for rich admin UI; Livewire and Roots Acorn explicitly out of scope for the
+  distributable plugin; performance budgets and wordpress.org packaging rules.
+
+Next up: [Frontend foundation](plans/07-frontend-modernization.md) (tooling), then
+[Projects](plans/01-projects.md).
 
 ## [0.3.0] — 2026-07-27
 

@@ -1,14 +1,8 @@
 <?php
 /**
- * The file that defines the core plugin class
+ * Core plugin class — wires hooks, admin screens, assets and optional blocks.
  *
- * A class definition that includes attributes and functions used across both the
- * public-facing side of the site and the admin area.
- *
- * @link       http://example.com
- * @since      1.0.0
- *
- * @package    WP_BizWit
+ * @package WP_BizWit
  */
 
 namespace WP_BizWit;
@@ -25,17 +19,7 @@ use WP_BizWit\Repositories\Client_Repository;
 use WP_BizWit\Repositories\Stats_Repository;
 
 /**
- * The core plugin class.
- *
- * This is used to define internationalization, admin-specific hooks, and
- * public-facing site hooks.
- *
- * Also maintains the unique identifier of this plugin as well as the current
- * version of the plugin.
- *
- * @since      1.0.0
- * @package    WP_BizWit
- * @author     Justin Vogt <mail@juvo-design.de>
+ * Boots the plugin: locale, schema check, admin menu, public assets, blocks.
  */
 class WP_BizWit {
 
@@ -52,13 +36,7 @@ class WP_BizWit {
 	protected Loader $loader;
 
 	/**
-	 * Define the core functionality of the plugin.
-	 *
-	 * Set the plugin name and the plugin version that can be used throughout the plugin.
-	 * Load the dependencies, define the locale, and set the hooks for the admin area and
-	 * the public-facing side of the site.
-	 *
-	 * @since    1.0.0
+	 * Wire locale, schema, admin and public hooks.
 	 */
 	public function __construct() {
 
@@ -85,27 +63,14 @@ class WP_BizWit {
 	}
 
 	/**
-	 * Load the required dependencies for this plugin.
-	 *
-	 * Create an instance of the loader which will be used to register the hooks
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
+	 * Create the hook loader.
 	 */
 	private function load_dependencies(): void {
-
 		$this->loader = new Loader();
 	}
 
 	/**
-	 * Define the locale for this plugin for internationalization.
-	 *
-	 * Uses the i18n class in order to set the domain and to register the hook
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
+	 * Load the plugin text domain.
 	 */
 	private function set_locale(): void {
 		load_plugin_textdomain(
@@ -148,11 +113,7 @@ class WP_BizWit {
 	}
 
 	/**
-	 * Register all of the hooks related to the public-facing functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
+	 * Register public-facing asset hooks.
 	 */
 	private function define_public_hooks(): void {
 
@@ -241,24 +202,14 @@ class WP_BizWit {
 	}
 
 	/**
-	 * Register Gutenberg blocks.
+	 * Register any Gutenberg blocks present under build/Blocks (optional).
 	 *
-	 * Registers all Gutenberg blocks from the Blocks directory.
-	 * Block assets are loaded from the build/Blocks directory using a manifest file.
-	 * Uses the metadata collection API (WP 6.8+).
-	 *
-	 * JSON Translations are loaded automatically. Use `npm run i18n:compile` to generate translation files from .po files.
-	 *
-	 * To localize scripts you need to use `wp_localize_script`.
-	 * The handle can be generated with `generate_block_asset_handle('wp-bizwit/block-name', 'editorScript')`.
-	 *
-	 * @link https://make.wordpress.org/core/2025/03/13/more-efficient-block-type-registration-in-6-8/
-	 * @link https://developer.wordpress.org/reference/functions/generate_block_asset_handle/
+	 * No-op when the project has no blocks yet. Uses the metadata collection
+	 * API (WP 6.8+) when a manifest exists.
 	 *
 	 * @return void
 	 */
 	public function register_blocks(): void {
-
 		$manifest_file = WP_BIZWIT_PATH . 'build/blocks-manifest.php';
 		$blocks_folder = WP_BIZWIT_PATH . 'build/Blocks';
 

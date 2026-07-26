@@ -15,7 +15,8 @@ elsewhere get a generic international profile.
 > "Payments" means recording a payment that already happened elsewhere and
 > issuing the matching receipt. There is no gateway integration by design.
 
-Built on the [JUVO WordPress Plugin Boilerplate](https://github.com/JUVOJustin/wordpress-plugin-boilerplate).
+Self-contained WordPress plugin. Runtime code lives under `src/` with Composer
+autoload; production has no required third-party PHP packages beyond PHP itself.
 
 ---
 

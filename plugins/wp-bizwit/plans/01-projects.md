@@ -29,6 +29,15 @@ absent or a stub, and a stub that silently reads zero looks like a bug.
 directly with no project in between. Projects must be optional everywhere,
 including on the invoice screen.
 
+## UI approach
+
+Follow [`../docs/frontend-architecture.md`](../docs/frontend-architecture.md).
+List can stay `WP_List_Table` + PHP form for v1 of this plan. **Termin builder**
+(ordered stages, amounts) is the first good Vue island once
+[07-frontend-modernization.md](07-frontend-modernization.md) Phase 5 is done —
+do not block a minimal PHP projects CRUD on the full design system if foundation
+is mid-flight; prefer foundation first when both are in the same sprint.
+
 ## Scope
 
 - Projects list: `WP_List_Table` with search, client filter, status filter.

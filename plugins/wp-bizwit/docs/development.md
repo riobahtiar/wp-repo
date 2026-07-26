@@ -12,12 +12,15 @@ npm run build
 
 | Command | Purpose |
 |---------|---------|
-| `npm run start` | Rebuild assets on change |
-| `npm run build` | Production asset build |
+| `npm run start` | *(Legacy)* Rebuild assets via `@wordpress/scripts` — retiring in [plan 07](../plans/07-frontend-modernization.md) |
+| `npm run build` | Production asset build (Vite after plan 07 Phase 1) |
 | `./vendor/bin/phpcs` | WordPress Coding Standards |
 | `./vendor/bin/phpcbf` | Auto-fix coding standard violations |
 | `./vendor/bin/phpstan analyse --memory-limit=1G` | Static analysis at level 6 |
 | `npm run test:php` | PHPUnit suite in the wp-env container |
+
+Interactive UI stack, performance budgets and REST conventions:
+[frontend-architecture.md](frontend-architecture.md).
 
 ## Layout
 
@@ -138,16 +141,35 @@ phar that bundles the i18n commands. Use `$(command -v wp)` as shown above.
 symptom is `Child process error (exit code 255)` from a parallel worker, which
 looks like a code failure but is not.
 
-**`phpcs.xml` differs from the boilerplate default, deliberately.** Upstream
-excludes `*.js`, `*.ts` and `*.tsx` by pattern, but PHPCS exclude patterns are
-unanchored regular expressions: `*.ts` compiles to `.*.ts` and matches any
-absolute path containing "ts" — including a checkout under `~/Projects/`, which
-silently excluded every file and made `phpcs` exit 0 having scanned nothing. This
-project scopes by `<arg name="extensions" value="php"/>` and anchors directory
-excludes with `type="relative"` and a leading `^`.
+**`phpcs.xml` scopes by PHP extension and anchors directory excludes.** PHPCS
+exclude patterns are unanchored regular expressions: a pattern like `*.ts`
+compiles to `.*.ts` and matches any absolute path containing "ts" — including a
+checkout under `~/Projects/`, which would silently exclude every file. This
+project uses `<arg name="extensions" value="php"/>` and
+`type="relative"` excludes with a leading `^`. If PHPCS reports no findings, run
+`./vendor/bin/phpcs -v` and confirm the "files in queue" count is non-zero.
 
-If you sync `phpcs.xml` from upstream, re-apply that fix and verify with
-`./vendor/bin/phpcs -v` that the "files in queue" count is non-zero.
+## Dependency policy
+
+Prefer a self-contained plugin. **Production `require` stays empty** unless a
+library clearly earns its place. Runtime third-party PHP packages (when any are
+added) are namespaced into `vendor-prefixed/` via Strauss so they cannot clash
+with other plugins.
+
+Dev tooling may use Composer packages when they meet all of:
+
+1. **Widely used or well-maintained** (roughly 1,000+ dependents, or active
+   maintenance by a known project/org — WordPress.org tooling, PHPStan, WPCS).
+2. **Updated within the last eight months.**
+3. **Trusted maintainer or reputation** for solid releases.
+
+Do not pull scaffolding templates, “sync from upstream boilerplate” scripts, or
+thin wrapper packages that we can implement in a few dozen lines of first-party
+code.
+
+**Frontend runtime:** prefer Vue only (plus tiny intentional helpers). Do not
+add Livewire, Acorn, or large UI kits to the distributable plugin. See
+[frontend-architecture.md](frontend-architecture.md).
 
 **`mysql` is not on `PATH`** in the Herd + Dbngin setup this project is developed
 against, so `wp db query` fails. Use `wp eval` with `$wpdb` instead.

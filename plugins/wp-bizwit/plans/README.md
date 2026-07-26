@@ -17,6 +17,7 @@ currently true of the codebase lives in [`PROGRESS.md`](PROGRESS.md).
 | [04-ux-and-onboarding.md](04-ux-and-onboarding.md) | Partly done | 0.7.0 |
 | [05-import-export.md](05-import-export.md) | **Deferred until 1.0 GA** | post-1.0 |
 | [06-hardening-and-release.md](06-hardening-and-release.md) | Planned | 1.0.0 |
+| [07-frontend-modernization.md](07-frontend-modernization.md) | Planned | Foundation for rich UI (0.3.x–0.4.x); consumed by 0.4+ |
 
 ## Status vocabulary
 

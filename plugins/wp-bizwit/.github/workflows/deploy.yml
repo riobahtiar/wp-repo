@@ -7,13 +7,11 @@ on:
 
 jobs:
   setup:
-    if: github.repository != 'JUVOJustin/wordpress-plugin-boilerplate'
     uses: ./.github/workflows/setup.yml
     with:
       mode: 'prod'
 
   deploy:
-    if: github.repository != 'JUVOJustin/wordpress-plugin-boilerplate'
     runs-on: ubuntu-latest
     needs: setup
 
