@@ -12,6 +12,7 @@ payment receipts — **built for Indonesian companies and UMKM first**.
 | [data-model.md](data-model.md) | The seven database tables, why custom tables, and the rules the schema depends on |
 | [development.md](development.md) | Build, lint, test, translation workflow, dependency policy, and tooling traps |
 | [frontend-architecture.md](frontend-architecture.md) | Vue 3 + Vite + Tailwind decisions, performance budgets, REST conventions, wordpress.org packaging — **read before any interactive UI work** |
+| [performance.md](performance.md) | Measured gzip baselines, re-measure commands, soft bundle gate |
 
 ## The two things that shape every decision here
 

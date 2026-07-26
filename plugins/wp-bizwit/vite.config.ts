@@ -4,9 +4,10 @@ import { fileURLToPath } from 'node:url';
 
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
-import { defineConfig } from 'vite';
+import { defineConfig, type PluginOption } from 'vite';
 
 const rootDir = path.dirname( fileURLToPath( import.meta.url ) );
+const analyze = process.env.ANALYZE === '1' || process.env.ANALYZE === 'true';
 
 /**
  * Vite multi-entry build for wp-admin product UI.
@@ -16,33 +17,54 @@ const rootDir = path.dirname( fileURLToPath( import.meta.url ) );
  * to the built HTML/manifest so the plugin path stays portable.
  *
  * Dev: `npm run dev` — HMR server; PHP enqueue for dev is also Phase 2.
+ * Analyze: `npm run build:analyze` (sets ANALYZE=1) → build/stats.html
  * Unit: `npm run test:unit` (Vitest, same resolve aliases).
+ *
+ * rollup-plugin-visualizer is ESM-only; load it via dynamic import so Vite's
+ * config bundler does not try to `require()` it on normal builds.
  */
-export default defineConfig( {
-	plugins: [ vue(), tailwindcss() ],
-	root: rootDir,
-	base: './',
-	build: {
-		outDir: 'build',
-		// Vite owns build/ entirely (no dual webpack pipeline).
-		emptyOutDir: true,
-		// Explicit path so the file is `build/manifest.json` (not `.vite/`).
-		manifest: 'manifest.json',
-		rollupOptions: {
-			input: {
-				admin: path.resolve( rootDir, 'resources/admin/main.ts' ),
-				dashboard: path.resolve( rootDir, 'resources/screens/dashboard.ts' ),
+export default defineConfig( async () => {
+	const plugins: PluginOption[] = [ vue(), tailwindcss() ];
+
+	if ( analyze ) {
+		const { visualizer } = await import( 'rollup-plugin-visualizer' );
+		plugins.push(
+			visualizer( {
+				filename: path.resolve( rootDir, 'build/stats.html' ),
+				gzipSize: true,
+				brotliSize: true,
+				open: false,
+				template: 'treemap',
+			} )
+		);
+	}
+
+	return {
+		plugins,
+		root: rootDir,
+		base: './',
+		build: {
+			outDir: 'build',
+			// Vite owns build/ entirely (no dual webpack pipeline).
+			emptyOutDir: true,
+			// Explicit path so the file is `build/manifest.json` (not `.vite/`).
+			manifest: 'manifest.json',
+			rollupOptions: {
+				input: {
+					admin: path.resolve( rootDir, 'resources/admin/main.ts' ),
+					dashboard: path.resolve( rootDir, 'resources/screens/dashboard.ts' ),
+				},
 			},
 		},
-	},
-	resolve: {
-		alias: {
-			'@': path.resolve( rootDir, 'resources' ),
-			'@ui': path.resolve( rootDir, 'resources/ui' ),
+		resolve: {
+			alias: {
+				'@': path.resolve( rootDir, 'resources' ),
+				'@ui': path.resolve( rootDir, 'resources/ui' ),
+			},
 		},
-	},
-	test: {
-		include: [ 'resources/**/*.test.ts' ],
-		environment: 'node',
-	},
+		test: {
+			include: [ 'resources/**/*.test.ts' ],
+			environment: 'node',
+		},
+	};
 } );

@@ -352,7 +352,8 @@ Unit tests: `npm run test:unit` (Vitest).
 **Composer scripts:** `phpstan`, `phpcs`, `phpcbf`, `i18n:extract`, `i18n:compile`
 
 **NPM scripts:** `dev` (Vite HMR), `build` (typecheck + Vite), `build:assets`,
-`typecheck`, `test:unit` (Vitest), `env:*`, `test:php`
+`build:analyze`, `check:bundle-size`, `typecheck`, `test:unit` (Vitest),
+`env:*`, `test:php`
 
 ### Feature quick reference
 

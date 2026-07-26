@@ -194,6 +194,32 @@ repository methods.
 
 Plugin Check (PCP) should run in CI before release candidates.
 
+### wordpress.org packaging checklist
+
+Use this before a release candidate or `.org` zip:
+
+1. **Local assets only** — `Admin\Assets` and `WP_BizWit` enqueue from
+   `build/` via `WP_BIZWIT_URL` / plugin path. No CDN, unpkg, or jsDelivr for
+   app JS/CSS. Optional Vite HMR (`WP_BIZWIT_VITE_DEV`) is local-dev only and
+   must stay off in production and release builds.
+2. **`npm run build` before zip** — release CI always rebuilds frontend assets
+   (setup `mode: prod`); never ship a zip that relies on a stale cached `build/`.
+   Local: run `npm run build` before `wp dist-archive` or manual packaging.
+3. **Include `build/`** — hashed JS/CSS + `manifest.json` must be inside the
+   plugin directory in the zip (`build/` is gitignored; CI/artifact supplies it).
+4. **Runtime npm is Vue only** — `package.json` `dependencies` should stay
+   `{ "vue": "…" }` unless a new runtime dep is budget-justified and
+   GPL-compatible. Vue is MIT (GPL-compatible). DevDependencies (Vite, Tailwind,
+   TypeScript, visualizer, …) must not appear in the zip.
+5. **Source on GitHub** — human-readable PHP + `resources/` TS/Vue; build tooling
+   is public (`package.json`, `vite.config.ts`).
+6. **Plugin Check** — run the WordPress.org Plugin Check Plugin against the
+   release zip before RC; fix reported blockers.
+7. **No payment processing** — confirm scope still matches README (record-keeping
+   only); unrelated to assets but required for product honesty on `.org`.
+
+Measured sizes and re-measure commands: [performance.md](performance.md).
+
 ---
 
 ## Dependency policy (frontend)
@@ -201,11 +227,12 @@ Plugin Check (PCP) should run in CI before release candidates.
 Same spirit as [development.md](development.md#dependency-policy):
 
 - Prefer zero runtime npm dependencies beyond Vue (and intentional tiny helpers).
+- **Current runtime `dependencies`:** `vue` only (MIT, GPL-compatible).
 - Any new runtime package must be: widely used / well maintained, updated within
   ~8 months, trusted maintainer — **and** justified against the performance budget.
 - Prefer first-party components over another UI framework.
-- DevDependencies (Vite, Tailwind, TypeScript, Oxlint) are free of ship-size cost
-  if they never land in the plugin zip.
+- DevDependencies (Vite, Tailwind, TypeScript, `rollup-plugin-visualizer`, …)
+  are free of ship-size cost if they never land in the plugin zip.
 
 ---
 

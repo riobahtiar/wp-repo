@@ -15,6 +15,8 @@ npm run build
 | `npm run dev` | Vite HMR dev server for Vue product UI |
 | `npm run build` | Typecheck (`vue-tsc`) then Vite production build into `build/` |
 | `npm run build:assets` | Vite production build only (no typecheck) |
+| `npm run build:analyze` | Production build + `build/stats.html` bundle treemap |
+| `npm run check:bundle-size` | Gzip sizes vs budgets (soft warnings; see [performance.md](performance.md)) |
 | `npm run typecheck` | `vue-tsc --noEmit` |
 | `./vendor/bin/phpcs` | WordPress Coding Standards |
 | `./vendor/bin/phpcbf` | Auto-fix coding standard violations |
@@ -272,6 +274,24 @@ code.
 **Frontend runtime:** prefer Vue only (plus tiny intentional helpers). Do not
 add Livewire, Acorn, or large UI kits to the distributable plugin. See
 [frontend-architecture.md](frontend-architecture.md).
+
+**Current npm runtime dependency:** `vue` only (MIT, GPL-compatible with
+GPLv2+). Everything else under `devDependencies` (Vite, Vue tooling, Tailwind,
+TypeScript, Vitest, `rollup-plugin-visualizer`, `@wordpress/env`) stays out of
+the plugin zip.
+
+### wordpress.org packaging checklist
+
+1. App JS/CSS from local `build/` only — no CDN for product assets.
+2. `npm run build` before packaging (`wp dist-archive` / release CI). Release
+   setup always rebuilds; do not rely on a package-lock-only cache of `build/`.
+3. Zip includes `build/manifest.json` and hashed assets under `build/assets/`.
+4. Runtime npm = `vue`; Vue MIT is fine next to the plugin’s GPLv2+.
+5. Source + build scripts public on GitHub.
+6. Run Plugin Check on the release zip before an RC.
+7. Bundle budgets: [performance.md](performance.md) (re-measure after heavy UI).
+
+Full packaging table: [frontend-architecture.md](frontend-architecture.md#wordpressorg-packaging).
 
 **`mysql` is not on `PATH`** in the Herd + Dbngin setup this project is developed
 against, so `wp db query` fails. Use `wp eval` with `$wpdb` instead.

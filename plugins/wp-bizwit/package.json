@@ -5,6 +5,7 @@
     "@types/node": "^20.19.43",
     "@vitejs/plugin-vue": "^6.0.8",
     "@wordpress/env": "^11.7.0",
+    "rollup-plugin-visualizer": "^7.0.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
     "vite": "^8.1.5",
@@ -14,6 +15,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
+    "build:analyze": "vue-tsc --noEmit && ANALYZE=1 vite build",
+    "check:bundle-size": "node scripts/check-bundle-size.mjs",
     "typecheck": "vue-tsc --noEmit",
     "build:assets": "vite build",
     "preview": "vite preview",

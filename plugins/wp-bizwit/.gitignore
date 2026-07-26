@@ -9,6 +9,9 @@ setup.sh
 .vscode
 
 build/
+# Bundle visualizer report (from npm run build:analyze); large HTML.
+build/stats.html
+stats.html
 
 .budfiles/
 bin/*

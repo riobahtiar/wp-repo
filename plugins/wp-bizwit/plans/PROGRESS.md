@@ -32,7 +32,7 @@ a migration. Do not run a real business on this yet.
 | Import / export | 🔒 Deferred | [Plan](05-import-export.md) — gated on 1.0 GA |
 | Reports | ⬜ Not started | Not yet planned |
 | REST API | 🟡 Health only | `GET /wp-bizwit/v1/health` + TS client; full CRUD later ([07](07-frontend-modernization.md)) |
-| Frontend (Vue/Vite/Tailwind) | 🟡 Phases 0–6 done | Tooling, asset bridge, REST health, design-system seed (`@ui/*`), dashboard pilot island; **Vite sole asset pipeline** (webpack retired) · [Architecture](../docs/frontend-architecture.md) · [Plan 07](07-frontend-modernization.md) |
+| Frontend (Vue/Vite/Tailwind) | 🟡 Phases 0–8 | Tooling, asset bridge, REST health, design-system seed (`@ui/*`), dashboard pilot; Vite sole pipeline; **performance baselines** ([performance.md](../docs/performance.md)); soft bundle gate; wordpress.org packaging notes; Plugin Check deferred to RC · [Architecture](../docs/frontend-architecture.md) · [Plan 07](07-frontend-modernization.md) |
 
 Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferred
 
@@ -44,6 +44,7 @@ Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferre
 | PHPStan level 6 | ✅ 0 errors |
 | PHPUnit | 🟡 `MoneyTest`, `IndonesiaRegionTest`, `RestHealthTest` — repositories and screens untested |
 | Vitest (JS) | 🟡 `formatMoney` only (`npm run test:unit`) |
+| Bundle budgets | ✅ Soft gate (`npm run check:bundle-size`); pilot under budget 2026-07-27 — [performance.md](../docs/performance.md) |
 | Accessibility | 🟡 Native `<details>`, form labels, list-table semantics. No audit yet |
 | Security review | 🟡 Controls documented in [`../SECURITY.md`](../SECURITY.md); no external review |
 | Browser testing | ⬜ Not done |

@@ -22,6 +22,10 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   CSS (tiles, progressive disclosure sections, status pills, …) lives in
   `resources/styles/admin.css` and is enqueued via the Vite `admin` entry on
   every BizWit screen. `npm run build` is `vue-tsc --noEmit && vite build`.
+- **Release CI always rebuilds frontend assets** (plan 07 Phase 8). Prod setup
+  no longer skips `npm run build` on a node_modules cache hit; `build/` is
+  transported via artifact instead of a package-lock-only cache (avoids shipping
+  stale JS/CSS).
 
 ### Added
 - **Frontend architecture** ([docs/frontend-architecture.md](docs/frontend-architecture.md))
@@ -42,8 +46,17 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Dashboard Vue pilot** (plan 07 Phase 5): mounts on `#wp-bizwit-dashboard`,
   loads health over REST (skeleton / error + retry), shows version, region, and
   a MoneyText sample.
+- **Single Vite pipeline + pilot dashboard** as the product UI foundation
+  (Phases 1–6); multi-entry admin + dashboard islands only.
+- **Performance baselines and soft bundle gate** (plan 07 Phase 7):
+  [docs/performance.md](docs/performance.md), `npm run build:analyze`
+  (`rollup-plugin-visualizer` → `build/stats.html`), and
+  `npm run check:bundle-size` (warns; optional `FAIL_HARD=1`).
+- **wordpress.org packaging notes** (plan 07 Phase 8): checklist in
+  frontend-architecture and development docs; runtime npm is `vue` only (MIT /
+  GPL-compatible); local assets only (no CDN for app JS/CSS).
 
-Next up: plan 07 Phase 7+ (bundle budgets), then
+Next up: plan 07 Phase 9 (feature-plan handoff) and Plugin Check at RC, then
 [Projects](plans/01-projects.md).
 
 ## [0.3.0] — 2026-07-27

@@ -1,6 +1,6 @@
 # Plan 07 — Frontend modernization
 
-**Status:** In progress (Phases 0–5 done: pilot live) · **Target:** foundation in 0.3.x / 0.4.x · **Blocks:** heavy
+**Status:** In progress (Phases 0–8 done except Plugin Check at RC; Phase 9 handoff open) · **Target:** foundation in 0.3.x / 0.4.x · **Blocks:** heavy
 UI for 0.4+ features · **Architecture:** [`../docs/frontend-architecture.md`](../docs/frontend-architecture.md)
 
 > **For agentic workers:** implement phase-by-phase. Each phase must leave the
@@ -470,28 +470,39 @@ and shows `MoneyText` sample using settings currency — progressive, low risk.
 
 ### Phase 7 — Performance gate
 
-- [ ] **7.1** Add `npm run build:analyze` using `rollup-plugin-visualizer` or
-      Vite’s built-in analyze — devDependency only.
-- [ ] **7.2** Record baseline sizes in `plans/PROGRESS.md` or a short
-      `docs/performance.md` table (gzipped).
-- [ ] **7.3** Fail CI (optional warning first) if shared chunk > 60 KB gzip
-      once measurement is stable — start with documentation, automate later.
-- [ ] **7.4** Confirm code-splitting: dashboard entry does not include future
-      invoice editor (when that entry exists).
+- [x] **7.1** Add `npm run build:analyze` using `rollup-plugin-visualizer`
+      (devDependency; dynamic import in `vite.config.ts`) → `build/stats.html`.
+- [x] **7.2** Record baseline sizes in `docs/performance.md` (gzipped, dated)
+      and note headroom on PROGRESS.
+- [x] **7.3** Soft gate: `scripts/check-bundle-size.mjs` +
+      `npm run check:bundle-size` (warn only; `FAIL_HARD=1` optional). CI runs
+      it after the JS build. Hard fail deferred until sizes are stable.
+- [x] **7.4** Code-splitting: multi-entry `admin` + `dashboard` only — no
+      invoice editor entry yet. Documented: Vue is **inlined** in dashboard;
+      extract shared vendor when a second Vue screen lands.
 
 **Acceptance:** Budgets from `docs/frontend-architecture.md` measured for pilot.
+**Met** (2026-07-27): admin JS ~0.02 KiB, dashboard ~24.95 KiB, CSS ~2.58 KiB gzip.
 
 ---
 
 ### Phase 8 — wordpress.org readiness pass
 
-- [ ] **8.1** Confirm no CDN script/style tags for app assets.
-- [ ] **8.2** List runtime npm packages in README/docs (should be tiny: `vue`).
+- [x] **8.1** Confirm no CDN script/style tags for app assets.
+      (`Assets.php` / `WP_BizWit` use local `build/` + `WP_BIZWIT_URL`; HMR is
+      localhost only behind `WP_BIZWIT_VITE_DEV`.)
+- [x] **8.2** List runtime npm packages in docs — **`vue` only**
+      (`docs/frontend-architecture.md`, `docs/development.md`).
 - [ ] **8.3** Run Plugin Check Plugin against a release zip when available.
-- [ ] **8.4** README.txt / deploy: `npm run build` before `wp dist-archive`.
-- [ ] **8.5** LICENSE note for Vue (MIT) compatibility with GPLv2+.
+      (Checklist documented; run at RC time.)
+- [x] **8.4** Deploy/setup: always `npm run build` for prod; ship `build/` via
+      artifact (not a package-lock-only cache). Docs checklist for
+      `wp dist-archive`.
+- [x] **8.5** LICENSE note for Vue (MIT) compatibility with GPLv2+ in packaging
+      docs.
 
 **Acceptance:** Reviewer-facing notes exist; zip includes `build/` assets.
+**Met** except Plugin Check deferred to RC (8.3).
 
 ---
 
