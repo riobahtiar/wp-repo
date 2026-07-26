@@ -19,9 +19,11 @@
     "lint": "turbo run lint",
     "phpstan": "turbo run phpstan",
     "phpcs": "turbo run phpcs",
-    "check": "turbo run typecheck lint phpstan test:unit build",
+    "check:bundle-size": "turbo run check:bundle-size",
+    "check": "turbo run typecheck lint phpstan test:unit build check:bundle-size",
     "bizwit": "npm run -w wp-bizwit --",
-    "prepare:php": "npm run -w wp-bizwit -- composer:install"
+    "prepare:php": "npm run -w wp-bizwit -- composer:install",
+    "clean": "turbo run build --force --dry-run=json >/dev/null 2>&1; rm -rf node_modules .turbo plugins/*/node_modules plugins/*/build"
   },
   "devDependencies": {
     "turbo": "^2.5.4"

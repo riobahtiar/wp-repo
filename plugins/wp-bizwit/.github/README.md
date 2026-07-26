@@ -1,20 +1,29 @@
-# Workflows moved to monorepo root
+# CI for this package lives at the monorepo root
 
-This plugin lives in the **wp-repo** monorepo. GitHub only runs workflows from
-the repository root:
+This plugin is part of **wp-repo**. GitHub Actions only load workflows from the
+**repository root** (`.github/workflows/`). Nested workflow YAML under packages
+is not executed and must not be re-added.
 
-| Former file (here) | Monorepo replacement |
-|--------------------|----------------------|
-| `workflows/test-analyse.yml` | [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml) |
-| `workflows/setup.yml` | Inlined into root CI / release jobs |
-| `workflows/deploy.yml` | [`.github/workflows/release-wp-bizwit.yml`](../../../.github/workflows/release-wp-bizwit.yml) |
+| Job | Root workflow |
+|-----|----------------|
+| Build, typecheck, unit tests, PHPCS, PHPStan, PHPUnit | [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml) |
+| Tagged release zip | [`.github/workflows/release-wp-bizwit.yml`](../../../.github/workflows/release-wp-bizwit.yml) |
 
-**Release tags** use a package prefix so multiple plugins can ship from one repo:
+## Release tags (multi-package convention)
+
+Prefix tags with the package name so one monorepo can ship several plugins:
 
 ```bash
-git tag wp-bizwit/v0.3.0
-git push origin wp-bizwit/v0.3.0
+# From monorepo root
+git tag wp-bizwit/v0.3.1
+git push origin wp-bizwit/v0.3.1
 ```
 
-The YAML files in `workflows/` are kept only as historical reference and are
-not executed.
+## Local commands (always from monorepo root)
+
+```bash
+npm install
+npm run -w wp-bizwit build
+npm run -w wp-bizwit test:unit
+cd plugins/wp-bizwit && composer install
+```

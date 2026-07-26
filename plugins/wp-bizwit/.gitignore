@@ -2,7 +2,11 @@
 
 /vendor/
 /vendor-prefixed/
+# JS deps are installed from the monorepo root (npm workspaces). Never commit
+# a nested lockfile or re-run `npm install` only inside this package.
 /node_modules/
+package-lock.json
+npm-shrinkwrap.json
 setup.sh
 
 .idea

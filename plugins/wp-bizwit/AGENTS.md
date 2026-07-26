@@ -347,8 +347,9 @@ Unit tests: `npm run test:unit` (Vitest).
 ### Quality Assurance
 
 - **PHP**: PHPStan (`phpstan.neon`), PHPCS (`phpcs.xml`)
-- **JS/TS**: `vue-tsc` typecheck (via `npm run build` / `typecheck`), Vitest
-- **CI/CD**: GitHub Actions in `.github/workflows/`
+- **JS/TS**: `vue-tsc` typecheck (via monorepo `npm run -w wp-bizwit build` / `typecheck`), Vitest
+- **CI/CD**: monorepo root `.github/workflows/` only (see `plugins/wp-bizwit/.github/README.md`)
+- **npm**: install from monorepo root only — no nested `package-lock.json`
 
 ### Key primitives
 

@@ -1,28 +1,41 @@
 # Development
 
-Requires PHP 8.0+, Composer and Node.
+Requires PHP 8.0+, Composer and Node 20+ (see monorepo `.nvmrc`).
+
+This package lives in the **wp-repo monorepo**. JS tooling is installed from the
+**repository root** (`wp-content/`), not from this directory alone.
 
 ```bash
-composer install
+# Monorepo root (wp-content/)
 npm install
-npm run build
+npm run -w wp-bizwit build
+
+# PHP stays package-local
+cd plugins/wp-bizwit && composer install
 ```
+
+Do **not** run `npm install` only inside this folder — that creates a nested
+lockfile and breaks workspace hoisting. See the monorepo
+[README](../../../README.md#monorepo-workflow-industry-defaults).
 
 ## Commands
 
+Prefer invoking via the workspace from the monorepo root
+(`npm run -w wp-bizwit <script>`). Scripts below are the package script names.
+
 | Command | Purpose |
 |---------|---------|
-| `npm run dev` | Vite HMR dev server for Vue product UI |
-| `npm run build` | Typecheck (`vue-tsc`) then Vite production build into `build/` |
-| `npm run build:assets` | Vite production build only (no typecheck) |
-| `npm run build:analyze` | Production build + `build/stats.html` bundle treemap |
-| `npm run check:bundle-size` | Gzip sizes vs budgets (soft warnings; see [performance.md](performance.md)) |
-| `npm run typecheck` | `vue-tsc --noEmit` |
+| `dev` | Vite HMR dev server for Vue product UI |
+| `build` | Typecheck (`vue-tsc`) then Vite production build into `build/` |
+| `build:assets` | Vite production build only (no typecheck) |
+| `build:analyze` | Production build + `build/stats.html` bundle treemap |
+| `check:bundle-size` | Gzip sizes vs budgets (soft warnings; see [performance.md](performance.md)) |
+| `typecheck` | `vue-tsc --noEmit` |
 | `./vendor/bin/phpcs` | WordPress Coding Standards |
 | `./vendor/bin/phpcbf` | Auto-fix coding standard violations |
 | `./vendor/bin/phpstan analyse --memory-limit=1G` | Static analysis at level 6 |
-| `npm run test:unit` | Vitest unit tests (e.g. `formatMoney` in `resources/app/lib/`) |
-| `npm run test:php` | PHPUnit suite in the wp-env container |
+| `test:unit` | Vitest unit tests (e.g. `formatMoney` in `resources/app/lib/`) |
+| `test:php` | PHPUnit suite in the wp-env container |
 
 ### Asset pipeline (Vite only)
 
@@ -46,7 +59,7 @@ There is no webpack / `@wordpress/scripts` admin path. Optional Gutenberg blocks
 | Dashboard | Additionally enqueues the `dashboard` island entry |
 | Handles | `wp-bizwit/{entry}` scripts (type=module) + matching styles |
 | Config | `wpBizwitConfig`: `restUrl`, `restNonce`, `pluginUrl`, `version`, `locale`, `region`, `currency` |
-| Missing build | Soft-fail; with `WP_DEBUG` admins see a notice to run `npm run build` |
+| Missing build | Soft-fail; with `WP_DEBUG` admins see a notice to run `npm run -w wp-bizwit build` from the monorepo root |
 
 ### REST API (`wp-bizwit/v1`)
 

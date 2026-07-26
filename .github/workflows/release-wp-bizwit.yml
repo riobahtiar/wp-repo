@@ -1,5 +1,6 @@
 name: Release wp-bizwit
 
+# Multi-package monorepo release convention: prefix tags with the package name.
 # Tag format: wp-bizwit/v0.3.0  or  wp-bizwit/v0.3.0-beta.1
 on:
   push:
@@ -11,9 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    defaults:
-      run:
-        working-directory: plugins/wp-bizwit
     steps:
       - uses: actions/checkout@v6
         with:
@@ -23,27 +21,27 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: npm
+          cache-dependency-path: package-lock.json
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           tools: wp-cli
 
-      - name: Install workspaces (root)
-        working-directory: .
+      - name: Install workspaces (root only)
         run: npm ci
 
       - name: Composer install (prod)
+        working-directory: plugins/wp-bizwit
         run: |
           mkdir -p vendor-prefixed bin
           composer install --no-dev --prefer-dist --no-progress --optimize-autoloader --classmap-authoritative
 
-      - name: Build assets
-        run: npm run build
+      - name: Build assets (workspace)
+        run: npm run -w wp-bizwit build
 
       - name: Parse tag
         id: meta
-        working-directory: .
         run: |
           TAG="${GITHUB_REF#refs/tags/}"
           # wp-bizwit/v0.3.0 → 0.3.0
@@ -59,6 +57,7 @@ jobs:
           fi
 
       - name: Bump version strings
+        working-directory: plugins/wp-bizwit
         run: |
           VERSION="${{ steps.meta.outputs.version }}"
           sed -i -E "s/(const PLUGIN_VERSION = ')[^']*(';)/\1${VERSION}\2/" src/WP_BizWit.php
@@ -70,17 +69,18 @@ jobs:
 
       - name: Start wp-env & compile translations
         run: |
-          npm run env:start
-          npm run env:cli composer run i18n:compile
+          npm run -w wp-bizwit env:start
+          npm run -w wp-bizwit env:cli -- composer run i18n:compile
 
       - name: Build zip
+        working-directory: plugins/wp-bizwit
         run: |
           VERSION="${{ steps.meta.outputs.version }}"
           wp dist-archive . "./wp-bizwit-${VERSION}.zip" --plugin-dirname=wp-bizwit
 
       - name: Stop wp-env
         if: always()
-        run: npm run env:stop
+        run: npm run -w wp-bizwit env:stop
 
       - name: GitHub Release
         uses: ncipollo/release-action@v1

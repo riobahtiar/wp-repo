@@ -1,5 +1,11 @@
 name: CI
 
+# Industry monorepo pattern:
+# - Single checkout
+# - npm ci only at repository root (one lockfile)
+# - Turbo for JS/Vue tasks across workspaces
+# - Composer still per PHP package (WordPress plugins cannot share one vendor/)
+
 on:
   push:
     branches: ['**']
@@ -25,11 +31,12 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: npm
+          cache-dependency-path: package-lock.json
 
-      - name: Install workspaces
+      - name: Install workspaces (root only)
         run: npm ci
 
-      - name: Turbo — typecheck, unit tests, build
+      - name: Turbo — typecheck, unit tests, build, budgets
         run: npx turbo run typecheck test:unit build check:bundle-size
 
   # ---------------------------------------------------------------------------
@@ -86,9 +93,6 @@ jobs:
     name: PHPUnit (wp-bizwit / wp-env)
     runs-on: ubuntu-latest
     needs: [turbo, php-bizwit]
-    defaults:
-      run:
-        working-directory: plugins/wp-bizwit
     steps:
       - uses: actions/checkout@v6
 
@@ -96,9 +100,9 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: npm
+          cache-dependency-path: package-lock.json
 
-      - name: Install workspaces (root)
-        working-directory: .
+      - name: Install workspaces (root only)
         run: npm ci
 
       - name: Cache Composer
@@ -112,12 +116,14 @@ jobs:
             php-bizwit-${{ runner.os }}-
 
       - name: Composer install
+        working-directory: plugins/wp-bizwit
         run: |
           mkdir -p vendor-prefixed bin
           composer install --prefer-dist --no-interaction --no-progress
 
       - name: Write Composer auth for test dependencies
         if: env.COMPOSER_AUTH != ''
+        working-directory: plugins/wp-bizwit
         env:
           COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
         run: |
@@ -125,12 +131,14 @@ jobs:
           $COMPOSER_AUTH
           EOF
 
+      # Always invoke workspace scripts from the monorepo root (-w), never via a
+      # nested package-lock or package-local node_modules.
       - name: Start wp-env
-        run: npm run env:start
+        run: npm run -w wp-bizwit env:start
 
       - name: Run application tests
-        run: npm run test:php
+        run: npm run -w wp-bizwit test:php
 
       - name: Stop wp-env
         if: always()
-        run: npm run env:stop
+        run: npm run -w wp-bizwit env:stop

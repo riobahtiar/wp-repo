@@ -22,18 +22,25 @@
 
 # Workspace install artefacts (even if a parent rule re-includes them)
 node_modules/
+**/node_modules/
 .turbo/
+**/.turbo/
 npm-debug.log*
 yarn-error.log*
 .DS_Store
+
+# Nested lockfiles are forbidden — root package-lock.json is the only one.
+# (npm workspaces industry default: one lockfile, install from root only.)
+plugins/**/package-lock.json
+themes/**/package-lock.json
 
 # --- First-party plugins (allowlist) ------------------------------------------
 !/plugins/
 /plugins/*
 !/plugins/wp-bizwit/
 
-# Nested package rules (vendor, node_modules, build, …) live in each package’s
-# own .gitignore — e.g. plugins/wp-bizwit/.gitignore.
+# Nested package rules (vendor, build, …) live in each package’s own
+# .gitignore — e.g. plugins/wp-bizwit/.gitignore.
 
 # --- Future first-party themes (uncomment when you add one) -------------------
 # !/themes/

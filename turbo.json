@@ -1,6 +1,11 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalDependencies": [
+    "package-lock.json",
+    ".npmrc",
+    "turbo.json"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -8,8 +13,7 @@
         "resources/**",
         "vite.config.*",
         "tsconfig*.json",
-        "package.json",
-        "package-lock.json"
+        "package.json"
       ],
       "outputs": ["build/**"]
     },
@@ -31,7 +35,12 @@
       "outputs": []
     },
     "test:unit": {
-      "inputs": ["resources/**", "vitest.config.*", "vite.config.*", "package.json"],
+      "inputs": [
+        "resources/**",
+        "vitest.config.*",
+        "vite.config.*",
+        "package.json"
+      ],
       "outputs": []
     },
     "lint": {

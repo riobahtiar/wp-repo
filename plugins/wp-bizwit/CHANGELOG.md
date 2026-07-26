@@ -12,6 +12,10 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Changed
+- **Monorepo packaging.** Plugin lives in `wp-repo` (`wp-content` git root). JS
+  installs from the monorepo root only (single `package-lock.json`, npm
+  workspaces + Turborepo). Nested plugin lockfile and package-local GitHub
+  workflow YAML removed; CI/release run from root.
 - **Detached from the JUVO WordPress Plugin Boilerplate.** The package identity,
   docs and CI no longer point at upstream scaffold; tooling and patterns are
   first-party. Removed unused Abilities API scaffold (no implementations) and
