@@ -123,7 +123,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 		<div class="wp-bizwit-section__body">
 		<p class="description">
 			<?php if ( $is_indonesia ) : ?>
-				<?php esc_html_e( 'Rekening tujuan transfer yang dicantumkan pada faktur. Hampir semua pembayaran antarperusahaan di Indonesia dilakukan lewat transfer bank.', 'wp-bizwit' ); ?>
+				<?php esc_html_e( 'Bank account shown on invoices for transfers. Most B2B payments in Indonesia are made by bank transfer.', 'wp-bizwit' ); ?>
 			<?php else : ?>
 				<?php esc_html_e( 'Shown on invoices so clients know where to send payment.', 'wp-bizwit' ); ?>
 			<?php endif; ?>
@@ -160,7 +160,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 		</p>
 		<table class="form-table" role="presentation">
 			<tr>
-				<th scope="row"><label for="wp-bizwit-tax-regime"><?php echo $is_indonesia ? esc_html__( 'Status perpajakan', 'wp-bizwit' ) : esc_html__( 'Tax handling', 'wp-bizwit' ); ?></label></th>
+				<th scope="row"><label for="wp-bizwit-tax-regime"><?php echo $is_indonesia ? esc_html__( 'Tax status', 'wp-bizwit' ) : esc_html__( 'Tax handling', 'wp-bizwit' ); ?></label></th>
 				<td>
 					<select id="wp-bizwit-tax-regime" name="tax_regime">
 						<?php foreach ( (array) $data['tax_regimes'] as $regime => $label ) : ?>
@@ -174,13 +174,13 @@ $value = static function ( string $key ) use ( $settings ): string {
 							<?php
 							printf(
 								/* translators: %s: formatted PKP registration threshold */
-								esc_html__( 'Hanya PKP yang boleh memungut PPN. Usaha dengan peredaran bruto sampai %s umumnya belum wajib dikukuhkan sebagai PKP.', 'wp-bizwit' ),
+								esc_html__( 'Only a PKP may charge VAT (PPN). Businesses with annual turnover up to %s are usually not yet required to register as PKP.', 'wp-bizwit' ),
 								'<strong>' . esc_html( Money::format( Indonesia::PKP_THRESHOLD, 'IDR' ) ) . '</strong>'
 							);
 							?>
 						</p>
 						<p class="description">
-							<?php esc_html_e( 'PPh Final UMKM 0,5% dihitung dari peredaran bruto Anda sendiri, bukan ditambahkan ke tagihan klien. BizWit tidak akan mencantumkannya pada faktur.', 'wp-bizwit' ); ?>
+							<?php esc_html_e( 'UMKM final income tax (0.5%) is calculated on your own turnover, never added to the client bill. BizWit will not put it on invoices.', 'wp-bizwit' ); ?>
 						</p>
 					<?php endif; ?>
 				</td>
@@ -202,7 +202,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 					<input type="text" name="withholding_rate" class="small-text" value="<?php echo esc_attr( $value( 'withholding_rate' ) ); ?>" aria-label="<?php esc_attr_e( 'Withholding rate', 'wp-bizwit' ); ?>" /> %
 					<p class="description">
 						<?php if ( $is_indonesia ) : ?>
-							<?php esc_html_e( 'Klien badan biasanya memotong PPh 23 atas jasa dan menyetorkannya atas nama Anda, sehingga dana yang masuk ke rekening lebih kecil dari nilai faktur.', 'wp-bizwit' ); ?>
+							<?php esc_html_e( 'Corporate clients often withhold income tax (PPh 23) on services and remit it on your behalf, so the bank credit is smaller than the invoice total.', 'wp-bizwit' ); ?>
 						<?php else : ?>
 							<?php esc_html_e( 'Used when a client withholds tax at source and remits it on your behalf.', 'wp-bizwit' ); ?>
 						<?php endif; ?>
@@ -257,7 +257,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 					</fieldset>
 					<?php if ( $is_indonesia ) : ?>
 						<p class="description">
-							<?php esc_html_e( 'Format Indonesia menyusun nomor sebagai urutan/jenis/kode usaha/bulan romawi/tahun, sehingga bulan dan tahun terbaca langsung dari nomornya.', 'wp-bizwit' ); ?>
+							<?php esc_html_e( 'The Indonesian format builds numbers as sequence/type/business code/roman month/year so the month and year are readable from the number itself.', 'wp-bizwit' ); ?>
 						</p>
 					<?php endif; ?>
 				</td>
@@ -280,18 +280,18 @@ $value = static function ( string $key ) use ( $settings ): string {
 			</tr>
 			<?php if ( $is_indonesia ) : ?>
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Bea meterai', 'wp-bizwit' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Stamp duty (bea meterai)', 'wp-bizwit' ); ?></th>
 					<td>
 						<div class="wp-bizwit-check-block">
 							<label class="wp-bizwit-check" for="wp-bizwit-stamp-duty">
 								<input type="checkbox" id="wp-bizwit-stamp-duty" name="apply_stamp_duty" value="1" <?php checked( ! empty( $settings['apply_stamp_duty'] ) ); ?> />
-								<span><?php esc_html_e( 'Ingatkan kebutuhan meterai pada kwitansi bernilai besar', 'wp-bizwit' ); ?></span>
+								<span><?php esc_html_e( 'Remind when stamp duty is needed on large-value receipts (kwitansi)', 'wp-bizwit' ); ?></span>
 							</label>
 							<p class="description">
 								<?php
 								printf(
 									/* translators: 1: threshold amount, 2: duty amount */
-									esc_html__( 'Berdasarkan UU 10/2020, dokumen yang menyebut nilai uang di atas %1$s dikenai bea meterai %2$s.', 'wp-bizwit' ),
+									esc_html__( 'Under Law 10/2020, documents stating an amount above %1$s attract stamp duty of %2$s.', 'wp-bizwit' ),
 									'<strong>' . esc_html( Money::format( Indonesia::METERAI_THRESHOLD, 'IDR' ) ) . '</strong>',
 									'<strong>' . esc_html( Money::format( Indonesia::METERAI_AMOUNT, 'IDR' ) ) . '</strong>'
 								);
@@ -345,7 +345,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 			</tr>
 			<?php if ( $is_indonesia ) : ?>
 				<tr>
-					<th scope="row"><label for="wp-bizwit-scale"><?php esc_html_e( 'Skala usaha', 'wp-bizwit' ); ?></label></th>
+					<th scope="row"><label for="wp-bizwit-scale"><?php esc_html_e( 'Business scale', 'wp-bizwit' ); ?></label></th>
 					<td>
 						<select id="wp-bizwit-scale" name="business_scale">
 							<?php foreach ( (array) $data['scales'] as $scale => $label ) : ?>
@@ -354,7 +354,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 								</option>
 							<?php endforeach; ?>
 						</select>
-						<p class="description"><?php esc_html_e( 'Klasifikasi menurut PP 7/2021, berdasarkan modal usaha atau hasil penjualan tahunan.', 'wp-bizwit' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Classification under PP 7/2021, based on capital or annual sales.', 'wp-bizwit' ); ?></p>
 					</td>
 				</tr>
 			<?php endif; ?>

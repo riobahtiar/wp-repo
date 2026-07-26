@@ -201,7 +201,7 @@ class Assets {
 		wp_script_add_data( $client_handle, 'type', 'module' );
 
 		$handle = 'wp-bizwit/' . $entry;
-		$deps   = array_merge( array( $client_handle ), $extra_script_deps );
+		$deps   = array_merge( array( 'wp-i18n', $client_handle ), $extra_script_deps );
 
 		wp_enqueue_script(
 			$handle,
@@ -212,6 +212,7 @@ class Assets {
 		);
 		// phpcs:enable WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		wp_script_add_data( $handle, 'type', 'module' );
+		wp_set_script_translations( $handle, 'wp-bizwit', WP_BIZWIT_PATH . 'languages' );
 
 		$this->localize_config( $handle );
 	}
@@ -288,6 +289,9 @@ class Assets {
 		$version = $this->asset_version( $file );
 		$url     = WP_BIZWIT_URL . 'build/' . ltrim( $file, '/' );
 
+		// wp-i18n provides window.wp.i18n for Vue/TS via resources/app/i18n.ts.
+		$deps = array_values( array_unique( array_merge( array( 'wp-i18n' ), $deps ) ) );
+
 		wp_enqueue_script(
 			$handle,
 			$url,
@@ -296,6 +300,9 @@ class Assets {
 			true
 		);
 		wp_script_add_data( $handle, 'type', 'module' );
+
+		// Load Jed JSON translations for this handle when available.
+		wp_set_script_translations( $handle, 'wp-bizwit', WP_BIZWIT_PATH . 'languages' );
 
 		$this->localize_config( $handle );
 		$this->enqueue_chunk_styles( $entry, $chunk, $version );

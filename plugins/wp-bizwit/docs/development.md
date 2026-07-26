@@ -181,37 +181,48 @@ tests/php/        PHPUnit tests
 
 ## Translations
 
-Indonesian (`id_ID`) ships complete — all 240 strings — and Indonesian users are
-the primary audience, so **a new untranslated string is an unfinished string**.
+Follow WordPress i18n (English **source** / msgid, translations in `.po` files):
+
+[How to Internationalize Your Plugin](https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/)
+
+Full product rules: **[i18n.md](i18n.md)**.
+
+- **Source language is English** in every `__()` / `esc_html_e()` / Vue `__(…, 'wp-bizwit')`.
+- **Indonesian is a complete catalogue** (`languages/wp-bizwit-id_ID.po`). An
+  untranslated string is unfinished for this product.
+- **Switching the WordPress site language must switch the whole UI** (en_US ↔ id_ID).
+- Domain terms (NPWP, NIB, PKP, PPN, termin, kwitansi, …) stay as official terms
+  in both languages.
 
 After adding or changing any translatable text:
 
 ```bash
-# 1. Refresh the template
+# 1. Refresh the template (English msgids)
 $(command -v wp) i18n make-pot . languages/wp-bizwit.pot \
-  --exclude=resources,vendor,vendor-prefixed,node_modules,tests
+  --domain=wp-bizwit \
+  --exclude=vendor,vendor-prefixed,node_modules,tests,bin,build
 
-# 2. Merge new strings into the Indonesian catalogue
+# 2. Merge into the Indonesian catalogue
 $(command -v wp) i18n update-po languages/wp-bizwit.pot languages/
 
-# 3. Translate the new msgids in languages/wp-bizwit-id_ID.po
+# 3. Translate new msgids in languages/wp-bizwit-id_ID.po (English → Indonesian)
 
-# 4. Compile
-$(command -v wp) i18n make-mo languages/ && $(command -v wp) i18n make-php languages/
+# 4. Compile for runtime
+$(command -v wp) i18n make-mo languages/
+$(command -v wp) i18n make-php languages/
+$(command -v wp) i18n make-json languages/ --no-purge
 ```
 
-Compiled `.mo` and `.l10n.php` files are gitignored and built at release time.
-After a fresh clone, run step 4 or the Indonesian translation will not appear.
+Compiled `.mo` / `.l10n.php` / `.json` may be gitignored and built at release.
+After a fresh clone, run step 4 so translations appear.
 
-Strings authored in Indonesian inside `Localization\Indonesia` are still wrapped
-in `__()` and appear in the catalogue translated to themselves. That is
-deliberate: one extraction pipeline, and a future `en_US` override could render
-those screens in English if anyone wants it.
-
-To see the translated UI, set the site language to Bahasa Indonesia:
+Verify both languages:
 
 ```bash
-wp language core install id_ID --activate
+wp language core install en_US
+wp site switch-language en_US   # UI chrome fully English
+wp language core install id_ID
+wp site switch-language id_ID   # UI chrome fully Indonesian
 ```
 
 ## Verifying without a browser

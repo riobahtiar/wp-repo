@@ -75,11 +75,29 @@ class WP_BizWit {
 	/**
 	 * Load the plugin text domain.
 	 */
+	/**
+	 * Load translations on `init` so they apply for the current site locale.
+	 *
+	 * @see https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/
+	 *
+	 * @return void
+	 */
 	private function set_locale(): void {
+		// Must not load in the constructor — too early for the current locale
+		// and just-in-time translation loading (WP 6.5+).
+		$this->loader->add_action( 'init', $this, 'load_textdomain', 0 );
+	}
+
+	/**
+	 * Load the plugin text domain from /languages.
+	 *
+	 * @return void
+	 */
+	public function load_textdomain(): void {
 		load_plugin_textdomain(
 			'wp-bizwit',
 			false,
-			dirname( plugin_basename( __FILE__ ), 2 ) . '/languages/'
+			dirname( plugin_basename( __FILE__ ), 2 ) . '/languages'
 		);
 	}
 

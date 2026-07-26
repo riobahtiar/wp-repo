@@ -115,10 +115,10 @@ class Indonesia extends Region {
 	 */
 	public function client_types(): array {
 		return array(
-			'individual'   => __( 'Perorangan', 'wp-bizwit' ),
-			'company'      => __( 'Perusahaan (PT / CV / UD)', 'wp-bizwit' ),
-			'government'   => __( 'Instansi Pemerintah', 'wp-bizwit' ),
-			'organization' => __( 'Yayasan / Koperasi / Organisasi', 'wp-bizwit' ),
+			'individual'   => __( 'Individual', 'wp-bizwit' ),
+			'company'      => __( 'Company (PT / CV / UD)', 'wp-bizwit' ),
+			'government'   => __( 'Government agency', 'wp-bizwit' ),
+			'organization' => __( 'Foundation / cooperative / organisation', 'wp-bizwit' ),
 		);
 	}
 
@@ -129,21 +129,21 @@ class Indonesia extends Region {
 	 */
 	protected function field_labels(): array {
 		return array(
-			'legal_name'         => __( 'Nama sesuai akta', 'wp-bizwit' ),
+			'legal_name'         => __( 'Legal name (as in deed)', 'wp-bizwit' ),
 			'tax_id'             => __( 'NPWP', 'wp-bizwit' ),
 			'registration_no'    => __( 'NIB', 'wp-bizwit' ),
-			'address_line1'      => __( 'Alamat (jalan dan nomor)', 'wp-bizwit' ),
-			'address_line2'      => __( 'Gedung / unit', 'wp-bizwit' ),
-			'city'               => __( 'Kabupaten / Kota', 'wp-bizwit' ),
-			'state'              => __( 'Provinsi', 'wp-bizwit' ),
-			'postal_code'        => __( 'Kode Pos', 'wp-bizwit' ),
-			'payment_terms_days' => __( 'Termin pembayaran', 'wp-bizwit' ),
-			'phone'              => __( 'Telepon / WhatsApp', 'wp-bizwit' ),
-			'budget'             => __( 'Anggaran', 'wp-bizwit' ),
-			'billing_type'       => __( 'Jenis penagihan', 'wp-bizwit' ),
+			'address_line1'      => __( 'Street address', 'wp-bizwit' ),
+			'address_line2'      => __( 'Building / unit', 'wp-bizwit' ),
+			'city'               => __( 'Regency / city', 'wp-bizwit' ),
+			'state'              => __( 'Province', 'wp-bizwit' ),
+			'postal_code'        => __( 'Postal code', 'wp-bizwit' ),
+			'payment_terms_days' => __( 'Payment terms (days)', 'wp-bizwit' ),
+			'phone'              => __( 'Phone / WhatsApp', 'wp-bizwit' ),
+			'budget'             => __( 'Budget', 'wp-bizwit' ),
+			'billing_type'       => __( 'Billing type', 'wp-bizwit' ),
 			'termin'             => __( 'Termin', 'wp-bizwit' ),
-			'retensi'            => __( 'Retensi (%)', 'wp-bizwit' ),
-			'project_code'       => __( 'Kode proyek / SPK', 'wp-bizwit' ),
+			'retensi'            => __( 'Retention (%)', 'wp-bizwit' ),
+			'project_code'       => __( 'Project code / SPK', 'wp-bizwit' ),
 		);
 	}
 
@@ -154,13 +154,13 @@ class Indonesia extends Region {
 	 */
 	protected function field_descriptions(): array {
 		return array(
-			'legal_name'         => __( 'Nama badan usaha sesuai akta pendirian, jika berbeda dengan nama panggilan di atas. Nama inilah yang dicantumkan pada faktur.', 'wp-bizwit' ),
-			'tax_id'             => __( 'Nomor Pokok Wajib Pajak. 16 digit (berbasis NIK) atau 15 digit format lama. Wajib dicantumkan pada faktur pajak.', 'wp-bizwit' ),
-			'registration_no'    => __( 'Nomor Induk Berusaha dari sistem OSS, 13 digit. Menggantikan SIUP dan TDP.', 'wp-bizwit' ),
-			'payment_terms_days' => __( 'Jumlah hari sejak tanggal faktur sampai jatuh tempo. Umumnya 14 atau 30 hari.', 'wp-bizwit' ),
-			'budget'             => __( 'Nilai kontrak atau total yang disepakati untuk proyek ini.', 'wp-bizwit' ),
-			'retensi'            => __( 'Persentase yang ditahan sampai serah terima akhir. Diterapkan saat penagihan.', 'wp-bizwit' ),
-			'project_code'       => __( 'Nomor SPK, kontrak, atau referensi internal (opsional).', 'wp-bizwit' ),
+			'legal_name'         => __( 'Legal entity name as in the deed of establishment, if different from the display name. This is what appears on invoices.', 'wp-bizwit' ),
+			'tax_id'             => __( 'Taxpayer ID (NPWP). 16 digits (NIK-based) or the older 15-digit form. Required on tax invoices.', 'wp-bizwit' ),
+			'registration_no'    => __( 'Business identification number (NIB) from OSS, 13 digits. Replaces SIUP and TDP.', 'wp-bizwit' ),
+			'payment_terms_days' => __( 'Days from the invoice date until payment is due. Commonly 14 or 30 days.', 'wp-bizwit' ),
+			'budget'             => __( 'Contract value or agreed total for this project.', 'wp-bizwit' ),
+			'retensi'            => __( 'Percentage held until final handover. Applied when invoicing.', 'wp-bizwit' ),
+			'project_code'       => __( 'SPK, contract, or internal reference number (optional).', 'wp-bizwit' ),
 		);
 	}
 
@@ -172,25 +172,25 @@ class Indonesia extends Region {
 	public function meta_fields(): array {
 		return array(
 			'legal_form' => array(
-				'label'       => __( 'Bentuk badan usaha', 'wp-bizwit' ),
+				'label'       => __( 'Legal entity form', 'wp-bizwit' ),
 				'type'        => 'select',
 				'advanced'    => true,
 				'options'     => self::legal_forms(),
-				'description' => __( 'Menentukan bagaimana nama klien ditulis pada faktur dan kwitansi.', 'wp-bizwit' ),
+				'description' => __( 'Controls how the client name is written on invoices and receipts (kwitansi).', 'wp-bizwit' ),
 			),
 			'nik'        => array(
 				'label'       => __( 'NIK', 'wp-bizwit' ),
 				'type'        => 'text',
 				'advanced'    => true,
 				'maxlength'   => 16,
-				'description' => __( 'Nomor Induk Kependudukan, 16 digit. Untuk klien perorangan, NIK kini juga berfungsi sebagai NPWP.', 'wp-bizwit' ),
+				'description' => __( 'National ID number (NIK), 16 digits. For individuals, NIK now also serves as NPWP.', 'wp-bizwit' ),
 			),
 			'is_pkp'     => array(
-				'label'       => __( 'Pengusaha Kena Pajak (PKP)', 'wp-bizwit' ),
+				'label'       => __( 'VAT-registered business (PKP)', 'wp-bizwit' ),
 				'type'        => 'checkbox',
 				'advanced'    => true,
 				'tax_only'    => true,
-				'description' => __( 'Centang bila klien berstatus PKP dan dapat menerima faktur pajak.', 'wp-bizwit' ),
+				'description' => __( 'Check if the client is PKP and can receive tax invoices.', 'wp-bizwit' ),
 			),
 			'rt_rw'      => array(
 				'label'     => __( 'RT / RW', 'wp-bizwit' ),
@@ -208,11 +208,11 @@ class Indonesia extends Region {
 				'maxlength' => 96,
 			),
 			'satker'     => array(
-				'label'       => __( 'Satuan Kerja / Unit', 'wp-bizwit' ),
+				'label'       => __( 'Working unit (satker)', 'wp-bizwit' ),
 				'type'        => 'text',
 				'advanced'    => true,
 				'maxlength'   => 191,
-				'description' => __( 'Untuk klien instansi pemerintah: nama satker yang menerbitkan SPK atau kontrak.', 'wp-bizwit' ),
+				'description' => __( 'For government clients: the working unit (satker) that issued the SPK or contract.', 'wp-bizwit' ),
 			),
 		);
 	}
@@ -224,19 +224,19 @@ class Indonesia extends Region {
 	 */
 	public static function legal_forms(): array {
 		return array(
-			''              => __( '— Tidak ditentukan —', 'wp-bizwit' ),
-			'pt'            => __( 'PT (Perseroan Terbatas)', 'wp-bizwit' ),
-			'pt_perorangan' => __( 'PT Perorangan', 'wp-bizwit' ),
-			'cv'            => __( 'CV (Commanditaire Vennootschap)', 'wp-bizwit' ),
-			'firma'         => __( 'Firma', 'wp-bizwit' ),
-			'ud'            => __( 'UD (Usaha Dagang)', 'wp-bizwit' ),
-			'koperasi'      => __( 'Koperasi', 'wp-bizwit' ),
-			'yayasan'       => __( 'Yayasan', 'wp-bizwit' ),
-			'perkumpulan'   => __( 'Perkumpulan', 'wp-bizwit' ),
-			'bumn'          => __( 'BUMN', 'wp-bizwit' ),
-			'bumd'          => __( 'BUMD', 'wp-bizwit' ),
-			'instansi'      => __( 'Instansi Pemerintah', 'wp-bizwit' ),
-			'perorangan'    => __( 'Perorangan', 'wp-bizwit' ),
+			''              => __( '— Not specified —', 'wp-bizwit' ),
+			'pt'            => __( 'PT (limited company)', 'wp-bizwit' ),
+			'pt_perorangan' => __( 'Individual PT', 'wp-bizwit' ),
+			'cv'            => __( 'CV (limited partnership)', 'wp-bizwit' ),
+			'firma'         => __( 'Partnership (Firma)', 'wp-bizwit' ),
+			'ud'            => __( 'UD (sole proprietorship)', 'wp-bizwit' ),
+			'koperasi'      => __( 'Cooperative', 'wp-bizwit' ),
+			'yayasan'       => __( 'Foundation', 'wp-bizwit' ),
+			'perkumpulan'   => __( 'Association', 'wp-bizwit' ),
+			'bumn'          => __( 'State-owned enterprise (BUMN)', 'wp-bizwit' ),
+			'bumd'          => __( 'Region-owned enterprise (BUMD)', 'wp-bizwit' ),
+			'instansi'      => __( 'Government agency', 'wp-bizwit' ),
+			'perorangan'    => __( 'Individual', 'wp-bizwit' ),
 		);
 	}
 
@@ -250,10 +250,10 @@ class Indonesia extends Region {
 	 */
 	public static function business_scales(): array {
 		return array(
-			'mikro'    => __( 'Usaha Mikro', 'wp-bizwit' ),
-			'kecil'    => __( 'Usaha Kecil', 'wp-bizwit' ),
-			'menengah' => __( 'Usaha Menengah', 'wp-bizwit' ),
-			'besar'    => __( 'Usaha Besar', 'wp-bizwit' ),
+			'mikro'    => __( 'Micro business', 'wp-bizwit' ),
+			'kecil'    => __( 'Small business', 'wp-bizwit' ),
+			'menengah' => __( 'Medium business', 'wp-bizwit' ),
+			'besar'    => __( 'Large business', 'wp-bizwit' ),
 		);
 	}
 
@@ -264,10 +264,10 @@ class Indonesia extends Region {
 	 */
 	public static function tax_regimes(): array {
 		return array(
-			Settings::REGIME_NONE   => __( 'Tidak menangani pajak di BizWit', 'wp-bizwit' ),
-			self::REGIME_UMKM_FINAL => __( 'UMKM — PPh Final 0,5% (PP 55/2022)', 'wp-bizwit' ),
-			self::REGIME_NON_PKP    => __( 'Non-PKP — tanpa PPN', 'wp-bizwit' ),
-			self::REGIME_PKP        => __( 'PKP — memungut PPN', 'wp-bizwit' ),
+			Settings::REGIME_NONE   => __( 'Not handling tax in BizWit', 'wp-bizwit' ),
+			self::REGIME_UMKM_FINAL => __( 'UMKM — final income tax 0.5% (PP 55/2022)', 'wp-bizwit' ),
+			self::REGIME_NON_PKP    => __( 'Non-PKP — no VAT (PPN)', 'wp-bizwit' ),
+			self::REGIME_PKP        => __( 'PKP — charges VAT (PPN)', 'wp-bizwit' ),
 		);
 	}
 
@@ -306,16 +306,16 @@ class Indonesia extends Region {
 	 */
 	public function payment_methods(): array {
 		return array(
-			'bank_transfer' => __( 'Transfer Bank', 'wp-bizwit' ),
-			'cash'          => __( 'Tunai', 'wp-bizwit' ),
+			'bank_transfer' => __( 'Bank transfer', 'wp-bizwit' ),
+			'cash'          => __( 'Cash', 'wp-bizwit' ),
 			'qris'          => __( 'QRIS', 'wp-bizwit' ),
-			'ewallet'       => __( 'E-Wallet (GoPay / OVO / DANA / ShopeePay)', 'wp-bizwit' ),
+			'ewallet'       => __( 'E-wallet (GoPay / OVO / DANA / ShopeePay)', 'wp-bizwit' ),
 			'virtual_acc'   => __( 'Virtual Account', 'wp-bizwit' ),
-			'giro'          => __( 'Cek / Giro', 'wp-bizwit' ),
-			'card'          => __( 'Kartu Kredit / Debit', 'wp-bizwit' ),
-			'sp2d'          => __( 'SP2D (pembayaran instansi pemerintah)', 'wp-bizwit' ),
-			'offset'        => __( 'Kompensasi / Potongan', 'wp-bizwit' ),
-			'other'         => __( 'Lainnya', 'wp-bizwit' ),
+			'giro'          => __( 'Cheque / giro', 'wp-bizwit' ),
+			'card'          => __( 'Credit / debit card', 'wp-bizwit' ),
+			'sp2d'          => __( 'SP2D (government payment order)', 'wp-bizwit' ),
+			'offset'        => __( 'Offset / deduction', 'wp-bizwit' ),
+			'other'         => __( 'Other', 'wp-bizwit' ),
 		);
 	}
 
@@ -459,18 +459,18 @@ class Indonesia extends Region {
 		}
 
 		$months = array(
-			1  => 'Januari',
-			2  => 'Februari',
-			3  => 'Maret',
-			4  => 'April',
-			5  => 'Mei',
-			6  => 'Juni',
-			7  => 'Juli',
-			8  => 'Agustus',
-			9  => 'September',
-			10 => 'Oktober',
-			11 => 'November',
-			12 => 'Desember',
+			1  => __( 'January', 'wp-bizwit' ),
+			2  => __( 'February', 'wp-bizwit' ),
+			3  => __( 'March', 'wp-bizwit' ),
+			4  => __( 'April', 'wp-bizwit' ),
+			5  => __( 'May', 'wp-bizwit' ),
+			6  => __( 'June', 'wp-bizwit' ),
+			7  => __( 'July', 'wp-bizwit' ),
+			8  => __( 'August', 'wp-bizwit' ),
+			9  => __( 'September', 'wp-bizwit' ),
+			10 => __( 'October', 'wp-bizwit' ),
+			11 => __( 'November', 'wp-bizwit' ),
+			12 => __( 'December', 'wp-bizwit' ),
 		);
 
 		return sprintf(
@@ -565,8 +565,8 @@ class Indonesia extends Region {
 	 */
 	public function document_notes(): array {
 		return array(
-			__( 'Pembayaran dianggap lunas setelah dana diterima di rekening yang tercantum.', 'wp-bizwit' ),
-			__( 'Mohon cantumkan nomor faktur pada berita transfer.', 'wp-bizwit' ),
+			__( 'Payment is considered complete once funds are received in the stated account.', 'wp-bizwit' ),
+			__( 'Please include the invoice number in the transfer reference.', 'wp-bizwit' ),
 		);
 	}
 

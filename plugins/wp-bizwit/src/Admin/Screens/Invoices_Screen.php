@@ -70,10 +70,10 @@ class Invoices_Screen extends Placeholder_Screen {
 		return array_merge(
 			$planned,
 			array(
-				__( 'PPN hanya dicantumkan bila usaha Anda berstatus PKP.', 'wp-bizwit' ),
-				__( 'Pencatatan potongan PPh 23, sehingga nilai faktur dan dana yang diterima di rekening tetap dapat direkonsiliasi.', 'wp-bizwit' ),
-				__( 'Penagihan bertahap: uang muka, termin, dan retensi.', 'wp-bizwit' ),
-				__( 'Rujukan nomor PO, SPK dan BAST pada faktur.', 'wp-bizwit' ),
+				__( 'VAT (PPN) only appears when your business is registered as PKP.', 'wp-bizwit' ),
+				__( 'Record PPh 23 withholding so invoice totals and bank credits can still be reconciled.', 'wp-bizwit' ),
+				__( 'Staged billing: down payment, termin stages, and retention.', 'wp-bizwit' ),
+				__( 'PO, SPK and BAST reference numbers on invoices.', 'wp-bizwit' ),
 			)
 		);
 	}

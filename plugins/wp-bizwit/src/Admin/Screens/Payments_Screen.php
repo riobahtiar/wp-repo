@@ -63,9 +63,9 @@ class Payments_Screen extends Placeholder_Screen {
 		);
 
 		if ( Regions::current() instanceof Indonesia ) {
-			$planned[] = __( 'Kwitansi dengan nilai terbilang, sebagaimana lazim pada dokumen yang ditandatangani klien.', 'wp-bizwit' );
-			$planned[] = __( 'Pengingat bea meterai untuk kwitansi di atas ambang batas.', 'wp-bizwit' );
-			$planned[] = __( 'Metode pembayaran lokal: transfer bank, QRIS, e-wallet, virtual account, dan SP2D untuk instansi pemerintah.', 'wp-bizwit' );
+			$planned[] = __( 'Receipts (kwitansi) with the amount in words, as expected on client-signed documents.', 'wp-bizwit' );
+			$planned[] = __( 'Stamp duty reminder for receipts above the threshold.', 'wp-bizwit' );
+			$planned[] = __( 'Local payment methods: bank transfer, QRIS, e-wallet, virtual account, and SP2D for government agencies.', 'wp-bizwit' );
 		}
 
 		$planned[] = __( 'This plugin never processes or moves money. It records payments that happened elsewhere.', 'wp-bizwit' );

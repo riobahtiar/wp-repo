@@ -11,7 +11,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       WP BizWit
- * Description:       WordPress Plugins for Business and Administration. Kelola klien, proyek, faktur dan kwitansi untuk perusahaan dan UMKM Indonesia — lengkap dengan NPWP, NIB, status PKP, PPN, PPh 23, terbilang dan bea meterai. Hanya pencatatan, tanpa pemrosesan pembayaran.
+ * Description:       Business administration for Indonesian companies and UMKM: clients, projects, invoices and receipts (kwitansi) with NPWP, NIB, PKP/PPN, PPh 23, terbilang and stamp duty. Record-keeping only — never processes payments.
  * Version:           0.4.0
  * Requires PHP:      8.0
  * Requires at least: 6.9

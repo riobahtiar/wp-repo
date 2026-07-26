@@ -24,6 +24,7 @@ PHP: `composer install` inside this package. Details in [development.md](develop
 | [culture.md](culture.md) | Designing for Indonesian users: names, tone, WhatsApp, documents, the Lebaran calendar, payment behaviour |
 | [data-model.md](data-model.md) | The seven database tables, why custom tables, and the rules the schema depends on |
 | [development.md](development.md) | Build, lint, test, translation workflow, monorepo npm, dependency policy, tooling traps |
+| [i18n.md](i18n.md) | **English source + id_ID catalogue** — WordPress i18n rules, locale switching, domain terms |
 | [frontend-architecture.md](frontend-architecture.md) | Vue 3 + Vite + Tailwind decisions, performance budgets, REST conventions, wordpress.org packaging — **read before any interactive UI work** |
 | [performance.md](performance.md) | Measured gzip baselines, re-measure commands, soft bundle gate |
 

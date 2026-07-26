@@ -11,6 +11,13 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+- **i18n: English source + full Indonesian catalogue.** User-facing strings use
+  English msgids (WordPress.org practice). `id_ID` translations cover the
+  catalogue; switching the site language switches the whole UI. Domain terms
+  (NPWP, PKP, termin, …) stay official in both languages. Vue uses `wp.i18n`
+  via `resources/app/i18n.ts`. See [docs/i18n.md](docs/i18n.md).
+
 ## [0.4.0] — 2026-07-27
 
 Projects CRUD with termin stages, plus the Vue/Vite frontend foundation closed

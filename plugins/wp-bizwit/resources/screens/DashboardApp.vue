@@ -1,10 +1,14 @@
 <script setup lang="ts">
 /**
  * Dashboard pilot island — proves PHP → enqueue → Vue → REST → design system.
+ *
+ * User-facing copy uses @wordpress/i18n so strings follow the site locale
+ * (English source → languages/*.json / PHP translations).
  */
 import { onMounted, ref } from 'vue';
 
 import { apiGet } from '@/app/api/client';
+import { __ } from '@/app/i18n';
 import AppShell from '@ui/AppShell.vue';
 import Button from '@ui/Button.vue';
 import EmptyState from '@ui/EmptyState.vue';
@@ -41,7 +45,9 @@ async function loadHealth(): Promise< void > {
 		state.value = 'ready';
 	} catch ( err ) {
 		errorMessage.value =
-			err instanceof Error ? err.message : 'Gagal memuat status sistem.';
+			err instanceof Error
+				? err.message
+				: __( 'Could not load system status.', 'wp-bizwit' );
 		state.value = 'error';
 	}
 }
@@ -53,8 +59,13 @@ onMounted( () => {
 
 <template>
 	<AppShell
-		title="Status sistem"
-		description="Panel percontohan Vue — memastikan REST dan format uang berjalan."
+		:title="__( 'System status', 'wp-bizwit' )"
+		:description="
+			__(
+				'Vue pilot panel — verifies REST and money formatting.',
+				'wp-bizwit'
+			)
+		"
 	>
 		<!-- Loading skeleton -->
 		<div
@@ -64,7 +75,7 @@ onMounted( () => {
 			aria-live="polite"
 		>
 			<p class="m-0 mb-4 text-sm text-[var(--bw-color-text-muted)]">
-				Memuat…
+				{{ __( 'Loading…', 'wp-bizwit' ) }}
 			</p>
 			<div class="flex flex-col gap-3">
 				<div
@@ -82,14 +93,17 @@ onMounted( () => {
 		<!-- Error -->
 		<EmptyState
 			v-else-if="state === 'error'"
-			title="Tidak dapat memuat status"
+			:title="__( 'Could not load status', 'wp-bizwit' )"
 			:description="
 				errorMessage ||
-				'Silakan coba lagi. Pastikan Anda masih masuk dan memiliki izin BizWit.'
+				__(
+					'Please try again. Make sure you are still signed in and have a BizWit capability.',
+					'wp-bizwit'
+				)
 			"
 		>
 			<Button variant="primary" type="button" @click="loadHealth">
-				Coba lagi
+				{{ __( 'Try again', 'wp-bizwit' ) }}
 			</Button>
 		</EmptyState>
 
@@ -101,7 +115,7 @@ onMounted( () => {
 			<dl class="m-0 grid gap-3 text-sm sm:grid-cols-2">
 				<div>
 					<dt class="m-0 font-medium text-[var(--bw-color-text-muted)]">
-						Versi
+						{{ __( 'Version', 'wp-bizwit' ) }}
 					</dt>
 					<dd class="m-0 mt-0.5 text-[var(--bw-color-text)]">
 						{{ health.version }}
@@ -109,7 +123,7 @@ onMounted( () => {
 				</div>
 				<div>
 					<dt class="m-0 font-medium text-[var(--bw-color-text-muted)]">
-						Wilayah
+						{{ __( 'Region', 'wp-bizwit' ) }}
 					</dt>
 					<dd class="m-0 mt-0.5 text-[var(--bw-color-text)]">
 						{{ health.region }}
@@ -117,7 +131,7 @@ onMounted( () => {
 				</div>
 				<div class="sm:col-span-2">
 					<dt class="m-0 font-medium text-[var(--bw-color-text-muted)]">
-						Contoh format uang
+						{{ __( 'Money format example', 'wp-bizwit' ) }}
 					</dt>
 					<dd class="m-0 mt-0.5 text-base text-[var(--bw-color-text)]">
 						<MoneyText
