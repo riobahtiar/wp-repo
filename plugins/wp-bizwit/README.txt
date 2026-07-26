@@ -1,6 +1,6 @@
 === WP BizWit ===
 Contributors:
-Tags: invoicing, clients, crm, projects, business
+Tags: invoicing, faktur, kwitansi, umkm, indonesia
 Requires at least: 6.9
 Tested up to: 7.0
 Requires PHP: 8.0
@@ -16,6 +16,18 @@ WP BizWit turns a WordPress install into a lightweight back office for a small
 business. It keeps the records a business actually runs on: who your clients
 are, what work you are doing for them, what you have billed, and what has been
 paid.
+
+**Built for Indonesian businesses first.** Indonesia is the default profile and
+rupiah the default currency, so a fresh install already speaks the right
+vocabulary: NPWP, NIB, NIK, status PKP, bentuk badan usaha, alamat lengkap
+sampai kelurahan dan kecamatan, dan seluruh 38 provinsi. Faktur bernomor
+007/INV/BW/VII/2026, kwitansi dengan nilai terbilang, dan pengingat bea meterai.
+The interface is fully translated into Indonesian.
+
+**Tax rules, not just tax wording.** BizWit knows that only a PKP may charge
+PPN, that PPh Final UMKM 0.5% is a tax on your own turnover rather than a line
+on your client's invoice, and that a corporate client withholding PPh 23 pays
+you less than the invoice total. Set your status once and the paperwork follows.
 
 **Clients of every kind.** Individuals, companies, government bodies and other
 organisations are all first-class client types, each with the identity fields
@@ -80,8 +92,29 @@ default.
 
 = Which currencies are supported? =
 
-A selection of common currencies, including zero-decimal currencies such as JPY.
-The list is filterable via `wp_bizwit_currencies`.
+A selection of common currencies, with IDR first. Rupiah is treated as a
+zero-decimal currency, since sen has not circulated for decades and no
+Indonesian invoice shows them. The list is filterable via `wp_bizwit_currencies`.
+
+= Can I use this outside Indonesia? =
+
+Yes. Set **BizWit → Settings → Business region** to "International (generic)",
+or simply set your country and currency and let BizWit detect it. You then get
+neutral wording and plain sequential document numbers.
+
+= Are the tax rates in the plugin guaranteed to be current? =
+
+No. Rates and thresholds change with the annual budget, so everything BizWit
+ships is a sensible default you can override in Settings. Confirm what applies
+to your business with your own tax consultant. BizWit records your paperwork; it
+does not give tax advice.
+
+= Apakah plugin ini tersedia dalam bahasa Indonesia? =
+
+Ya. Seluruh antarmuka sudah diterjemahkan. Atur bahasa situs WordPress Anda ke
+Bahasa Indonesia melalui Pengaturan → Umum. Istilah bisnis seperti NPWP, PPN dan
+kwitansi tetap muncul walaupun antarmuka Anda berbahasa Inggris, karena wilayah
+usaha dan bahasa antarmuka diatur terpisah.
 
 == Changelog ==
 
@@ -90,3 +123,7 @@ The list is filterable via `wp_bizwit_currencies`.
 * Client records for individuals, companies, government entities and organisations.
 * Database schema, versioned migrations, capabilities and roles.
 * Dashboard, clients list and editor, and settings screens.
+* Indonesian regional profile: NPWP, NIB, NIK, PKP status, legal entity forms,
+  full address fields, all 38 provinces, PPN / PPh Final UMKM / PPh 23 handling,
+  bea meterai, terbilang, and Indonesian document numbering.
+* Complete Indonesian (id_ID) translation.

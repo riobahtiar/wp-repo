@@ -8,12 +8,14 @@
 namespace WP_BizWit\Admin\Screens;
 
 use WP_BizWit\Admin\Notices;
+use WP_BizWit\Localization\Indonesia;
+use WP_BizWit\Localization\Regions;
 use WP_BizWit\Support\Capabilities;
 use WP_BizWit\Support\Money;
 use WP_BizWit\Support\Settings;
 
 /**
- * Business identity, currency and document numbering settings.
+ * Business identity, tax regime, bank details and document numbering.
  */
 class Settings_Screen extends Screen {
 
@@ -52,28 +54,7 @@ class Settings_Screen extends Screen {
 
 		check_admin_referer( self::FORM_NONCE );
 
-		$currency = strtoupper( sanitize_text_field( wp_unslash( $_POST['currency'] ?? '' ) ) );
-		if ( ! in_array( $currency, Money::currencies(), true ) ) {
-			$currency = Settings::currency();
-		}
-
-		Settings::update(
-			array(
-				'business_name'            => sanitize_text_field( wp_unslash( $_POST['business_name'] ?? '' ) ),
-				'business_email'           => sanitize_email( wp_unslash( $_POST['business_email'] ?? '' ) ),
-				'business_phone'           => sanitize_text_field( wp_unslash( $_POST['business_phone'] ?? '' ) ),
-				'business_address'         => sanitize_textarea_field( wp_unslash( $_POST['business_address'] ?? '' ) ),
-				'tax_id'                   => sanitize_text_field( wp_unslash( $_POST['tax_id'] ?? '' ) ),
-				'currency'                 => $currency,
-				'tax_label'                => sanitize_text_field( wp_unslash( $_POST['tax_label'] ?? '' ) ),
-				'default_tax_rate'         => sanitize_text_field( wp_unslash( $_POST['default_tax_rate'] ?? '0' ) ),
-				'payment_terms_days'       => max( 0, min( 3650, absint( $_POST['payment_terms_days'] ?? 30 ) ) ),
-				'invoice_prefix'           => sanitize_text_field( wp_unslash( $_POST['invoice_prefix'] ?? '' ) ),
-				'receipt_prefix'           => sanitize_text_field( wp_unslash( $_POST['receipt_prefix'] ?? '' ) ),
-				'number_padding'           => max( 1, min( 12, absint( $_POST['number_padding'] ?? 4 ) ) ),
-				'delete_data_on_uninstall' => isset( $_POST['delete_data_on_uninstall'] ),
-			)
-		);
+		Settings::save( $this->collect_input() );
 
 		Notices::add( __( 'Settings saved.', 'wp-bizwit' ), 'success' );
 
@@ -82,17 +63,95 @@ class Settings_Screen extends Screen {
 	}
 
 	/**
+	 * Sanitise the submitted settings form.
+	 *
+	 * @return array<string, mixed> Settings ready to persist.
+	 */
+	private function collect_input(): array {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Verified by the caller.
+		$currency = strtoupper( sanitize_text_field( wp_unslash( $_POST['currency'] ?? '' ) ) );
+		if ( ! in_array( $currency, Money::currencies(), true ) ) {
+			$currency = Settings::currency();
+		}
+
+		$region = sanitize_key( wp_unslash( $_POST['region'] ?? Regions::AUTO ) );
+		if ( Regions::AUTO !== $region && ! array_key_exists( $region, Regions::all() ) ) {
+			$region = Regions::AUTO;
+		}
+
+		$regime = sanitize_key( wp_unslash( $_POST['tax_regime'] ?? '' ) );
+		if ( ! array_key_exists( $regime, Indonesia::tax_regimes() ) ) {
+			$regime = Indonesia::REGIME_UMKM_FINAL;
+		}
+
+		$scale = sanitize_key( wp_unslash( $_POST['business_scale'] ?? '' ) );
+		if ( ! array_key_exists( $scale, Indonesia::business_scales() ) ) {
+			$scale = 'kecil';
+		}
+
+		$number_format = sanitize_key( wp_unslash( $_POST['number_format'] ?? 'regional' ) );
+
+		$settings = array(
+			'business_name'            => sanitize_text_field( wp_unslash( $_POST['business_name'] ?? '' ) ),
+			'business_email'           => sanitize_email( wp_unslash( $_POST['business_email'] ?? '' ) ),
+			'business_phone'           => sanitize_text_field( wp_unslash( $_POST['business_phone'] ?? '' ) ),
+			'business_address'         => sanitize_textarea_field( wp_unslash( $_POST['business_address'] ?? '' ) ),
+			'business_country'         => strtoupper( substr( sanitize_text_field( wp_unslash( $_POST['business_country'] ?? '' ) ), 0, 2 ) ),
+			'business_code'            => strtoupper( substr( sanitize_text_field( wp_unslash( $_POST['business_code'] ?? '' ) ), 0, 12 ) ),
+			'tax_id'                   => sanitize_text_field( wp_unslash( $_POST['tax_id'] ?? '' ) ),
+			'business_reg_no'          => sanitize_text_field( wp_unslash( $_POST['business_reg_no'] ?? '' ) ),
+			'region'                   => $region,
+			'business_scale'           => $scale,
+			'tax_regime'               => $regime,
+			'currency'                 => $currency,
+			'tax_label'                => sanitize_text_field( wp_unslash( $_POST['tax_label'] ?? '' ) ),
+			'default_tax_rate'         => sanitize_text_field( wp_unslash( $_POST['default_tax_rate'] ?? '0' ) ),
+			'withholding_label'        => sanitize_text_field( wp_unslash( $_POST['withholding_label'] ?? '' ) ),
+			'withholding_rate'         => sanitize_text_field( wp_unslash( $_POST['withholding_rate'] ?? '0' ) ),
+			'payment_terms_days'       => max( 0, min( 3650, absint( $_POST['payment_terms_days'] ?? 30 ) ) ),
+			'bank_name'                => sanitize_text_field( wp_unslash( $_POST['bank_name'] ?? '' ) ),
+			'bank_account_no'          => sanitize_text_field( wp_unslash( $_POST['bank_account_no'] ?? '' ) ),
+			'bank_account_name'        => sanitize_text_field( wp_unslash( $_POST['bank_account_name'] ?? '' ) ),
+			'bank_branch'              => sanitize_text_field( wp_unslash( $_POST['bank_branch'] ?? '' ) ),
+			'number_format'            => 'simple' === $number_format ? 'simple' : 'regional',
+			'invoice_prefix'           => sanitize_text_field( wp_unslash( $_POST['invoice_prefix'] ?? '' ) ),
+			'receipt_prefix'           => sanitize_text_field( wp_unslash( $_POST['receipt_prefix'] ?? '' ) ),
+			'number_padding'           => max( 1, min( 12, absint( $_POST['number_padding'] ?? 3 ) ) ),
+			'apply_stamp_duty'         => isset( $_POST['apply_stamp_duty'] ),
+			'delete_data_on_uninstall' => isset( $_POST['delete_data_on_uninstall'] ),
+		);
+		// phpcs:enable
+
+		// A business that is not a PKP has no right to charge PPN, so the stored
+		// rate is forced to zero rather than being left as a trap for whoever
+		// builds the first invoice.
+		if ( Indonesia::REGIME_PKP !== $regime ) {
+			$settings['default_tax_rate'] = '0';
+		}
+
+		return $settings;
+	}
+
+	/**
 	 * Render the settings form.
 	 *
 	 * @return void
 	 */
 	protected function render(): void {
+		$region = Regions::current();
+
 		$this->view(
 			'settings',
 			array(
-				'settings'    => Settings::all(),
-				'currencies'  => Money::currencies(),
-				'nonce_field' => self::FORM_NONCE,
+				'settings'       => Settings::all(),
+				'currencies'     => Money::currencies(),
+				'region'         => $region,
+				'is_indonesia'   => $region instanceof Indonesia,
+				'region_choices' => Regions::choices(),
+				'tax_regimes'    => Indonesia::tax_regimes(),
+				'scales'         => Indonesia::business_scales(),
+				'sample_number'  => Settings::document_number( 'invoice', 1 ),
+				'nonce_field'    => self::FORM_NONCE,
 			)
 		);
 	}

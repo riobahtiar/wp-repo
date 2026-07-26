@@ -5,6 +5,12 @@
 A lightweight back office inside wp-admin: client records, project billing,
 invoices and payment receipts.
 
+**Built for Indonesian companies and UMKM first.** Indonesia is the default
+profile and rupiah the default currency — NPWP, NIB, PKP status, Provinsi,
+kwitansi with terbilang, bea meterai and `007/INV/BW/VII/2026` numbering work out
+of the box. Ships with a complete Indonesian (`id_ID`) translation. Businesses
+elsewhere get a generic international profile.
+
 > **Record keeping only.** WP BizWit never processes, moves, or holds money.
 > "Payments" means recording a payment that already happened elsewhere and
 > issuing the matching receipt. There is no gateway integration by design.
@@ -22,7 +28,27 @@ Built on the [JUVO WordPress Plugin Boilerplate](https://github.com/JUVOJustin/w
 | **Invoices** | Line items, tax, discounts, gap-free sequential numbering |
 | **Payments** | Recorded receipts against invoices, including partial payments |
 
+## Untuk pengguna Indonesia
+
+| | |
+|---|---|
+| **Identitas klien** | NPWP (15 digit format lama maupun 16 digit berbasis NIK), NIB dari OSS, NIK, status PKP, bentuk badan usaha (PT, PT Perorangan, CV, Firma, UD, Koperasi, Yayasan, BUMN, BUMD, instansi) |
+| **Alamat** | Jalan, RT/RW, Kelurahan/Desa, Kecamatan, Kabupaten/Kota, dan 38 provinsi |
+| **Perpajakan** | Pilihan status UMKM (PPh Final 0,5%), Non-PKP, atau PKP. PPN hanya muncul bila Anda PKP |
+| **Pemotongan** | Pencatatan PPh 23 agar nilai faktur dan dana masuk tetap dapat direkonsiliasi |
+| **Dokumen** | Penomoran `007/INV/BW/VII/2026`, kwitansi dengan terbilang, pengingat bea meterai di atas Rp 5.000.000 |
+| **Pembayaran** | Transfer bank, tunai, QRIS, e-wallet, virtual account, cek/giro, kartu, SP2D |
+| **Format** | Rp 1.500.000 dengan pemisah ribuan titik, tanggal "26 Juli 2026" |
+
+Rujukan tarif dan ambang batas adalah nilai bawaan yang dapat Anda ubah di
+Pengaturan. Pastikan ketentuan yang berlaku kepada konsultan pajak Anda.
+
 ## Design decisions worth knowing
+
+**A region is not a language.** The `id_ID` translation changes the interface
+language; the regional profile changes the business vocabulary, which fields
+exist, and the tax rules. An Indonesian company running wp-admin in English
+still gets NPWP fields and terbilang on its kwitansi.
 
 **Custom tables, not custom post types.** Invoices have line items, running
 balances and numbers that must be unique. Modelling that in `postmeta` means
@@ -79,11 +105,21 @@ problem.
 ```
 src/
   Database/       Schema, versioned Installer, atomic Sequence
+  Localization/   Region profiles (Indonesia, generic) and Terbilang
   Repositories/   All $wpdb access lives here
   Support/        Money, Settings, Capabilities
   Admin/          Menu, Screens, WP_List_Table subclasses, view templates
 resources/        SCSS and JS entry points, compiled by @wordpress/scripts
+languages/        Translation template and the id_ID catalogue
 tests/php/        PHPUnit tests
+```
+
+Compiled `.mo` / `.l10n.php` files are gitignored and built at release time.
+After a fresh clone, regenerate them or the Indonesian translation will not
+appear:
+
+```bash
+$(command -v wp) i18n make-mo languages/ && $(command -v wp) i18n make-php languages/
 ```
 
 See [`AGENTS.md`](AGENTS.md) for the conventions this codebase relies on.

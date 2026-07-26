@@ -7,6 +7,8 @@
 
 namespace WP_BizWit\Admin\Screens;
 
+use WP_BizWit\Localization\Indonesia;
+use WP_BizWit\Localization\Regions;
 use WP_BizWit\Support\Capabilities;
 
 /**
@@ -54,11 +56,25 @@ class Invoices_Screen extends Placeholder_Screen {
 	 * @return string[] Translated list items.
 	 */
 	protected function planned(): array {
-		return array(
+		$planned = array(
 			__( 'Line items with quantity, unit price, per-line tax and discounts.', 'wp-bizwit' ),
-			__( 'Gap-free invoice numbering with a configurable prefix.', 'wp-bizwit' ),
+			__( 'Race-free invoice numbering in your chosen format.', 'wp-bizwit' ),
 			__( 'Draft, sent, partially paid, paid, overdue and void statuses.', 'wp-bizwit' ),
 			__( 'Print-ready invoice output, with the running balance shown against payments.', 'wp-bizwit' ),
+		);
+
+		if ( ! Regions::current() instanceof Indonesia ) {
+			return $planned;
+		}
+
+		return array_merge(
+			$planned,
+			array(
+				__( 'PPN hanya dicantumkan bila usaha Anda berstatus PKP.', 'wp-bizwit' ),
+				__( 'Pencatatan potongan PPh 23, sehingga nilai faktur dan dana yang diterima di rekening tetap dapat direkonsiliasi.', 'wp-bizwit' ),
+				__( 'Penagihan bertahap: uang muka, termin, dan retensi.', 'wp-bizwit' ),
+				__( 'Rujukan nomor PO, SPK dan BAST pada faktur.', 'wp-bizwit' ),
+			)
 		);
 	}
 }

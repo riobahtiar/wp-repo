@@ -12,6 +12,12 @@ This file covers what is specific to WP BizWit.
 Business administration for the person running the business: **clients,
 projects, invoices, and payment records**, all inside wp-admin.
 
+**Indonesian companies and UMKM are the primary target.** Indonesia is the
+default regional profile and IDR the default currency; a fresh install already
+speaks the right vocabulary without anyone finding a setting. Other regions are
+supported through the same abstraction, but Indonesian correctness wins any
+design argument.
+
 **Hard scope boundary: this plugin never processes, moves, or holds money.** It
 is a record-keeping system. There is no gateway integration, no card handling, no
 payment initiation. "Payments" here means *recording that a payment already
@@ -68,11 +74,71 @@ Defined in `src/Database/Schema.php`. To change the schema: edit `Schema`, then
 
 ---
 
+## Regional profiles — read before touching any user-facing wording
+
+**A region is not a language.** Two independent axes:
+
+| | Controlled by | Changes |
+|---|---|---|
+| **Interface language** | WordPress site locale + `languages/*.mo` | The words wp-admin is written in |
+| **Regional profile** | `Localization\Regions`, from settings | Business vocabulary, which fields exist, tax rules, number and date formats, document numbering |
+
+An Indonesian company running wp-admin in English still needs a field labelled
+NPWP, a Provinsi dropdown, and kwitansi with the amount in words. Never gate
+domain vocabulary on `get_locale()`.
+
+`Regions::current()` resolves the active profile: an explicit setting, else
+auto-detection (business country `ID` **or** currency `IDR` → Indonesia; empty
+settings → Indonesia). Call `Regions::reset()` after changing settings — use
+`Settings::save()`, which does it for you.
+
+### Adding or changing user-facing wording
+
+- Field labels and help text come from `$region->field_label()` /
+  `field_description()` with a region-neutral fallback. Do not hardcode a label
+  in a view.
+- Region-specific *extra* fields come from `$region->meta_fields()` and are
+  stored as JSON in `clients.meta`, read back with `Client_Repository::meta()`.
+- Client type slugs (`individual`, `company`, `government`, `organization`) are
+  fixed; only their labels vary by region. Never add a fifth type for a country.
+
+### Indonesian rules that change what a correct document looks like
+
+These are business rules, not wording. `Localization\Indonesia` owns them.
+
+- **Only a PKP may charge PPN.** `Settings::charges_sales_tax()` and
+  `Settings::effective_tax_rate()` are the gate. A non-PKP invoice must never
+  carry a PPN line — that is billing tax the business has no right to collect.
+  Saving settings with a non-PKP regime forces the stored rate to `0`.
+- **PPh Final UMKM 0.5%** (PP 55/2022) is a tax on the seller's own turnover,
+  not a charge added to the client's invoice. Never add it to an invoice total.
+- **PPh 23** withholding means the client pays the invoice total *minus* the
+  withheld amount. An invoice model that ignores this will not reconcile against
+  the bank. Rate lives in `withholding_rate`.
+- **Bea meterai** Rp 10,000 on documents stating over Rp 5,000,000
+  (`Indonesia::stamp_duty()`), which catches most kwitansi.
+- **Terbilang.** Indonesian kwitansi carry the amount in words; that is what
+  makes them hard to alter after signing. `Money::in_words()` →
+  `Localization\Terbilang`. The grammar has irregulars — `sebelas` not `satu
+  belas`, `seratus`/`seribu` not `satu ratus`/`satu ribu`.
+- **Document numbers** are composite: `007/INV/BW/VII/2026` — sequence / type /
+  business code / roman month / year. Built by `Settings::document_number()`.
+- **NPWP** is accepted at 15 digits (legacy, stored masked as
+  `01.234.567.8-901.234`) or 16 digits (NIK-based, stored plain).
+- **IDR is zero-decimal here.** ISO 4217 says 2 (sen), but sen has not
+  circulated for decades. Changing this would reinterpret every stored
+  `*_minor` value and needs a data migration.
+
+Tax rates change with the annual budget. Treat everything as a *default the
+business overrides*, and keep UI wording pointing at the user's own tax
+consultant rather than asserting current law.
+
 ## Layer conventions
 
 ```
 src/
   Database/       Schema, Installer (versioned migrations), Sequence
+  Localization/   Region (base), Indonesia, Generic_Region, Regions, Terbilang
   Repositories/   All $wpdb access. Repository (base) + one class per entity
   Support/        Money, Settings, Capabilities
   Admin/
@@ -113,12 +179,26 @@ full administrator.
 Roles are written to the database on activation only. After changing
 `Capabilities::install()`, deactivate and reactivate the plugin.
 
-### Currency note
+### Translations
 
-IDR is treated as a **2-decimal** currency, per ISO 4217. Indonesian invoices are
-conventionally written in whole rupiah, so if that becomes a problem, add `IDR`
-to `Money::ZERO_DECIMAL_CURRENCIES` — but note that doing so changes the meaning
-of every already-stored `*_minor` value and needs a data migration.
+Indonesian (`id_ID`) ships complete: all 240 strings. Workflow after adding or
+changing any translatable string:
+
+```bash
+$(command -v wp) i18n make-pot . languages/wp-bizwit.pot --exclude=resources,vendor,vendor-prefixed,node_modules,tests
+$(command -v wp) i18n update-po languages/wp-bizwit.pot languages/
+# translate the new msgids in languages/wp-bizwit-id_ID.po, then
+$(command -v wp) i18n make-mo languages/ && $(command -v wp) i18n make-php languages/
+```
+
+Use the global `wp` explicitly — see the tooling papercuts below. Compiled
+`.mo` / `.l10n.php` files are gitignored and built during release; regenerate
+them locally or Indonesian will not appear.
+
+Note that strings authored in Indonesian in `Localization\Indonesia` are still
+wrapped in `__()` and appear in the catalogue translated to themselves. That is
+deliberate: it keeps one extraction pipeline and lets a future `en_US` override
+render those screens in English if anyone wants it.
 
 ---
 
@@ -126,16 +206,22 @@ of every already-stored `*_minor` value and needs a data migration.
 
 Built: schema for all seven tables, versioned installer, capabilities and roles,
 admin menu, dashboard, **full Clients CRUD** (list table with search / filter /
-sort / bulk archive and delete, add/edit form), settings.
+sort / bulk archive and delete, add/edit form), settings, the regional profile
+layer, and a complete Indonesian translation.
 
 Placeholders: Projects, Invoices, Payments screens render an honest "not built
 yet" panel. Their tables already exist, so implementing them needs no migration.
 `Repositories/Stats_Repository.php` already queries them for the dashboard.
 
-Tests: `tests/php/MoneyTest.php` locks in amount parsing. Extend it before
-touching `Money::normalize_decimal_string()` — a separator misread by one
-position is an invoice wrong by a factor of a hundred, and nothing downstream
-catches it.
+Tests:
+
+- `tests/php/MoneyTest.php` — amount parsing across locale formats. Extend it
+  before touching `Money::normalize_decimal_string()`: a separator misread by one
+  position is an invoice wrong by a factor of a hundred, and nothing downstream
+  catches it.
+- `tests/php/IndonesiaRegionTest.php` — NPWP formatting and validation, the 38
+  provinces, terbilang grammar, document numbering, bea meterai thresholds, and
+  the PKP / non-PKP tax gate.
 
 ## Known tooling papercuts in this checkout
 

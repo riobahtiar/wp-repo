@@ -7,6 +7,8 @@
 
 namespace WP_BizWit\Admin\Screens;
 
+use WP_BizWit\Localization\Indonesia;
+use WP_BizWit\Localization\Regions;
 use WP_BizWit\Support\Capabilities;
 
 /**
@@ -54,11 +56,20 @@ class Payments_Screen extends Placeholder_Screen {
 	 * @return string[] Translated list items.
 	 */
 	protected function planned(): array {
-		return array(
+		$planned = array(
 			__( 'Payments recorded against an invoice, including partial payments.', 'wp-bizwit' ),
 			__( 'Sequential receipt numbering, independent of invoice numbering.', 'wp-bizwit' ),
 			__( 'Payment method and external reference, for reconciliation against a bank statement.', 'wp-bizwit' ),
-			__( 'This plugin never processes or moves money. It records payments that happened elsewhere.', 'wp-bizwit' ),
 		);
+
+		if ( Regions::current() instanceof Indonesia ) {
+			$planned[] = __( 'Kwitansi dengan nilai terbilang, sebagaimana lazim pada dokumen yang ditandatangani klien.', 'wp-bizwit' );
+			$planned[] = __( 'Pengingat bea meterai untuk kwitansi di atas ambang batas.', 'wp-bizwit' );
+			$planned[] = __( 'Metode pembayaran lokal: transfer bank, QRIS, e-wallet, virtual account, dan SP2D untuk instansi pemerintah.', 'wp-bizwit' );
+		}
+
+		$planned[] = __( 'This plugin never processes or moves money. It records payments that happened elsewhere.', 'wp-bizwit' );
+
+		return $planned;
 	}
 }

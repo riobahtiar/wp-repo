@@ -7,27 +7,15 @@
 
 namespace WP_BizWit\Support;
 
+use WP_BizWit\Localization\Generic_Region;
+use WP_BizWit\Localization\Indonesia;
+use WP_BizWit\Localization\Regions;
+
 /**
  * Reads and writes the single options row holding all plugin settings.
  *
  * One serialized option beats a dozen separate ones here: settings are always
  * read together, and a single autoloaded row means one query instead of many.
- *
- * @phpstan-type SettingsArray array{
- *     business_name: string,
- *     business_email: string,
- *     business_phone: string,
- *     business_address: string,
- *     tax_id: string,
- *     currency: string,
- *     tax_label: string,
- *     default_tax_rate: string,
- *     payment_terms_days: int,
- *     invoice_prefix: string,
- *     receipt_prefix: string,
- *     number_padding: int,
- *     delete_data_on_uninstall: bool
- * }
  */
 class Settings {
 
@@ -45,18 +33,43 @@ class Settings {
 	 */
 	public static function defaults(): array {
 		return array(
+			// Business identity.
 			'business_name'            => (string) get_bloginfo( 'name' ),
 			'business_email'           => (string) get_option( 'admin_email', '' ),
 			'business_phone'           => '',
 			'business_address'         => '',
+			'business_country'         => 'ID',
+			'business_code'            => '',
 			'tax_id'                   => '',
-			'currency'                 => 'USD',
-			'tax_label'                => __( 'Tax', 'wp-bizwit' ),
-			'default_tax_rate'         => '0',
+			'business_reg_no'          => '',
+
+			// Regional profile. 'auto' resolves to Indonesia unless the business
+			// details say otherwise - see Localization\Regions.
+			'region'                   => 'auto',
+			'business_scale'           => 'kecil',
+			'tax_regime'               => 'umkm_final',
+
+			// Money. Defaults target an Indonesian UMKM.
+			'currency'                 => 'IDR',
+			'tax_label'                => 'PPN',
+			'default_tax_rate'         => '11',
+			'withholding_label'        => 'PPh 23',
+			'withholding_rate'         => '2',
 			'payment_terms_days'       => 30,
+
+			// Bank details. Indonesian invoices are expected to carry them.
+			'bank_name'                => '',
+			'bank_account_no'          => '',
+			'bank_account_name'        => '',
+			'bank_branch'              => '',
+
+			// Document numbering.
+			'number_format'            => 'regional',
 			'invoice_prefix'           => 'INV-',
-			'receipt_prefix'           => 'RCP-',
-			'number_padding'           => 4,
+			'receipt_prefix'           => 'KW-',
+			'number_padding'           => 3,
+			'apply_stamp_duty'         => true,
+
 			'delete_data_on_uninstall' => false,
 		);
 	}
@@ -107,23 +120,70 @@ class Settings {
 	 * @return string ISO 4217 currency code.
 	 */
 	public static function currency(): string {
-		$currency = self::get( 'currency', 'USD' );
+		$currency = self::get( 'currency', 'IDR' );
 
-		return is_string( $currency ) && 3 === strlen( $currency ) ? strtoupper( $currency ) : 'USD';
+		return is_string( $currency ) && 3 === strlen( $currency ) ? strtoupper( $currency ) : 'IDR';
 	}
 
 	/**
-	 * Build a formatted document number from a prefix and a sequence value.
+	 * Persist settings and drop any cached derived state.
 	 *
-	 * @param string $prefix Document prefix, e.g. 'INV-'.
-	 * @param int    $number Allocated sequence value.
+	 * @param array<string, mixed> $values Settings to merge over the stored ones.
 	 *
-	 * @return string Formatted document number, e.g. 'INV-0007'.
+	 * @return void
 	 */
-	public static function format_number( string $prefix, int $number ): string {
-		$padding = (int) self::get( 'number_padding', 4 );
-		$padding = max( 1, min( 12, $padding ) );
+	public static function save( array $values ): void {
+		self::update( $values );
 
-		return $prefix . str_pad( (string) $number, $padding, '0', STR_PAD_LEFT );
+		// The active region is derived from these values, so a stale cached
+		// instance would keep serving the previous profile for this request.
+		Regions::reset();
+	}
+
+	/**
+	 * Whether the business charges sales tax on its invoices.
+	 *
+	 * Only a PKP may charge PPN. A business on the UMKM final regime pays 0.5%
+	 * of its own turnover instead; that is a tax on the seller, not a line the
+	 * client is billed, so it must never be added to an invoice total.
+	 *
+	 * @return bool True when invoices should carry a tax line.
+	 */
+	public static function charges_sales_tax(): bool {
+		return Indonesia::REGIME_PKP === (string) self::get( 'tax_regime', Indonesia::REGIME_UMKM_FINAL );
+	}
+
+	/**
+	 * The tax rate to apply to new invoice lines, as a percentage string.
+	 *
+	 * Returns '0' when the business is not entitled to charge tax.
+	 *
+	 * @return string Percentage rate.
+	 */
+	public static function effective_tax_rate(): string {
+		return self::charges_sales_tax() ? (string) self::get( 'default_tax_rate', '11' ) : '0';
+	}
+
+	/**
+	 * Build a document number for an allocated sequence value.
+	 *
+	 * @param string $type     Document type key, 'invoice' or 'receipt'.
+	 * @param int    $number   Allocated sequence value.
+	 * @param string $date     Document date in Y-m-d form.
+	 *
+	 * @return string Formatted document number.
+	 */
+	public static function document_number( string $type, int $number, string $date = '' ): string {
+		if ( '' === $date ) {
+			$date = (string) current_time( 'Y-m-d' );
+		}
+
+		// 'simple' forces the plain prefixed format even inside a region that
+		// would otherwise use its own house style.
+		if ( 'simple' === (string) self::get( 'number_format', 'regional' ) ) {
+			return ( new Generic_Region() )->document_number( $type, $number, $date );
+		}
+
+		return Regions::current()->document_number( $type, $number, $date );
 	}
 }

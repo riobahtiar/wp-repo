@@ -5,7 +5,9 @@
  * @package WP_BizWit
  */
 
+use WP_BizWit\Localization\Regions;
 use WP_BizWit\Support\Money;
+use WP_BizWit\Support\Settings;
 
 /**
  * Locks in how user-entered amounts are parsed into integer minor units.
@@ -16,6 +18,16 @@ use WP_BizWit\Support\Money;
  * behaviour cannot regress silently.
  */
 class MoneyTest extends WP_UnitTestCase {
+
+	/**
+	 * Start each test from a known regional profile.
+	 */
+	public function set_up(): void {
+		parent::set_up();
+
+		delete_option( Settings::OPTION );
+		Regions::reset();
+	}
 
 	/**
 	 * Amounts that must parse to a known number of minor units.
@@ -30,9 +42,9 @@ class MoneyTest extends WP_UnitTestCase {
 			'eu grouped with decimal'    => array( '1.234,56', 'USD', 123456 ),
 			'lone comma as decimal'      => array( '1,50', 'USD', 150 ),
 			'lone comma as grouping'     => array( '1,234', 'USD', 123400 ),
-			'repeated dots as grouping'  => array( '1.500.000', 'IDR', 150000000 ),
+			'repeated dots as grouping'  => array( '1.500.000', 'IDR', 1500000 ),
 			'repeated commas as group'   => array( '1,500,000', 'USD', 150000000 ),
-			'currency symbol is ignored' => array( 'Rp 2.750.000', 'IDR', 275000000 ),
+			'currency symbol is ignored' => array( 'Rp 2.750.000', 'IDR', 2750000 ),
 			'dollar sign is ignored'     => array( '$1,234.56', 'USD', 123456 ),
 			'negative amount'            => array( '-45.10', 'USD', -4510 ),
 			'empty string'               => array( '', 'USD', 0 ),
@@ -59,19 +71,35 @@ class MoneyTest extends WP_UnitTestCase {
 	 * Converting to minor units and back is lossless.
 	 */
 	public function test_minor_units_round_trip(): void {
-		$minor = Money::to_minor( '1.500.000', 'IDR' );
+		$minor = Money::to_minor( '1.234,56', 'USD' );
 
-		$this->assertSame( '1500000.00', Money::to_decimal( $minor, 'IDR' ) );
-		$this->assertSame( $minor, Money::to_minor( Money::to_decimal( $minor, 'IDR' ), 'IDR' ) );
+		$this->assertSame( '1234.56', Money::to_decimal( $minor, 'USD' ) );
+		$this->assertSame( $minor, Money::to_minor( Money::to_decimal( $minor, 'USD' ), 'USD' ) );
 	}
 
 	/**
 	 * Currencies without a minor unit are not divided by one hundred.
+	 *
+	 * IDR is treated as zero-decimal deliberately: sen has not circulated for
+	 * decades, and storing whole rupiah keeps stored values the same magnitude
+	 * as the figures on an Indonesian invoice.
 	 */
 	public function test_zero_decimal_currencies_have_no_fraction(): void {
 		$this->assertSame( 0, Money::decimals( 'JPY' ) );
+		$this->assertSame( 0, Money::decimals( 'IDR' ) );
 		$this->assertSame( 2, Money::decimals( 'USD' ) );
 		$this->assertSame( '1500', Money::to_decimal( 1500, 'JPY' ) );
+		$this->assertSame( '1500000', Money::to_decimal( 1500000, 'IDR' ) );
+	}
+
+	/**
+	 * Rupiah is displayed with Indonesian separators and no decimals.
+	 */
+	public function test_rupiah_uses_indonesian_separators(): void {
+		Settings::save( array( 'region' => 'id' ) );
+
+		$this->assertSame( 'Rp 1.500.000', Money::format( 1500000, 'IDR' ) );
+		$this->assertSame( '-Rp 250.000', Money::format( -250000, 'IDR' ) );
 	}
 
 	/**

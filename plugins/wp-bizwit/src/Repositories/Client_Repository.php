@@ -9,6 +9,7 @@ namespace WP_BizWit\Repositories;
 
 use WP_Error;
 use WP_BizWit\Database\Schema;
+use WP_BizWit\Localization\Regions;
 use WP_BizWit\Support\Settings;
 
 /**
@@ -86,12 +87,10 @@ class Client_Repository extends Repository {
 	 * @return array<string, string> Type slug mapped to label.
 	 */
 	public static function types(): array {
-		return array(
-			self::TYPE_INDIVIDUAL   => __( 'Individual', 'wp-bizwit' ),
-			self::TYPE_COMPANY      => __( 'Company', 'wp-bizwit' ),
-			self::TYPE_GOVERNMENT   => __( 'Government', 'wp-bizwit' ),
-			self::TYPE_ORGANIZATION => __( 'Organization', 'wp-bizwit' ),
-		);
+		// Labels come from the active region: the same four stored slugs are
+		// called Perorangan, Perusahaan, Instansi Pemerintah and Yayasan /
+		// Koperasi to an Indonesian business.
+		return Regions::current()->client_types();
 	}
 
 	/**
@@ -240,10 +239,11 @@ class Client_Repository extends Repository {
 	 * @return int|WP_Error New client id, or an error describing what was invalid.
 	 */
 	public function create( array $input ) {
-		$data = $this->sanitize( $input );
+		$data  = $this->sanitize( $input );
+		$error = $this->validate( $data );
 
-		if ( '' === $data['display_name'] ) {
-			return new WP_Error( 'wp_bizwit_missing_name', __( 'A client name is required.', 'wp-bizwit' ) );
+		if ( null !== $error ) {
+			return $error;
 		}
 
 		$data['created_by'] = get_current_user_id();
@@ -280,10 +280,11 @@ class Client_Repository extends Repository {
 			return new WP_Error( 'wp_bizwit_not_found', __( 'That client no longer exists.', 'wp-bizwit' ) );
 		}
 
-		$data = $this->sanitize( $input );
+		$data  = $this->sanitize( $input );
+		$error = $this->validate( $data );
 
-		if ( '' === $data['display_name'] ) {
-			return new WP_Error( 'wp_bizwit_missing_name', __( 'A client name is required.', 'wp-bizwit' ) );
+		if ( null !== $error ) {
+			return $error;
 		}
 
 		$data['updated_at'] = $this->now();
@@ -355,6 +356,35 @@ class Client_Repository extends Repository {
 	}
 
 	/**
+	 * Check sanitised data against the rules of the active region.
+	 *
+	 * @param array<string, mixed> $data Sanitised column values.
+	 *
+	 * @return WP_Error|null An error to return to the user, or null when valid.
+	 */
+	private function validate( array $data ): ?WP_Error {
+		if ( '' === $data['display_name'] ) {
+			return new WP_Error( 'wp_bizwit_missing_name', __( 'A client name is required.', 'wp-bizwit' ) );
+		}
+
+		$region = Regions::current();
+		$tax_id = (string) $data['tax_id'];
+
+		if ( ! $region->is_valid_tax_id( $tax_id ) ) {
+			return new WP_Error(
+				'wp_bizwit_invalid_tax_id',
+				sprintf(
+					/* translators: %s: name of the tax identifier, for example NPWP */
+					__( 'The %s does not look right. Check the number of digits and try again.', 'wp-bizwit' ),
+					$region->field_label( 'tax_id', __( 'tax ID', 'wp-bizwit' ) )
+				)
+			);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Reduce raw input to exactly the columns this table accepts, sanitised.
 	 *
 	 * Building the column list here rather than from array keys of the input is
@@ -375,12 +405,16 @@ class Client_Repository extends Repository {
 
 		$terms = isset( $input['payment_terms_days'] ) ? (int) $input['payment_terms_days'] : (int) Settings::get( 'payment_terms_days', 30 );
 
+		// The region normalises its own tax identifier, so an NPWP typed as bare
+		// digits is stored in the 00.000.000.0-000.000 form people expect to see.
+		$tax_id = Regions::current()->format_tax_id( (string) ( $input['tax_id'] ?? '' ) );
+
 		return array(
 			'type'               => array_key_exists( $type, self::types() ) ? $type : self::TYPE_COMPANY,
 			'status'             => array_key_exists( $status, self::statuses() ) ? $status : self::STATUS_ACTIVE,
 			'display_name'       => $this->text( $input, 'display_name', 191 ),
 			'legal_name'         => $this->text( $input, 'legal_name', 191 ),
-			'tax_id'             => $this->text( $input, 'tax_id', 64 ),
+			'tax_id'             => substr( sanitize_text_field( $tax_id ), 0, 64 ),
 			'registration_no'    => $this->text( $input, 'registration_no', 64 ),
 			'email'              => sanitize_email( (string) ( $input['email'] ?? '' ) ),
 			'phone'              => $this->text( $input, 'phone', 64 ),
@@ -394,7 +428,71 @@ class Client_Repository extends Repository {
 			'currency'           => $currency,
 			'payment_terms_days' => max( 0, min( 3650, $terms ) ),
 			'notes'              => sanitize_textarea_field( (string) ( $input['notes'] ?? '' ) ),
+			'meta'               => $this->sanitize_meta( $input ),
 		);
+	}
+
+	/**
+	 * Reduce region-specific input to a JSON blob for the meta column.
+	 *
+	 * Only keys the active region actually declares are kept, so switching
+	 * region never lets an unexpected field through, and a checkbox that was
+	 * simply not submitted is stored as false rather than being left stale.
+	 *
+	 * @param array<string, mixed> $input Raw field values.
+	 *
+	 * @return string JSON object, or '' when the region declares no extra fields.
+	 */
+	private function sanitize_meta( array $input ): string {
+		$fields = Regions::current()->meta_fields();
+
+		if ( array() === $fields ) {
+			return '';
+		}
+
+		$meta = array();
+
+		foreach ( $fields as $key => $definition ) {
+			$raw = $input[ 'meta_' . $key ] ?? null;
+
+			if ( 'checkbox' === $definition['type'] ) {
+				$meta[ $key ] = ! empty( $raw );
+
+				continue;
+			}
+
+			$value = sanitize_text_field( (string) $raw );
+
+			if ( 'select' === $definition['type'] ) {
+				$options      = $definition['options'] ?? array();
+				$meta[ $key ] = array_key_exists( $value, $options ) ? $value : '';
+
+				continue;
+			}
+
+			$meta[ $key ] = substr( $value, 0, (int) ( $definition['maxlength'] ?? 191 ) );
+		}
+
+		return (string) wp_json_encode( $meta );
+	}
+
+	/**
+	 * Decode a client's region-specific meta fields.
+	 *
+	 * @param array<string, mixed> $client Client row.
+	 *
+	 * @return array<string, mixed> Meta values, empty when none are stored.
+	 */
+	public static function meta( array $client ): array {
+		$raw = (string) ( $client['meta'] ?? '' );
+
+		if ( '' === $raw ) {
+			return array();
+		}
+
+		$decoded = json_decode( $raw, true );
+
+		return is_array( $decoded ) ? $decoded : array();
 	}
 
 	/**

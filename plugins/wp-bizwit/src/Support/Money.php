@@ -7,6 +7,8 @@
 
 namespace WP_BizWit\Support;
 
+use WP_BizWit\Localization\Regions;
+
 /**
  * Converts between human-entered amounts and integer minor units.
  *
@@ -27,6 +29,11 @@ class Money {
 		'CLP',
 		'DJF',
 		'GNF',
+		// ISO 4217 formally gives IDR two decimals (sen), but sen has not
+		// circulated for decades and no Indonesian invoice, kwitansi or bank
+		// statement shows them. Storing whole rupiah keeps stored values the
+		// same magnitude as the numbers people actually type and read.
+		'IDR',
 		'JPY',
 		'KMF',
 		'KRW',
@@ -55,7 +62,7 @@ class Money {
 		'CNY' => '¥',
 		'EUR' => '€',
 		'GBP' => '£',
-		'IDR' => 'Rp',
+		'IDR' => 'Rp ',
 		'INR' => '₹',
 		'JPY' => '¥',
 		'MYR' => 'RM',
@@ -140,15 +147,31 @@ class Money {
 		$decimals = self::decimals( $currency );
 		$symbol   = self::SYMBOLS[ $currency ] ?? $currency . ' ';
 
-		$value = 0 === $decimals
-			? number_format_i18n( $minor )
-			: number_format_i18n( $minor / ( 10 ** $decimals ), $decimals );
+		// Grouping and decimal characters come from the active region, not the
+		// site locale. A rupiah figure rendered "1,500,000" reads as one and a
+		// half to an Indonesian reader, whatever language wp-admin is in.
+		$value = Regions::current()->format_number(
+			0 === $decimals ? (float) $minor : $minor / ( 10 ** $decimals ),
+			$decimals
+		);
 
 		if ( $minor < 0 ) {
 			return '-' . $symbol . ltrim( $value, '-' );
 		}
 
 		return $symbol . $value;
+	}
+
+	/**
+	 * Express an amount in words, where the region has such a convention.
+	 *
+	 * @param int    $minor    Amount in minor units.
+	 * @param string $currency ISO 4217 currency code.
+	 *
+	 * @return string Amount written out, or '' when not applicable.
+	 */
+	public static function in_words( int $minor, string $currency = 'USD' ): string {
+		return Regions::current()->amount_in_words( $minor, strtoupper( $currency ) );
 	}
 
 	/**
@@ -164,7 +187,8 @@ class Money {
 		 */
 		$currencies = apply_filters(
 			'wp_bizwit_currencies',
-			array( 'AUD', 'CAD', 'CHF', 'CNY', 'EUR', 'GBP', 'IDR', 'INR', 'JPY', 'MYR', 'NZD', 'PHP', 'SGD', 'THB', 'USD', 'VND' )
+			// IDR leads the list because this plugin's primary users bill in it.
+			array( 'IDR', 'USD', 'SGD', 'MYR', 'AUD', 'EUR', 'GBP', 'JPY', 'CNY', 'INR', 'PHP', 'THB', 'VND', 'CAD', 'CHF', 'NZD' )
 		);
 
 		return array_values( array_unique( array_map( 'strval', (array) $currencies ) ) );

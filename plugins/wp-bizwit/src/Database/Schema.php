@@ -10,6 +10,12 @@ namespace WP_BizWit\Database;
 /**
  * Defines table names and the `CREATE TABLE` statements consumed by dbDelta().
  *
+ * Region-specific paperwork fields (NPWP variants, NIK, kelurahan, satker and
+ * so on) live in a JSON `meta` column rather than getting their own columns.
+ * They are printed on documents, never filtered or sorted on, and giving each
+ * jurisdiction its own columns would widen the table for every user who does not
+ * operate there.
+ *
  * All monetary columns are stored as signed BIGINT in the *minor unit* of the
  * relevant currency (cents, sen, pence). Never use FLOAT/DOUBLE for money:
  * binary floating point cannot represent 0.10 exactly, so summing invoice lines
@@ -153,6 +159,7 @@ class Schema {
 			currency varchar(3) NOT NULL DEFAULT 'USD',
 			payment_terms_days smallint(5) unsigned NOT NULL DEFAULT 30,
 			notes longtext NOT NULL,
+			meta longtext NOT NULL,
 			created_by bigint(20) unsigned NOT NULL DEFAULT 0,
 			created_at datetime NOT NULL,
 			updated_at datetime NOT NULL,

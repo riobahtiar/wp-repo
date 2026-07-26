@@ -10,6 +10,7 @@ namespace WP_BizWit\Admin\Screens;
 use WP_Error;
 use WP_BizWit\Admin\Notices;
 use WP_BizWit\Admin\Tables\Clients_Table;
+use WP_BizWit\Localization\Regions;
 use WP_BizWit\Repositories\Client_Repository;
 use WP_BizWit\Support\Capabilities;
 use WP_BizWit\Support\Money;
@@ -156,11 +157,17 @@ class Clients_Screen extends Screen {
 			$client = $record;
 		}
 
+		$region = Regions::current();
+
 		$this->view(
 			'clients-form',
 			array(
 				'client'      => $client,
+				'meta'        => Client_Repository::meta( $client ),
 				'is_edit'     => 'edit' === $action,
+				'region'      => $region,
+				'meta_fields' => $region->meta_fields(),
+				'provinces'   => $region->provinces(),
 				'types'       => Client_Repository::types(),
 				'statuses'    => Client_Repository::statuses(),
 				'currencies'  => Money::currencies(),
