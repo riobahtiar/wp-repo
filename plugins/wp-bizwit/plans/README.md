@@ -18,7 +18,7 @@ currently true of the codebase lives in [`PROGRESS.md`](PROGRESS.md).
 | Plan | Status | Blocks release |
 |------|--------|----------------|
 | [01-projects.md](01-projects.md) | **Done** (0.4.0) | — |
-| [02-invoices.md](02-invoices.md) | Planned | 0.5.0 |
+| [02-invoices.md](02-invoices.md) | **Done** (0.5.0) | — |
 | [03-payments-receipts.md](03-payments-receipts.md) | Planned | 0.6.0 |
 | [04-ux-and-onboarding.md](04-ux-and-onboarding.md) | Partly done | 0.7.0 |
 | [05-import-export.md](05-import-export.md) | **Deferred until 1.0 GA** | post-1.0 |

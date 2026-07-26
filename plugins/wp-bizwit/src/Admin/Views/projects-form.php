@@ -80,6 +80,27 @@ $form_terms[] = array(
 <a href="<?php echo esc_url( (string) $data['list_url'] ); ?>" class="page-title-action">
 	<?php esc_html_e( 'Back to projects', 'wp-bizwit' ); ?>
 </a>
+<?php if ( $is_edit && ! empty( $project['id'] ) ) : ?>
+	<a
+		href="
+		<?php
+		echo esc_url(
+			add_query_arg(
+				array(
+					'page'       => 'wp-bizwit-invoices',
+					'action'     => 'new',
+					'project_id' => (int) $project['id'],
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+		?>
+				"
+		class="page-title-action"
+	>
+		<?php esc_html_e( 'Create invoice', 'wp-bizwit' ); ?>
+	</a>
+<?php endif; ?>
 
 <hr class="wp-header-end" />
 

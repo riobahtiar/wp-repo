@@ -21,7 +21,7 @@ class Installer {
 	 *
 	 * @var string
 	 */
-	public const DB_VERSION = '1.2.0';
+	public const DB_VERSION = '1.3.0';
 
 	/**
 	 * Option name holding the installed schema version.

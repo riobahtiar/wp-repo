@@ -15,8 +15,10 @@ use WP_BizWit\Admin\Screens\Invoices_Screen;
 use WP_BizWit\Admin\Screens\Payments_Screen;
 use WP_BizWit\Admin\Screens\Projects_Screen;
 use WP_BizWit\Admin\Screens\Settings_Screen;
+use WP_BizWit\Cron\Overdue_Invoices;
 use WP_BizWit\Database\Installer;
 use WP_BizWit\Repositories\Client_Repository;
+use WP_BizWit\Repositories\Invoice_Repository;
 use WP_BizWit\Repositories\Project_Repository;
 use WP_BizWit\Repositories\Stats_Repository;
 use WP_BizWit\Rest\Controllers\Health_Controller;
@@ -28,7 +30,7 @@ class WP_BizWit {
 
 
 	const PLUGIN_NAME    = 'wp-bizwit';
-	const PLUGIN_VERSION = '0.4.0';
+	const PLUGIN_VERSION = '0.5.0';
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -48,6 +50,7 @@ class WP_BizWit {
 		$this->define_schema_hooks();
 		$this->define_admin_hooks();
 		$this->define_rest_hooks();
+		$this->define_cron_hooks();
 
 		$this->loader->add_action( 'init', $this, 'register_blocks' );
 	}
@@ -113,6 +116,7 @@ class WP_BizWit {
 
 		$clients  = new Client_Repository();
 		$projects = new Project_Repository();
+		$invoices = new Invoice_Repository();
 		$stats    = new Stats_Repository();
 
 		// Screens are handed their dependencies here rather than reaching for
@@ -122,12 +126,23 @@ class WP_BizWit {
 			new Dashboard_Screen( $stats ),
 			new Clients_Screen( $clients, $projects ),
 			new Projects_Screen( $projects, $clients ),
-			new Invoices_Screen(),
+			new Invoices_Screen( $invoices, $clients, $projects ),
 			new Payments_Screen(),
 			new Settings_Screen()
 		);
 
 		$this->loader->add_action( 'admin_menu', $menu, 'register' );
+	}
+
+	/**
+	 * Schedule and run background jobs (overdue invoices, …).
+	 *
+	 * @return void
+	 */
+	private function define_cron_hooks(): void {
+		$overdue = new Overdue_Invoices();
+		$this->loader->add_action( 'init', $overdue, 'schedule' );
+		$this->loader->add_action( Overdue_Invoices::HOOK, $overdue, 'run' );
 	}
 
 	/**

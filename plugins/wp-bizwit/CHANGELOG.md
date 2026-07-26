@@ -11,16 +11,37 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-07-27
+
+Invoices end-to-end: list, editor, status machine, print, PPN/PPh 23 rules.
+
+### Added
+- **Invoices** ([plan 02](plans/02-invoices.md)): `WP_List_Table` list with
+  status filters and overdue view; add/edit form with line-item repeater;
+  draft → sent → partial / paid / overdue / void transitions.
+- **`Invoice_Repository`** with items replace-all, server-side totals, void
+  (number preserved), draft-only delete, create-from-project prefill.
+- **`Invoice_Totals`** calculator (line base → header discount → tax scaling →
+  withholding). Posted totals are never trusted.
+- **`Invoice_Status`** transition rules; editable only while draft.
+- **Printable A4 HTML** (browser print-to-PDF): kop fields, lines, bank
+  details, terbilang, signature/cap space, meterai note when applicable.
+- **PPN gated** on `Settings::charges_sales_tax()` (PKP only); **PPh 23**
+  withholding with gross / withheld / net expected.
+- **Numbering:** provisional `DRAFT-…` until first leave-draft; permanent
+  number via `Sequence` + `Settings::document_number()`.
+- **Daily cron** `wp_bizwit_mark_overdue_invoices` to flip past-due open
+  invoices to overdue.
+- Schema **1.3.0**: `withholding_rate`, `withholding_minor` on invoices.
+- Tests: `InvoiceTotalsTest`, `InvoiceRepositoryTest`.
+- `Money::line_base_minor()` / `percent_of()` fixed-point helpers.
+
 ### Changed
-- **i18n: English source + full Indonesian catalogue.** User-facing strings use
-  English msgids (WordPress.org practice). `id_ID` translations cover the
-  catalogue; switching the site language switches the whole UI. Domain terms
-  (NPWP, PKP, termin, …) stay official in both languages.
+- Version **0.5.0**. Placeholder invoices screen replaced with full CRUD.
+- **i18n: English source + full Indonesian catalogue** (carried from unreleased
+  work). Domain terms (NPWP, PKP, termin, …) stay official in both languages.
 - **JS i18n follows Gutenberg:** `import { __ } from '@wordpress/i18n'`, Vite
-  externalizes the package to core `wp.i18n`, handles `wp-bizwit-{entry}`,
-  `wp_set_script_translations()`, Jed JSON via `npm run i18n:compile`. See
-  [docs/i18n.md](docs/i18n.md) and the
-  [Gutenberg i18n guide](https://github.com/WordPress/gutenberg/blob/trunk/docs/how-to-guides/internationalization.md).
+  externalizes to core `wp.i18n`, `wp_set_script_translations()`, Jed JSON.
 
 ## [0.4.0] — 2026-07-27
 

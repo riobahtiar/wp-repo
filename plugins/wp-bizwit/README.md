@@ -149,14 +149,12 @@ $(command -v wp) i18n make-mo languages/ && $(command -v wp) i18n make-php langu
 
 ## Status
 
-**0.4.0 — beta.** Pre-1.0 on purpose: invoices and payments admin screens are
-placeholders and the schema may still change. Do not run a real business on this
-yet.
+**0.5.0 — beta.** Pre-1.0 on purpose: payments are still a placeholder and the
+schema may still change. Do not run a real business on this yet.
 
-Clients are fully implemented. Projects, invoices and payments have their schema
-in place and render a placeholder screen; no migration is needed when their
-interfaces land. Import and export are deliberately deferred until after 1.0 —
-see [plans/05-import-export.md](plans/05-import-export.md) for why.
+Clients, projects and invoices are implemented (list, form, print for invoices).
+Payments still use a placeholder screen. Import and export are deliberately
+deferred until after 1.0 — see [plans/05-import-export.md](plans/05-import-export.md).
 
 Live status: [plans/PROGRESS.md](plans/PROGRESS.md).
 

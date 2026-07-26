@@ -7,6 +7,8 @@
 
 namespace WP_BizWit;
 
+use WP_BizWit\Cron\Overdue_Invoices;
+
 /**
  * Fired during plugin deactivation.
  *
@@ -22,5 +24,6 @@ class Deactivator {
 	 * @return void
 	 */
 	public static function deactivate(): void {
+		Overdue_Invoices::unschedule();
 	}
 }

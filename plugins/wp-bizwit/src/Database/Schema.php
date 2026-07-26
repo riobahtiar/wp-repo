@@ -296,6 +296,8 @@ class Schema {
 			tax_minor bigint(20) NOT NULL DEFAULT 0,
 			total_minor bigint(20) NOT NULL DEFAULT 0,
 			paid_minor bigint(20) NOT NULL DEFAULT 0,
+			withholding_rate decimal(7,4) NOT NULL DEFAULT 0.0000,
+			withholding_minor bigint(20) NOT NULL DEFAULT 0,
 			notes longtext NOT NULL,
 			terms longtext NOT NULL,
 			created_by bigint(20) unsigned NOT NULL DEFAULT 0,

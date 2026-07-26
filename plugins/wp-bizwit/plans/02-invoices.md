@@ -1,6 +1,6 @@
 # Plan 02 — Invoices
 
-**Status:** Planned · **Target:** 0.5.0 · **Tables exist:** `bizwit_invoices`, `bizwit_invoice_items`
+**Status:** Done · **Target:** 0.5.0 · **Shipped:** `bizwit_invoices` + items + print + overdue cron
 
 ## Goal
 
@@ -80,19 +80,21 @@ signature and cap space, meterai where required, bank details, A4.
 
 ## Tasks
 
-- [ ] `Invoice_Repository` and `Invoice_Item_Repository`
-- [ ] A `Totals` calculator with the ordering rules documented and unit-tested
-- [ ] Line item repeater UI
-- [ ] Tax section rendered only when `Settings::charges_sales_tax()`
-- [ ] PPh 23 withholding line, showing gross, withheld and net expected
-- [ ] Status machine with allowed transitions in one place
-- [ ] Void flow that preserves the number and the record
-- [ ] Numbering decision: gaps or no gaps (see risks)
-- [ ] Printable template with region document notes
-- [ ] Create-from-project
-- [ ] Overdue detection — a scheduled task, not a computed-on-read guess
-- [ ] Indonesian translation for every new string
-- [ ] Tests: totals arithmetic, tax gating, transitions, numbering under concurrency
+- [x] `Invoice_Repository` (items nested; no separate public item repo needed)
+- [x] A `Totals` calculator with the ordering rules documented and unit-tested
+- [x] Line item repeater UI (PHP rows in v1; Vue editor deferred)
+- [x] Tax section rendered only when `Settings::charges_sales_tax()`
+- [x] PPh 23 withholding line, showing gross, withheld and net expected
+- [x] Status machine with allowed transitions in one place (`Invoice_Status`)
+- [x] Void flow that preserves the number and the record
+- [x] Numbering decision: provisional draft numbers; permanent on leave-draft; gaps accepted for v1
+- [x] Printable template with region document notes (HTML/print CSS, A4)
+- [x] Create-from-project (query args `project_id` / `term_id`)
+- [x] Overdue detection — daily cron `wp_bizwit_mark_overdue_invoices`
+- [x] Indonesian translation for every new string
+- [x] Tests: totals arithmetic, tax gating, transitions (concurrency left for later)
+- [ ] Vue line-item editor island (optional follow-up)
+- [ ] Concurrent numbering stress test
 
 ## Acceptance criteria
 

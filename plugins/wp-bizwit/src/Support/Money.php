@@ -199,6 +199,129 @@ class Money {
 	}
 
 	/**
+	 * Multiply a DECIMAL quantity by an integer unit price in minor units.
+	 *
+	 * Quantity is treated as fixed-point with four decimal places (matching
+	 * `DECIMAL(14,4)` on line items). Rounding to the nearest minor unit
+	 * happens once, half-up. Never compute this with bare float multiplication.
+	 *
+	 * @param string|float|int $quantity         Line quantity.
+	 * @param int              $unit_price_minor Unit price in minor units.
+	 *
+	 * @return int Line base amount in minor units (ex tax).
+	 */
+	public static function line_base_minor( $quantity, int $unit_price_minor ): int {
+		$scaled = self::quantity_to_scaled( $quantity );
+
+		if ( 0 === $scaled || 0 === $unit_price_minor ) {
+			return 0;
+		}
+
+		// half-up: add half the divisor before integer division.
+		$product = $scaled * $unit_price_minor;
+		$sign    = $product < 0 ? -1 : 1;
+		$abs     = abs( $product );
+
+		return $sign * (int) intdiv( $abs + 5000, 10000 );
+	}
+
+	/**
+	 * Apply a percentage rate to a minor-unit amount (half-up).
+	 *
+	 * @param int              $amount_minor Base amount in minor units.
+	 * @param string|float|int $rate_percent Percentage, e.g. 11 or "2.5".
+	 *
+	 * @return int Resulting amount in minor units.
+	 */
+	public static function percent_of( int $amount_minor, $rate_percent ): int {
+		$rate_scaled = self::rate_to_scaled( $rate_percent );
+
+		if ( 0 === $amount_minor || 0 === $rate_scaled ) {
+			return 0;
+		}
+
+		// rate_scaled is percent × 10000 (four decimals), so / 1_000_000 for %.
+		$product = $amount_minor * $rate_scaled;
+		$sign    = $product < 0 ? -1 : 1;
+		$abs     = abs( $product );
+
+		return $sign * (int) intdiv( $abs + 500000, 1000000 );
+	}
+
+	/**
+	 * Parse a quantity into a 4-decimal fixed-point integer (value × 10000).
+	 *
+	 * @param string|float|int $quantity Raw quantity.
+	 *
+	 * @return int Scaled quantity.
+	 */
+	public static function quantity_to_scaled( $quantity ): int {
+		if ( is_int( $quantity ) ) {
+			return $quantity * 10000;
+		}
+
+		if ( is_float( $quantity ) ) {
+			return (int) round( $quantity * 10000 );
+		}
+
+		$normalized = self::normalize_decimal_string( (string) $quantity );
+
+		if ( '' === $normalized ) {
+			return 0;
+		}
+
+		$negative   = str_starts_with( $normalized, '-' );
+		$normalized = ltrim( $normalized, '-' );
+		$parts      = explode( '.', $normalized, 2 );
+		$whole      = (int) $parts[0];
+		$frac       = isset( $parts[1] ) ? substr( $parts[1] . '0000', 0, 4 ) : '0000';
+		// Round fifth decimal digit into the fourth when present.
+		if ( isset( $parts[1] ) && strlen( $parts[1] ) > 4 ) {
+			$fifth  = (int) $parts[1][4];
+			$frac_i = (int) $frac + ( $fifth >= 5 ? 1 : 0 );
+			if ( $frac_i >= 10000 ) {
+				++$whole;
+				$frac_i = 0;
+			}
+			$frac = str_pad( (string) $frac_i, 4, '0', STR_PAD_LEFT );
+		}
+
+		$scaled = $whole * 10000 + (int) $frac;
+
+		return $negative ? -$scaled : $scaled;
+	}
+
+	/**
+	 * Parse a percentage into a 4-decimal fixed-point integer (rate × 10000).
+	 *
+	 * "11" → 110000, "2.5" → 25000.
+	 *
+	 * @param string|float|int $rate Percentage.
+	 *
+	 * @return int Scaled rate.
+	 */
+	public static function rate_to_scaled( $rate ): int {
+		return self::quantity_to_scaled( $rate );
+	}
+
+	/**
+	 * Format a scaled quantity (×10000) back to a plain decimal string.
+	 *
+	 * @param int $scaled Quantity × 10000.
+	 *
+	 * @return string e.g. "1.5000".
+	 */
+	public static function quantity_from_scaled( int $scaled ): string {
+		$negative = $scaled < 0;
+		$scaled   = abs( $scaled );
+		$whole    = intdiv( $scaled, 10000 );
+		$frac     = str_pad( (string) ( $scaled % 10000 ), 4, '0', STR_PAD_LEFT );
+		$value    = $whole . '.' . $frac;
+
+		return $negative ? '-' . $value : $value;
+	}
+
+	/**
 	 * Currency codes offered in settings dropdowns.
 	 *
 	 * @return string[] Sorted list of ISO 4217 codes.
