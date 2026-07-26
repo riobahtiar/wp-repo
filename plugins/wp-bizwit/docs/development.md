@@ -20,6 +20,7 @@ npm run build
 | `./vendor/bin/phpcs` | WordPress Coding Standards |
 | `./vendor/bin/phpcbf` | Auto-fix coding standard violations |
 | `./vendor/bin/phpstan analyse --memory-limit=1G` | Static analysis at level 6 |
+| `npm run test:unit` | Vitest unit tests (e.g. `formatMoney` in `resources/app/lib/`) |
 | `npm run test:php` | PHPUnit suite in the wp-env container |
 
 ### Dual-pipeline assets (temporary)
@@ -60,6 +61,27 @@ Conventions: [frontend-architecture.md](frontend-architecture.md#rest-api-conven
 | Health | `GET /wp-json/wp-bizwit/v1/health` → `{ ok, version, region }` (any BizWit cap) |
 | TS client | `resources/app/api/client.ts` (`apiGet`) + `resources/app/types/window.d.ts` |
 | Tests | `tests/php/RestHealthTest.php` |
+
+### Design system (`resources/ui/`)
+
+Shared Vue SFCs for product UI. Import with the `@ui/*` path alias:
+
+```ts
+import Button from '@ui/Button.vue';
+import MoneyText from '@ui/MoneyText.vue';
+import EmptyState from '@ui/EmptyState.vue';
+import AppShell from '@ui/AppShell.vue';
+```
+
+| Piece | Location |
+|-------|----------|
+| Tokens | CSS variables on `.wp-bizwit` in `resources/styles/admin.css` |
+| Money format | `resources/app/lib/money.ts` → `formatMoney(amountMinor, currency)` |
+| Money tests | `resources/app/lib/money.test.ts` via `npm run test:unit` |
+| Dashboard pilot | `resources/screens/DashboardApp.vue` mounted from `dashboard.ts` |
+
+Domain props for money are always `amountMinor` + `currency`. Do not invent a
+second client formatter that drifts from PHP `Support\Money`.
 
 #### Adding a REST controller
 

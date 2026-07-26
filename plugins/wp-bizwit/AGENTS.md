@@ -323,6 +323,20 @@ Interactive product UI uses **Vue 3 + Vite 8 + Tailwind v4**. Full decisions:
 - **Scope CSS** under `.wp-bizwit` so Tailwind never restyles core wp-admin.
 - **Enqueue by screen** — never load the invoice bundle on every BizWit page.
 
+**Design system (`resources/ui/`):** import shared components via the `@ui`
+alias (resolved in `vite.config.ts` / `tsconfig.json`):
+
+```ts
+import Button from '@ui/Button.vue';
+import MoneyText from '@ui/MoneyText.vue';
+import EmptyState from '@ui/EmptyState.vue';
+import AppShell from '@ui/AppShell.vue';
+```
+
+Money display uses integer minor units and `formatMoney` from
+`@/app/lib/money` (mirror of PHP `Support\Money` edge rules for UI only).
+Unit tests: `npm run test:unit` (Vitest).
+
 ### Quality Assurance
 
 - **PHP**: PHPStan (`phpstan.neon`), PHPCS (`phpcs.xml`)
@@ -335,7 +349,7 @@ Interactive product UI uses **Vue 3 + Vite 8 + Tailwind v4**. Full decisions:
 
 **Composer scripts:** `phpstan`, `phpcs`, `phpcbf`, `i18n:extract`, `i18n:compile`
 
-**NPM scripts:** `dev` (Vite HMR), `build` (clean + legacy webpack + Vite), `build:legacy`, `build:assets`, `start:legacy`, `lint:js`, `lint:style`, `format`, `create-block`, `env:*`
+**NPM scripts:** `dev` (Vite HMR), `build` (clean + legacy webpack + Vite), `build:legacy`, `build:assets`, `start:legacy`, `test:unit` (Vitest), `lint:js`, `lint:style`, `format`, `create-block`, `env:*`
 
 ### Feature quick reference
 

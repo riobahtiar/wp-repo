@@ -29,6 +29,23 @@
 .wp-bizwit {
 	@import "tailwindcss/utilities.css" layer(utilities) source(none);
 
-	/* Design tokens (CSS variables) land here as the system grows. */
+	/*
+	 * Design tokens — prefer WP admin blues so primary actions feel native.
+	 * Values are local to this tree; they do not pollute :root for other plugins.
+	 */
+	--bw-color-primary: #2271b1;
+	--bw-color-primary-hover: #135e96;
+	--bw-color-text: #1d2327;
+	--bw-color-text-muted: #646970;
+	--bw-color-border: #c3c4c7;
+	--bw-color-surface: #fff;
+	--bw-color-surface-muted: #f0f0f1;
+	--bw-radius: 4px;
+	--bw-space-1: 0.25rem;
+	--bw-space-2: 0.5rem;
+	--bw-space-3: 0.75rem;
+	--bw-space-4: 1rem;
+	--bw-space-6: 1.5rem;
+
 	box-sizing: border-box;
 }

@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -15,6 +16,7 @@ const rootDir = path.dirname( fileURLToPath( import.meta.url ) );
  * to the built HTML/manifest so the plugin path stays portable.
  *
  * Dev: `npm run dev` — HMR server; PHP enqueue for dev is also Phase 2.
+ * Unit: `npm run test:unit` (Vitest, same resolve aliases).
  */
 export default defineConfig( {
 	plugins: [ vue(), tailwindcss() ],
@@ -39,5 +41,9 @@ export default defineConfig( {
 			'@': path.resolve( rootDir, 'resources' ),
 			'@ui': path.resolve( rootDir, 'resources/ui' ),
 		},
+	},
+	test: {
+		include: [ 'resources/**/*.test.ts' ],
+		environment: 'node',
 	},
 } );
