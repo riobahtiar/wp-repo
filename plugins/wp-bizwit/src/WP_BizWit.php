@@ -17,6 +17,9 @@ use WP_BizWit\Admin\Screens\Projects_Screen;
 use WP_BizWit\Admin\Screens\Settings_Screen;
 use WP_BizWit\Cron\Overdue_Invoices;
 use WP_BizWit\Database\Installer;
+use WP_BizWit\Documents\Default_Templates;
+use WP_BizWit\Documents\Document_Blocks;
+use WP_BizWit\Documents\Template_Post_Type;
 use WP_BizWit\Repositories\Client_Repository;
 use WP_BizWit\Repositories\Invoice_Repository;
 use WP_BizWit\Repositories\Payment_Repository;
@@ -31,7 +34,7 @@ class WP_BizWit {
 
 
 	const PLUGIN_NAME    = 'wp-bizwit';
-	const PLUGIN_VERSION = '0.6.0';
+	const PLUGIN_VERSION = '0.6.1';
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -52,6 +55,7 @@ class WP_BizWit {
 		$this->define_admin_hooks();
 		$this->define_rest_hooks();
 		$this->define_cron_hooks();
+		$this->define_document_hooks();
 
 		$this->loader->add_action( 'init', $this, 'register_blocks' );
 	}
@@ -145,6 +149,19 @@ class WP_BizWit {
 		$overdue = new Overdue_Invoices();
 		$this->loader->add_action( 'init', $overdue, 'schedule' );
 		$this->loader->add_action( Overdue_Invoices::HOOK, $overdue, 'run' );
+	}
+
+	/**
+	 * Document templates (Gutenberg Header / Body / Footer) and merge blocks.
+	 *
+	 * @return void
+	 */
+	private function define_document_hooks(): void {
+		( new Template_Post_Type() )->register();
+		( new Document_Blocks() )->register();
+
+		// Seed sample default invoice template after CPT exists (admin only).
+		$this->loader->add_action( 'admin_init', new Default_Templates(), 'maybe_seed', 20 );
 	}
 
 	/**

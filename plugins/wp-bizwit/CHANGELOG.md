@@ -11,6 +11,23 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.6.1] — 2026-07-27
+
+Gutenberg document Template designer (Header / Body / Footer) integrated with invoices.
+
+### Added
+- **Template CPT** under BizWit → **Template**: design documents with the block
+  editor. Each template has Header, Body and Footer sections.
+- **Document blocks** (`wp-bizwit/*`): section, merge field, line items, totals,
+  signature. Field **labels** re-translate at print time via site locale.
+- **Default invoice template** seeded once (sample layout with business, client,
+  lines, totals, bank, signature).
+- **Invoice print** uses the default Gutenberg template when available; falls
+  back to the legacy PHP view otherwise.
+
+### Changed
+- Version **0.6.1**.
+
 ## [0.6.0] — 2026-07-27
 
 Payments and kwitansi: record money that already arrived, settle invoices, print receipts.

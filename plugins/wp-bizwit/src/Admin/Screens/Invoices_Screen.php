@@ -10,6 +10,7 @@ namespace WP_BizWit\Admin\Screens;
 use WP_Error;
 use WP_BizWit\Admin\Notices;
 use WP_BizWit\Admin\Tables\Invoices_Table;
+use WP_BizWit\Documents\Document_Renderer;
 use WP_BizWit\Localization\Regions;
 use WP_BizWit\Repositories\Client_Repository;
 use WP_BizWit\Repositories\Invoice_Repository;
@@ -432,6 +433,21 @@ class Invoices_Screen extends Screen {
 		status_header( 200 );
 		nocache_headers();
 
+		// Prefer Gutenberg document template (labels follow site language).
+		$rendered = ( new Document_Renderer() )->render_invoice_document(
+			$invoice,
+			$items,
+			$client,
+			$project
+		);
+
+		if ( null !== $rendered && '' !== $rendered ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Renderer escapes field values.
+			echo $rendered;
+			exit;
+		}
+
+		// Legacy fallback when no template is published yet.
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Template escapes its own output.
 		include WP_BIZWIT_PATH . 'src/Admin/Views/invoices-print.php';
 		exit;

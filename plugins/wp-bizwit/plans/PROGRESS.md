@@ -3,7 +3,7 @@
 What is actually true of the codebase right now. Update this in the same commit
 as the work it describes — a tracker that lags is worse than none.
 
-**Current version: 0.6.0 — beta.** Pre-1.0 on purpose: onboarding and reports
+**Current version: 0.6.1 — beta.** Pre-1.0 on purpose: onboarding and reports
 are thin, and the data model may still change. Do not run a real business on
 this yet.
 
@@ -31,7 +31,8 @@ this yet.
 | **Projects** | ✅ Done | Termin, retensi · [01](01-projects.md) |
 | **Invoices** | ✅ Done | List/form/print, PPN/PPh 23 · [02](02-invoices.md) |
 | **Payments / kwitansi** | ✅ Done | Record, settle, print · [03](03-payments-receipts.md) |
-| Printable documents | ✅ Done | Invoice + kwitansi HTML/print |
+| Printable documents | ✅ Done | Invoice (Gutenberg template) + kwitansi HTML/print |
+| **Document templates** | ✅ Done | CPT + Header/Body/Footer blocks · default invoice |
 | Onboarding | ⬜ Not started | [04](04-ux-and-onboarding.md) |
 | Import / export | 🔒 Deferred | [05](05-import-export.md) |
 | Reports | ⬜ Not started | |
