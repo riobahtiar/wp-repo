@@ -82,22 +82,31 @@ class Template_Post_Type {
 				'labels'              => $labels,
 				'public'              => false,
 				'show_ui'             => true,
-				'show_in_menu'        => Dashboard_Screen::SLUG,
-				'menu_position'       => 30,
+				// Menu entry is added explicitly in Admin\Menu so it always
+				// appears under BizWit when the user can manage settings.
+				'show_in_menu'        => false,
 				'show_in_rest'        => true,
 				'rest_base'           => 'bizwit-templates',
 				'capability_type'     => 'post',
 				'map_meta_cap'        => true,
-				// Gate on settings so template design is an admin task.
+				// Use MANAGE_INVOICES: templates design invoice/receipt output.
+				// Full map required so edit_published_posts is not left as a
+				// core post cap (which would hide the menu for BizWit users).
 				'capabilities'        => array(
-					'edit_post'          => Capabilities::MANAGE_SETTINGS,
-					'read_post'          => Capabilities::MANAGE_SETTINGS,
-					'delete_post'        => Capabilities::MANAGE_SETTINGS,
-					'edit_posts'         => Capabilities::MANAGE_SETTINGS,
-					'edit_others_posts'  => Capabilities::MANAGE_SETTINGS,
-					'publish_posts'      => Capabilities::MANAGE_SETTINGS,
-					'read_private_posts' => Capabilities::MANAGE_SETTINGS,
-					'delete_posts'       => Capabilities::MANAGE_SETTINGS,
+					'edit_post'              => Capabilities::MANAGE_INVOICES,
+					'read_post'              => Capabilities::MANAGE_INVOICES,
+					'delete_post'            => Capabilities::MANAGE_INVOICES,
+					'edit_posts'             => Capabilities::MANAGE_INVOICES,
+					'edit_others_posts'      => Capabilities::MANAGE_INVOICES,
+					'edit_published_posts'   => Capabilities::MANAGE_INVOICES,
+					'publish_posts'          => Capabilities::MANAGE_INVOICES,
+					'read_private_posts'     => Capabilities::MANAGE_INVOICES,
+					'delete_posts'           => Capabilities::MANAGE_INVOICES,
+					'delete_private_posts'   => Capabilities::MANAGE_INVOICES,
+					'delete_published_posts' => Capabilities::MANAGE_INVOICES,
+					'delete_others_posts'    => Capabilities::MANAGE_INVOICES,
+					'edit_private_posts'     => Capabilities::MANAGE_INVOICES,
+					'create_posts'           => Capabilities::MANAGE_INVOICES,
 				),
 				'hierarchical'        => false,
 				'supports'            => array( 'title', 'editor', 'revisions', 'custom-fields' ),
@@ -176,7 +185,7 @@ class Template_Post_Type {
 				'default'           => 'invoice',
 				'show_in_rest'      => true,
 				'auth_callback'     => static function (): bool {
-					return current_user_can( Capabilities::MANAGE_SETTINGS );
+					return current_user_can( Capabilities::MANAGE_INVOICES );
 				},
 				'sanitize_callback' => static function ( $value ): string {
 					$value = sanitize_key( (string) $value );
@@ -194,7 +203,7 @@ class Template_Post_Type {
 				'default'           => false,
 				'show_in_rest'      => true,
 				'auth_callback'     => static function (): bool {
-					return current_user_can( Capabilities::MANAGE_SETTINGS );
+					return current_user_can( Capabilities::MANAGE_INVOICES );
 				},
 				'sanitize_callback' => static function ( $value ): bool {
 					return (bool) $value;
@@ -333,7 +342,7 @@ class Template_Post_Type {
 			return;
 		}
 
-		if ( ! current_user_can( Capabilities::MANAGE_SETTINGS ) ) {
+		if ( ! current_user_can( Capabilities::MANAGE_INVOICES ) ) {
 			return;
 		}
 

@@ -14,6 +14,7 @@ use WP_BizWit\Admin\Screens\Payments_Screen;
 use WP_BizWit\Admin\Screens\Projects_Screen;
 use WP_BizWit\Admin\Screens\Screen;
 use WP_BizWit\Admin\Screens\Settings_Screen;
+use WP_BizWit\Documents\Template_Post_Type;
 use WP_BizWit\Support\Capabilities;
 
 /**
@@ -114,5 +115,16 @@ class Menu {
 
 			add_action( 'load-' . $hook, array( $screen, 'on_load' ) );
 		}
+
+		// Explicit Template submenu (CPT list). More reliable than depending
+		// only on show_in_menu when parent menus are built in admin_menu.
+		// Same capability as invoices — templates design printable invoices.
+		add_submenu_page(
+			Dashboard_Screen::SLUG,
+			__( 'Template', 'wp-bizwit' ),
+			__( 'Template', 'wp-bizwit' ),
+			Capabilities::MANAGE_INVOICES,
+			'edit.php?post_type=' . Template_Post_Type::POST_TYPE
+		);
 	}
 }

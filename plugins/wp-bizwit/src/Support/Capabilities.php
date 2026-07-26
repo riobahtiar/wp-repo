@@ -90,10 +90,25 @@ class Capabilities {
 	}
 
 	/**
+	 * Option that records which capability set version is installed.
+	 *
+	 * @var string
+	 */
+	public const VERSION_OPTION = 'wp_bizwit_caps_version';
+
+	/**
+	 * Bump when the capability set or role matrix changes so maybe_install
+	 * re-applies roles without requiring a full re-activation.
+	 *
+	 * @var string
+	 */
+	public const VERSION = '1.1.0';
+
+	/**
 	 * Grant capabilities to administrators and create the plugin's own roles.
 	 *
-	 * Runs on activation. Roles are stored in the database, so this must not be
-	 * called on every request.
+	 * Runs on activation and via maybe_install() after upgrades. Roles are
+	 * stored in the database.
 	 *
 	 * @return void
 	 */
@@ -127,6 +142,33 @@ class Capabilities {
 				self::MANAGE_PROJECTS => true,
 			)
 		);
+
+		update_option( self::VERSION_OPTION, self::VERSION, false );
+	}
+
+	/**
+	 * Re-apply caps when the stored version is behind (or missing).
+	 *
+	 * Cheap when already current: one option read. Fixes installs that never
+	 * re-activated after capabilities were introduced or expanded — which
+	 * silently hides CPT menus such as Template.
+	 *
+	 * @return void
+	 */
+	public static function maybe_install(): void {
+		$installed = get_option( self::VERSION_OPTION, '' );
+
+		if ( is_string( $installed ) && version_compare( $installed, self::VERSION, '>=' ) ) {
+			// Still ensure the current admin role has every cap (manual role edits).
+			$administrator = get_role( 'administrator' );
+			if ( null !== $administrator && ! $administrator->has_cap( self::MANAGE_SETTINGS ) ) {
+				self::install();
+			}
+
+			return;
+		}
+
+		self::install();
 	}
 
 	/**

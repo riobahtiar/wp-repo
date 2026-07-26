@@ -26,6 +26,7 @@ use WP_BizWit\Repositories\Payment_Repository;
 use WP_BizWit\Repositories\Project_Repository;
 use WP_BizWit\Repositories\Stats_Repository;
 use WP_BizWit\Rest\Controllers\Health_Controller;
+use WP_BizWit\Support\Capabilities;
 
 /**
  * Boots the plugin: locale, schema check, admin menu, Vite assets, blocks.
@@ -71,6 +72,17 @@ class WP_BizWit {
 	 */
 	private function define_schema_hooks(): void {
 		$this->loader->add_action( 'plugins_loaded', new Installer(), 'maybe_install', 5 );
+		// Roles/caps live in the DB; re-sync after plugin updates without re-activation.
+		$this->loader->add_action( 'plugins_loaded', $this, 'maybe_install_capabilities', 6 );
+	}
+
+	/**
+	 * Ensure BizWit capabilities exist on administrators and plugin roles.
+	 *
+	 * @return void
+	 */
+	public function maybe_install_capabilities(): void {
+		Capabilities::maybe_install();
 	}
 
 	/**
