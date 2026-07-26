@@ -181,6 +181,7 @@ src/
   Localization/   Region (base), Indonesia, Generic_Region, Regions, Terbilang
   Repositories/   All $wpdb access. Repository (base) + one class per entity
   Support/        Money, Settings, Capabilities
+  Rest/           REST base + Controllers under wp-bizwit/v1 (health; more later)
   Admin/
     Menu.php      Registers pages, wires each screen's load- hook
     Assets.php    Enqueues Vite entries from build/manifest.json (screen-scoped)

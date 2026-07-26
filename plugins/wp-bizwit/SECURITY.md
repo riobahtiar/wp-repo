@@ -42,9 +42,10 @@ Some of the strongest security properties come from absence:
 - **No payment processing.** No card data, no gateway credentials, no ability to
   move money. There is nothing here worth attacking for financial gain directly.
 - **No secrets stored.** No API keys, no bank credentials, no OAuth tokens.
-- **No public-facing endpoints.** Everything is behind `wp-admin` and a
-  capability check. No AJAX endpoints, no REST routes, no shortcodes rendering
-  client data on the front end.
+- **No public (anonymous) data endpoints.** Admin UI and the `wp-bizwit/v1` REST
+  API both require a logged-in user with a BizWit capability. Cookie auth plus
+  `X-WP-Nonce` (`wp_rest`) for REST; no shortcodes rendering client data on the
+  front end.
 - **No file uploads.** Nothing accepts a file. (This changes when
   [import/export](plans/05-import-export.md) lands, which is why that plan has a
   security section of its own and is gated on a hardening pass.)

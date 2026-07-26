@@ -331,59 +331,38 @@ BizWit screens.
 
 **Goal:** Vue can call a versioned REST API with capability checks.
 
-- [ ] **3.1** Create `src/Rest/Rest_Loader.php` (or register in `WP_BizWit`)
+- [x] **3.1** Create `src/Rest/Rest_Controller.php` + register in `WP_BizWit`
       on `rest_api_init`.
 
-- [ ] **3.2** `GET /wp-json/wp-bizwit/v1/health`
+- [x] **3.2** `GET /wp-json/wp-bizwit/v1/health`
 
-  - `permission_callback`: `current_user_can( 'bizwit_manage_settings' )` or a
-    broader “logged-in + any BizWit cap” helper — pick one and document.
+  - `permission_callback`: any BizWit capability via
+    `Capabilities::current_user_has_any()` / `Rest_Controller::permission_any_cap()`.
   - Response:
 
     ```json
     {
       "ok": true,
       "version": "0.3.0",
-      "region": "ID"
+      "region": "id"
     }
     ```
 
-- [ ] **3.3** Add `resources/app/api/client.ts`:
+    (`region` is `Regions::current()->code()`, e.g. `id` or `generic`.)
 
-  ```ts
-  type BizWitConfig = {
-    restUrl: string;
-    restNonce: string;
-  };
+- [x] **3.3** Add `resources/app/api/client.ts` + `resources/app/types/window.d.ts`
+      aligned with `wpBizwitConfig` from Assets.php.
 
-  export async function apiGet<T>( path: string ): Promise<T> {
-    const cfg = window.wpBizwitConfig; // name aligned with localize object
-    const res = await fetch( `${ cfg.restUrl }/${ path.replace( /^\//, '' ) }`, {
-      credentials: 'same-origin',
-      headers: {
-        'X-WP-Nonce': cfg.restNonce,
-        Accept: 'application/json',
-      },
-    } );
-    if ( ! res.ok ) {
-      throw new Error( `API ${ res.status }` );
-    }
-    return res.json() as Promise<T>;
-  }
-  ```
+- [x] **3.4** PHPUnit `RestHealthTest` + `wp eval` smoke for health route.
 
-  Declare `window.wpBizwitConfig` in a small `resources/app/types/window.d.ts`.
-
-- [ ] **3.4** PHPUnit or `wp eval` smoke for health route as admin user.
-
-- [ ] **3.5** Document route conventions in `docs/frontend-architecture.md`
-      (already sketched) and `docs/development.md` (how to add a controller).
+- [x] **3.5** Document how to add a controller in `docs/development.md`
+      (conventions already in `docs/frontend-architecture.md`).
 
 **Acceptance:**
 
 - Unauthenticated → 401/403.
 - Admin with cap → 200 + version.
-- Frontend client can log health JSON on pilot screen.
+- Frontend client can log health JSON on pilot screen (Phase 5).
 
 **Do not** yet expose write routes for invoices without plan 02.
 

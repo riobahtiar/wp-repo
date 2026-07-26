@@ -31,7 +31,7 @@ a migration. Do not run a real business on this yet.
 | Onboarding | ⬜ Not started | [Plan](04-ux-and-onboarding.md) |
 | Import / export | 🔒 Deferred | [Plan](05-import-export.md) — gated on 1.0 GA |
 | Reports | ⬜ Not started | Not yet planned |
-| REST API | ⬜ Not started | Starts with health in [07](07-frontend-modernization.md) |
+| REST API | 🟡 Health only | `GET /wp-bizwit/v1/health` + TS client; full CRUD later ([07](07-frontend-modernization.md) Phase 3) |
 | Frontend (Vue/Vite/Tailwind) | 🟡 Phase 2 asset bridge | Vite build + `Admin\Assets` enqueues dashboard from `build/manifest.json`; webpack legacy still dual-pipeline · [Architecture](../docs/frontend-architecture.md) · [Plan 07](07-frontend-modernization.md) |
 
 Legend: ✅ done · 🟡 partial · ⬜ not started · 🔒 deliberately deferred

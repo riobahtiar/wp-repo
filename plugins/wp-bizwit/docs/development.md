@@ -47,6 +47,40 @@ Do not run a bare `vite build` with `emptyOutDir: true` against a populated `bui
 | Missing build | Soft-fail; with `WP_DEBUG` admins see a notice to run `npm run build` |
 | Legacy | Webpack `wp-bizwit-admin` still enqueued separately until Phase 6 |
 
+### REST API (`wp-bizwit/v1`)
+
+Custom routes for the Vue admin shell. Cookie auth + `X-WP-Nonce` (`wp_rest`).
+Conventions: [frontend-architecture.md](frontend-architecture.md#rest-api-conventions).
+
+| Concern | Detail |
+|---------|--------|
+| Namespace | `wp-bizwit/v1` |
+| Registration | Controllers under `src/Rest/Controllers/`; wired on `rest_api_init` from `WP_BizWit::define_rest_hooks()` |
+| Base class | `src/Rest/Rest_Controller.php` — `API_NAMESPACE`, `permission_any_cap()` |
+| Health | `GET /wp-json/wp-bizwit/v1/health` → `{ ok, version, region }` (any BizWit cap) |
+| TS client | `resources/app/api/client.ts` (`apiGet`) + `resources/app/types/window.d.ts` |
+| Tests | `tests/php/RestHealthTest.php` |
+
+#### Adding a REST controller
+
+1. Create `src/Rest/Controllers/Your_Controller.php` extending `Rest_Controller`.
+2. Implement `register_routes()` with `register_rest_route( self::API_NAMESPACE, … )`.
+3. Set a real `permission_callback` — use a specific `Capabilities::*` constant for
+   resource routes; use `permission_any_cap()` only for shared shell endpoints.
+4. In the callback, load data via a **repository** (never `$wpdb` from REST).
+5. Wire it in `WP_BizWit::define_rest_hooks()`:
+
+   ```php
+   $this->loader->add_action( 'rest_api_init', new Your_Controller(), 'register_routes' );
+   ```
+
+6. Call it from Vue with `apiGet( 'your-path' )` (path is relative to `restUrl`).
+7. Add PHPUnit coverage when the route is non-trivial; smoke with:
+
+   ```bash
+   wp eval 'wp_set_current_user(1); $r = rest_do_request(new WP_REST_Request("GET","/wp-bizwit/v1/health")); echo $r->get_status()," ", wp_json_encode($r->get_data()),"\n";'
+   ```
+
 #### Optional Vite HMR (dev only)
 
 Default is **off**. In `wp-config.php` (local only):
@@ -74,13 +108,14 @@ src/
   Localization/   Region (base), Indonesia, Generic_Region, Regions, Terbilang
   Repositories/   All $wpdb access. Repository (base) + one class per entity
   Support/        Money, Settings, Capabilities
+  Rest/           REST base + Controllers (wp-bizwit/v1)
   Admin/
     Menu.php      Registers pages, wires each screen's load- hook
     Assets.php    Enqueues Vite entries from build/manifest.json (screen-scoped)
     Screens/      One class per screen, extending Screen
     Tables/       WP_List_Table subclasses
     Views/        Templates. Receive a single $data array — no extract()
-resources/        Vue/Vite entries (admin, screens, styles) + legacy webpack SCSS/JS
+resources/        Vue/Vite entries (admin, screens, app/api, styles) + legacy webpack SCSS/JS
 build/            Dual output: webpack handle files + Vite assets + manifest.json
 languages/        Translation template and the id_ID catalogue
 tests/php/        PHPUnit tests
@@ -175,6 +210,7 @@ from the CLI context, not from plugin code.
 - `tests/php/IndonesiaRegionTest.php` — NPWP formatting and validation, the 38
   provinces, terbilang grammar, document numbering, bea meterai thresholds, and
   the PKP / non-PKP tax gate.
+- `tests/php/RestHealthTest.php` — `GET /wp-bizwit/v1/health` auth and payload.
 
 ## Tooling papercuts in this project
 

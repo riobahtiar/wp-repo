@@ -18,6 +18,7 @@ use WP_BizWit\Admin\Screens\Settings_Screen;
 use WP_BizWit\Database\Installer;
 use WP_BizWit\Repositories\Client_Repository;
 use WP_BizWit\Repositories\Stats_Repository;
+use WP_BizWit\Rest\Controllers\Health_Controller;
 
 /**
  * Boots the plugin: locale, schema check, admin menu, public assets, blocks.
@@ -45,6 +46,7 @@ class WP_BizWit {
 		$this->set_locale();
 		$this->define_schema_hooks();
 		$this->define_admin_hooks();
+		$this->define_rest_hooks();
 		$this->define_public_hooks();
 
 		$this->loader->add_action( 'init', $this, 'register_blocks' );
@@ -115,6 +117,17 @@ class WP_BizWit {
 		);
 
 		$this->loader->add_action( 'admin_menu', $menu, 'register' );
+	}
+
+	/**
+	 * Register custom REST routes under wp-bizwit/v1.
+	 *
+	 * @return void
+	 */
+	private function define_rest_hooks(): void {
+		// Add further controllers here as the Vue shell gains screens; keep
+		// permission_callback on every route (see Capabilities).
+		$this->loader->add_action( 'rest_api_init', new Health_Controller(), 'register_routes' );
 	}
 
 	/**
