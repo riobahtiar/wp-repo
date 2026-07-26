@@ -75,45 +75,51 @@ class Layout {
 	 * @return array<string, mixed>
 	 */
 	public static function default_invoice(): array {
-		$layout = self::empty();
+		$layout                     = self::empty();
+		$layout['page']['marginMm'] = 14;
 
 		$layout['sections']['header']['components'] = array(
 			self::component(
 				'columns',
 				array(
-					'gap'     => 24,
+					'gap'     => 32,
 					'columns' => array(
 						array(
 							self::component(
 								'field',
 								array(
-									'field'      => 'business_name',
-									'fontSize'   => 18,
-									'fontWeight' => '700',
+									'field'        => 'business_name',
+									'fontSize'     => 20,
+									'fontWeight'   => '700',
+									'color'        => '#1e4d6b',
+									'marginBottom' => 6,
 								)
 							),
 							self::component(
 								'field',
 								array(
-									'field'    => 'business_address',
-									'fontSize' => 11,
-									'color'    => '#646970',
+									'field'        => 'business_address',
+									'fontSize'     => 10,
+									'color'        => '#5c6570',
+									'marginBottom' => 2,
 								)
 							),
 							self::component(
 								'field',
 								array(
-									'field'    => 'business_phone',
-									'fontSize' => 11,
-									'color'    => '#646970',
+									'field'        => 'business_phone',
+									'fontSize'     => 10,
+									'color'        => '#5c6570',
+									'marginBottom' => 2,
 								)
 							),
 							self::component(
 								'field',
 								array(
-									'field'    => 'business_email',
-									'fontSize' => 11,
-									'color'    => '#646970',
+									'field'        => 'business_email',
+									'fontSize'     => 10,
+									'color'        => '#5c6570',
+									'marginBottom' => 4,
 								)
 							),
 							self::component(
@@ -121,7 +127,8 @@ class Layout {
 								array(
 									'field'     => 'business_tax_id',
 									'showLabel' => true,
-									'fontSize'  => 11,
+									'fontSize'  => 10,
+									'color'     => '#5c6570',
 								)
 							),
 						),
@@ -129,28 +136,33 @@ class Layout {
 							self::component(
 								'field',
 								array(
-									'field'      => 'document_title',
-									'fontSize'   => 20,
-									'fontWeight' => '700',
-									'align'      => 'right',
+									'field'        => 'document_title',
+									'fontSize'     => 26,
+									'fontWeight'   => '700',
+									'align'        => 'right',
+									'color'        => '#1a2332',
+									'marginBottom' => 10,
 								)
 							),
 							self::component(
 								'field',
 								array(
-									'field'     => 'invoice_number',
-									'showLabel' => true,
-									'align'     => 'right',
-									'fontSize'  => 12,
+									'field'        => 'invoice_number',
+									'showLabel'    => true,
+									'align'        => 'right',
+									'fontSize'     => 11,
+									'fontWeight'   => '600',
+									'marginBottom' => 3,
 								)
 							),
 							self::component(
 								'field',
 								array(
-									'field'     => 'issue_date',
-									'showLabel' => true,
-									'align'     => 'right',
-									'fontSize'  => 12,
+									'field'        => 'issue_date',
+									'showLabel'    => true,
+									'align'        => 'right',
+									'fontSize'     => 11,
+									'marginBottom' => 3,
 								)
 							),
 							self::component(
@@ -159,27 +171,11 @@ class Layout {
 									'field'     => 'due_date',
 									'showLabel' => true,
 									'align'     => 'right',
-									'fontSize'  => 12,
-								)
-							),
-							self::component(
-								'field',
-								array(
-									'field'     => 'status_label',
-									'showLabel' => true,
-									'align'     => 'right',
-									'fontSize'  => 12,
+									'fontSize'  => 11,
 								)
 							),
 						),
 					),
-				)
-			),
-			self::component(
-				'divider',
-				array(
-					'marginTop'    => 12,
-					'marginBottom' => 12,
 				)
 			),
 		);
@@ -188,85 +184,94 @@ class Layout {
 			self::component(
 				'heading',
 				array(
-					'content'  => 'Bill to',
-					'level'    => 3,
-					'fontSize' => 12,
-					'color'    => '#646970',
+					'content'      => 'Bill to',
+					'level'        => 3,
+					'fontSize'     => 10,
+					'fontWeight'   => '600',
+					'color'        => '#5c6570',
+					'marginBottom' => 6,
 				)
 			),
 			self::component(
 				'field',
 				array(
-					'field'      => 'client_name',
-					'fontSize'   => 14,
-					'fontWeight' => '700',
+					'field'        => 'client_name',
+					'fontSize'     => 13,
+					'fontWeight'   => '700',
+					'marginBottom' => 3,
 				)
 			),
 			self::component(
 				'field',
 				array(
-					'field'    => 'client_address',
-					'fontSize' => 12,
+					'field'        => 'client_address',
+					'fontSize'     => 11,
+					'color'        => '#5c6570',
+					'marginBottom' => 3,
 				)
 			),
 			self::component(
 				'field',
 				array(
-					'field'     => 'client_tax_id',
-					'showLabel' => true,
-					'fontSize'  => 12,
+					'field'        => 'client_tax_id',
+					'showLabel'    => true,
+					'fontSize'     => 10,
+					'color'        => '#5c6570',
+					'marginBottom' => 3,
 				)
 			),
 			self::component(
 				'field',
 				array(
-					'field'     => 'project_name',
-					'showLabel' => true,
-					'fontSize'  => 12,
+					'field'        => 'project_name',
+					'showLabel'    => true,
+					'fontSize'     => 10,
+					'color'        => '#5c6570',
+					'marginBottom' => 14,
 				)
 			),
-			self::component( 'spacer', array( 'height' => 16 ) ),
-			self::component( 'line_items', array( 'showTax' => true ) ),
-			self::component( 'spacer', array( 'height' => 12 ) ),
+			self::component(
+				'line_items',
+				array(
+					'showTax'      => true,
+					'marginBottom' => 8,
+				)
+			),
 			self::component(
 				'totals',
 				array(
 					'showTerbilang' => true,
 					'align'         => 'right',
+					'marginTop'     => 4,
 				)
 			),
 		);
 
 		$layout['sections']['footer']['components'] = array(
-			self::component( 'spacer', array( 'height' => 16 ) ),
 			self::component(
 				'heading',
 				array(
-					'content'  => 'Payment details',
-					'level'    => 3,
-					'fontSize' => 12,
-					'color'    => '#646970',
+					'content'      => 'Payment details',
+					'level'        => 3,
+					'fontSize'     => 10,
+					'fontWeight'   => '600',
+					'color'        => '#5c6570',
+					'marginTop'    => 8,
+					'marginBottom' => 6,
 				)
 			),
-			self::component( 'bank', array() ),
+			self::component( 'bank', array( 'marginBottom' => 10 ) ),
 			self::component(
 				'field',
 				array(
-					'field'     => 'notes',
-					'showLabel' => true,
-					'fontSize'  => 11,
+					'field'        => 'terms',
+					'showLabel'    => true,
+					'fontSize'     => 10,
+					'color'        => '#5c6570',
+					'marginBottom' => 16,
 				)
 			),
-			self::component(
-				'field',
-				array(
-					'field'     => 'terms',
-					'showLabel' => true,
-					'fontSize'  => 11,
-				)
-			),
-			self::component( 'spacer', array( 'height' => 24 ) ),
-			self::component( 'signature', array() ),
+			self::component( 'signature', array( 'marginTop' => 8 ) ),
 		);
 
 		return $layout;
@@ -400,11 +405,11 @@ class Layout {
 	 * @return array<string, mixed>
 	 */
 	private static function sanitize_props( string $type, array $props ): array {
-		$align  = self::align( $props['align'] ?? 'left' );
-		$size   = max( 9, min( 36, (int) ( $props['fontSize'] ?? 12 ) ) );
+		$align      = self::align( $props['align'] ?? 'left' );
+		$size       = max( 9, min( 36, (int) ( $props['fontSize'] ?? 12 ) ) );
 		$raw_weight = (string) ( $props['fontWeight'] ?? '400' );
 		$weight     = in_array( $raw_weight, array( '400', '600', '700' ), true ) ? $raw_weight : '400';
-		$color  = self::color( (string) ( $props['color'] ?? '#1d2327' ) );
+		$color      = self::color( (string) ( $props['color'] ?? '#1d2327' ) );
 
 		$common = array(
 			'align'        => $align,

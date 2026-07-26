@@ -1,6 +1,6 @@
 {
   "name": "wp-bizwit",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "private": true,
   "description": "Business administration for Indonesian companies and UMKM — clients, projects, invoices and payment receipts inside wp-admin.",
   "devDependencies": {

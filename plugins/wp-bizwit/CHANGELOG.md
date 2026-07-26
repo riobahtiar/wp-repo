@@ -11,6 +11,18 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.8.1] — 2026-07-27
+
+Document studio polish: print quality and layout builder UX.
+
+### Changed
+- **Print stylesheet** redesigned for A4 Indonesian paperwork (kop accent,
+  table header, totals card, bank callout, signature blocks).
+- **Template builder** becomes a document studio: Design / Print preview
+  modes, sample data on canvas, refined palette and property controls.
+- **Default invoice layout** re-tuned for clearer hierarchy and spacing.
+- Version **0.8.1**.
+
 ## [0.8.0] — 2026-07-27
 
 Test coverage expansion and accessibility hardening for admin screens.

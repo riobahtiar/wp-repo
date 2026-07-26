@@ -1,11 +1,12 @@
 <script setup lang="ts">
 /**
- * A4 document layout builder: palette · canvas (header/body/footer) · properties.
+ * Document layout builder — design canvas + live print-style preview.
  */
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { __ } from '@wordpress/i18n';
 
 type Zone = 'header' | 'body' | 'footer';
+type Mode = 'design' | 'preview';
 
 interface ComponentNode {
 	id: string;
@@ -22,7 +23,9 @@ interface LayoutDoc {
 interface BuilderConfig {
 	layout: LayoutDoc;
 	fields: Record< string, string >;
-	componentMeta: Record< string, { label: string; description: string } >;
+	sampleValues: Record< string, string >;
+	documentCss: string;
+	componentMeta: Record< string, { label: string; description: string; icon?: string } >;
 	zones: Record< Zone, string >;
 	i18n: Record< string, string >;
 	defaultLayout: LayoutDoc;
@@ -45,7 +48,7 @@ function readConfig(): BuilderConfig {
 		return {
 			layout: {
 				version: 1,
-				page: { size: 'A4', marginMm: 16 },
+				page: { size: 'A4', marginMm: 14 },
 				sections: {
 					header: { components: [] },
 					body: { components: [] },
@@ -53,12 +56,14 @@ function readConfig(): BuilderConfig {
 				},
 			},
 			fields: {},
+			sampleValues: {},
+			documentCss: '',
 			componentMeta: {},
 			zones: { header: 'Header', body: 'Body', footer: 'Footer' },
 			i18n: {},
 			defaultLayout: {
 				version: 1,
-				page: { size: 'A4', marginMm: 16 },
+				page: { size: 'A4', marginMm: 14 },
 				sections: {
 					header: { components: [] },
 					body: { components: [] },
@@ -75,6 +80,7 @@ const t = ( key: string, fallback: string ) => config.i18n[ key ] || fallback;
 const layout = reactive< LayoutDoc >( deepClone( config.layout ) );
 const selectedId = ref< string | null >( null );
 const activeZone = ref< Zone >( 'body' );
+const mode = ref< Mode >( 'design' );
 
 const hiddenInput = () =>
 	document.getElementById( 'wp-bizwit-layout-json' ) as HTMLInputElement | null;
@@ -87,7 +93,14 @@ function syncHidden(): void {
 }
 
 watch( layout, () => syncHidden(), { deep: true } );
-onMounted( () => syncHidden() );
+onMounted( () => {
+	syncHidden();
+	// Expand the postbox to full width of the editor column.
+	const box = document.getElementById( 'wp-bizwit-layout-builder' );
+	if ( box ) {
+		box.classList.add( 'bw-lb-host' );
+	}
+} );
 
 const zones: Zone[] = [ 'header', 'body', 'footer' ];
 
@@ -101,11 +114,10 @@ const selected = computed( () => {
 } );
 
 function findComponent(
-	id: string,
-	nodes?: ComponentNode[]
+	id: string
 ): { node: ComponentNode; zone: Zone; index: number; parent: ComponentNode[] } | null {
 	for ( const zone of zones ) {
-		const list = nodes ?? layout.sections[ zone ].components;
+		const list = layout.sections[ zone ].components;
 		for ( let i = 0; i < list.length; i++ ) {
 			if ( list[ i ].id === id ) {
 				return { node: list[ i ], zone, index: i, parent: list };
@@ -114,26 +126,14 @@ function findComponent(
 				const cols = list[ i ].props.columns as ComponentNode[][] | undefined;
 				if ( cols ) {
 					for ( const col of cols ) {
-						const hit = findInList( id, col, zone );
-						if ( hit ) {
-							return hit;
+						for ( let j = 0; j < col.length; j++ ) {
+							if ( col[ j ].id === id ) {
+								return { node: col[ j ], zone, index: j, parent: col };
+							}
 						}
 					}
 				}
 			}
-		}
-	}
-	return null;
-}
-
-function findInList(
-	id: string,
-	list: ComponentNode[],
-	zone: Zone
-): { node: ComponentNode; zone: Zone; index: number; parent: ComponentNode[] } | null {
-	for ( let i = 0; i < list.length; i++ ) {
-		if ( list[ i ].id === id ) {
-			return { node: list[ i ], zone, index: i, parent: list };
 		}
 	}
 	return null;
@@ -145,20 +145,20 @@ function defaultProps( type: string ): Record< string, unknown > {
 			return {
 				content: 'Heading',
 				level: 3,
-				fontSize: 14,
+				fontSize: 11,
 				fontWeight: '600',
 				align: 'left',
-				color: '#1d2327',
+				color: '#5c6570',
 				marginTop: 0,
 				marginBottom: 8,
 			};
 		case 'text':
 			return {
 				content: '',
-				fontSize: 12,
+				fontSize: 11,
 				fontWeight: '400',
 				align: 'left',
-				color: '#1d2327',
+				color: '#1a2332',
 				marginTop: 0,
 				marginBottom: 6,
 			};
@@ -169,7 +169,7 @@ function defaultProps( type: string ): Record< string, unknown > {
 				fontSize: 12,
 				fontWeight: '400',
 				align: 'left',
-				color: '#1d2327',
+				color: '#1a2332',
 				marginTop: 0,
 				marginBottom: 4,
 			};
@@ -184,9 +184,9 @@ function defaultProps( type: string ): Record< string, unknown > {
 		case 'spacer':
 			return { height: 16 };
 		case 'divider':
-			return { color: '#c3c4c7', marginTop: 8, marginBottom: 8 };
+			return { color: '#e2e6ea', marginTop: 8, marginBottom: 8 };
 		case 'columns':
-			return { gap: 24, columns: [ [], [] ], marginTop: 0, marginBottom: 8 };
+			return { gap: 28, columns: [ [], [] ], marginTop: 0, marginBottom: 8 };
 		default:
 			return {};
 	}
@@ -202,6 +202,7 @@ function addComponent( type: string, zone?: Zone ): void {
 	layout.sections[ z ].components.push( node );
 	selectedId.value = node.id;
 	activeZone.value = z;
+	mode.value = 'design';
 }
 
 function removeSelected(): void {
@@ -246,14 +247,11 @@ function duplicateSelected(): void {
 function select( id: string, zone: Zone ): void {
 	selectedId.value = id;
 	activeZone.value = zone;
+	mode.value = 'design';
 }
 
 function resetDefault(): void {
-	if (
-		! window.confirm(
-			t( 'resetDefault', 'Reset to default layout' ) + '?'
-		)
-	) {
+	if ( ! window.confirm( t( 'resetDefault', 'Reset to default layout' ) + '?' ) ) {
 		return;
 	}
 	const next = deepClone( config.defaultLayout );
@@ -263,18 +261,8 @@ function resetDefault(): void {
 	selectedId.value = null;
 }
 
-function previewLabel( node: ComponentNode ): string {
-	const meta = config.componentMeta[ node.type ];
-	const base = meta?.label || node.type;
-	if ( node.type === 'field' ) {
-		const f = String( node.props.field || '' );
-		return `${ base }: ${ config.fields[ f ] || f }`;
-	}
-	if ( node.type === 'heading' || node.type === 'text' ) {
-		const c = String( node.props.content || '' ).slice( 0, 32 );
-		return c ? `${ base }: ${ c }` : base;
-	}
-	return base;
+function sampleField( field: string ): string {
+	return config.sampleValues[ field ] || '—';
 }
 
 function styleOf( node: ComponentNode ): Record< string, string > {
@@ -312,572 +300,904 @@ function setProp( key: string, value: unknown ): void {
 	hit.node.props[ key ] = value;
 }
 
+function fieldDisplay( node: ComponentNode ): string {
+	const f = String( node.props.field || '' );
+	const val = sampleField( f );
+	if ( node.props.showLabel ) {
+		const lab = config.fields[ f ] || f;
+		return `${ lab }: ${ val }`;
+	}
+	return val;
+}
+
 const fieldOptions = computed( () =>
 	Object.entries( config.fields ).map( ( [ value, label ] ) => ( { value, label } ) )
 );
+
+const icons: Record< string, string > = {
+	heading: 'H',
+	text: 'T',
+	field: '··',
+	line_items: '☰',
+	totals: 'Σ',
+	bank: '₳',
+	signature: '✍',
+	spacer: '↕',
+	divider: '—',
+	columns: '▥',
+};
 </script>
 
 <template>
-	<div class="bw-lb">
-		<!-- Palette -->
-		<aside class="bw-lb__palette">
-			<div class="bw-lb__panel-title">{{ t( 'palette', 'Components' ) }}</div>
-			<button
-				v-for="type in paletteTypes"
-				:key="type"
-				type="button"
-				class="bw-lb__palette-item"
-				@click="addComponent( type )"
-			>
-				<strong>{{ config.componentMeta[ type ]?.label || type }}</strong>
-				<span>{{ config.componentMeta[ type ]?.description }}</span>
-			</button>
-			<button type="button" class="bw-lb__reset button" @click="resetDefault">
-				{{ t( 'resetDefault', 'Reset to default layout' ) }}
-			</button>
-		</aside>
-
-		<!-- Canvas -->
-		<main class="bw-lb__canvas-wrap">
-			<div class="bw-lb__panel-title">{{ t( 'canvas', 'Canvas (A4)' ) }}</div>
-			<div
-				class="bw-lb__paper"
-				:style="{ padding: layout.page.marginMm + 'mm' }"
-			>
-				<section
-					v-for="zone in zones"
-					:key="zone"
-					class="bw-lb__zone"
-					:class="{
-						'bw-lb__zone--active': activeZone === zone,
-						[ 'bw-lb__zone--' + zone ]: true,
-					}"
-					@click.self="activeZone = zone"
+	<div class="bw-studio">
+		<header class="bw-studio__top">
+			<div class="bw-studio__brand">
+				<span class="bw-studio__brand-mark">A4</span>
+				<div>
+					<strong>{{ t( 'studioTitle', 'Document studio' ) }}</strong>
+					<span>{{ t( 'studioHint', 'Design the layout · preview as printed' ) }}</span>
+				</div>
+			</div>
+			<div class="bw-studio__modes" role="tablist">
+				<button
+					type="button"
+					role="tab"
+					:aria-selected="mode === 'design'"
+					:class="{ 'is-active': mode === 'design' }"
+					@click="mode = 'design'"
 				>
-					<div class="bw-lb__zone-label">{{ config.zones[ zone ] }}</div>
-					<div
-						v-if="layout.sections[ zone ].components.length === 0"
-						class="bw-lb__empty"
-						@click="activeZone = zone"
+					{{ t( 'modeDesign', 'Design' ) }}
+				</button>
+				<button
+					type="button"
+					role="tab"
+					:aria-selected="mode === 'preview'"
+					:class="{ 'is-active': mode === 'preview' }"
+					@click="mode = 'preview'"
+				>
+					{{ t( 'modePreview', 'Print preview' ) }}
+				</button>
+			</div>
+			<button type="button" class="bw-studio__ghost" @click="resetDefault">
+				{{ t( 'resetDefault', 'Reset default' ) }}
+			</button>
+		</header>
+
+		<div class="bw-studio__body" :class="{ 'bw-studio__body--preview': mode === 'preview' }">
+			<!-- Palette (design only) -->
+			<aside v-show="mode === 'design'" class="bw-studio__side bw-studio__side--left">
+				<div class="bw-studio__side-title">{{ t( 'palette', 'Components' ) }}</div>
+				<p class="bw-studio__side-hint">
+					{{ t( 'paletteHint', 'Click to add into the active section' ) }}
+				</p>
+				<button
+					v-for="type in paletteTypes"
+					:key="type"
+					type="button"
+					class="bw-studio__chip"
+					@click="addComponent( type )"
+				>
+					<span class="bw-studio__chip-icon">{{ icons[ type ] || '+' }}</span>
+					<span class="bw-studio__chip-text">
+						<strong>{{ config.componentMeta[ type ]?.label || type }}</strong>
+						<small>{{ config.componentMeta[ type ]?.description }}</small>
+					</span>
+				</button>
+			</aside>
+
+			<!-- Canvas -->
+			<main class="bw-studio__canvas-wrap">
+				<div
+					class="bw-studio__paper"
+					:class="{ 'is-preview': mode === 'preview' }"
+					:style="{ padding: layout.page.marginMm + 'mm' }"
+				>
+					<section
+						v-for="zone in zones"
+						:key="zone"
+						class="bw-studio__zone"
+						:class="[
+							'bw-studio__zone--' + zone,
+							{
+								'is-active': mode === 'design' && activeZone === zone,
+								'is-preview': mode === 'preview',
+							},
+						]"
+						@click.self="activeZone = zone"
 					>
-						{{ t( 'emptyZone', 'Drop or add components here' ) }}
-					</div>
-					<div
-						v-for="node in layout.sections[ zone ].components"
-						:key="node.id"
-						class="bw-lb__comp"
-						:class="{ 'bw-lb__comp--selected': selectedId === node.id }"
-						:style="styleOf( node )"
-						@click.stop="select( node.id, zone )"
-					>
-						<template v-if="node.type === 'divider'">
-							<hr class="bw-lb__divider" :style="{ borderColor: String( node.props.color || '#c3c4c7' ) }" />
-						</template>
-						<template v-else-if="node.type === 'spacer'">
-							<div class="bw-lb__spacer-mark" :style="{ height: ( node.props.height || 16 ) + 'px' }" />
-						</template>
-						<template v-else-if="node.type === 'line_items'">
-							<div class="bw-lb__table-ph">{{ previewLabel( node ) }}</div>
-						</template>
-						<template v-else-if="node.type === 'totals'">
-							<div class="bw-lb__table-ph bw-lb__table-ph--right">{{ previewLabel( node ) }}</div>
-						</template>
-						<template v-else-if="node.type === 'signature'">
-							<div class="bw-lb__sign-ph">
-								<span>{{ __( 'Received by', 'wp-bizwit' ) }}</span>
-								<span>{{ __( 'Signature and company stamp', 'wp-bizwit' ) }}</span>
-							</div>
-						</template>
-						<template v-else-if="node.type === 'columns'">
-							<div class="bw-lb__cols" :style="{ gap: ( node.props.gap || 24 ) + 'px' }">
-								<div
-									v-for="( col, ci ) in ( node.props.columns as ComponentNode[][] ) || [ [], [] ]"
-									:key="ci"
-									class="bw-lb__col"
-								>
-									<div
-										v-for="child in col"
-										:key="child.id"
-										class="bw-lb__comp bw-lb__comp--nested"
-										:class="{ 'bw-lb__comp--selected': selectedId === child.id }"
-										:style="styleOf( child )"
-										@click.stop="select( child.id, zone )"
-									>
-										{{ previewLabel( child ) }}
-									</div>
-									<button
-										type="button"
-										class="bw-lb__col-add"
-										@click.stop="
-											( node.props.columns as ComponentNode[][] )[ ci ].push( {
-												id: uid(),
-												type: 'field',
-												props: defaultProps( 'field' ),
-											} )
-										"
-									>
-										+
-									</button>
-								</div>
-							</div>
-						</template>
-						<template v-else>
-							<span v-if="node.props.showLabel && node.type === 'field'" class="bw-lb__label">
-								{{ config.fields[ String( node.props.field ) ] || node.props.field }}:
+						<div v-if="mode === 'design'" class="bw-studio__zone-tag">
+							{{ config.zones[ zone ] }}
+						</div>
+
+						<div
+							v-if="layout.sections[ zone ].components.length === 0"
+							class="bw-studio__empty"
+							@click="activeZone = zone"
+						>
+							{{ t( 'emptyZone', 'Add components to this section' ) }}
+						</div>
+
+						<div
+							v-for="node in layout.sections[ zone ].components"
+							:key="node.id"
+							class="bw-studio__block"
+							:class="{
+								'is-selected': mode === 'design' && selectedId === node.id,
+								'is-preview': mode === 'preview',
+								[ 'type-' + node.type ]: true,
+							}"
+							:style="styleOf( node )"
+							@click.stop="mode === 'design' && select( node.id, zone )"
+						>
+							<!-- DESIGN chrome label -->
+							<span v-if="mode === 'design'" class="bw-studio__block-badge">
+								{{ config.componentMeta[ node.type ]?.label || node.type }}
 							</span>
-							{{
-								node.type === 'heading' || node.type === 'text'
-									? node.props.content || previewLabel( node )
-									: previewLabel( node )
-							}}
-						</template>
+
+							<template v-if="node.type === 'divider'">
+								<hr class="bw-studio__hr" :style="{ borderColor: String( node.props.color || '#e2e6ea' ) }" />
+							</template>
+							<template v-else-if="node.type === 'spacer'">
+								<div
+									class="bw-studio__spacer"
+									:class="{ 'is-design': mode === 'design' }"
+									:style="{ height: ( node.props.height || 16 ) + 'px' }"
+								/>
+							</template>
+							<template v-else-if="node.type === 'line_items'">
+								<table class="bw-studio__table">
+									<thead>
+										<tr>
+											<th>{{ __( 'Description', 'wp-bizwit' ) }}</th>
+											<th class="num">{{ __( 'Qty', 'wp-bizwit' ) }}</th>
+											<th class="num">{{ __( 'Unit price', 'wp-bizwit' ) }}</th>
+											<th class="num">{{ __( 'Amount', 'wp-bizwit' ) }}</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>{{ sampleField( '_item1' ) || 'Website redesign' }}</td>
+											<td class="num">1</td>
+											<td class="num">{{ sampleField( '_price1' ) || 'Rp 10.000.000' }}</td>
+											<td class="num">{{ sampleField( '_price1' ) || 'Rp 10.000.000' }}</td>
+										</tr>
+										<tr>
+											<td>{{ sampleField( '_item2' ) || 'Implementation' }}</td>
+											<td class="num">1</td>
+											<td class="num">{{ sampleField( '_price2' ) || 'Rp 5.000.000' }}</td>
+											<td class="num">{{ sampleField( '_price2' ) || 'Rp 5.000.000' }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</template>
+							<template v-else-if="node.type === 'totals'">
+								<div
+									class="bw-studio__totals"
+									:style="{ textAlign: ( String( node.props.align || 'right' ) as 'left' | 'center' | 'right' ) }"
+								>
+									<table>
+										<tr>
+											<td>{{ __( 'Subtotal', 'wp-bizwit' ) }}</td>
+											<td class="num">{{ sampleField( 'subtotal' ) }}</td>
+										</tr>
+										<tr class="grand">
+											<td>{{ __( 'Total', 'wp-bizwit' ) }}</td>
+											<td class="num">{{ sampleField( 'total' ) }}</td>
+										</tr>
+									</table>
+									<p v-if="node.props.showTerbilang !== false" class="bw-studio__words">
+										{{ sampleField( 'total_in_words' ) }}
+									</p>
+								</div>
+							</template>
+							<template v-else-if="node.type === 'bank'">
+								<div class="bw-studio__bank">
+									{{ sampleField( 'bank_block' ) || t( 'bankPlaceholder', 'Bank transfer details' ) }}
+								</div>
+							</template>
+							<template v-else-if="node.type === 'signature'">
+								<div class="bw-studio__sign">
+									<div>
+										<strong>{{ __( 'Received by', 'wp-bizwit' ) }}</strong>
+										<span>{{ __( 'Name & signature', 'wp-bizwit' ) }}</span>
+									</div>
+									<div>
+										<strong>{{ sampleField( 'business_name' ) }}</strong>
+										<span>{{ __( 'Signature and company stamp', 'wp-bizwit' ) }}</span>
+									</div>
+								</div>
+							</template>
+							<template v-else-if="node.type === 'columns'">
+								<div class="bw-studio__cols" :style="{ gap: ( node.props.gap || 28 ) + 'px' }">
+									<div
+										v-for="( col, ci ) in ( node.props.columns as ComponentNode[][] ) || [ [], [] ]"
+										:key="ci"
+										class="bw-studio__col"
+										:class="{ 'is-design': mode === 'design' }"
+									>
+										<div
+											v-for="child in col"
+											:key="child.id"
+											class="bw-studio__block bw-studio__block--nested"
+											:class="{ 'is-selected': mode === 'design' && selectedId === child.id }"
+											:style="styleOf( child )"
+											@click.stop="mode === 'design' && select( child.id, zone )"
+										>
+											<template v-if="child.type === 'field'">
+												{{ fieldDisplay( child ) }}
+											</template>
+											<template v-else>
+												{{ child.props.content || config.componentMeta[ child.type ]?.label }}
+											</template>
+										</div>
+										<button
+											v-if="mode === 'design'"
+											type="button"
+											class="bw-studio__col-add"
+											@click.stop="
+												( node.props.columns as ComponentNode[][] )[ ci ].push( {
+													id: uid(),
+													type: 'field',
+													props: defaultProps( 'field' ),
+												} )
+											"
+										>
+											+ {{ t( 'addField', 'Field' ) }}
+										</button>
+									</div>
+								</div>
+							</template>
+							<template v-else-if="node.type === 'field'">
+								{{ fieldDisplay( node ) }}
+							</template>
+							<template v-else>
+								{{ node.props.content || config.componentMeta[ node.type ]?.label }}
+							</template>
+						</div>
+					</section>
+				</div>
+			</main>
+
+			<!-- Properties (design only) -->
+			<aside v-show="mode === 'design'" class="bw-studio__side bw-studio__side--right">
+				<div class="bw-studio__side-title">{{ t( 'properties', 'Properties' ) }}</div>
+				<div v-if="! selected" class="bw-studio__empty-props">
+					{{ t( 'selectHint', 'Select a block on the page to edit it.' ) }}
+				</div>
+				<template v-else>
+					<div class="bw-studio__sel-type">
+						{{ config.componentMeta[ selected.node.type ]?.label || selected.node.type }}
 					</div>
-				</section>
-			</div>
-		</main>
+					<div class="bw-studio__toolbar">
+						<button type="button" class="button button-small" :title="t( 'moveUp', 'Up' )" @click="moveSelected( -1 )">↑</button>
+						<button type="button" class="button button-small" :title="t( 'moveDown', 'Down' )" @click="moveSelected( 1 )">↓</button>
+						<button type="button" class="button button-small" @click="duplicateSelected">
+							{{ t( 'duplicate', 'Duplicate' ) }}
+						</button>
+						<button type="button" class="button button-small button-link-delete" @click="removeSelected">
+							{{ t( 'remove', 'Remove' ) }}
+						</button>
+					</div>
 
-		<!-- Properties -->
-		<aside class="bw-lb__props">
-			<div class="bw-lb__panel-title">{{ t( 'properties', 'Properties' ) }}</div>
-			<div v-if="! selected" class="bw-lb__hint">
-				{{ t( 'selectHint', 'Select a component on the canvas to edit its properties.' ) }}
-			</div>
-			<template v-else>
-				<div class="bw-lb__prop-type">
-					{{ config.componentMeta[ selected.node.type ]?.label || selected.node.type }}
-				</div>
-				<div class="bw-lb__toolbar">
-					<button type="button" class="button button-small" @click="moveSelected( -1 )">↑</button>
-					<button type="button" class="button button-small" @click="moveSelected( 1 )">↓</button>
-					<button type="button" class="button button-small" @click="duplicateSelected">
-						{{ t( 'duplicate', 'Duplicate' ) }}
-					</button>
-					<button type="button" class="button button-small button-link-delete" @click="removeSelected">
-						{{ t( 'remove', 'Remove' ) }}
-					</button>
-				</div>
+					<label v-if="selected.node.type === 'field'" class="bw-f">
+						<span>{{ t( 'field', 'Data field' ) }}</span>
+						<select
+							:value="String( selected.node.props.field || '' )"
+							@change="setProp( 'field', ( $event.target as HTMLSelectElement ).value )"
+						>
+							<option v-for="opt in fieldOptions" :key="opt.value" :value="opt.value">
+								{{ opt.label }}
+							</option>
+						</select>
+					</label>
+					<label v-if="selected.node.type === 'field'" class="bw-check">
+						<input
+							type="checkbox"
+							:checked="!! selected.node.props.showLabel"
+							@change="setProp( 'showLabel', ( $event.target as HTMLInputElement ).checked )"
+						/>
+						{{ t( 'showLabel', 'Show label' ) }}
+					</label>
 
-				<!-- Field -->
-				<label v-if="selected.node.type === 'field'" class="bw-lb__field">
-					<span>{{ t( 'field', 'Data field' ) }}</span>
-					<select
-						:value="String( selected.node.props.field || '' )"
-						@change="setProp( 'field', ( $event.target as HTMLSelectElement ).value )"
+					<label
+						v-if="selected.node.type === 'heading' || selected.node.type === 'text'"
+						class="bw-f"
 					>
-						<option v-for="opt in fieldOptions" :key="opt.value" :value="opt.value">
-							{{ opt.label }}
-						</option>
-					</select>
-				</label>
-				<label v-if="selected.node.type === 'field'" class="bw-lb__check">
-					<input
-						type="checkbox"
-						:checked="!! selected.node.props.showLabel"
-						@change="setProp( 'showLabel', ( $event.target as HTMLInputElement ).checked )"
-					/>
-					{{ t( 'showLabel', 'Show label' ) }}
-				</label>
-
-				<!-- Text / heading -->
-				<label
-					v-if="selected.node.type === 'heading' || selected.node.type === 'text'"
-					class="bw-lb__field"
-				>
-					<span>{{ t( 'content', 'Text' ) }}</span>
-					<textarea
-						v-if="selected.node.type === 'text'"
-						rows="3"
-						:value="String( selected.node.props.content || '' )"
-						@input="setProp( 'content', ( $event.target as HTMLTextAreaElement ).value )"
-					/>
-					<input
-						v-else
-						type="text"
-						:value="String( selected.node.props.content || '' )"
-						@input="setProp( 'content', ( $event.target as HTMLInputElement ).value )"
-					/>
-				</label>
-
-				<!-- Shared style -->
-				<template
-					v-if="
-						[ 'heading', 'text', 'field', 'totals' ].includes( selected.node.type )
-					"
-				>
-					<label class="bw-lb__field">
-						<span>{{ t( 'align', 'Alignment' ) }}</span>
-						<select
-							:value="String( selected.node.props.align || 'left' )"
-							@change="setProp( 'align', ( $event.target as HTMLSelectElement ).value )"
-						>
-							<option value="left">{{ t( 'left', 'Left' ) }}</option>
-							<option value="center">{{ t( 'center', 'Center' ) }}</option>
-							<option value="right">{{ t( 'right', 'Right' ) }}</option>
-						</select>
-					</label>
-				</template>
-				<template
-					v-if="[ 'heading', 'text', 'field' ].includes( selected.node.type )"
-				>
-					<label class="bw-lb__field">
-						<span>{{ t( 'fontSize', 'Font size' ) }}</span>
+						<span>{{ t( 'content', 'Text' ) }}</span>
+						<textarea
+							v-if="selected.node.type === 'text'"
+							rows="3"
+							:value="String( selected.node.props.content || '' )"
+							@input="setProp( 'content', ( $event.target as HTMLTextAreaElement ).value )"
+						/>
 						<input
-							type="number"
-							min="9"
-							max="36"
-							:value="Number( selected.node.props.fontSize || 12 )"
-							@input="setProp( 'fontSize', Number( ( $event.target as HTMLInputElement ).value ) )"
+							v-else
+							type="text"
+							:value="String( selected.node.props.content || '' )"
+							@input="setProp( 'content', ( $event.target as HTMLInputElement ).value )"
 						/>
 					</label>
-					<label class="bw-lb__field">
-						<span>{{ t( 'fontWeight', 'Weight' ) }}</span>
-						<select
-							:value="String( selected.node.props.fontWeight || '400' )"
-							@change="setProp( 'fontWeight', ( $event.target as HTMLSelectElement ).value )"
-						>
-							<option value="400">Regular</option>
-							<option value="600">Semi-bold</option>
-							<option value="700">Bold</option>
-						</select>
-					</label>
-					<label class="bw-lb__field">
-						<span>{{ t( 'color', 'Colour' ) }}</span>
+
+					<template v-if="[ 'heading', 'text', 'field', 'totals' ].includes( selected.node.type )">
+						<label class="bw-f">
+							<span>{{ t( 'align', 'Alignment' ) }}</span>
+							<select
+								:value="String( selected.node.props.align || 'left' )"
+								@change="setProp( 'align', ( $event.target as HTMLSelectElement ).value )"
+							>
+								<option value="left">{{ t( 'left', 'Left' ) }}</option>
+								<option value="center">{{ t( 'center', 'Center' ) }}</option>
+								<option value="right">{{ t( 'right', 'Right' ) }}</option>
+							</select>
+						</label>
+					</template>
+					<template v-if="[ 'heading', 'text', 'field' ].includes( selected.node.type )">
+						<label class="bw-f">
+							<span>{{ t( 'fontSize', 'Font size' ) }}</span>
+							<input
+								type="range"
+								min="9"
+								max="28"
+								:value="Number( selected.node.props.fontSize || 12 )"
+								@input="setProp( 'fontSize', Number( ( $event.target as HTMLInputElement ).value ) )"
+							/>
+							<em>{{ selected.node.props.fontSize || 12 }}px</em>
+						</label>
+						<label class="bw-f">
+							<span>{{ t( 'fontWeight', 'Weight' ) }}</span>
+							<select
+								:value="String( selected.node.props.fontWeight || '400' )"
+								@change="setProp( 'fontWeight', ( $event.target as HTMLSelectElement ).value )"
+							>
+								<option value="400">Regular</option>
+								<option value="600">Semi-bold</option>
+								<option value="700">Bold</option>
+							</select>
+						</label>
+						<label class="bw-f">
+							<span>{{ t( 'color', 'Colour' ) }}</span>
+							<input
+								type="color"
+								:value="String( selected.node.props.color || '#1a2332' )"
+								@input="setProp( 'color', ( $event.target as HTMLInputElement ).value )"
+							/>
+						</label>
+					</template>
+
+					<label v-if="selected.node.type === 'spacer'" class="bw-f">
+						<span>{{ t( 'height', 'Height' ) }}</span>
 						<input
-							type="color"
-							:value="String( selected.node.props.color || '#1d2327' )"
-							@input="setProp( 'color', ( $event.target as HTMLInputElement ).value )"
+							type="range"
+							min="4"
+							max="80"
+							:value="Number( selected.node.props.height || 16 )"
+							@input="setProp( 'height', Number( ( $event.target as HTMLInputElement ).value ) )"
 						/>
+						<em>{{ selected.node.props.height || 16 }}px</em>
+					</label>
+					<label v-if="selected.node.type === 'line_items'" class="bw-check">
+						<input
+							type="checkbox"
+							:checked="selected.node.props.showTax !== false"
+							@change="setProp( 'showTax', ( $event.target as HTMLInputElement ).checked )"
+						/>
+						{{ t( 'showTax', 'Show tax column' ) }}
+					</label>
+					<label v-if="selected.node.type === 'totals'" class="bw-check">
+						<input
+							type="checkbox"
+							:checked="selected.node.props.showTerbilang !== false"
+							@change="setProp( 'showTerbilang', ( $event.target as HTMLInputElement ).checked )"
+						/>
+						{{ t( 'showTerbilang', 'Show amount in words' ) }}
+					</label>
+					<label v-if="selected.node.type === 'columns'" class="bw-f">
+						<span>{{ t( 'gap', 'Column gap' ) }}</span>
+						<input
+							type="range"
+							min="8"
+							max="48"
+							:value="Number( selected.node.props.gap || 28 )"
+							@input="setProp( 'gap', Number( ( $event.target as HTMLInputElement ).value ) )"
+						/>
+						<em>{{ selected.node.props.gap || 28 }}px</em>
+					</label>
+					<label v-if="selected.node.type !== 'spacer'" class="bw-f">
+						<span>{{ t( 'marginTop', 'Space above' ) }}</span>
+						<input
+							type="range"
+							min="0"
+							max="48"
+							:value="Number( selected.node.props.marginTop || 0 )"
+							@input="setProp( 'marginTop', Number( ( $event.target as HTMLInputElement ).value ) )"
+						/>
+						<em>{{ selected.node.props.marginTop || 0 }}px</em>
+					</label>
+					<label v-if="selected.node.type !== 'spacer'" class="bw-f">
+						<span>{{ t( 'marginBottom', 'Space below' ) }}</span>
+						<input
+							type="range"
+							min="0"
+							max="48"
+							:value="Number( selected.node.props.marginBottom || 0 )"
+							@input="setProp( 'marginBottom', Number( ( $event.target as HTMLInputElement ).value ) )"
+						/>
+						<em>{{ selected.node.props.marginBottom || 0 }}px</em>
 					</label>
 				</template>
-
-				<label v-if="selected.node.type === 'spacer'" class="bw-lb__field">
-					<span>{{ t( 'height', 'Height' ) }} (px)</span>
-					<input
-						type="number"
-						min="4"
-						max="120"
-						:value="Number( selected.node.props.height || 16 )"
-						@input="setProp( 'height', Number( ( $event.target as HTMLInputElement ).value ) )"
-					/>
-				</label>
-
-				<label v-if="selected.node.type === 'line_items'" class="bw-lb__check">
-					<input
-						type="checkbox"
-						:checked="selected.node.props.showTax !== false"
-						@change="setProp( 'showTax', ( $event.target as HTMLInputElement ).checked )"
-					/>
-					{{ t( 'showTax', 'Show tax column' ) }}
-				</label>
-				<label v-if="selected.node.type === 'totals'" class="bw-lb__check">
-					<input
-						type="checkbox"
-						:checked="selected.node.props.showTerbilang !== false"
-						@change="setProp( 'showTerbilang', ( $event.target as HTMLInputElement ).checked )"
-					/>
-					{{ t( 'showTerbilang', 'Show amount in words' ) }}
-				</label>
-				<label v-if="selected.node.type === 'bank'" class="bw-lb__check">
-					<input
-						type="checkbox"
-						:checked="!! selected.node.props.showTitle"
-						@change="setProp( 'showTitle', ( $event.target as HTMLInputElement ).checked )"
-					/>
-					{{ t( 'showTitle', 'Show title' ) }}
-				</label>
-				<label v-if="selected.node.type === 'columns'" class="bw-lb__field">
-					<span>{{ t( 'gap', 'Column gap' ) }}</span>
-					<input
-						type="number"
-						min="8"
-						max="48"
-						:value="Number( selected.node.props.gap || 24 )"
-						@input="setProp( 'gap', Number( ( $event.target as HTMLInputElement ).value ) )"
-					/>
-				</label>
-				<label v-if="selected.node.type === 'divider'" class="bw-lb__field">
-					<span>{{ t( 'color', 'Colour' ) }}</span>
-					<input
-						type="color"
-						:value="String( selected.node.props.color || '#c3c4c7' )"
-						@input="setProp( 'color', ( $event.target as HTMLInputElement ).value )"
-					/>
-				</label>
-
-				<label
-					v-if="selected.node.type !== 'spacer'"
-					class="bw-lb__field"
-				>
-					<span>{{ t( 'marginTop', 'Margin top' ) }}</span>
-					<input
-						type="number"
-						min="0"
-						max="64"
-						:value="Number( selected.node.props.marginTop || 0 )"
-						@input="setProp( 'marginTop', Number( ( $event.target as HTMLInputElement ).value ) )"
-					/>
-				</label>
-				<label
-					v-if="selected.node.type !== 'spacer'"
-					class="bw-lb__field"
-				>
-					<span>{{ t( 'marginBottom', 'Margin bottom' ) }}</span>
-					<input
-						type="number"
-						min="0"
-						max="64"
-						:value="Number( selected.node.props.marginBottom || 0 )"
-						@input="setProp( 'marginBottom', Number( ( $event.target as HTMLInputElement ).value ) )"
-					/>
-				</label>
-			</template>
-		</aside>
+			</aside>
+		</div>
 	</div>
 </template>
 
 <style scoped>
-.bw-lb {
-	display: grid;
-	grid-template-columns: 200px minmax(0, 1fr) 240px;
-	gap: 0;
-	min-height: 640px;
-	background: #f0f0f1;
-	border: 1px solid #c3c4c7;
-	font-size: 13px;
+.bw-studio {
+	--ink: #1a2332;
+	--muted: #5c6570;
+	--line: #e2e6ea;
+	--accent: #1e4d6b;
+	--soft: #f4f7f9;
+	--paper-shadow: 0 12px 40px rgba(26, 35, 50, 0.14);
+	font-family: "Segoe UI", system-ui, sans-serif;
+	color: var(--ink);
+	background: linear-gradient(165deg, #dfe6ec 0%, #eef2f5 40%, #e4e9ee 100%);
+	border-radius: 12px;
+	overflow: hidden;
+	border: 1px solid #cfd6dd;
+	min-height: 720px;
 }
-.bw-lb__palette,
-.bw-lb__props {
-	background: #fff;
-	border-right: 1px solid #dcdcde;
-	padding: 12px;
-	overflow: auto;
-}
-.bw-lb__props {
-	border-right: 0;
-	border-left: 1px solid #dcdcde;
-}
-.bw-lb__panel-title {
-	font-size: 11px;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.04em;
-	color: #646970;
-	margin-bottom: 10px;
-}
-.bw-lb__palette-item {
+.bw-studio__top {
 	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	width: 100%;
-	margin: 0 0 6px;
-	padding: 8px 10px;
-	border: 1px solid #dcdcde;
-	border-radius: 4px;
-	background: #f6f7f7;
-	cursor: pointer;
-	text-align: left;
-}
-.bw-lb__palette-item:hover {
-	border-color: #2271b1;
-	background: #f0f6fc;
-}
-.bw-lb__palette-item strong {
-	font-size: 12px;
-	color: #1d2327;
-}
-.bw-lb__palette-item span {
-	font-size: 11px;
-	color: #646970;
-	margin-top: 2px;
-}
-.bw-lb__reset {
-	margin-top: 12px;
-	width: 100%;
-}
-.bw-lb__canvas-wrap {
-	padding: 12px 16px 24px;
-	overflow: auto;
-}
-.bw-lb__paper {
-	max-width: 210mm;
-	min-height: 280mm;
-	margin: 0 auto;
+	align-items: center;
+	gap: 16px;
+	flex-wrap: wrap;
+	padding: 12px 16px;
 	background: #fff;
-	box-shadow: 0 2px 12px rgba( 0, 0, 0, 0.12 );
-	border: 1px solid #c3c4c7;
+	border-bottom: 1px solid var(--line);
 }
-.bw-lb__zone {
-	position: relative;
-	min-height: 64px;
-	padding: 8px 4px 12px;
-	border-bottom: 1px dashed #dcdcde;
+.bw-studio__brand {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-right: auto;
 }
-.bw-lb__zone--footer {
-	border-bottom: 0;
+.bw-studio__brand-mark {
+	display: grid;
+	place-items: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 8px;
+	background: var(--accent);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
 }
-.bw-lb__zone--active {
-	background: #fafcfe;
-	outline: 1px solid #c5d9ed;
+.bw-studio__brand strong {
+	display: block;
+	font-size: 14px;
 }
-.bw-lb__zone-label {
+.bw-studio__brand span {
+	display: block;
+	font-size: 11px;
+	color: var(--muted);
+}
+.bw-studio__modes {
+	display: inline-flex;
+	padding: 3px;
+	background: var(--soft);
+	border-radius: 8px;
+	border: 1px solid var(--line);
+}
+.bw-studio__modes button {
+	border: 0;
+	background: transparent;
+	padding: 7px 14px;
+	border-radius: 6px;
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--muted);
+	cursor: pointer;
+}
+.bw-studio__modes button.is-active {
+	background: #fff;
+	color: var(--ink);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.bw-studio__ghost {
+	border: 1px solid var(--line);
+	background: #fff;
+	border-radius: 6px;
+	padding: 7px 12px;
+	font-size: 12px;
+	cursor: pointer;
+	color: var(--muted);
+}
+.bw-studio__ghost:hover {
+	border-color: var(--accent);
+	color: var(--accent);
+}
+.bw-studio__body {
+	display: grid;
+	grid-template-columns: 220px minmax(0, 1fr) 260px;
+	min-height: 640px;
+}
+.bw-studio__body--preview {
+	grid-template-columns: 1fr;
+}
+.bw-studio__side {
+	background: #fff;
+	padding: 14px 12px;
+	overflow: auto;
+	border-right: 1px solid var(--line);
+}
+.bw-studio__side--right {
+	border-right: 0;
+	border-left: 1px solid var(--line);
+}
+.bw-studio__side-title {
 	font-size: 10px;
 	font-weight: 700;
 	text-transform: uppercase;
-	letter-spacing: 0.06em;
-	color: #8c8f94;
+	letter-spacing: 0.08em;
+	color: var(--muted);
 	margin-bottom: 6px;
 }
-.bw-lb__empty {
-	border: 1px dashed #c3c4c7;
-	border-radius: 4px;
-	padding: 16px;
-	text-align: center;
-	color: #8c8f94;
-	font-size: 12px;
-	cursor: pointer;
-}
-.bw-lb__comp {
-	padding: 6px 8px;
-	margin-bottom: 4px;
-	border: 1px solid transparent;
-	border-radius: 3px;
-	cursor: pointer;
-	line-height: 1.4;
-	word-break: break-word;
-}
-.bw-lb__comp:hover {
-	border-color: #c5d9ed;
-	background: #f6f7f7;
-}
-.bw-lb__comp--selected {
-	border-color: #2271b1 !important;
-	box-shadow: 0 0 0 1px #2271b1;
-	background: #f0f6fc;
-}
-.bw-lb__comp--nested {
-	font-size: 12px;
-	background: #fff;
-	border: 1px solid #e0e0e0;
-}
-.bw-lb__label {
-	color: #646970;
-	font-weight: 600;
-	margin-right: 4px;
-}
-.bw-lb__divider {
-	border: 0;
-	border-top: 1px solid #c3c4c7;
-	margin: 0;
-}
-.bw-lb__spacer-mark {
-	background: repeating-linear-gradient(
-		-45deg,
-		#f0f0f1,
-		#f0f0f1 4px,
-		#e2e4e7 4px,
-		#e2e4e7 8px
-	);
-	border-radius: 2px;
-	opacity: 0.7;
-}
-.bw-lb__table-ph {
-	padding: 12px;
-	background: #f6f7f7;
-	border: 1px dashed #c3c4c7;
-	font-size: 12px;
-	color: #646970;
-	text-align: center;
-}
-.bw-lb__table-ph--right {
-	margin-left: auto;
-	max-width: 220px;
-}
-.bw-lb__sign-ph {
-	display: flex;
-	justify-content: space-between;
-	gap: 24px;
-	margin-top: 8px;
-}
-.bw-lb__sign-ph span {
-	flex: 1;
-	border-top: 1px solid #c3c4c7;
-	padding-top: 8px;
+.bw-studio__side-hint {
 	font-size: 11px;
-	color: #646970;
-	min-height: 48px;
+	color: var(--muted);
+	margin: 0 0 12px;
+	line-height: 1.4;
 }
-.bw-lb__cols {
+.bw-studio__chip {
 	display: flex;
+	gap: 10px;
 	width: 100%;
-}
-.bw-lb__col {
-	flex: 1;
-	min-width: 0;
-	border: 1px dashed #dcdcde;
-	border-radius: 3px;
-	padding: 4px;
-	min-height: 40px;
-}
-.bw-lb__col-add {
-	display: block;
-	width: 100%;
-	margin-top: 4px;
-	border: 1px dashed #c3c4c7;
-	background: transparent;
+	align-items: flex-start;
+	text-align: left;
+	border: 1px solid var(--line);
+	background: var(--soft);
+	border-radius: 10px;
+	padding: 10px;
+	margin-bottom: 8px;
 	cursor: pointer;
-	color: #646970;
-	font-size: 14px;
-	line-height: 1.6;
+	transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
 }
-.bw-lb__hint {
-	color: #646970;
+.bw-studio__chip:hover {
+	border-color: var(--accent);
+	box-shadow: 0 4px 12px rgba(30, 77, 107, 0.1);
+	transform: translateY(-1px);
+}
+.bw-studio__chip-icon {
+	flex: 0 0 28px;
+	height: 28px;
+	display: grid;
+	place-items: center;
+	border-radius: 6px;
+	background: #fff;
+	border: 1px solid var(--line);
 	font-size: 12px;
-	line-height: 1.5;
+	font-weight: 700;
+	color: var(--accent);
 }
-.bw-lb__prop-type {
-	font-weight: 600;
+.bw-studio__chip-text strong {
+	display: block;
+	font-size: 12px;
+}
+.bw-studio__chip-text small {
+	display: block;
+	font-size: 11px;
+	color: var(--muted);
+	margin-top: 2px;
+}
+.bw-studio__canvas-wrap {
+	padding: 28px 20px 40px;
+	overflow: auto;
+	display: flex;
+	justify-content: center;
+}
+.bw-studio__paper {
+	width: min(210mm, 100%);
+	min-height: 280mm;
+	background: #fff;
+	box-shadow: var(--paper-shadow);
+	border-radius: 2px;
+}
+.bw-studio__paper.is-preview .bw-studio__zone--header {
+	border-bottom: 2.5px solid var(--accent);
+	padding-bottom: 12px;
+	margin-bottom: 16px;
+}
+.bw-studio__zone {
+	position: relative;
+	min-height: 56px;
+	padding: 10px 4px 14px;
+}
+.bw-studio__zone.is-active:not(.is-preview) {
+	background: linear-gradient(180deg, rgba(30, 77, 107, 0.04), transparent);
+	outline: 1px dashed rgba(30, 77, 107, 0.25);
+	outline-offset: 2px;
+	border-radius: 6px;
+}
+.bw-studio__zone-tag {
+	font-size: 9px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: #8a939c;
 	margin-bottom: 8px;
 }
-.bw-lb__toolbar {
+.bw-studio__empty {
+	border: 1.5px dashed #c5ced6;
+	border-radius: 8px;
+	padding: 20px;
+	text-align: center;
+	color: #8a939c;
+	font-size: 12px;
+	cursor: pointer;
+	background: rgba(255, 255, 255, 0.6);
+}
+.bw-studio__block {
+	position: relative;
+	padding: 4px 6px;
+	margin-bottom: 2px;
+	border-radius: 4px;
+	cursor: pointer;
+	line-height: 1.45;
+	word-break: break-word;
+	border: 1px solid transparent;
+}
+.bw-studio__block:not(.is-preview):hover {
+	background: rgba(30, 77, 107, 0.04);
+}
+.bw-studio__block.is-selected {
+	border-color: var(--accent) !important;
+	box-shadow: 0 0 0 1px var(--accent);
+	background: rgba(30, 77, 107, 0.06);
+}
+.bw-studio__block.is-preview {
+	cursor: default;
+	border: 0 !important;
+	box-shadow: none !important;
+	background: transparent !important;
+	padding-left: 0;
+	padding-right: 0;
+}
+.bw-studio__block-badge {
+	position: absolute;
+	top: -8px;
+	right: 4px;
+	font-size: 9px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	background: var(--accent);
+	color: #fff;
+	padding: 1px 6px;
+	border-radius: 99px;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.12s;
+}
+.bw-studio__block:not(.is-preview):hover .bw-studio__block-badge,
+.bw-studio__block.is-selected .bw-studio__block-badge {
+	opacity: 1;
+}
+.bw-studio__block--nested {
+	font-size: 12px;
+}
+.bw-studio__hr {
+	border: 0;
+	border-top: 1px solid #e2e6ea;
+	margin: 4px 0;
+}
+.bw-studio__spacer.is-design {
+	background: repeating-linear-gradient(
+		-45deg,
+		#f0f3f6,
+		#f0f3f6 4px,
+		#e4e9ee 4px,
+		#e4e9ee 8px
+	);
+	border-radius: 3px;
+	opacity: 0.85;
+}
+.bw-studio__table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 11px;
+	margin: 4px 0;
+}
+.bw-studio__table th {
+	background: var(--accent);
+	color: #fff;
+	text-align: left;
+	padding: 8px 10px;
+	font-size: 9px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+.bw-studio__table td {
+	padding: 8px 10px;
+	border-bottom: 1px solid var(--line);
+}
+.bw-studio__table tr:nth-child(even) td {
+	background: var(--soft);
+}
+.bw-studio__table .num {
+	text-align: right;
+	white-space: nowrap;
+}
+.bw-studio__totals table {
+	width: 220px;
+	margin-left: auto;
+	border-collapse: collapse;
+	font-size: 12px;
+}
+.bw-studio__totals td {
+	padding: 6px 10px;
+	border-bottom: 1px solid var(--line);
+}
+.bw-studio__totals tr.grand td {
+	background: #f0f5f8;
+	font-weight: 700;
+	border-top: 2px solid var(--accent);
+	border-bottom: 0;
+}
+.bw-studio__totals .num {
+	text-align: right;
+}
+.bw-studio__words {
+	margin: 8px 0 0;
+	font-size: 11px;
+	font-style: italic;
+	color: var(--muted);
+	text-align: right;
+}
+.bw-studio__bank {
+	background: var(--soft);
+	border-left: 3px solid var(--accent);
+	padding: 10px 14px;
+	border-radius: 0 6px 6px 0;
+	font-size: 12px;
+	white-space: pre-line;
+}
+.bw-studio__sign {
+	display: flex;
+	justify-content: space-between;
+	gap: 32px;
+	margin-top: 12px;
+}
+.bw-studio__sign > div {
+	flex: 1;
+	text-align: center;
+	font-size: 11px;
+	color: var(--muted);
+}
+.bw-studio__sign > div::before {
+	content: "";
+	display: block;
+	height: 72px;
+	margin-bottom: 8px;
+	border-bottom: 1px solid var(--ink);
+}
+.bw-studio__sign strong {
+	display: block;
+	color: var(--ink);
+	margin-bottom: 2px;
+}
+.bw-studio__cols {
+	display: flex;
+	width: 100%;
+}
+.bw-studio__col {
+	flex: 1;
+	min-width: 0;
+}
+.bw-studio__col.is-design {
+	border: 1px dashed #d0d7de;
+	border-radius: 6px;
+	padding: 6px;
+	min-height: 48px;
+}
+.bw-studio__col-add {
+	display: block;
+	width: 100%;
+	margin-top: 6px;
+	border: 1px dashed #c5ced6;
+	background: transparent;
+	border-radius: 4px;
+	color: var(--muted);
+	font-size: 11px;
+	padding: 4px;
+	cursor: pointer;
+}
+.bw-studio__empty-props {
+	font-size: 12px;
+	color: var(--muted);
+	line-height: 1.5;
+	padding: 8px 0;
+}
+.bw-studio__sel-type {
+	font-weight: 700;
+	font-size: 13px;
+	margin-bottom: 10px;
+}
+.bw-studio__toolbar {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 4px;
-	margin-bottom: 12px;
+	margin-bottom: 14px;
 }
-.bw-lb__field {
+.bw-f {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
-	margin-bottom: 10px;
-}
-.bw-lb__field span {
-	font-size: 11px;
-	font-weight: 600;
-	color: #646970;
-}
-.bw-lb__field input[type='text'],
-.bw-lb__field input[type='number'],
-.bw-lb__field select,
-.bw-lb__field textarea {
-	width: 100%;
-	max-width: 100%;
-}
-.bw-lb__field input[type='color'] {
-	width: 48px;
-	height: 28px;
-	padding: 0;
-	border: 1px solid #c3c4c7;
-}
-.bw-lb__check {
-	display: flex;
-	align-items: center;
-	gap: 6px;
-	margin-bottom: 10px;
+	margin-bottom: 12px;
 	font-size: 12px;
 }
-@media ( max-width: 1100px ) {
-	.bw-lb {
+.bw-f span {
+	font-size: 10px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--muted);
+}
+.bw-f em {
+	font-style: normal;
+	font-size: 11px;
+	color: var(--muted);
+}
+.bw-f input[type='text'],
+.bw-f input[type='number'],
+.bw-f select,
+.bw-f textarea {
+	width: 100%;
+	border-radius: 6px;
+	border: 1px solid var(--line);
+	padding: 6px 8px;
+}
+.bw-f input[type='range'] {
+	width: 100%;
+}
+.bw-f input[type='color'] {
+	width: 48px;
+	height: 32px;
+	padding: 0;
+	border: 1px solid var(--line);
+	border-radius: 6px;
+}
+.bw-check {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 12px;
+	font-size: 12px;
+}
+@media (max-width: 1200px) {
+	.bw-studio__body:not(.bw-studio__body--preview) {
 		grid-template-columns: 1fr;
 	}
+	.bw-studio__side {
+		border: 0;
+		border-bottom: 1px solid var(--line);
+		max-height: 220px;
+	}
+}
+</style>
+
+<style>
+/* Host postbox: bleed builder edge-to-edge */
+#wp-bizwit-layout-builder.bw-lb-host {
+	border: 0;
+	box-shadow: none;
+	background: transparent;
+}
+#wp-bizwit-layout-builder.bw-lb-host > .postbox-header {
+	display: none;
+}
+#wp-bizwit-layout-builder.bw-lb-host > .inside {
+	margin: 0 !important;
+	padding: 0 !important;
 }
 </style>

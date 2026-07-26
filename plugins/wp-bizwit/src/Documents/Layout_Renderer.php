@@ -336,8 +336,12 @@ class Layout_Renderer {
 		ob_start();
 		?>
 		<div class="wp-bizwit-sign" style="<?php echo esc_attr( $margin ); ?>">
-			<div class="wp-bizwit-sign-box"><?php esc_html_e( 'Received by', 'wp-bizwit' ); ?></div>
 			<div class="wp-bizwit-sign-box">
+				<strong><?php esc_html_e( 'Received by', 'wp-bizwit' ); ?></strong>
+				<span class="muted"><?php esc_html_e( 'Name & signature', 'wp-bizwit' ); ?></span>
+			</div>
+			<div class="wp-bizwit-sign-box">
+				<strong>
 				<?php
 				echo esc_html(
 					sprintf(
@@ -347,7 +351,8 @@ class Layout_Renderer {
 					)
 				);
 				?>
-				<br /><span class="muted"><?php esc_html_e( 'Signature and company stamp', 'wp-bizwit' ); ?></span>
+				</strong>
+				<span class="muted"><?php esc_html_e( 'Signature and company stamp', 'wp-bizwit' ); ?></span>
 			</div>
 		</div>
 		<?php

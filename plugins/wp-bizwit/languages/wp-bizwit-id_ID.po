@@ -1496,7 +1496,6 @@ msgstr "Hapus draf"
 #: src/Admin/Views/invoices-form.php:131
 #: src/Admin/Views/invoices-print.php:160
 #: src/Admin/Views/payments-print.php:133
-#: src/Documents/Document_Renderer.php:76
 msgid "Print"
 msgstr "Cetak"
 
@@ -1548,7 +1547,7 @@ msgid "Optional. Link this invoice to a project when billing staged work."
 msgstr "Opsional. Hubungkan faktur ke proyek saat menagih pekerjaan bertahap."
 
 #: src/Admin/Views/invoices-form.php:285
-#: src/Documents/Template_Post_Type.php:358
+#: src/Documents/Template_Post_Type.php:372
 msgid "Line items"
 msgstr "Baris item"
 
@@ -1594,7 +1593,7 @@ msgstr "Kosongkan uraian untuk menghapus baris. Simpan agar total dihitung ulang
 #: src/Admin/Views/invoices-form.php:363
 #: src/Documents/Document_Blocks.php:301
 #: src/Documents/Layout_Renderer.php:225
-#: src/Documents/Template_Post_Type.php:362
+#: src/Documents/Template_Post_Type.php:376
 msgid "Totals"
 msgstr "Total"
 
@@ -1687,19 +1686,18 @@ msgstr "Faktur itu tidak ada atau sudah dihapus."
 
 #. translators: %s: invoice number
 #: src/Admin/Views/invoices-print.php:65
-#: src/Documents/Document_Renderer.php:60
+#: src/Documents/Document_Renderer.php:57
 #, php-format
 msgid "Invoice %s"
 msgstr "Faktur %s"
 
 #: src/Admin/Views/invoices-print.php:162
 #: src/Admin/Views/payments-print.php:135
-#: src/Documents/Document_Renderer.php:78
 msgid "Use your browser’s print dialog to save as PDF (A4)."
 msgstr "Gunakan dialog cetak peramban untuk menyimpan sebagai PDF (A4)."
 
 #: src/Admin/Views/invoices-print.php:166
-#: src/Documents/Document_Renderer.php:81
+#: src/Documents/Document_Renderer.php:78
 msgid "VOID"
 msgstr "DIBATALKAN"
 
@@ -1708,7 +1706,7 @@ msgstr "DIBATALKAN"
 #: src/Admin/Views/payments-form.php:124
 #: src/Documents/Merge_Fields.php:94
 #: src/Documents/Template_Post_Type.php:235
-#: src/Documents/Template_Post_Type.php:506
+#: src/Documents/Template_Post_Type.php:520
 msgid "Invoice"
 msgstr "Faktur"
 
@@ -1748,7 +1746,7 @@ msgstr "Bea meterai mungkin berlaku untuk dokumen ini menurut hukum Indonesia �
 
 #: src/Admin/Views/invoices-print.php:351
 #: src/Documents/Document_Blocks.php:391
-#: src/Documents/Layout_Renderer.php:339
+#: src/Documents/Layout_Renderer.php:340
 #: resources/blocks/document-blocks.js:257
 msgid "Received by"
 msgstr "Diterima oleh"
@@ -1756,7 +1754,7 @@ msgstr "Diterima oleh"
 #. translators: %s: business name
 #: src/Admin/Views/invoices-print.php:358
 #: src/Documents/Document_Blocks.php:398
-#: src/Documents/Layout_Renderer.php:345
+#: src/Documents/Layout_Renderer.php:349
 #, php-format
 msgid "For %s"
 msgstr "Untuk %s"
@@ -1764,7 +1762,7 @@ msgstr "Untuk %s"
 #: src/Admin/Views/invoices-print.php:364
 #: src/Admin/Views/payments-print.php:263
 #: src/Documents/Document_Blocks.php:404
-#: src/Documents/Layout_Renderer.php:350
+#: src/Documents/Layout_Renderer.php:355
 #: resources/blocks/document-blocks.js:270
 msgid "Signature and company stamp"
 msgstr "Tanda tangan dan cap perusahaan"
@@ -2088,17 +2086,17 @@ msgid "Enter an amount received and/or a withheld amount."
 msgstr "Masukkan jumlah diterima dan/atau jumlah yang dipotong."
 
 #: src/Documents/Document_Blocks.php:74
-#: src/Documents/Template_Post_Type.php:288
+#: src/Documents/Template_Post_Type.php:302
 msgid "Header"
 msgstr "Header"
 
 #: src/Documents/Document_Blocks.php:75
-#: src/Documents/Template_Post_Type.php:289
+#: src/Documents/Template_Post_Type.php:303
 msgid "Body"
 msgstr "Body"
 
 #: src/Documents/Document_Blocks.php:76
-#: src/Documents/Template_Post_Type.php:290
+#: src/Documents/Template_Post_Type.php:304
 msgid "Footer"
 msgstr "Footer"
 
@@ -2252,17 +2250,17 @@ msgid "Template settings"
 msgstr "Pengaturan template"
 
 #: src/Documents/Template_Post_Type.php:236
-#: src/Documents/Template_Post_Type.php:507
+#: src/Documents/Template_Post_Type.php:521
 msgid "Receipt / kwitansi"
 msgstr "Kwitansi"
 
 #: src/Documents/Template_Post_Type.php:237
-#: src/Documents/Template_Post_Type.php:508
+#: src/Documents/Template_Post_Type.php:522
 msgid "General"
 msgstr "Umum"
 
 #: src/Documents/Template_Post_Type.php:241
-#: src/Documents/Template_Post_Type.php:486
+#: src/Documents/Template_Post_Type.php:500
 msgid "Document type"
 msgstr "Jenis dokumen"
 
@@ -2270,15 +2268,15 @@ msgstr "Jenis dokumen"
 msgid "Use as default for this document type"
 msgstr "Jadikan bawaan untuk jenis dokumen ini"
 
-#: src/Documents/Template_Post_Type.php:487
+#: src/Documents/Template_Post_Type.php:501
 msgid "Default"
 msgstr "Bawaan"
 
-#: src/Documents/Template_Post_Type.php:515
+#: src/Documents/Template_Post_Type.php:529
 msgid "Yes"
 msgstr "Ya"
 
-#: src/Documents/Template_Post_Type.php:530
+#: src/Documents/Template_Post_Type.php:544
 msgid "Template name"
 msgstr "Nama template"
 
@@ -2298,12 +2296,13 @@ msgstr ""
 msgid "A dynamic value from the invoice or business settings. Labels follow the site language when printed."
 msgstr ""
 
+#: src/Documents/Template_Post_Type.php:337
 #: resources/blocks/document-blocks.js:140
 msgid "Field"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:303
-#: src/Documents/Template_Post_Type.php:354
+#: src/Documents/Template_Post_Type.php:320
+#: src/Documents/Template_Post_Type.php:368
 #: resources/blocks/document-blocks.js:142
 msgid "Data field"
 msgstr ""
@@ -2404,7 +2403,7 @@ msgid "View all invoices"
 msgstr "Lihat semua faktur"
 
 #: src/Documents/Layout_Renderer.php:319
-#: src/Documents/Template_Post_Type.php:366
+#: src/Documents/Template_Post_Type.php:380
 msgid "Bank details"
 msgstr ""
 
@@ -2416,172 +2415,132 @@ msgstr ""
 msgid "Build the layout on the canvas. Field labels follow the site language when the document is printed."
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:293
+#: src/Documents/Template_Post_Type.php:311
 msgid "Components"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:294
+#: src/Documents/Template_Post_Type.php:313
 msgid "Properties"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:295
-msgid "Canvas (A4)"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:296
-msgid "Select a component on the canvas to edit its properties."
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:297
-msgid "Add"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:298
+#: src/Documents/Template_Post_Type.php:315
 msgid "Remove"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:299
-msgid "Move up"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:300
-msgid "Move down"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:301
+#: src/Documents/Template_Post_Type.php:318
 msgid "Duplicate"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:302
-msgid "Drop or add components here"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:304
+#: src/Documents/Template_Post_Type.php:321
 msgid "Show label"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:305
+#: src/Documents/Template_Post_Type.php:322
 msgid "Alignment"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:306
+#: src/Documents/Template_Post_Type.php:323
 msgid "Font size"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:307
+#: src/Documents/Template_Post_Type.php:324
 msgid "Weight"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:308
+#: src/Documents/Template_Post_Type.php:325
 msgid "Colour"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:309
-msgid "Margin top"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:310
-msgid "Margin bottom"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:311
-#: src/Documents/Template_Post_Type.php:350
+#: src/Documents/Template_Post_Type.php:328
+#: src/Documents/Template_Post_Type.php:364
 msgid "Text"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:312
+#: src/Documents/Template_Post_Type.php:329
 msgid "Height"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:313
+#: src/Documents/Template_Post_Type.php:330
 msgid "Show tax column"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:314
+#: src/Documents/Template_Post_Type.php:331
 msgid "Show amount in words"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:315
-msgid "Show title"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:316
+#: src/Documents/Template_Post_Type.php:332
 msgid "Column gap"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:317
+#: src/Documents/Template_Post_Type.php:333
 msgid "Left"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:318
+#: src/Documents/Template_Post_Type.php:334
 msgid "Center"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:319
+#: src/Documents/Template_Post_Type.php:335
 msgid "Right"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:320
-msgid "Reset to default layout"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:346
+#: src/Documents/Template_Post_Type.php:360
 msgid "Heading"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:347
+#: src/Documents/Template_Post_Type.php:361
 msgid "Static title text"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:351
+#: src/Documents/Template_Post_Type.php:365
 msgid "Free paragraph"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:355
+#: src/Documents/Template_Post_Type.php:369
 msgid "Invoice / business value"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:359
+#: src/Documents/Template_Post_Type.php:373
 msgid "Invoice rows table"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:363
+#: src/Documents/Template_Post_Type.php:377
 msgid "Subtotal, tax, total"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:367
+#: src/Documents/Template_Post_Type.php:381
 msgid "Payment account block"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:370
+#: src/Documents/Template_Post_Type.php:384
 msgid "Signature"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:371
+#: src/Documents/Template_Post_Type.php:385
 msgid "Sign and stamp area"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:374
+#: src/Documents/Template_Post_Type.php:388
 msgid "Spacer"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:375
+#: src/Documents/Template_Post_Type.php:389
 msgid "Vertical space"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:378
+#: src/Documents/Template_Post_Type.php:392
 msgid "Divider"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:379
+#: src/Documents/Template_Post_Type.php:393
 msgid "Horizontal rule"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:382
+#: src/Documents/Template_Post_Type.php:396
 msgid "Columns"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:383
+#: src/Documents/Template_Post_Type.php:397
 msgid "Two side-by-side columns"
 msgstr ""
 
@@ -2608,3 +2567,94 @@ msgstr "Tinjau template dokumen faktur"
 #: src/Admin/Screens/Screen.php:65
 msgid "Skip to BizWit content"
 msgstr "Loncat ke konten BizWit"
+
+#: src/Documents/Document_Renderer.php:73
+msgid "Print / Save as PDF"
+msgstr "Cetak / Simpan PDF"
+
+#: src/Documents/Document_Renderer.php:74
+msgid "Use A4 paper · browser print dialog"
+msgstr "Kertas A4 · dialog cetak peramban"
+
+#: src/Documents/Document_Renderer.php:157
+msgid "Payment within 30 days via bank transfer."
+msgstr "Pembayaran dalam 30 hari via transfer bank."
+
+#: src/Documents/Document_Renderer.php:161
+#: src/Documents/Template_Post_Type.php:289
+msgid "Website redesign — discovery & UI"
+msgstr "Redesain website — riset & UI"
+
+#: src/Documents/Document_Renderer.php:163
+#: src/Documents/Document_Renderer.php:171
+msgid "package"
+msgstr "paket"
+
+#: src/Documents/Document_Renderer.php:169
+#: src/Documents/Template_Post_Type.php:290
+msgid "Implementation & training"
+msgstr "Implementasi & pelatihan"
+
+#: src/Documents/Document_Renderer.php:178
+msgid "PT Nusantara Maju"
+msgstr "PT Nusantara Maju"
+
+#: src/Documents/Document_Renderer.php:183
+msgid "Corporate website 2026"
+msgstr "Website korporat 2026"
+
+#: src/Documents/Layout_Renderer.php:341
+msgid "Name & signature"
+msgstr "Nama & tanda tangan"
+
+#: src/Documents/Template_Post_Type.php:307
+msgid "Document studio"
+msgstr "Studio dokumen"
+
+#: src/Documents/Template_Post_Type.php:308
+msgid "Design the layout · preview as printed"
+msgstr "Rancang layout · pratinjau seperti cetakan"
+
+#: src/Documents/Template_Post_Type.php:309
+msgid "Design"
+msgstr "Desain"
+
+#: src/Documents/Template_Post_Type.php:310
+msgid "Print preview"
+msgstr "Pratinjau cetak"
+
+#: src/Documents/Template_Post_Type.php:312
+msgid "Click to add into the active section"
+msgstr "Klik untuk menambah ke bagian aktif"
+
+#: src/Documents/Template_Post_Type.php:314
+msgid "Select a block on the page to edit it."
+msgstr "Pilih blok di halaman untuk mengedit."
+
+#: src/Documents/Template_Post_Type.php:316
+msgid "Up"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:317
+msgid "Down"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:319
+msgid "Add components to this section"
+msgstr "Tambah komponen ke bagian ini"
+
+#: src/Documents/Template_Post_Type.php:326
+msgid "Space above"
+msgstr "Jarak atas"
+
+#: src/Documents/Template_Post_Type.php:327
+msgid "Space below"
+msgstr "Jarak bawah"
+
+#: src/Documents/Template_Post_Type.php:336
+msgid "Reset default"
+msgstr "Reset bawaan"
+
+#: src/Documents/Template_Post_Type.php:338
+msgid "Bank transfer details"
+msgstr "Detail transfer bank"

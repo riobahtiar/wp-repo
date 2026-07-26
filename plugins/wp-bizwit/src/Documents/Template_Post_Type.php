@@ -280,9 +280,23 @@ class Template_Post_Type {
 			$layout = Layout::default_invoice();
 		}
 
+		// Resolve sample merge values for the live print preview (no real invoice).
+		Document_Context::set( 'invoice', Document_Renderer::sample_context() );
+		$sample_values = array();
+		foreach ( array_keys( Merge_Fields::catalogue() ) as $field_key ) {
+			$sample_values[ $field_key ] = wp_strip_all_tags( str_replace( array( '<br />', '<br/>', '<br>' ), "\n", Merge_Fields::resolve( $field_key ) ) );
+		}
+		$sample_values['_item1']  = __( 'Website redesign — discovery & UI', 'wp-bizwit' );
+		$sample_values['_item2']  = __( 'Implementation & training', 'wp-bizwit' );
+		$sample_values['_price1'] = \WP_BizWit\Support\Money::format( 10000000, \WP_BizWit\Support\Settings::currency() );
+		$sample_values['_price2'] = \WP_BizWit\Support\Money::format( 5000000, \WP_BizWit\Support\Settings::currency() );
+		Document_Context::clear();
+
 		$payload = array(
 			'layout'        => $layout,
 			'fields'        => Merge_Fields::catalogue(),
+			'sampleValues'  => $sample_values,
+			'documentCss'   => Document_Styles::css(),
 			'componentMeta' => self::component_palette(),
 			'zones'         => array(
 				'header' => __( 'Header', 'wp-bizwit' ),
@@ -290,34 +304,38 @@ class Template_Post_Type {
 				'footer' => __( 'Footer', 'wp-bizwit' ),
 			),
 			'i18n'          => array(
-				'palette'       => __( 'Components', 'wp-bizwit' ),
-				'properties'    => __( 'Properties', 'wp-bizwit' ),
-				'canvas'        => __( 'Canvas (A4)', 'wp-bizwit' ),
-				'selectHint'    => __( 'Select a component on the canvas to edit its properties.', 'wp-bizwit' ),
-				'add'           => __( 'Add', 'wp-bizwit' ),
-				'remove'        => __( 'Remove', 'wp-bizwit' ),
-				'moveUp'        => __( 'Move up', 'wp-bizwit' ),
-				'moveDown'      => __( 'Move down', 'wp-bizwit' ),
-				'duplicate'     => __( 'Duplicate', 'wp-bizwit' ),
-				'emptyZone'     => __( 'Drop or add components here', 'wp-bizwit' ),
-				'field'         => __( 'Data field', 'wp-bizwit' ),
-				'showLabel'     => __( 'Show label', 'wp-bizwit' ),
-				'align'         => __( 'Alignment', 'wp-bizwit' ),
-				'fontSize'      => __( 'Font size', 'wp-bizwit' ),
-				'fontWeight'    => __( 'Weight', 'wp-bizwit' ),
-				'color'         => __( 'Colour', 'wp-bizwit' ),
-				'marginTop'     => __( 'Margin top', 'wp-bizwit' ),
-				'marginBottom'  => __( 'Margin bottom', 'wp-bizwit' ),
-				'content'       => __( 'Text', 'wp-bizwit' ),
-				'height'        => __( 'Height', 'wp-bizwit' ),
-				'showTax'       => __( 'Show tax column', 'wp-bizwit' ),
-				'showTerbilang' => __( 'Show amount in words', 'wp-bizwit' ),
-				'showTitle'     => __( 'Show title', 'wp-bizwit' ),
-				'gap'           => __( 'Column gap', 'wp-bizwit' ),
-				'left'          => __( 'Left', 'wp-bizwit' ),
-				'center'        => __( 'Center', 'wp-bizwit' ),
-				'right'         => __( 'Right', 'wp-bizwit' ),
-				'resetDefault'  => __( 'Reset to default layout', 'wp-bizwit' ),
+				'studioTitle'     => __( 'Document studio', 'wp-bizwit' ),
+				'studioHint'      => __( 'Design the layout · preview as printed', 'wp-bizwit' ),
+				'modeDesign'      => __( 'Design', 'wp-bizwit' ),
+				'modePreview'     => __( 'Print preview', 'wp-bizwit' ),
+				'palette'         => __( 'Components', 'wp-bizwit' ),
+				'paletteHint'     => __( 'Click to add into the active section', 'wp-bizwit' ),
+				'properties'      => __( 'Properties', 'wp-bizwit' ),
+				'selectHint'      => __( 'Select a block on the page to edit it.', 'wp-bizwit' ),
+				'remove'          => __( 'Remove', 'wp-bizwit' ),
+				'moveUp'          => __( 'Up', 'wp-bizwit' ),
+				'moveDown'        => __( 'Down', 'wp-bizwit' ),
+				'duplicate'       => __( 'Duplicate', 'wp-bizwit' ),
+				'emptyZone'       => __( 'Add components to this section', 'wp-bizwit' ),
+				'field'           => __( 'Data field', 'wp-bizwit' ),
+				'showLabel'       => __( 'Show label', 'wp-bizwit' ),
+				'align'           => __( 'Alignment', 'wp-bizwit' ),
+				'fontSize'        => __( 'Font size', 'wp-bizwit' ),
+				'fontWeight'      => __( 'Weight', 'wp-bizwit' ),
+				'color'           => __( 'Colour', 'wp-bizwit' ),
+				'marginTop'       => __( 'Space above', 'wp-bizwit' ),
+				'marginBottom'    => __( 'Space below', 'wp-bizwit' ),
+				'content'         => __( 'Text', 'wp-bizwit' ),
+				'height'          => __( 'Height', 'wp-bizwit' ),
+				'showTax'         => __( 'Show tax column', 'wp-bizwit' ),
+				'showTerbilang'   => __( 'Show amount in words', 'wp-bizwit' ),
+				'gap'             => __( 'Column gap', 'wp-bizwit' ),
+				'left'            => __( 'Left', 'wp-bizwit' ),
+				'center'          => __( 'Center', 'wp-bizwit' ),
+				'right'           => __( 'Right', 'wp-bizwit' ),
+				'resetDefault'    => __( 'Reset default', 'wp-bizwit' ),
+				'addField'        => __( 'Field', 'wp-bizwit' ),
+				'bankPlaceholder' => __( 'Bank transfer details', 'wp-bizwit' ),
 			),
 			'defaultLayout' => Layout::default_invoice(),
 		);
@@ -328,10 +346,6 @@ class Template_Post_Type {
 			class="wp-bizwit"
 			data-config="<?php echo esc_attr( (string) wp_json_encode( $payload ) ); ?>"
 		></div>
-		<style>
-			#wp-bizwit-layout-builder .inside { margin: 0; padding: 0; }
-			#wp-bizwit-layout-builder .postbox-header { display: none; }
-		</style>
 		<?php
 	}
 
