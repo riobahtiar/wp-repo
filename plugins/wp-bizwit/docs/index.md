@@ -3,6 +3,19 @@
 Back-office record keeping inside wp-admin — clients, projects, invoices and
 payment receipts — **built for Indonesian companies and UMKM first**.
 
+## Repo layout (agents)
+
+This package is part of the **wp-repo monorepo** (git root = `wp-content/`).
+
+| Doc | Scope |
+|-----|--------|
+| [Monorepo AGENTS](../../../AGENTS.md) / [README](../../../README.md) | Git root, npm workspaces, Turbo, CI |
+| [Package AGENTS](../AGENTS.md) | BizWit conventions (`CLAUDE.md` → same file) |
+| [Install AGENTS](../../../../AGENTS.md) | Herd, WP-CLI, install-wide security & Indonesia-first rules |
+
+JS: install and build from monorepo root only (`npm install`, `npm run -w wp-bizwit build`).
+PHP: `composer install` inside this package. Details in [development.md](development.md).
+
 ## Start here
 
 | Document | What it covers |
@@ -10,7 +23,7 @@ payment receipts — **built for Indonesian companies and UMKM first**.
 | [indonesia.md](indonesia.md) | The Indonesian profile: NPWP, NIB, PKP, PPN, PPh 23, bea meterai, terbilang, document numbering, and the glossary |
 | [culture.md](culture.md) | Designing for Indonesian users: names, tone, WhatsApp, documents, the Lebaran calendar, payment behaviour |
 | [data-model.md](data-model.md) | The seven database tables, why custom tables, and the rules the schema depends on |
-| [development.md](development.md) | Build, lint, test, translation workflow, dependency policy, and tooling traps |
+| [development.md](development.md) | Build, lint, test, translation workflow, monorepo npm, dependency policy, tooling traps |
 | [frontend-architecture.md](frontend-architecture.md) | Vue 3 + Vite + Tailwind decisions, performance budgets, REST conventions, wordpress.org packaging — **read before any interactive UI work** |
 | [performance.md](performance.md) | Measured gzip baselines, re-measure commands, soft bundle gate |
 

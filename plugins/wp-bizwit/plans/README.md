@@ -3,6 +3,12 @@
 Working documents for everything not yet built, plus the reasoning behind how it
 should be built. One file per body of work.
 
+This package is part of the **wp-repo monorepo** (git root `wp-content/`). Agent
+orientation: [`../AGENTS.md`](../AGENTS.md) · monorepo
+[`../../../AGENTS.md`](../../../AGENTS.md). Implement features from a package
+checkout that is still the monorepo tree — do not treat this folder as its own
+git root for remotes/CI.
+
 **These are plans, not promises.** Anything here can be re-scoped or dropped.
 What is actually shipped lives in [`../CHANGELOG.md`](../CHANGELOG.md); what is
 currently true of the codebase lives in [`PROGRESS.md`](PROGRESS.md).

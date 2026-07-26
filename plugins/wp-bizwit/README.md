@@ -79,22 +79,28 @@ instead. Uninstalling only drops data if you opt in from Settings first.
 
 ## Development
 
-Requires PHP 8.0+, Composer, and Node.
+This package lives in the **wp-repo monorepo** (`wp-content/` git root). Requires
+PHP 8.0+, Composer, and Node 20+.
 
 ```bash
-composer install
+# From monorepo root (wp-content/) — not from this folder alone
 npm install
-npm run build
+cd plugins/wp-bizwit && composer install && cd ../..
+npm run -w wp-bizwit build
 ```
 
-| Command | Purpose |
-|---------|---------|
-| `npm run start` | Rebuild assets on change |
-| `npm run build` | Production asset build |
-| `./vendor/bin/phpcs` | WordPress Coding Standards |
-| `./vendor/bin/phpcbf` | Auto-fix coding standard violations |
-| `./vendor/bin/phpstan analyse --memory-limit=1G` | Static analysis at level 6 |
-| `npm run test:php` | PHPUnit suite in the wp-env container |
+| Command (from monorepo root) | Purpose |
+|------------------------------|---------|
+| `npm run -w wp-bizwit dev` | Vite HMR for product UI |
+| `npm run -w wp-bizwit build` | Typecheck + production assets into `build/` |
+| `npm run -w wp-bizwit test:unit` | Vitest (e.g. money formatter) |
+| `npm run -w wp-bizwit test:php` | PHPUnit via wp-env |
+| `./vendor/bin/phpcs` | WordPress Coding Standards (inside package after Composer) |
+| `./vendor/bin/phpstan analyse --memory-limit=1G` | Static analysis level 6 |
+
+**Do not** run `npm install` only inside this plugin (nested lockfile breaks
+workspaces). Full monorepo rules: [monorepo README](../../README.md) ·
+[AGENTS](AGENTS.md) · [docs/development.md](docs/development.md).
 
 PHPStan's parallel workers exhaust the default 128M limit, hence the explicit
 `--memory-limit`. A `Child process error (exit code 255)` is that, not a code

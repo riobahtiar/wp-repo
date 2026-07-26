@@ -15,6 +15,7 @@ packages we own.
 | Server | [Laravel Herd](https://herd.laravel.com) + [Dbngin](https://dbngin.com) |
 | Orchestration | [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces) + [Turborepo](https://turbo.build) |
 | PHP | 8.4 local · packages target 8.0+ |
+| Agent guide | [AGENTS.md](AGENTS.md) (`CLAUDE.md` is a symlink to the same file) |
 
 Think of this like a JS monorepo (`apps/` / `packages/`), except WordPress
 **requires** plugins under `plugins/<slug>/` and themes under `themes/<slug>/`.

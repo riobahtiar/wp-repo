@@ -7,6 +7,10 @@ as the work it describes — a tracker that lags is worse than none.
 screens are placeholders, and the data model may still change in ways that need
 a migration. Do not run a real business on this yet.
 
+**Git / tooling:** package lives in monorepo `wp-content/` (`wp-repo`). JS:
+`npm install` + `npm run -w wp-bizwit …` from monorepo root. See package
+[`AGENTS.md`](../AGENTS.md) and monorepo [`AGENTS.md`](../../../AGENTS.md).
+
 ---
 
 ## Feature status

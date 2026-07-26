@@ -1,10 +1,15 @@
 # WP monorepo — agent guide
 
-This repository is the **git root for first-party WordPress work**. The working
-tree is a normal `wp-content/` directory on a local WordPress install (Herd +
-Dbngin at http://wp.test). Only packages listed in the root allowlist are
-versioned here; stock themes, uploads, and third-party plugins stay on disk but
-stay out of git.
+**You are in the git root for first-party WordPress work.**
+
+This directory is a normal local `wp-content/` on a WordPress install (Herd +
+Dbngin at http://wp.test). Git remote: `git@github.com:riobahtiar/wp-repo.git`
+(repo name **wp-repo**).
+
+`CLAUDE.md` in this directory is a **symlink to this file** (same content).
+
+Only packages listed in the root allowlist are versioned; stock themes, uploads,
+language packs, and third-party plugins stay on disk but stay out of git.
 
 | | |
 |---|---|
@@ -14,10 +19,81 @@ stay out of git.
 | PHP | 8.4 (local) · 8.0+ supported by packages |
 | Orchestration | npm workspaces + Turborepo |
 | JS install | **Root only** — single `package-lock.json` |
+| Git root | **This directory (`wp-content/`)** — not WP core, not a single plugin |
 
-Install-wide WordPress conventions (security, `dbDelta`, WP-CLI, Indonesia-first
-product rules) live one level up: `../AGENTS.md` and `../SECURITY.md`. This file
-covers monorepo layout and package boundaries.
+---
+
+## Orientation for agents (start here)
+
+### Three-layer doc model
+
+| Layer | Path | Use for |
+|-------|------|---------|
+| **Monorepo (this file)** | `wp-content/AGENTS.md` | Git, npm workspaces, Turbo, CI, package layout |
+| **WP install host** | `../AGENTS.md` | Herd, WP-CLI, security, Indonesia-first product rules, `dbDelta` |
+| **Package** | `plugins/<slug>/AGENTS.md` | Domain model, feature conventions, package tooling |
+
+**Precedence:** package → monorepo → install root. Product/domain detail in
+`plugins/<slug>/docs/` and `plans/`.
+
+### What lives where
+
+```
+…/wp/                         ← WordPress install (NOT the git root)
+  AGENTS.md / CLAUDE.md       ← install-wide rules (symlink pair)
+  wp-admin/ wp-includes/ …    ← core — never edit, never commit here
+  wp-content/                 ← YOU ARE HERE (git root = monorepo)
+    package.json              ← workspaces + turbo scripts
+    package-lock.json         ← ONLY JS lockfile
+    turbo.json
+    .github/workflows/        ← only place GitHub Actions run
+    AGENTS.md / CLAUDE.md     ← this guide (symlink pair)
+    plugins/
+      wp-bizwit/              ← first package (part of this repo)
+        AGENTS.md / CLAUDE.md
+        src/ resources/ docs/ plans/
+    themes/ uploads/ …        ← host noise (gitignored except allowlisted packages)
+```
+
+### Commands (always from this directory)
+
+```bash
+# JS — monorepo root only
+npm install
+npm ci
+npm run build
+npm run dev
+npm run typecheck
+npm run test:unit
+npm run lint
+npm run phpstan
+npm run check                 # typecheck + lint + phpstan + unit + build + budgets
+
+# One package
+npm run -w wp-bizwit build
+npm run -w wp-bizwit dev
+npm run bizwit -- build
+turbo run build --filter=wp-bizwit
+
+# PHP — still per package
+cd plugins/wp-bizwit && composer install
+```
+
+### Hard anti-patterns
+
+```bash
+# WRONG: nested lockfile / nested node_modules / broken hoisting
+cd plugins/wp-bizwit && npm install
+
+# WRONG: assuming git root is the plugin or the WP install
+cd plugins/wp-bizwit && git status   # works only because this is one monorepo tree
+
+# WRONG: adding executable workflows under a package
+plugins/wp-bizwit/.github/workflows/*.yml   # GitHub ignores nested workflows
+```
+
+If a nested `package-lock.json` appears under a package, **delete it** and run
+`npm install` again from this monorepo root.
 
 ---
 
@@ -25,12 +101,12 @@ covers monorepo layout and package boundaries.
 
 1. **This repo is not WordPress core.** Never add `wp-admin/`, `wp-includes/`, or
    `wp-config.php`. The parent directory is the WP install; this directory is
-   only `wp-content` content we own.
+   only first-party `wp-content` content.
 2. **One package = one plugin or theme.** Put work under
    `plugins/<slug>/` or (later) `themes/<slug>/`. Do not invent a parallel
    `packages/` tree for production code that WordPress must load.
-3. **Read the package’s own `AGENTS.md` / `CLAUDE.md` first.** It overrides
-   monorepo defaults for that codebase.
+3. **Read the package’s own `AGENTS.md` / `CLAUDE.md` first** for domain work.
+   It overrides monorepo defaults for that codebase.
 4. **Ship Indonesian (`id_ID`) with the feature.** Translatable but untranslated
    is unfinished for this audience.
 5. **Do not commit secrets, `uploads/`, or third-party plugins.** The root
@@ -38,7 +114,7 @@ covers monorepo layout and package boundaries.
 6. **npm workspaces industry defaults:**
    - Install / `npm ci` **only from the monorepo root**.
    - **One** `package-lock.json` (root). Never commit nested lockfiles.
-   - Prefer `npm run -w <package> <script>` over `cd plugins/... && npm run …`.
+   - Prefer `npm run -w <package> <script>` over ad-hoc `cd` + `npm run`.
    - PHP: `composer install` still runs **inside** each package.
 
 ---
@@ -54,46 +130,7 @@ Add a new first-party plugin by creating `plugins/<slug>/` with its own
 `.gitignore` allowlist (`!/plugins/<slug>/`). Do **not** add a nested
 `package-lock.json`.
 
----
-
-## Commands (from repo root)
-
-```bash
-npm install                 # install root + all workspaces (ONLY from here)
-npm ci                      # clean CI-style install from root lockfile
-npm run build               # turbo: build every package
-npm run dev                 # turbo: package dev servers (Vite HMR, etc.)
-npm run typecheck
-npm run test:unit
-npm run lint                # package-defined (usually PHPCS)
-npm run phpstan
-npm run check               # typecheck + lint + phpstan + unit + build + budgets
-
-# Single package (preferred)
-npm run -w wp-bizwit build
-npm run -w wp-bizwit dev
-npm run bizwit -- build
-turbo run build --filter=wp-bizwit
-turbo run build --filter=...[origin/main]   # affected only (once history exists)
-```
-
-PHP dependencies are **per package**. Root npm does not install Composer deps.
-
-```bash
-cd plugins/wp-bizwit && composer install
-```
-
-### Anti-patterns (do not)
-
-```bash
-# Wrong: creates a nested lockfile / nested node_modules
-cd plugins/wp-bizwit && npm install
-
-# Wrong: nested GitHub Actions under a package (GitHub ignores them)
-plugins/wp-bizwit/.github/workflows/*.yml
-```
-
-If a nested lockfile appears, delete it and re-run `npm install` at the root.
+Package agent entry: `plugins/wp-bizwit/AGENTS.md` (`CLAUDE.md` → same file).
 
 ---
 
@@ -101,11 +138,13 @@ If a nested lockfile appears, delete it and re-run `npm install` at the root.
 
 | Layer | Location |
 |-------|----------|
-| Monorepo (this file + README) | repo root |
-| WP install environment | `../AGENTS.md`, `../README.md` (parent of `wp-content`) |
+| Monorepo (this file + README) | repo root (`wp-content/`) |
+| WP install environment | `../AGENTS.md`, `../README.md`, `../SECURITY.md` |
 | Package conventions | `plugins/<slug>/AGENTS.md` |
 | Package product docs | `plugins/<slug>/docs/` |
 | Unbuilt work | `plugins/<slug>/plans/` |
+
+Human-oriented monorepo overview: [`README.md`](README.md).
 
 ---
 
@@ -119,7 +158,15 @@ GitHub Actions live in **root** `.github/workflows/` only:
 | `release-wp-bizwit.yml` | Tag `wp-bizwit/v*` → build, zip, GitHub Release |
 
 Package-local `plugins/*/.github/` may only contain a short pointer README —
-never executable workflows.
+never executable workflows. See
+[`plugins/wp-bizwit/.github/README.md`](plugins/wp-bizwit/.github/README.md).
+
+### Release tags (multi-package)
+
+```bash
+git tag wp-bizwit/v0.3.1
+git push origin wp-bizwit/v0.3.1
+```
 
 ---
 
@@ -130,5 +177,6 @@ never executable workflows.
 3. Give it a `package.json` `name` and scripts Turbo should run (`build`,
    `typecheck`, `test:unit`, `lint`, …). **No** nested lockfile.
 4. Run `npm install` at the **root** so the root lockfile records the package.
-5. Document it in root `README.md` and this file.
-6. Extend root CI (path filters / PHP jobs / release workflow) as needed.
+5. Add `AGENTS.md` (+ `CLAUDE.md` → `AGENTS.md` symlink) for agents.
+6. Document it in root `README.md` and this file.
+7. Extend root CI (path filters / PHP jobs / release workflow) as needed.

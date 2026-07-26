@@ -5,6 +5,11 @@
 This document is the decision record for how WP BizWit builds interactive UI.
 Implementation work is tracked in [`../plans/07-frontend-modernization.md`](../plans/07-frontend-modernization.md).
 
+**Monorepo:** assets are built with npm workspaces + Turborepo from the
+`wp-content/` git root — `npm run -w wp-bizwit build` (not a nested plugin-only
+`npm install`). See [development.md](development.md) and
+[monorepo AGENTS](../../../AGENTS.md).
+
 ---
 
 ## Goals (non-negotiable)

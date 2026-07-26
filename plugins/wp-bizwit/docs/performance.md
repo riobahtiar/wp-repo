@@ -2,6 +2,14 @@
 
 **Last measured:** 2026-07-27 · **Stack:** Vite 8 + Vue 3 + Tailwind v4 (sole pipeline)
 
+Build and re-measure from the **monorepo root** (`wp-content/`):
+
+```bash
+npm run -w wp-bizwit build
+npm run -w wp-bizwit check:bundle-size
+# or: npm run check:bundle-size   # turbo across packages
+```
+
 Budgets are **gzipped** production assets. Product rule: chatty UIs and fat
 bundles are bugs for remote / slow connections. Source of truth for targets:
 [frontend-architecture.md](frontend-architecture.md#performance-budget-remote--slow-links).

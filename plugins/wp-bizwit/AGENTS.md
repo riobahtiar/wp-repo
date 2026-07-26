@@ -1,14 +1,41 @@
 ## AI Coding Agent Instructions for WP BizWit
-This plugin is a modern WordPress plugin with strict conventions and automated workflows. Follow these guidelines.
 
-This package lives in the **wp-repo monorepo** (`wp-content/` git root). Monorepo
-layout, Turbo commands, and package allowlisting: [`../../AGENTS.md`](../../AGENTS.md)
-and [`../../README.md`](../../README.md). From the monorepo root you can run
-`npm run bizwit -- <script>` or `turbo run build --filter=wp-bizwit`.
+This plugin is a modern WordPress plugin with strict conventions and automated
+workflows. Follow these guidelines.
 
-For install-wide WordPress conventions (security rules, `dbDelta` gotchas, WP-CLI
-patterns, the Herd/Dbngin environment), see the `AGENTS.md` at the WordPress install
-root (parent of `wp-content`). This file covers what is specific to WP BizWit.
+`CLAUDE.md` in this directory is a **symlink to this file**.
+
+---
+
+## Monorepo context (required reading)
+
+| | |
+|---|---|
+| **Git root** | `wp-content/` (repo **wp-repo** → `git@github.com:riobahtiar/wp-repo.git`) — **not** this package alone, **not** WordPress core |
+| **This package path** | `plugins/wp-bizwit/` inside that monorepo |
+| **Monorepo agent guide** | [`../../AGENTS.md`](../../AGENTS.md) · [`../../README.md`](../../README.md) |
+| **Install host guide** | WordPress install root (parent of `wp-content`): `../../../AGENTS.md` for Herd, WP-CLI, security, Indonesia-first defaults |
+
+### Tooling from monorepo root
+
+```bash
+cd ../..                                 # → wp-content/ (git root)
+npm install                              # ONLY from monorepo root
+npm run -w wp-bizwit build
+npm run -w wp-bizwit dev
+npm run -w wp-bizwit test:unit
+npm run bizwit -- check:bundle-size
+turbo run build --filter=wp-bizwit
+
+cd plugins/wp-bizwit && composer install # PHP deps stay package-local
+```
+
+**Never** run `npm install` only inside this directory (no nested
+`package-lock.json`). CI and releases run from monorepo root
+(`.github/workflows/` there only — see [`.github/README.md`](.github/README.md)).
+
+This file covers **BizWit-specific** domain and conventions. Monorepo layout and
+npm workspaces rules live one level up; install-wide WP rules two levels up.
 
 **Longer-form documentation lives in [`docs/`](docs/)** — read it before making
 non-trivial changes:
@@ -323,8 +350,8 @@ Interactive product UI uses **Vue 3 + Vite 8 + Tailwind v4**. Full decisions:
 
 - **Do not** add Livewire, Roots Acorn, or a second SPA framework to this plugin.
 - **Assets**: `resources/admin/`, `resources/screens/`, `resources/ui/`,
-  `resources/styles/` → `npm run build` → `build/` (Vite sole owner; manifest
-  enqueued from PHP via `Admin\Assets`).
+  `resources/styles/` → monorepo `npm run -w wp-bizwit build` → `build/` (Vite
+  sole owner; manifest enqueued from PHP via `Admin\Assets`).
 - **Shared admin entry** loads on every BizWit screen (styles + tiny JS). Screen
   islands (e.g. dashboard) are extra entries only on their page.
 - **Scope CSS** under `.wp-bizwit` so Tailwind never restyles core wp-admin.
@@ -342,14 +369,16 @@ import AppShell from '@ui/AppShell.vue';
 
 Money display uses integer minor units and `formatMoney` from
 `@/app/lib/money` (mirror of PHP `Support\Money` edge rules for UI only).
-Unit tests: `npm run test:unit` (Vitest).
+Unit tests from monorepo root: `npm run -w wp-bizwit test:unit` (Vitest).
 
 ### Quality Assurance
 
-- **PHP**: PHPStan (`phpstan.neon`), PHPCS (`phpcs.xml`)
-- **JS/TS**: `vue-tsc` typecheck (via monorepo `npm run -w wp-bizwit build` / `typecheck`), Vitest
-- **CI/CD**: monorepo root `.github/workflows/` only (see `plugins/wp-bizwit/.github/README.md`)
-- **npm**: install from monorepo root only — no nested `package-lock.json`
+- **PHP**: PHPStan (`phpstan.neon`), PHPCS (`phpcs.xml`) — after package
+  `composer install`
+- **JS/TS**: `vue-tsc` / Vitest via monorepo (`npm run -w wp-bizwit …`)
+- **CI/CD**: monorepo root `.github/workflows/` only
+  ([`.github/README.md`](.github/README.md))
+- **npm**: monorepo root only — no nested `package-lock.json`
 
 ### Key primitives
 
@@ -357,9 +386,9 @@ Unit tests: `npm run test:unit` (Vitest).
 
 **Composer scripts:** `phpstan`, `phpcs`, `phpcbf`, `i18n:extract`, `i18n:compile`
 
-**NPM scripts:** `dev` (Vite HMR), `build` (typecheck + Vite), `build:assets`,
-`build:analyze`, `check:bundle-size`, `typecheck`, `test:unit` (Vitest),
-`env:*`, `test:php`
+**NPM package scripts** (invoke as `npm run -w wp-bizwit <name>` from monorepo
+root): `dev`, `build`, `build:assets`, `build:analyze`, `check:bundle-size`,
+`typecheck`, `test:unit`, `env:*`, `test:php`
 
 ### Feature quick reference
 
@@ -369,9 +398,11 @@ Unit tests: `npm run test:unit` (Vitest).
 - **i18n**: Indonesian (`id_ID`) is a shipped, complete translation — **an
   untranslated new string is unfinished**. Prefer global `wp` for extract/compile;
   see [`docs/development.md`](docs/development.md#translations).
-- **wp-env**: `npm run env:start`. PHPUnit: `npm run test:php`.
+- **wp-env / PHPUnit**: from monorepo root —
+  `npm run -w wp-bizwit env:start` · `npm run -w wp-bizwit test:php`.
 - **Testing**: Prefer repository and domain tests (`MoneyTest`,
-  `IndonesiaRegionTest`); extend those before changing money or region logic.
+  `IndonesiaRegionTest`, `RestHealthTest`); extend those before changing money,
+  region, or REST permission logic.
 
 ### Maintaining the plugin
 
