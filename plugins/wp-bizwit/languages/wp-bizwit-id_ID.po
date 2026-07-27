@@ -2900,3 +2900,48 @@ msgstr "VA %s"
 
 msgid "%1$d methods · %2$s"
 msgstr "%1$d metode · %2$s"
+
+msgid "State banks (BUMN)"
+msgstr "Bank BUMN"
+
+msgid "Private banks"
+msgstr "Bank swasta"
+
+msgid "Regional banks (BPD)"
+msgstr "Bank daerah (BPD)"
+
+msgid "Islamic banks (syariah)"
+msgstr "Bank syariah"
+
+msgid "Digital banks"
+msgstr "Bank digital"
+
+msgid "Foreign banks"
+msgstr "Bank asing"
+
+msgid "E-money / other"
+msgstr "Uang elektronik / lainnya"
+
+msgid "Rural banks (BPR)"
+msgstr "BPR"
+
+msgid "— Select bank —"
+msgstr "— Pilih bank —"
+
+msgid "Other bank (type name…)"
+msgstr "Bank lain (ketik nama…)"
+
+msgid "Bank name if not listed"
+msgstr "Nama bank jika tidak ada di daftar"
+
+msgid "Bank list: %1$d Indonesian banks with transfer codes (from %2$s)."
+msgstr "Daftar bank: %1$d bank Indonesia dengan kode transfer (dari %2$s)."
+
+msgid "Source"
+msgstr "Sumber"
+
+msgid "%1$s (code %2$s)"
+msgstr "%1$s (kode %2$s)"
+
+msgid "Bank"
+msgstr "Bank"

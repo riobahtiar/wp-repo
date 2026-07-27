@@ -1,6 +1,6 @@
 {
   "name": "wp-bizwit",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "description": "Business administration for Indonesian companies and UMKM — clients, projects, invoices and payment receipts inside wp-admin.",
   "devDependencies": {
@@ -37,7 +37,8 @@
     "test:php": "wp-env run tests-cli --env-cwd=wp-content/plugins/wp-bizwit bash -lc 'composer install --working-dir=tests --no-interaction && vendor/bin/phpunit'",
     "i18n:pot": "wp i18n make-pot . languages/wp-bizwit.pot --domain=wp-bizwit --exclude=vendor,vendor-prefixed,node_modules,tests,bin,build",
     "i18n:update-po": "wp i18n update-po languages/wp-bizwit.pot languages/",
-    "i18n:compile": "wp i18n make-mo languages/ && wp i18n make-php languages/ && node scripts/build-script-translations.mjs"
+    "i18n:compile": "wp i18n make-mo languages/ && wp i18n make-php languages/ && node scripts/build-script-translations.mjs",
+    "data:banks": "curl -sL https://raw.githubusercontent.com/riobahtiar/data-bank-indonesia/main/data/banks.json -o data/indonesia-banks.json && node -e \"console.log(require('./data/indonesia-banks.json').length+' banks')\""
   },
   "dependencies": {
     "@wordpress/i18n": "^5.26.0",

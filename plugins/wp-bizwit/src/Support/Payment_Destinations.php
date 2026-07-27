@@ -7,6 +7,8 @@
 
 namespace WP_BizWit\Support;
 
+use WP_BizWit\Localization\Indonesia_Banks;
+
 /**
  * Catalogue, sanitise, migrate and render payment destinations.
  *
@@ -66,10 +68,12 @@ class Payment_Destinations {
 			'type'         => self::TYPE_BANK_TRANSFER,
 			'label'        => '',
 			'enabled'      => true,
+			'bank_code'    => '',
 			'bank_name'    => '',
 			'account_no'   => '',
 			'account_name' => '',
 			'branch'       => '',
+			'va_bank_code' => '',
 			'va_bank'      => '',
 			'va_number'    => '',
 			'ewallet_id'   => '',
@@ -300,10 +304,14 @@ class Payment_Destinations {
 
 		switch ( $type ) {
 			case self::TYPE_BANK_TRANSFER:
+				$code = trim( (string) ( $row['bank_code'] ?? '' ) );
 				$name = trim( (string) ( $row['bank_name'] ?? '' ) );
-				$br   = trim( (string) ( $row['branch'] ?? '' ) );
-				$no   = trim( (string) ( $row['account_no'] ?? '' ) );
-				$acc  = trim( (string) ( $row['account_name'] ?? '' ) );
+				if ( '' !== $code ) {
+					$name = Indonesia_Banks::display_name( $code, $name );
+				}
+				$br  = trim( (string) ( $row['branch'] ?? '' ) );
+				$no  = trim( (string) ( $row['account_no'] ?? '' ) );
+				$acc = trim( (string) ( $row['account_name'] ?? '' ) );
 				if ( '' !== $name ) {
 					$lines[] = '' !== $br ? $name . ' — ' . $br : $name;
 				}
@@ -322,9 +330,13 @@ class Payment_Destinations {
 				break;
 
 			case self::TYPE_VIRTUAL_ACCOUNT:
-				$bank = trim( (string) ( $row['va_bank'] ?? '' ) );
-				$va   = trim( (string) ( $row['va_number'] ?? '' ) );
-				$acc  = trim( (string) ( $row['account_name'] ?? '' ) );
+				$va_code = trim( (string) ( $row['va_bank_code'] ?? '' ) );
+				$bank    = trim( (string) ( $row['va_bank'] ?? '' ) );
+				if ( '' !== $va_code ) {
+					$bank = Indonesia_Banks::display_name( $va_code, $bank );
+				}
+				$va  = trim( (string) ( $row['va_number'] ?? '' ) );
+				$acc = trim( (string) ( $row['account_name'] ?? '' ) );
 				if ( '' !== $bank ) {
 					$lines[] = $bank;
 				}
@@ -400,21 +412,82 @@ class Payment_Destinations {
 
 		$url = esc_url_raw( (string) ( $row['url'] ?? '' ) );
 
+		$bank_code_raw = (string) ( $row['bank_code'] ?? '' );
+		// "__custom__" means free-text bank_name only.
+		if ( '__custom__' === $bank_code_raw ) {
+			$bank_code_raw = '';
+		}
+		$bank_code = self::sanitize_bank_code( $bank_code_raw );
+		$bank_name = sanitize_text_field( (string) ( $row['bank_name'] ?? '' ) );
+		// Resolve name from catalogue when a transfer code is selected.
+		if ( '' !== $bank_code ) {
+			$found = Indonesia_Banks::find_by_code( $bank_code );
+			if ( null !== $found ) {
+				$bank_name = $found['name'];
+			}
+		} elseif ( '' !== $bank_name ) {
+			// Legacy free-text → try map to code.
+			$found = Indonesia_Banks::find_by_name( $bank_name );
+			if ( null !== $found ) {
+				$bank_code = $found['code'];
+				$bank_name = $found['name'];
+			}
+		}
+
+		$va_code_raw = (string) ( $row['va_bank_code'] ?? '' );
+		if ( '__custom__' === $va_code_raw ) {
+			$va_code_raw = '';
+		}
+		$va_bank_code = self::sanitize_bank_code( $va_code_raw );
+		$va_bank      = sanitize_text_field( (string) ( $row['va_bank'] ?? '' ) );
+		if ( '' !== $va_bank_code ) {
+			$found = Indonesia_Banks::find_by_code( $va_bank_code );
+			if ( null !== $found ) {
+				$va_bank = $found['name'];
+			}
+		} elseif ( '' !== $va_bank ) {
+			$found = Indonesia_Banks::find_by_name( $va_bank );
+			if ( null !== $found ) {
+				$va_bank_code = $found['code'];
+				$va_bank      = $found['name'];
+			}
+		}
+
 		return array(
 			'id'           => $id,
 			'type'         => $type,
 			'label'        => sanitize_text_field( (string) ( $row['label'] ?? '' ) ),
 			'enabled'      => ! empty( $row['enabled'] ),
-			'bank_name'    => sanitize_text_field( (string) ( $row['bank_name'] ?? '' ) ),
+			'bank_code'    => $bank_code,
+			'bank_name'    => $bank_name,
 			'account_no'   => sanitize_text_field( (string) ( $row['account_no'] ?? '' ) ),
 			'account_name' => sanitize_text_field( (string) ( $row['account_name'] ?? '' ) ),
 			'branch'       => sanitize_text_field( (string) ( $row['branch'] ?? '' ) ),
-			'va_bank'      => sanitize_text_field( (string) ( $row['va_bank'] ?? '' ) ),
+			'va_bank_code' => $va_bank_code,
+			'va_bank'      => $va_bank,
 			'va_number'    => sanitize_text_field( (string) ( $row['va_number'] ?? '' ) ),
 			'ewallet_id'   => sanitize_text_field( (string) ( $row['ewallet_id'] ?? '' ) ),
 			'url'          => $url,
 			'notes'        => sanitize_textarea_field( (string) ( $row['notes'] ?? '' ) ),
 		);
+	}
+
+	/**
+	 * Normalise a 3-digit bank transfer code.
+	 *
+	 * @param string $code Raw code.
+	 *
+	 * @return string Empty or zero-padded code present in the catalogue.
+	 */
+	private static function sanitize_bank_code( string $code ): string {
+		$code = preg_replace( '/\D/', '', $code ) ?? '';
+		if ( '' === $code ) {
+			return '';
+		}
+		if ( strlen( $code ) < 3 ) {
+			$code = str_pad( $code, 3, '0', STR_PAD_LEFT );
+		}
+		return null !== Indonesia_Banks::find_by_code( $code ) ? $code : '';
 	}
 
 	/**
@@ -438,7 +511,7 @@ class Payment_Destinations {
 	 * @return bool
 	 */
 	private static function is_blank( array $row ): bool {
-		$keys = array( 'label', 'bank_name', 'account_no', 'account_name', 'branch', 'va_bank', 'va_number', 'ewallet_id', 'url', 'notes' );
+		$keys = array( 'label', 'bank_code', 'bank_name', 'account_no', 'account_name', 'branch', 'va_bank_code', 'va_bank', 'va_number', 'ewallet_id', 'url', 'notes' );
 		foreach ( $keys as $key ) {
 			if ( '' !== trim( (string) ( $row[ $key ] ?? '' ) ) ) {
 				return false;
@@ -470,6 +543,12 @@ class Payment_Destinations {
 		$row['account_no']   = $no;
 		$row['account_name'] = $acc;
 		$row['branch']       = $br;
+
+		$matched = Indonesia_Banks::find_by_name( $name );
+		if ( null !== $matched ) {
+			$row['bank_code'] = $matched['code'];
+			$row['bank_name'] = $matched['name'];
+		}
 
 		return array( $row );
 	}

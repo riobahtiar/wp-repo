@@ -1,0 +1,1445 @@
+[
+  {
+    "code": "002",
+    "name": "Bank Rakyat Indonesia (BRI)",
+    "type": "state",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BUMN - Largest bank by assets",
+    "features": null
+  },
+  {
+    "code": "003",
+    "name": "Bank Ekspor Indonesia",
+    "type": "state",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "Export-Import Bank",
+    "features": null
+  },
+  {
+    "code": "008",
+    "name": "Bank Mandiri",
+    "type": "state",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BUMN - Merger of 4 state banks",
+    "features": null
+  },
+  {
+    "code": "009",
+    "name": "Bank Negara Indonesia (BNI)",
+    "type": "state",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BUMN",
+    "features": null
+  },
+  {
+    "code": "011",
+    "name": "Bank Danamon",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "MUFG Bank",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "013",
+    "name": "Bank Permata",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Bangkok Bank",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "014",
+    "name": "Bank Central Asia (BCA)",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Djarum Group",
+    "notes": "Largest private bank",
+    "features": null
+  },
+  {
+    "code": "016",
+    "name": "Bank Maybank Indonesia",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Maybank",
+    "notes": "Formerly Bank BII",
+    "features": null
+  },
+  {
+    "code": "019",
+    "name": "Bank Panin",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "020",
+    "name": "Bank Arta Niaga Kencana",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "022",
+    "name": "Bank CIMB Niaga",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "CIMB Group",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "023",
+    "name": "Bank UOB Indonesia",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "UOB Singapore",
+    "notes": "Digital service: TMRW by UOB",
+    "features": [
+      "City Index Savings",
+      "Simple Goals",
+      "Cashback"
+    ]
+  },
+  {
+    "code": "026",
+    "name": "Bank Lippo",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "Merged to CIMB Niaga",
+    "features": null
+  },
+  {
+    "code": "028",
+    "name": "Bank OCBC NISP",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "OCBC Singapore",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "030",
+    "name": "American Express Bank",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "American Express",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "031",
+    "name": "Citibank",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Citigroup",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "032",
+    "name": "JP Morgan Chase Bank",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "JPMorgan Chase",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "033",
+    "name": "Bank of America",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Bank of America",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "034",
+    "name": "ING Indonesia Bank",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "ING Group",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "036",
+    "name": "Bank Multicor",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "037",
+    "name": "Bank Artha Graha Internasional",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "039",
+    "name": "Bank Credit Agricole Indosuez",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Credit Agricole",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "040",
+    "name": "The Bangkok Bank",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Bangkok Bank",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "042",
+    "name": "MUFG Bank",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Mitsubishi UFJ",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "045",
+    "name": "Bank Sumitomo Mitsui Indonesia",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "SMBC",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "046",
+    "name": "Bank DBS Indonesia",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "DBS Singapore",
+    "notes": "Digital service: Digibank by DBS",
+    "features": [
+      "Paperless Account Opening",
+      "Budget Tracker",
+      "digiPortfolio"
+    ]
+  },
+  {
+    "code": "047",
+    "name": "Bank Resona Perdania",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Resona Holdings",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "048",
+    "name": "Bank Mizuho Indonesia",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Mizuho Financial",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "050",
+    "name": "Standard Chartered Bank",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Standard Chartered",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "052",
+    "name": "Bank ABN AMRO",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "ABN AMRO",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "053",
+    "name": "Bank Keppel Tatlee Buana",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Keppel Group",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "054",
+    "name": "Bank Capital Indonesia",
+    "type": "digital",
+    "is_digital": true,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "Transformed to digital banking model",
+    "features": [
+      "Digital Savings",
+      "Online Banking"
+    ]
+  },
+  {
+    "code": "057",
+    "name": "Bank BNP Paribas Indonesia",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "BNP Paribas",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "059",
+    "name": "Korea Exchange Bank Danamon",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "060",
+    "name": "Rabobank Internasional Indonesia",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Rabobank",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "061",
+    "name": "Bank ANZ Indonesia",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "ANZ Bank",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "069",
+    "name": "Bank of China",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Bank of China",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "076",
+    "name": "Bank Bumi Arta",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "087",
+    "name": "Bank HSBC Indonesia",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "HSBC Holdings",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "088",
+    "name": "Bank AntarDaerah",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "089",
+    "name": "Bank Haga",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "093",
+    "name": "Bank IFI",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "095",
+    "name": "Bank J Trust Indonesia",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "J Trust Co",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "097",
+    "name": "Bank Mayapada",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Mayapada Group",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "110",
+    "name": "Bank Jabar Banten (BJB)",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Jawa Barat dan Banten",
+    "features": null
+  },
+  {
+    "code": "111",
+    "name": "Bank DKI Jakarta",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD DKI Jakarta",
+    "features": null
+  },
+  {
+    "code": "112",
+    "name": "BPD DIY",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Daerah Istimewa Yogyakarta",
+    "features": null
+  },
+  {
+    "code": "113",
+    "name": "Bank Jateng",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Jawa Tengah",
+    "features": null
+  },
+  {
+    "code": "114",
+    "name": "Bank Jatim",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Jawa Timur - Digital service: hibank",
+    "features": [
+      "High Interest Savings",
+      "Regional Focus",
+      "Digital Services"
+    ]
+  },
+  {
+    "code": "115",
+    "name": "Bank Jambi",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Jambi",
+    "features": null
+  },
+  {
+    "code": "116",
+    "name": "BPD Aceh",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Aceh",
+    "features": null
+  },
+  {
+    "code": "117",
+    "name": "Bank Sumut",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Sumatera Utara",
+    "features": null
+  },
+  {
+    "code": "118",
+    "name": "Bank Nagari",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Sumatera Barat",
+    "features": null
+  },
+  {
+    "code": "119",
+    "name": "Bank Riau Kepri",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Riau dan Kepulauan Riau",
+    "features": null
+  },
+  {
+    "code": "120",
+    "name": "Bank Sumsel Babel",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Sumatera Selatan dan Bangka Belitung",
+    "features": null
+  },
+  {
+    "code": "121",
+    "name": "Bank Lampung",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Lampung",
+    "features": null
+  },
+  {
+    "code": "122",
+    "name": "Bank Kalsel",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Kalimantan Selatan",
+    "features": null
+  },
+  {
+    "code": "123",
+    "name": "Bank Kalbar",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Kalimantan Barat",
+    "features": null
+  },
+  {
+    "code": "124",
+    "name": "Bank Kaltimtara",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Kalimantan Timur dan Utara",
+    "features": null
+  },
+  {
+    "code": "125",
+    "name": "Bank Kalteng",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Kalimantan Tengah",
+    "features": null
+  },
+  {
+    "code": "126",
+    "name": "Bank Sulselbar",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Sulawesi Selatan dan Barat",
+    "features": null
+  },
+  {
+    "code": "127",
+    "name": "Bank SulutGo",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Sulawesi Utara dan Gorontalo",
+    "features": null
+  },
+  {
+    "code": "128",
+    "name": "Bank NTB Syariah",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": true,
+    "parent_company": null,
+    "notes": "BPD Nusa Tenggara Barat",
+    "features": null
+  },
+  {
+    "code": "129",
+    "name": "Bank BPD Bali",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Bali",
+    "features": null
+  },
+  {
+    "code": "130",
+    "name": "Bank NTT",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Nusa Tenggara Timur",
+    "features": null
+  },
+  {
+    "code": "131",
+    "name": "Bank Maluku Malut",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Maluku dan Maluku Utara",
+    "features": null
+  },
+  {
+    "code": "132",
+    "name": "Bank Papua",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Papua",
+    "features": null
+  },
+  {
+    "code": "133",
+    "name": "Bank Bengkulu",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Bengkulu",
+    "features": null
+  },
+  {
+    "code": "134",
+    "name": "Bank Sulteng",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Sulawesi Tengah",
+    "features": null
+  },
+  {
+    "code": "135",
+    "name": "Bank Sultra",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Sulawesi Tenggara",
+    "features": null
+  },
+  {
+    "code": "137",
+    "name": "Bank BPD Banten",
+    "type": "regional",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BPD Banten",
+    "features": null
+  },
+  {
+    "code": "145",
+    "name": "Bank Nusantara Parahyangan",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "146",
+    "name": "Bank Swadesi",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "147",
+    "name": "Bank Muamalat",
+    "type": "islamic",
+    "is_digital": false,
+    "is_islamic": true,
+    "parent_company": null,
+    "notes": "First Islamic bank in Indonesia",
+    "features": null
+  },
+  {
+    "code": "151",
+    "name": "Bank Mestika Dharma",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "152",
+    "name": "Bank Shinhan Indonesia",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Shinhan Financial",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "153",
+    "name": "Bank Sinarmas",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Sinarmas Group",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "157",
+    "name": "Bank Maspion Indonesia",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Maspion Group",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "159",
+    "name": "Bank Hagakita",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "161",
+    "name": "Bank Ganesha",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "162",
+    "name": "Bank Windu Kentjana",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "164",
+    "name": "Bank ICBC Indonesia",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "ICBC China",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "166",
+    "name": "Bank Harmoni International",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "167",
+    "name": "Bank QNB Indonesia",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "QNB Group",
+    "notes": "Formerly Bank Kesawan",
+    "features": null
+  },
+  {
+    "code": "200",
+    "name": "Bank Tabungan Negara (BTN)",
+    "type": "state",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "BUMN - Focus on housing finance",
+    "features": null
+  },
+  {
+    "code": "212",
+    "name": "Bank Woori Saudara",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Woori Financial",
+    "notes": "Formerly Bank Himpunan Saudara 1906",
+    "features": null
+  },
+  {
+    "code": "213",
+    "name": "Bank BTPN",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "SMBC",
+    "notes": "Digital service: Jenius - Pioneer of digital banking in Indonesia",
+    "features": [
+      "Flexi Saver",
+      "Dream Saver",
+      "Split Bill",
+      "QRIS",
+      "Virtual Card"
+    ]
+  },
+  {
+    "code": "405",
+    "name": "Bank Swaguna",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "422",
+    "name": "Bank Syariah Indonesia (BSI)",
+    "type": "islamic",
+    "is_digital": false,
+    "is_islamic": true,
+    "parent_company": null,
+    "notes": "eks BRI Syariah code",
+    "features": null
+  },
+  {
+    "code": "425",
+    "name": "Bank BJB Syariah",
+    "type": "islamic",
+    "is_digital": false,
+    "is_islamic": true,
+    "parent_company": "Bank BJB",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "426",
+    "name": "Bank Mega",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "CT Corp",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "427",
+    "name": "Bank Syariah Indonesia (BSI)",
+    "type": "islamic",
+    "is_digital": false,
+    "is_islamic": true,
+    "parent_company": null,
+    "notes": "eks BNI Syariah code",
+    "features": null
+  },
+  {
+    "code": "441",
+    "name": "Bank KB Bukopin",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "KB Kookmin Bank",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "451",
+    "name": "Bank Syariah Indonesia (BSI)",
+    "type": "islamic",
+    "is_digital": false,
+    "is_islamic": true,
+    "parent_company": null,
+    "notes": "eks Bank Syariah Mandiri code - Primary BSI code",
+    "features": null
+  },
+  {
+    "code": "459",
+    "name": "Krom Bank",
+    "type": "digital",
+    "is_digital": true,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "Digital bank",
+    "features": [
+      "Digital Savings",
+      "Fast Transfers"
+    ]
+  },
+  {
+    "code": "466",
+    "name": "Bank Sri Partha",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "472",
+    "name": "Bank Jasa Jakarta",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "484",
+    "name": "Bank Hana",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Hana Financial",
+    "notes": "Digital service: LINE Bank",
+    "features": [
+      "LINE Integration",
+      "Quick Transfer",
+      "Digital Savings"
+    ]
+  },
+  {
+    "code": "485",
+    "name": "Bank MNC Internasional",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "MNC Group",
+    "notes": "Digital service: MotionBank",
+    "features": [
+      "Motion Pay",
+      "Digital Savings",
+      "Bill Payment"
+    ]
+  },
+  {
+    "code": "490",
+    "name": "Bank Neo",
+    "type": "digital",
+    "is_digital": true,
+    "is_islamic": false,
+    "parent_company": "Akulaku",
+    "notes": "Formerly Bank Neo Commerce - Transformed to digital bank",
+    "features": [
+      "Neo WOW Savings",
+      "Neo Deposito",
+      "Neo Pinjam",
+      "High Interest Savings"
+    ]
+  },
+  {
+    "code": "491",
+    "name": "Bank Mitraniaga",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "494",
+    "name": "Bank Raya",
+    "type": "digital",
+    "is_digital": true,
+    "is_islamic": false,
+    "parent_company": "BRI",
+    "notes": "Formerly BRI Agroniaga - Focus on gig economy workers",
+    "features": [
+      "Gig Economy Services",
+      "Digital Savings",
+      "Fast Disbursement"
+    ]
+  },
+  {
+    "code": "498",
+    "name": "Bank SBI Indonesia",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "State Bank of India",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "501",
+    "name": "Bank Royal Indonesia",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "501-BLU",
+    "name": "Blu by BCA Digital",
+    "type": "digital",
+    "is_digital": true,
+    "is_islamic": false,
+    "parent_company": "BCA",
+    "notes": "Digital arm of BCA - Targeted at millennials and Gen Z",
+    "features": [
+      "bluSaving",
+      "bluGether",
+      "bluDeposit",
+      "Split Bill",
+      "BCA Network Integration"
+    ]
+  },
+  {
+    "code": "503",
+    "name": "Bank National Nobu",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Lippo Group",
+    "notes": "Digital service: Superbank (JV with Emtek/Grab)",
+    "features": [
+      "Grab Integration",
+      "Digital Savings",
+      "MSME Lending"
+    ]
+  },
+  {
+    "code": "506",
+    "name": "Bank Mega Syariah",
+    "type": "islamic",
+    "is_digital": false,
+    "is_islamic": true,
+    "parent_company": "CT Corp",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "513",
+    "name": "Bank Ina Perdana",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "517",
+    "name": "Bank Panin Dubai Syariah",
+    "type": "islamic",
+    "is_digital": false,
+    "is_islamic": true,
+    "parent_company": "Bank Panin",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "520",
+    "name": "Prima Master Bank",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "521",
+    "name": "Bank KB Bukopin Syariah",
+    "type": "islamic",
+    "is_digital": false,
+    "is_islamic": true,
+    "parent_company": "KB Kookmin Bank",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "523",
+    "name": "Bank Sahabat Sampoerna",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Sampoerna",
+    "notes": "Digital service: Bank Saqu",
+    "features": [
+      "Digital Savings",
+      "Easy Transfer",
+      "Bill Payment"
+    ]
+  },
+  {
+    "code": "525",
+    "name": "Bank Akita",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "526",
+    "name": "Bank Oke Indonesia",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "531",
+    "name": "Anglomas Internasional Bank",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "535",
+    "name": "SeaBank Indonesia",
+    "type": "digital",
+    "is_digital": true,
+    "is_islamic": false,
+    "parent_company": "Sea Group",
+    "notes": "Parent of Shopee - Leading digital bank by deposits",
+    "features": [
+      "High Interest up to 7%",
+      "Shopee Integration",
+      "Fast Registration",
+      "SeaBank Savings"
+    ]
+  },
+  {
+    "code": "536",
+    "name": "Bank BCA Syariah",
+    "type": "islamic",
+    "is_digital": false,
+    "is_islamic": true,
+    "parent_company": "BCA",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "542",
+    "name": "Bank Jago",
+    "type": "digital",
+    "is_digital": true,
+    "is_islamic": false,
+    "parent_company": "GoPay/GoTo",
+    "notes": "Integrated with GoPay and GoTo ecosystem",
+    "features": [
+      "Kantong (Pockets)",
+      "Auto-Debit",
+      "GoPay Integration",
+      "Jago Syariah"
+    ]
+  },
+  {
+    "code": "547",
+    "name": "Bank BTPN Syariah",
+    "type": "islamic",
+    "is_digital": false,
+    "is_islamic": true,
+    "parent_company": "SMBC",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "548",
+    "name": "Bank Multi Arta Sentosa",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "553",
+    "name": "Bank Mayora Indonesia",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Mayora Group",
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "555",
+    "name": "Bank Index Selindo",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "558",
+    "name": "Bank Eksekutif",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "559",
+    "name": "Centratama Nasional Bank",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "562",
+    "name": "Bank Fama Internasional",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "564",
+    "name": "Bank Mandiri Taspen",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Bank Mandiri",
+    "notes": "For retirees",
+    "features": null
+  },
+  {
+    "code": "566",
+    "name": "Bank Victoria International",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "567",
+    "name": "Allo Bank Indonesia",
+    "type": "digital",
+    "is_digital": true,
+    "is_islamic": false,
+    "parent_company": "CT Corp/Bukalapak",
+    "notes": "Integrated with Bukalapak e-commerce",
+    "features": [
+      "Bukalapak Integration",
+      "Cashback Rewards",
+      "Digital Savings"
+    ]
+  },
+  {
+    "code": "600",
+    "name": "BPR Supra Artapersada",
+    "type": "bpr",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": "Rural bank",
+    "features": null
+  },
+  {
+    "code": "688",
+    "name": "BPR KS",
+    "type": "bpr",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Astra",
+    "notes": "Rural bank - Karyajatnika Sedaya",
+    "features": null
+  },
+  {
+    "code": "789",
+    "name": "Indosat Dompetku",
+    "type": "emoney",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Indosat Ooredoo",
+    "notes": "E-money",
+    "features": null
+  },
+  {
+    "code": "911",
+    "name": "LinkAja",
+    "type": "emoney",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Telkomsel/BUMN",
+    "notes": "E-money - formerly Tcash",
+    "features": null
+  },
+  {
+    "code": "945",
+    "name": "Bank IBK Indonesia",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "IBK Korea",
+    "notes": "Formerly Bank Agris",
+    "features": null
+  },
+  {
+    "code": "946",
+    "name": "Bank Merincorp",
+    "type": "private",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": null,
+    "notes": null,
+    "features": null
+  },
+  {
+    "code": "947",
+    "name": "Bank Aladin Syariah",
+    "type": "digital",
+    "is_digital": true,
+    "is_islamic": true,
+    "parent_company": null,
+    "notes": "First fully digital Islamic bank in Indonesia",
+    "features": [
+      "Sharia Compliant",
+      "Digital Savings",
+      "Halal Investment"
+    ]
+  },
+  {
+    "code": "949",
+    "name": "Bank CTBC Indonesia",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "CTBC Financial",
+    "notes": "China Trust",
+    "features": null
+  },
+  {
+    "code": "950",
+    "name": "Bank Commonwealth",
+    "type": "foreign",
+    "is_digital": false,
+    "is_islamic": false,
+    "parent_company": "Commonwealth Bank Australia",
+    "notes": null,
+    "features": null
+  }
+]

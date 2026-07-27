@@ -703,6 +703,18 @@
 		margin: 0;
 	}
 
+	.wp-bizwit-bank-select {
+		max-width: 100%;
+	}
+
+	.wp-bizwit-bank-custom {
+		margin-top: 0.5rem !important;
+	}
+
+	.wp-bizwit-bank-custom[hidden] {
+		display: none !important;
+	}
+
 	/* Setup checklist */
 
 	.wp-bizwit-checklist__list {

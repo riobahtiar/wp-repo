@@ -74,6 +74,29 @@ function bindPaymentDestinations(): void {
 		other: [ 'label', 'notes', 'account_no', 'account_name', 'url' ],
 	};
 
+	const syncBankCustom = ( select: HTMLSelectElement ): void => {
+		const wrap = select.closest( '.wp-bizwit-pay-card__field' );
+		const custom = wrap?.querySelector< HTMLInputElement >( '[data-bank-custom]' );
+		if ( ! custom ) {
+			return;
+		}
+		const isCustom = select.value === '__custom__' || select.value === '';
+		// Show free-text only for explicit "other bank", or empty+existing custom name.
+		const show = select.value === '__custom__';
+		custom.hidden = ! show;
+		if ( ! show && select.value && select.value !== '__custom__' ) {
+			// Keep name in hidden field from option text for form post of bank_name.
+			const opt = select.selectedOptions[ 0 ];
+			if ( opt ) {
+				// Strip " · 014" suffix from option label.
+				custom.value = opt.textContent?.replace( /\s·\s\d+$/, '' ).trim() || '';
+			}
+		}
+		if ( isCustom && select.value === '' ) {
+			custom.hidden = true;
+		}
+	};
+
 	const applyType = ( card: HTMLElement ): void => {
 		const select = card.querySelector< HTMLSelectElement >( '[data-pay-type]' );
 		const type = select?.value || 'bank_transfer';
@@ -115,6 +138,7 @@ function bindPaymentDestinations(): void {
 	};
 
 	root.querySelectorAll< HTMLElement >( '[data-pay-card]' ).forEach( applyType );
+	root.querySelectorAll< HTMLSelectElement >( '[data-bank-select]' ).forEach( syncBankCustom );
 
 	root.addEventListener( 'change', ( event ) => {
 		const t = event.target;
@@ -123,6 +147,9 @@ function bindPaymentDestinations(): void {
 			if ( card ) {
 				applyType( card );
 			}
+		}
+		if ( t instanceof HTMLSelectElement && t.matches( '[data-bank-select]' ) ) {
+			syncBankCustom( t );
 		}
 	} );
 

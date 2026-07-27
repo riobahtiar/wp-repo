@@ -11,6 +11,21 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.1] — 2026-07-27
+
+Indonesian bank catalogue for payment destination bank / VA pickers.
+
+### Added
+- **Bank list** from [data-bank-indonesia](https://github.com/riobahtiar/data-bank-indonesia)
+  (137 banks, transfer codes) bundled as `data/indonesia-banks.json`.
+- Settings bank/VA fields use optgroup selects (BUMN, private, regional, …)
+  with official names and 3-digit codes; free-text “other bank” still available.
+- Print lines show bank name plus transfer code when known.
+- `npm run data:banks` to refresh the catalogue; `IndonesiaBanksTest`.
+
+### Changed
+- Version **1.1.1**.
+
 ## [1.1.0] — 2026-07-27
 
 Multiple payment destinations on invoices (not only one bank account).

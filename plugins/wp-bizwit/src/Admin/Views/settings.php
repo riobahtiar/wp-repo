@@ -14,6 +14,7 @@
  */
 
 use WP_BizWit\Localization\Indonesia;
+use WP_BizWit\Localization\Indonesia_Banks;
 use WP_BizWit\Localization\Region;
 use WP_BizWit\Support\Money;
 use WP_BizWit\Support\Payment_Destinations;
@@ -127,6 +128,22 @@ $value = static function ( string $key ) use ( $settings ): string {
 			<?php else : ?>
 				<?php esc_html_e( 'Shown on invoices so clients know where to send payment. You may add several methods.', 'wp-bizwit' ); ?>
 			<?php endif; ?>
+			<?php if ( Indonesia_Banks::count() > 0 ) : ?>
+				<br />
+				<?php
+				echo esc_html(
+					sprintf(
+						/* translators: 1: number of banks, 2: project name */
+						__( 'Bank list: %1$d Indonesian banks with transfer codes (from %2$s).', 'wp-bizwit' ),
+						Indonesia_Banks::count(),
+						'data-bank-indonesia'
+					)
+				);
+				?>
+				<a href="<?php echo esc_url( Indonesia_Banks::SOURCE_URL ); ?>" target="_blank" rel="noopener noreferrer">
+					<?php esc_html_e( 'Source', 'wp-bizwit' ); ?>
+				</a>
+			<?php endif; ?>
 		</p>
 
 		<div id="wp-bizwit-pay-destinations" class="wp-bizwit-pay-destinations">
@@ -185,11 +202,33 @@ $value = static function ( string $key ) use ( $settings ): string {
 									placeholder="<?php esc_attr_e( 'e.g. BCA operasional', 'wp-bizwit' ); ?>"
 								/>
 							</div>
-							<div class="wp-bizwit-pay-card__field" data-pay-field="bank_name">
+							<div class="wp-bizwit-pay-card__field wp-bizwit-pay-card__field--full" data-pay-field="bank_name">
 								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-bank-<?php echo esc_attr( (string) $i ); ?>">
-									<?php esc_html_e( 'Bank name', 'wp-bizwit' ); ?>
+									<?php esc_html_e( 'Bank', 'wp-bizwit' ); ?>
 								</label>
-								<input type="text" id="wp-bizwit-pay-bank-<?php echo esc_attr( (string) $i ); ?>" class="wp-bizwit-pay-card__input" name="<?php echo esc_attr( $prefix ); ?>[bank_name]" value="<?php echo esc_attr( (string) ( $dest['bank_name'] ?? '' ) ); ?>" placeholder="BCA" autocomplete="organization" />
+								<?php
+								$bank_code        = (string) ( $dest['bank_code'] ?? '' );
+								$bank_name        = (string) ( $dest['bank_name'] ?? '' );
+								$show_custom_bank = ( '' === $bank_code && '' !== trim( $bank_name ) );
+								// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built/escaped by Indonesia_Banks::render_select().
+								echo Indonesia_Banks::render_select(
+									$prefix . '[bank_code]',
+									'wp-bizwit-pay-bank-' . (string) $i,
+									$bank_code,
+									$bank_name
+								);
+								// phpcs:enable
+								?>
+								<input
+									type="text"
+									class="wp-bizwit-pay-card__input wp-bizwit-bank-custom"
+									name="<?php echo esc_attr( $prefix ); ?>[bank_name]"
+									value="<?php echo esc_attr( $bank_name ); ?>"
+									placeholder="<?php esc_attr_e( 'Bank name if not listed', 'wp-bizwit' ); ?>"
+									data-bank-custom
+									<?php echo $show_custom_bank ? '' : ' hidden'; ?>
+									autocomplete="organization"
+								/>
 							</div>
 							<div class="wp-bizwit-pay-card__field" data-pay-field="branch">
 								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-branch-<?php echo esc_attr( (string) $i ); ?>">
@@ -209,11 +248,32 @@ $value = static function ( string $key ) use ( $settings ): string {
 								</label>
 								<input type="text" id="wp-bizwit-pay-accname-<?php echo esc_attr( (string) $i ); ?>" class="wp-bizwit-pay-card__input" name="<?php echo esc_attr( $prefix ); ?>[account_name]" value="<?php echo esc_attr( (string) ( $dest['account_name'] ?? '' ) ); ?>" />
 							</div>
-							<div class="wp-bizwit-pay-card__field" data-pay-field="va_bank">
+							<div class="wp-bizwit-pay-card__field wp-bizwit-pay-card__field--full" data-pay-field="va_bank">
 								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-vabank-<?php echo esc_attr( (string) $i ); ?>">
 									<?php esc_html_e( 'VA bank', 'wp-bizwit' ); ?>
 								</label>
-								<input type="text" id="wp-bizwit-pay-vabank-<?php echo esc_attr( (string) $i ); ?>" class="wp-bizwit-pay-card__input" name="<?php echo esc_attr( $prefix ); ?>[va_bank]" value="<?php echo esc_attr( (string) ( $dest['va_bank'] ?? '' ) ); ?>" placeholder="BCA / Mandiri / BNI" />
+								<?php
+								$va_code        = (string) ( $dest['va_bank_code'] ?? '' );
+								$va_name        = (string) ( $dest['va_bank'] ?? '' );
+								$show_custom_va = ( '' === $va_code && '' !== trim( $va_name ) );
+								// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built/escaped by Indonesia_Banks::render_select().
+								echo Indonesia_Banks::render_select(
+									$prefix . '[va_bank_code]',
+									'wp-bizwit-pay-vabank-' . (string) $i,
+									$va_code,
+									$va_name
+								);
+								// phpcs:enable
+								?>
+								<input
+									type="text"
+									class="wp-bizwit-pay-card__input wp-bizwit-bank-custom"
+									name="<?php echo esc_attr( $prefix ); ?>[va_bank]"
+									value="<?php echo esc_attr( $va_name ); ?>"
+									placeholder="<?php esc_attr_e( 'Bank name if not listed', 'wp-bizwit' ); ?>"
+									data-bank-custom
+									<?php echo $show_custom_va ? '' : ' hidden'; ?>
+								/>
 							</div>
 							<div class="wp-bizwit-pay-card__field" data-pay-field="va_number">
 								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-vano-<?php echo esc_attr( (string) $i ); ?>">
