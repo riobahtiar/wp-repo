@@ -44,7 +44,7 @@
     "data:banks": "curl -sL https://raw.githubusercontent.com/riobahtiar/data-bank-indonesia/main/data/banks.json -o data/indonesia-banks.json && node -e \"console.log(require('./data/indonesia-banks.json').length+' banks')\""
   },
   "dependencies": {
-    "@wordpress/i18n": "^5.26.0",
+    "@wordpress/i18n": "^6.24.0",
     "tom-select": "^2.6.2",
     "vue": "^3.5.40"
   }
