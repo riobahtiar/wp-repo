@@ -61,28 +61,33 @@ type BankOptionData = {
 	value?: string;
 	text?: string;
 	code?: string;
+	/** data-name → dataset.name */
+	name?: string;
+	/** data-bank-name → dataset.bankName */
 	bankName?: string;
-	/** Tom Select maps data-bank-name → bankName */
 	[ key: string ]: unknown;
 };
 
 /**
- * Resolve display name for a bank option (from data attributes or text).
+ * Resolve display name (never include transfer code in this string).
  */
 function bankOptionName( data: BankOptionData ): string {
-	const fromData = String( data.bankName ?? data[ 'bank-name' ] ?? '' ).trim();
-	if ( fromData ) {
-		return fromData;
+	const candidates = [ data.name, data.bankName, data[ 'bank-name' ] ];
+	for ( const c of candidates ) {
+		const s = String( c ?? '' ).trim();
+		if ( s ) {
+			return s;
+		}
 	}
-	// Fallback: option text was "Name CODE" (search blob).
+	// Fallback: strip trailing code from search text "Name 014".
 	const text = String( data.text ?? '' ).trim();
 	const m = text.match( /^(.*?)\s+(\d{3,})$/ );
-	return m ? m[ 1 ] : text;
+	return m ? m[ 1 ].trim() : text;
 }
 
 function bankOptionCode( data: BankOptionData ): string {
 	const fromData = String( data.code ?? '' ).trim();
-	if ( fromData ) {
+	if ( fromData && fromData !== '__custom__' ) {
 		return fromData;
 	}
 	const text = String( data.text ?? '' ).trim();
@@ -114,7 +119,11 @@ function syncBankCustom( select: HTMLSelectElement ): void {
 			}
 		}
 		const optEl = select.selectedOptions[ 0 ];
-		custom.value = optEl?.getAttribute( 'data-bank-name' ) || optEl?.textContent?.trim() || '';
+		custom.value =
+			optEl?.getAttribute( 'data-name' ) ||
+			optEl?.getAttribute( 'data-bank-name' ) ||
+			optEl?.textContent?.trim() ||
+			'';
 	}
 }
 
@@ -134,14 +143,15 @@ function enhanceBankSelect( select: HTMLSelectElement ): void {
 		allowEmptyOption: true,
 		create: false,
 		maxOptions: 100,
-		// Search across option text (name + code) and explicit code field.
-		searchField: [ 'text', 'code', 'bankName' ],
+		// Search name (text), transfer code, and explicit name field.
+		searchField: [ 'text', 'code', 'name', 'bankName' ],
 		dropdownParent: 'body',
 		optgroupField: 'optgroup',
 		lockOptgroupOrder: true,
 		plugins: [ 'dropdown_input' ],
 		placeholder,
 		render: {
+			// Root element becomes the .option / .item node — keep name & code as children only.
 			option( data: BankOptionData, escape: ( s: string ) => string ) {
 				const value = String( data.value ?? '' );
 				if ( value === '' ) {
@@ -160,7 +170,9 @@ function enhanceBankSelect( select: HTMLSelectElement ): void {
 					`<div class="bw-bank-opt">` +
 					`<span class="bw-bank-opt__name">${ escape( name ) }</span>` +
 					( code
-						? `<span class="bw-bank-opt__code" title="Transfer code">${ escape( code ) }</span>`
+						? `<span class="bw-bank-opt__code" aria-label="Transfer code">${ escape(
+								code
+						  ) }</span>`
 						: '' ) +
 					`</div>`
 				);
@@ -177,7 +189,11 @@ function enhanceBankSelect( select: HTMLSelectElement ): void {
 				return (
 					`<div class="bw-bank-item">` +
 					`<span class="bw-bank-item__name">${ escape( name ) }</span>` +
-					( code ? `<span class="bw-bank-item__code">${ escape( code ) }</span>` : '' ) +
+					( code
+						? `<span class="bw-bank-item__code" aria-label="Transfer code">${ escape(
+								code
+						  ) }</span>`
+						: '' ) +
 					`</div>`
 				);
 			},

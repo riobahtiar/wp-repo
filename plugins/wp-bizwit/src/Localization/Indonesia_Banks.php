@@ -281,10 +281,11 @@ class Indonesia_Banks {
 			$group_label = $labels[ $type ] ?? $type;
 			$html       .= '<optgroup label="' . esc_attr( $group_label ) . '">';
 			foreach ( $banks as $bank ) {
-				// Text includes code for search; Tom Select renders name + code badge separately.
+				// data-name / data-code feed Tom Select; text is for search only.
+				// Render templates never show text as a single mixed string.
 				$search_text = $bank['name'] . ' ' . $bank['code'];
 				$html       .= sprintf(
-					'<option value="%1$s" data-code="%1$s" data-bank-name="%2$s"%3$s>%4$s</option>',
+					'<option value="%1$s" data-code="%1$s" data-name="%2$s"%3$s>%4$s</option>',
 					esc_attr( $bank['code'] ),
 					esc_attr( $bank['name'] ),
 					selected( $selected_code, $bank['code'], false ),
@@ -298,7 +299,7 @@ class Indonesia_Banks {
 		$custom = ( '' === $selected_code && '' !== trim( $fallback_name ) );
 		$html  .= '<optgroup label="' . esc_attr__( 'Not in list', 'wp-bizwit' ) . '">';
 		$html  .= sprintf(
-			'<option value="__custom__" data-code="" data-bank-name=""%s>%s</option>',
+			'<option value="__custom__" data-code="" data-name=""%s>%s</option>',
 			selected( $custom, true, false ),
 			esc_html__( 'Other bank — type the name below', 'wp-bizwit' )
 		);

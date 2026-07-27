@@ -715,9 +715,22 @@
 		display: none !important;
 	}
 
+	.wp-bizwit-bank-select {
+		max-width: 100%;
+	}
+
+	.wp-bizwit-bank-custom {
+		margin-top: 0.5rem !important;
+	}
+
+	.wp-bizwit-bank-custom[hidden] {
+		display: none !important;
+	}
+
 	/*
-	 * Tom Select — bank picker
-	 * Control sits under .wp-bizwit; dropdown uses dropdownParent: body.
+	 * Tom Select bank picker
+	 * Important: render.option root BECOMES the .option node (not nested inside it).
+	 * So flex layout must target `.ts-dropdown .option.bw-bank-opt` directly.
 	 */
 
 	.wp-bizwit .ts-wrapper {
@@ -745,27 +758,23 @@
 		box-shadow: 0 0 0 1px var(--bw-color-primary);
 	}
 
-	.wp-bizwit .ts-wrapper.single .ts-control > div.item,
-	.wp-bizwit .ts-wrapper.single .ts-control > .item {
-		padding: 0;
-		margin: 0;
+	/* Selected item is also the render root (class item + bw-bank-item). */
+	.wp-bizwit .ts-wrapper.single .ts-control > .item,
+	.wp-bizwit .ts-wrapper.single .ts-control > .bw-bank-item {
+		display: flex !important;
+		align-items: center;
+		justify-content: space-between;
+		gap: 10px;
+		width: 100%;
+		min-width: 0;
+		margin: 0 !important;
+		padding: 0 !important;
 		line-height: 1.35;
 	}
 
 	.wp-bizwit .ts-wrapper .ts-control > input {
 		min-height: 0 !important;
 		font-size: 14px !important;
-	}
-
-	/* —— Closed control: selected bank —— */
-
-	.bw-bank-item {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 10px;
-		width: 100%;
-		min-width: 0;
 	}
 
 	.bw-bank-item__name {
@@ -780,15 +789,17 @@
 
 	.bw-bank-item__code {
 		flex: 0 0 auto;
-		padding: 2px 7px;
-		border-radius: 3px;
+		margin-left: 8px;
+		padding: 2px 8px;
+		border-radius: 4px;
 		background: #f0f0f1;
+		border: 1px solid #dcdcde;
 		color: #50575e;
 		font-size: 11px;
-		font-weight: 600;
+		font-weight: 700;
 		font-variant-numeric: tabular-nums;
-		letter-spacing: 0.02em;
-		line-height: 1.4;
+		letter-spacing: 0.04em;
+		line-height: 1.45;
 	}
 
 	.bw-bank-item--muted {
@@ -796,9 +807,8 @@
 		font-weight: 400;
 	}
 
-	/* —— Dropdown (appended to body) —— */
+	/* —— Dropdown on body —— */
 
-	body > .ts-dropdown.bw-bank-dropdown,
 	body > .ts-dropdown {
 		z-index: 100100;
 		margin-top: 4px;
@@ -809,10 +819,11 @@
 		font-size: 13px;
 		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 		overflow: hidden;
+		color: #1d2327;
 	}
 
 	body > .ts-dropdown .dropdown-input-wrap {
-		padding: 10px 10px 8px;
+		padding: 10px;
 		border-bottom: 1px solid #dcdcde;
 		background: #f6f7f7;
 	}
@@ -837,142 +848,141 @@
 	}
 
 	body > .ts-dropdown .ts-dropdown-content {
-		max-height: 280px;
+		max-height: 300px;
 		padding: 4px 0 6px;
 	}
 
-	/* Optgroup labels */
 	body > .ts-dropdown .optgroup {
 		margin: 0;
 		padding: 0;
 	}
 
 	body > .ts-dropdown .optgroup + .optgroup {
-		margin-top: 2px;
-		border-top: 1px solid #f0f0f1;
+		margin-top: 4px;
+		padding-top: 2px;
+		border-top: 1px solid #e8e8e9;
 	}
 
+	/* Group label is the render root with class optgroup-header */
 	body > .ts-dropdown .optgroup-header,
 	body > .ts-dropdown .bw-bank-optgroup {
+		display: block;
 		margin: 0;
-		padding: 10px 14px 6px;
+		padding: 10px 14px 4px;
 		font-size: 11px;
-		font-weight: 600;
+		font-weight: 700;
 		line-height: 1.3;
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 		color: #646970;
-		background: transparent;
+		background: transparent !important;
 		border: 0;
+		cursor: default;
 	}
 
-	/* Options — denser list with clear rows */
-	body > .ts-dropdown .option {
-		margin: 0;
-		padding: 0;
-		border-radius: 0;
-		cursor: pointer;
-	}
-
-	body > .ts-dropdown .option .bw-bank-opt {
-		display: flex;
+	/*
+	 * Option root = .option.bw-bank-opt (single element from render.option).
+	 * Name and code are direct children spans.
+	 */
+	body > .ts-dropdown .option,
+	body > .ts-dropdown .option.bw-bank-opt {
+		display: flex !important;
 		align-items: center;
 		justify-content: space-between;
-		gap: 12px;
-		min-height: 40px;
-		padding: 8px 14px;
+		gap: 14px;
+		min-height: 42px;
+		margin: 0;
+		padding: 9px 14px !important;
 		box-sizing: border-box;
+		border-radius: 0;
+		cursor: pointer;
+		line-height: 1.35;
 	}
 
 	body > .ts-dropdown .option.active,
 	body > .ts-dropdown .option.selected {
-		background: transparent;
+		background: #f0f6fc !important;
+		color: #1d2327;
 	}
 
-	body > .ts-dropdown .option.active .bw-bank-opt,
-	body > .ts-dropdown .option.selected .bw-bank-opt {
-		background: #f0f6fc;
-	}
-
-	body > .ts-dropdown .option.active {
-		background: #f0f6fc;
-	}
-
-	body > .ts-dropdown .option.active .bw-bank-opt {
-		background: transparent;
-	}
-
-	.bw-bank-opt__name {
+	body > .ts-dropdown .option .bw-bank-opt__name,
+	body > .ts-dropdown .bw-bank-opt__name {
 		flex: 1 1 auto;
 		min-width: 0;
 		font-size: 13px;
 		font-weight: 500;
 		line-height: 1.35;
 		color: #1d2327;
+		/* prevent long names from colliding with the code chip */
+		padding-right: 4px;
 	}
 
-	.bw-bank-opt__code {
+	body > .ts-dropdown .option .bw-bank-opt__code,
+	body > .ts-dropdown .bw-bank-opt__code {
 		flex: 0 0 auto;
-		padding: 3px 8px;
-		border-radius: 3px;
+		align-self: center;
+		margin-left: auto;
+		padding: 3px 9px;
+		border-radius: 4px;
 		background: #f0f0f1;
+		border: 1px solid #dcdcde;
 		color: #50575e;
 		font-size: 11px;
-		font-weight: 600;
+		font-weight: 700;
 		font-variant-numeric: tabular-nums;
-		letter-spacing: 0.03em;
-		line-height: 1.3;
+		letter-spacing: 0.05em;
+		line-height: 1.35;
+		white-space: nowrap;
 	}
 
-	body > .ts-dropdown .option.active .bw-bank-opt__code {
+	body > .ts-dropdown .option.active .bw-bank-opt__code,
+	body > .ts-dropdown .option.selected .bw-bank-opt__code {
 		background: #d8e6f5;
+		border-color: #c5d9ed;
 		color: #135e96;
 	}
 
-	.bw-bank-opt--placeholder,
-	.bw-bank-opt--custom {
-		min-height: 40px;
-		padding: 8px 14px;
-		box-sizing: border-box;
-		display: flex;
-		align-items: center;
+	body > .ts-dropdown .option.bw-bank-opt--placeholder,
+	body > .ts-dropdown .option.bw-bank-opt--custom {
 		font-size: 13px;
 		color: #646970;
 		font-style: italic;
+		font-weight: 400;
 	}
 
-	.bw-bank-opt--custom {
+	body > .ts-dropdown .option.bw-bank-opt--custom {
 		font-style: normal;
 		color: #1d2327;
 	}
 
 	body > .ts-dropdown .no-results,
 	body > .ts-dropdown .bw-bank-empty {
-		padding: 16px 14px;
+		padding: 18px 14px;
 		font-size: 13px;
 		line-height: 1.45;
 		color: #646970;
 		text-align: center;
 	}
 
-	/* Scoped fallback if dropdown stays inside .wp-bizwit */
-	.wp-bizwit .ts-dropdown .option .bw-bank-opt {
-		display: flex;
+	/* If dropdown ever renders inside .wp-bizwit */
+	.wp-bizwit .ts-dropdown .option.bw-bank-opt {
+		display: flex !important;
 		align-items: center;
 		justify-content: space-between;
-		gap: 12px;
-		min-height: 40px;
-		padding: 8px 14px;
+		gap: 14px;
+		min-height: 42px;
+		padding: 9px 14px !important;
 	}
 
-	.wp-bizwit .ts-dropdown .optgroup-header,
-	.wp-bizwit .ts-dropdown .bw-bank-optgroup {
-		padding: 10px 14px 6px;
+	.wp-bizwit .ts-dropdown .bw-bank-opt__code {
+		margin-left: auto;
+		padding: 3px 9px;
+		border-radius: 4px;
+		background: #f0f0f1;
+		border: 1px solid #dcdcde;
 		font-size: 11px;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
-		color: var(--bw-color-text-muted);
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
 	}
 
 	/* Setup checklist */
