@@ -12,6 +12,7 @@ use WP_BizWit\Localization\Indonesia;
 use WP_BizWit\Localization\Regions;
 use WP_BizWit\Support\Capabilities;
 use WP_BizWit\Support\Money;
+use WP_BizWit\Support\Payment_Destinations;
 use WP_BizWit\Support\Settings;
 
 /**
@@ -115,10 +116,6 @@ class Settings_Screen extends Screen {
 			'withholding_label'        => sanitize_text_field( wp_unslash( $_POST['withholding_label'] ?? '' ) ),
 			'withholding_rate'         => sanitize_text_field( wp_unslash( $_POST['withholding_rate'] ?? '0' ) ),
 			'payment_terms_days'       => max( 0, min( 3650, absint( $_POST['payment_terms_days'] ?? 30 ) ) ),
-			'bank_name'                => sanitize_text_field( wp_unslash( $_POST['bank_name'] ?? '' ) ),
-			'bank_account_no'          => sanitize_text_field( wp_unslash( $_POST['bank_account_no'] ?? '' ) ),
-			'bank_account_name'        => sanitize_text_field( wp_unslash( $_POST['bank_account_name'] ?? '' ) ),
-			'bank_branch'              => sanitize_text_field( wp_unslash( $_POST['bank_branch'] ?? '' ) ),
 			'number_format'            => 'simple' === $number_format ? 'simple' : 'regional',
 			'invoice_prefix'           => sanitize_text_field( wp_unslash( $_POST['invoice_prefix'] ?? '' ) ),
 			'receipt_prefix'           => sanitize_text_field( wp_unslash( $_POST['receipt_prefix'] ?? '' ) ),
@@ -126,6 +123,14 @@ class Settings_Screen extends Screen {
 			'apply_stamp_duty'         => isset( $_POST['apply_stamp_duty'] ),
 			'delete_data_on_uninstall' => isset( $_POST['delete_data_on_uninstall'] ),
 		);
+
+		// Multi payment destinations (bank, VA, e-wallets, links, offline, …).
+		$raw_dest = isset( $_POST['payment_destinations'] ) && is_array( $_POST['payment_destinations'] )
+			? wp_unslash( $_POST['payment_destinations'] ) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitised by Payment_Destinations.
+			: array();
+		$destinations                     = Payment_Destinations::sanitize_list( $raw_dest );
+		$settings['payment_destinations'] = $destinations;
+		$settings                         = array_merge( $settings, Payment_Destinations::legacy_bank_fields_from( $destinations ) );
 		// phpcs:enable
 
 		// A business that is not a PKP has no right to charge PPN, so the stored

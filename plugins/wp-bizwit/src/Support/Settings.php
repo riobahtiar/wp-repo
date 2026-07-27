@@ -90,11 +90,14 @@ class Settings {
 			'withholding_rate'         => '2',
 			'payment_terms_days'       => 30,
 
-			// Bank details. Indonesian invoices are expected to carry them.
+			// Legacy single bank (kept in sync with first bank_transfer destination).
 			'bank_name'                => '',
 			'bank_account_no'          => '',
 			'bank_account_name'        => '',
 			'bank_branch'              => '',
+
+			// Multiple payment destinations for invoices (bank, VA, e-wallet, …).
+			'payment_destinations'     => array(),
 
 			// Document numbering.
 			'number_format'            => 'regional',

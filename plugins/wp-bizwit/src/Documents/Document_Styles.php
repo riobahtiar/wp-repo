@@ -243,7 +243,7 @@ table.wp-bizwit-totals tr.grand td {
 	text-align: right;
 }
 
-/* —— Bank & notes —— */
+/* —— Bank & notes / multi payment methods —— */
 .wp-bizwit-c-bank {
 	background: var(--doc-soft);
 	border-left: 3px solid var(--doc-accent);
@@ -252,6 +252,27 @@ table.wp-bizwit-totals tr.grand td {
 	font-size: 9.5pt;
 	border-radius: 0 4px 4px 0;
 	line-height: 1.55;
+}
+.wp-bizwit-pay-methods {
+	display: flex;
+	flex-direction: column;
+	gap: 3mm;
+}
+.wp-bizwit-pay-method__title {
+	font-weight: 700;
+	font-size: 9pt;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: var(--doc-accent);
+	margin-bottom: 1mm;
+}
+.wp-bizwit-pay-method__body {
+	font-size: 9.5pt;
+	line-height: 1.5;
+}
+.wp-bizwit-pay-method + .wp-bizwit-pay-method {
+	padding-top: 2.5mm;
+	border-top: 1px dashed var(--doc-line);
 }
 
 /* —— Signature —— */

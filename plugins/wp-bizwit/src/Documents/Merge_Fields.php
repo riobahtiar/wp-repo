@@ -11,6 +11,7 @@ use WP_BizWit\Localization\Regions;
 use WP_BizWit\Support\Invoice_Status;
 use WP_BizWit\Support\Invoice_Totals;
 use WP_BizWit\Support\Money;
+use WP_BizWit\Support\Payment_Destinations;
 use WP_BizWit\Support\Settings;
 
 /**
@@ -182,28 +183,11 @@ class Merge_Fields {
 	}
 
 	/**
-	 * Composite bank details block.
+	 * Composite payment destinations block (bank, VA, e-wallets, links, …).
 	 *
 	 * @return string HTML.
 	 */
 	private static function bank_block_html(): string {
-		$name = (string) Settings::get( 'bank_name', '' );
-		$no   = (string) Settings::get( 'bank_account_no', '' );
-		$acc  = (string) Settings::get( 'bank_account_name', '' );
-		$br   = (string) Settings::get( 'bank_branch', '' );
-
-		if ( '' === $name && '' === $no ) {
-			return '';
-		}
-
-		$lines = array();
-		if ( '' !== $name ) {
-			$lines[] = esc_html( $name ) . ( '' !== $br ? esc_html( ' — ' . $br ) : '' );
-		}
-		if ( '' !== $no ) {
-			$lines[] = esc_html( $no ) . ( '' !== $acc ? esc_html( ' a/n ' . $acc ) : '' );
-		}
-
-		return implode( '<br />', $lines );
+		return Payment_Destinations::block_html();
 	}
 }

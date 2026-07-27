@@ -502,6 +502,86 @@
 		white-space: nowrap;
 	}
 
+	/* Payment destinations (settings) */
+
+	.wp-bizwit-pay-destinations {
+		display: flex;
+		flex-direction: column;
+		gap: var(--bw-space-4);
+		margin: var(--bw-space-3) 0;
+	}
+
+	.wp-bizwit-pay-card {
+		margin: 0;
+		padding: var(--bw-space-4);
+		border: 1px solid var(--bw-color-border-soft);
+		border-radius: var(--bw-radius);
+		background: var(--bw-color-surface-muted);
+	}
+
+	.wp-bizwit-pay-card__head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--bw-space-3);
+		margin-bottom: var(--bw-space-3);
+	}
+
+	.wp-bizwit-pay-card__type {
+		flex: 1 1 12rem;
+		margin: 0;
+	}
+
+	.wp-bizwit-pay-card__type select {
+		width: 100%;
+		max-width: 22rem;
+	}
+
+	.wp-bizwit-pay-card__enabled {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		margin: 0;
+		font-size: 13px;
+	}
+
+	.wp-bizwit-pay-card__remove {
+		margin-left: auto;
+	}
+
+	.wp-bizwit-pay-card__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+		gap: var(--bw-space-3);
+	}
+
+	.wp-bizwit-pay-card__field {
+		margin: 0;
+	}
+
+	.wp-bizwit-pay-card__field label {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		font-size: 13px;
+		font-weight: 600;
+	}
+
+	.wp-bizwit-pay-card__field input,
+	.wp-bizwit-pay-card__field textarea {
+		font-weight: 400;
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.wp-bizwit-pay-card__field--full {
+		grid-column: 1 / -1;
+	}
+
+	.wp-bizwit-pay-card__field[hidden] {
+		display: none !important;
+	}
+
 	/* Setup checklist */
 
 	.wp-bizwit-checklist__list {

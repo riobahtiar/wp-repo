@@ -3,7 +3,8 @@
 What is actually true of the codebase right now. Update this in the same commit
 as the work it describes — a tracker that lags is worse than none.
 
-**Current version: 1.0.0 — GA.** Schema is frozen for additive-only changes.
+**Current version: 1.1.0 — GA.** Schema is frozen for additive-only changes.
+Multiple payment destinations on invoices (1.1.0).
 External security review remains recommended for high-risk installs
 ([docs/security-self-review.md](../docs/security-self-review.md)).
 

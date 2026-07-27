@@ -63,9 +63,7 @@ class Onboarding {
 		$stats    = new Stats_Repository();
 
 		$business_name = trim( (string) ( $settings['business_name'] ?? '' ) );
-		$bank_no       = trim( (string) ( $settings['bank_account_no'] ?? '' ) );
-		$bank_name     = trim( (string) ( $settings['bank_name'] ?? '' ) );
-		$has_bank      = '' !== $bank_no || '' !== $bank_name;
+		$has_bank      = Payment_Destinations::has_any();
 
 		$clients  = $stats->clients();
 		$invoices = $stats->invoices();
@@ -80,7 +78,7 @@ class Onboarding {
 			),
 			array(
 				'id'    => 'bank',
-				'label' => __( 'Add bank account details for invoices and receipts', 'wp-bizwit' ),
+				'label' => __( 'Add payment details (bank, e-wallet, VA or link) for invoices', 'wp-bizwit' ),
 				'done'  => $has_bank,
 				'url'   => (string) ( $urls['settings'] ?? '' ),
 			),

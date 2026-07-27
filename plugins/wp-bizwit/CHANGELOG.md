@@ -11,6 +11,23 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-07-27
+
+Multiple payment destinations on invoices (not only one bank account).
+
+### Added
+- **Payment destinations** in Settings: bank transfer, Virtual Account, payment
+  link, DANA, GoPay, OVO, ShopeePay, offline payment, and other — multiple cards,
+  optional labels, show/hide on invoices.
+- Print/merge field `bank_block` renders all enabled destinations with type
+  headings; styles for multi-method blocks on A4 documents.
+- Legacy single `bank_*` settings stay in sync with the first bank-transfer
+  destination for backward compatibility.
+- PHPUnit: `PaymentDestinationsTest`.
+
+### Changed
+- Version **1.1.0**. Onboarding checklist asks for any payment method, not only bank.
+
 ## [1.0.0] — 2026-07-27
 
 First stable release. Schema freeze (additive migrations only). Security

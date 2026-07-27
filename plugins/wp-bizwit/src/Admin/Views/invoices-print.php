@@ -16,6 +16,7 @@ use WP_BizWit\Localization\Regions;
 use WP_BizWit\Support\Invoice_Status;
 use WP_BizWit\Support\Invoice_Totals;
 use WP_BizWit\Support\Money;
+use WP_BizWit\Support\Payment_Destinations;
 use WP_BizWit\Support\Settings;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -31,10 +32,7 @@ $biz_addr       = (string) Settings::get( 'business_address', '' );
 $biz_email      = (string) Settings::get( 'business_email', '' );
 $biz_phone      = (string) Settings::get( 'business_phone', '' );
 $tax_id         = (string) Settings::get( 'tax_id', '' );
-$bank_name      = (string) Settings::get( 'bank_name', '' );
-$bank_no        = (string) Settings::get( 'bank_account_no', '' );
-$bank_acc       = (string) Settings::get( 'bank_account_name', '' );
-$bank_br        = (string) Settings::get( 'bank_branch', '' );
+$pay_block      = Payment_Destinations::block_html();
 $charges_tax    = Settings::charges_sales_tax() || (int) $invoice['tax_minor'] > 0;
 
 $subtotal   = (int) $invoice['subtotal_minor'];
@@ -324,15 +322,10 @@ $document_title = sprintf(
 		</p>
 	<?php endif; ?>
 
-	<?php if ( '' !== $bank_name || '' !== $bank_no ) : ?>
+	<?php if ( '' !== $pay_block ) : ?>
 		<div class="bank">
 			<h2><?php esc_html_e( 'Payment details', 'wp-bizwit' ); ?></h2>
-			<?php if ( '' !== $bank_name ) : ?>
-				<div><?php echo esc_html( $bank_name ); ?><?php echo '' !== $bank_br ? esc_html( ' — ' . $bank_br ) : ''; ?></div>
-			<?php endif; ?>
-			<?php if ( '' !== $bank_no ) : ?>
-				<div><?php echo esc_html( $bank_no ); ?><?php echo '' !== $bank_acc ? esc_html( ' a/n ' . $bank_acc ) : ''; ?></div>
-			<?php endif; ?>
+			<?php echo $pay_block; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped inside Payment_Destinations::block_html(). ?>
 		</div>
 	<?php endif; ?>
 
