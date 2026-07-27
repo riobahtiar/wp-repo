@@ -272,20 +272,23 @@ class Indonesia_Banks {
 			'<select class="wp-bizwit-pay-card__select wp-bizwit-bank-select" name="%1$s" id="%2$s" data-bank-select data-placeholder="%3$s">',
 			esc_attr( $name ),
 			esc_attr( $id ),
-			esc_attr__( 'Search bank name or code…', 'wp-bizwit' )
+			esc_attr__( 'Search by bank name or transfer code…', 'wp-bizwit' )
 		);
-		$html  .= '<option value="">' . esc_html__( '— Select bank —', 'wp-bizwit' ) . '</option>';
+		// Empty option: short label for the closed control.
+		$html .= '<option value="">' . esc_html__( 'Select a bank…', 'wp-bizwit' ) . '</option>';
 
 		foreach ( self::grouped() as $type => $banks ) {
 			$group_label = $labels[ $type ] ?? $type;
 			$html       .= '<optgroup label="' . esc_attr( $group_label ) . '">';
 			foreach ( $banks as $bank ) {
-				$label = sprintf( '%s · %s', $bank['name'], $bank['code'] );
-				$html .= sprintf(
-					'<option value="%1$s"%2$s>%3$s</option>',
+				// Text includes code for search; Tom Select renders name + code badge separately.
+				$search_text = $bank['name'] . ' ' . $bank['code'];
+				$html       .= sprintf(
+					'<option value="%1$s" data-code="%1$s" data-bank-name="%2$s"%3$s>%4$s</option>',
 					esc_attr( $bank['code'] ),
+					esc_attr( $bank['name'] ),
 					selected( $selected_code, $bank['code'], false ),
-					esc_html( $label )
+					esc_html( $search_text )
 				);
 			}
 			$html .= '</optgroup>';
@@ -293,11 +296,11 @@ class Indonesia_Banks {
 
 		// Custom free-text bank not in the list.
 		$custom = ( '' === $selected_code && '' !== trim( $fallback_name ) );
-		$html  .= '<optgroup label="' . esc_attr__( 'Other', 'wp-bizwit' ) . '">';
+		$html  .= '<optgroup label="' . esc_attr__( 'Not in list', 'wp-bizwit' ) . '">';
 		$html  .= sprintf(
-			'<option value="__custom__"%s>%s</option>',
+			'<option value="__custom__" data-code="" data-bank-name=""%s>%s</option>',
 			selected( $custom, true, false ),
-			esc_html__( 'Other bank (type name…)', 'wp-bizwit' )
+			esc_html__( 'Other bank — type the name below', 'wp-bizwit' )
 		);
 		$html  .= '</optgroup>';
 		$html  .= '</select>';

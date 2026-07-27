@@ -57,6 +57,39 @@ function focusAdminNotice(): void {
 	}
 }
 
+type BankOptionData = {
+	value?: string;
+	text?: string;
+	code?: string;
+	bankName?: string;
+	/** Tom Select maps data-bank-name → bankName */
+	[ key: string ]: unknown;
+};
+
+/**
+ * Resolve display name for a bank option (from data attributes or text).
+ */
+function bankOptionName( data: BankOptionData ): string {
+	const fromData = String( data.bankName ?? data[ 'bank-name' ] ?? '' ).trim();
+	if ( fromData ) {
+		return fromData;
+	}
+	// Fallback: option text was "Name CODE" (search blob).
+	const text = String( data.text ?? '' ).trim();
+	const m = text.match( /^(.*?)\s+(\d{3,})$/ );
+	return m ? m[ 1 ] : text;
+}
+
+function bankOptionCode( data: BankOptionData ): string {
+	const fromData = String( data.code ?? '' ).trim();
+	if ( fromData ) {
+		return fromData;
+	}
+	const text = String( data.text ?? '' ).trim();
+	const m = text.match( /\s(\d{3,})$/ );
+	return m ? m[ 1 ] : '';
+}
+
 /**
  * Show free-text bank name when user picks "Other bank".
  */
@@ -73,14 +106,15 @@ function syncBankCustom( select: HTMLSelectElement ): void {
 	if ( ! show && select.value && select.value !== '__custom__' ) {
 		const el = select as TomSelectEl;
 		const ts = el.tomselect;
-		let label = '';
 		if ( ts ) {
-			const opt = ts.options[ select.value ] as { text?: string } | undefined;
-			label = String( opt?.text ?? '' );
-		} else {
-			label = select.selectedOptions[ 0 ]?.textContent || '';
+			const opt = ts.options[ select.value ] as BankOptionData | undefined;
+			if ( opt ) {
+				custom.value = bankOptionName( opt );
+				return;
+			}
 		}
-		custom.value = label.replace( /\s·\s\d+$/, '' ).trim();
+		const optEl = select.selectedOptions[ 0 ];
+		custom.value = optEl?.getAttribute( 'data-bank-name' ) || optEl?.textContent?.trim() || '';
 	}
 }
 
@@ -93,37 +127,67 @@ function enhanceBankSelect( select: HTMLSelectElement ): void {
 		return;
 	}
 
+	const placeholder =
+		select.getAttribute( 'data-placeholder' ) || 'Search by bank name or transfer code…';
+
 	new TomSelect( select, {
 		allowEmptyOption: true,
 		create: false,
-		maxOptions: 80,
-		searchField: [ 'text' ],
+		maxOptions: 100,
+		// Search across option text (name + code) and explicit code field.
+		searchField: [ 'text', 'code', 'bankName' ],
 		dropdownParent: 'body',
 		optgroupField: 'optgroup',
 		lockOptgroupOrder: true,
 		plugins: [ 'dropdown_input' ],
+		placeholder,
 		render: {
-			option( data: { text?: string }, escape: ( s: string ) => string ) {
-				const text = String( data.text ?? '' );
-				const m = text.match( /^(.*)\s·\s(\d+)$/ );
-				if ( m ) {
-					return (
-						`<div class="bw-bank-opt">` +
-						`<span class="bw-bank-opt__name">${ escape( m[ 1 ] ) }</span>` +
-						`<span class="bw-bank-opt__code">${ escape( m[ 2 ] ) }</span>` +
-						`</div>`
-					);
+			option( data: BankOptionData, escape: ( s: string ) => string ) {
+				const value = String( data.value ?? '' );
+				if ( value === '' ) {
+					return `<div class="bw-bank-opt bw-bank-opt--placeholder">${ escape(
+						String( data.text ?? '' )
+					) }</div>`;
 				}
-				return `<div>${ escape( text ) }</div>`;
+				if ( value === '__custom__' ) {
+					return `<div class="bw-bank-opt bw-bank-opt--custom">${ escape(
+						String( data.text ?? '' )
+					) }</div>`;
+				}
+				const name = bankOptionName( data );
+				const code = bankOptionCode( data );
+				return (
+					`<div class="bw-bank-opt">` +
+					`<span class="bw-bank-opt__name">${ escape( name ) }</span>` +
+					( code
+						? `<span class="bw-bank-opt__code" title="Transfer code">${ escape( code ) }</span>`
+						: '' ) +
+					`</div>`
+				);
 			},
-			item( data: { text?: string }, escape: ( s: string ) => string ) {
-				return `<div>${ escape( String( data.text ?? '' ) ) }</div>`;
+			item( data: BankOptionData, escape: ( s: string ) => string ) {
+				const value = String( data.value ?? '' );
+				if ( value === '' || value === '__custom__' ) {
+					return `<div class="bw-bank-item bw-bank-item--muted">${ escape(
+						String( data.text ?? '' )
+					) }</div>`;
+				}
+				const name = bankOptionName( data );
+				const code = bankOptionCode( data );
+				return (
+					`<div class="bw-bank-item">` +
+					`<span class="bw-bank-item__name">${ escape( name ) }</span>` +
+					( code ? `<span class="bw-bank-item__code">${ escape( code ) }</span>` : '' ) +
+					`</div>`
+				);
 			},
 			optgroup_header( data: { label?: string }, escape: ( s: string ) => string ) {
 				return `<div class="bw-bank-optgroup">${ escape( String( data.label ?? '' ) ) }</div>`;
 			},
 			no_results( _data: unknown, escape: ( s: string ) => string ) {
-				return `<div class="no-results">${ escape( 'No match — try bank name or code' ) }</div>`;
+				return `<div class="bw-bank-empty">${ escape(
+					'No banks match — try another name or code'
+				) }</div>`;
 			},
 		},
 		onChange() {

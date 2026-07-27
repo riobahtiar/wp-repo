@@ -204,7 +204,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 							</div>
 							<div class="wp-bizwit-pay-card__field wp-bizwit-pay-card__field--full" data-pay-field="bank_name">
 								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-bank-<?php echo esc_attr( (string) $i ); ?>">
-									<?php esc_html_e( 'Bank', 'wp-bizwit' ); ?>
+									<?php esc_html_e( 'Bank (name & transfer code)', 'wp-bizwit' ); ?>
 								</label>
 								<?php
 								$bank_code        = (string) ( $dest['bank_code'] ?? '' );
@@ -224,8 +224,9 @@ $value = static function ( string $key ) use ( $settings ): string {
 									class="wp-bizwit-pay-card__input wp-bizwit-bank-custom"
 									name="<?php echo esc_attr( $prefix ); ?>[bank_name]"
 									value="<?php echo esc_attr( $bank_name ); ?>"
-									placeholder="<?php esc_attr_e( 'Bank name if not listed', 'wp-bizwit' ); ?>"
+									placeholder="<?php esc_attr_e( 'Type the bank name', 'wp-bizwit' ); ?>"
 									data-bank-custom
+									aria-label="<?php esc_attr_e( 'Custom bank name', 'wp-bizwit' ); ?>"
 									<?php echo $show_custom_bank ? '' : ' hidden'; ?>
 									autocomplete="organization"
 								/>
@@ -250,7 +251,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 							</div>
 							<div class="wp-bizwit-pay-card__field wp-bizwit-pay-card__field--full" data-pay-field="va_bank">
 								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-vabank-<?php echo esc_attr( (string) $i ); ?>">
-									<?php esc_html_e( 'VA bank', 'wp-bizwit' ); ?>
+									<?php esc_html_e( 'VA bank (name & transfer code)', 'wp-bizwit' ); ?>
 								</label>
 								<?php
 								$va_code        = (string) ( $dest['va_bank_code'] ?? '' );
@@ -270,8 +271,9 @@ $value = static function ( string $key ) use ( $settings ): string {
 									class="wp-bizwit-pay-card__input wp-bizwit-bank-custom"
 									name="<?php echo esc_attr( $prefix ); ?>[va_bank]"
 									value="<?php echo esc_attr( $va_name ); ?>"
-									placeholder="<?php esc_attr_e( 'Bank name if not listed', 'wp-bizwit' ); ?>"
+									placeholder="<?php esc_attr_e( 'Type the bank name', 'wp-bizwit' ); ?>"
 									data-bank-custom
+									aria-label="<?php esc_attr_e( 'Custom VA bank name', 'wp-bizwit' ); ?>"
 									<?php echo $show_custom_va ? '' : ' hidden'; ?>
 								/>
 							</div>
