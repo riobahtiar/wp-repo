@@ -309,6 +309,7 @@ class Schema {
 			withholding_minor bigint(20) NOT NULL DEFAULT 0,
 			notes longtext NOT NULL,
 			terms longtext NOT NULL,
+			public_token varchar(12) NOT NULL DEFAULT '',
 			created_by bigint(20) unsigned NOT NULL DEFAULT 0,
 			created_at datetime NOT NULL,
 			updated_at datetime NOT NULL,
@@ -319,7 +320,8 @@ class Schema {
 			KEY status (status),
 			KEY issue_date (issue_date),
 			KEY due_date (due_date),
-			KEY status_due (status,due_date)
+			KEY status_due (status,due_date),
+			KEY public_token (public_token)
 		) {$collate};";
 	}
 

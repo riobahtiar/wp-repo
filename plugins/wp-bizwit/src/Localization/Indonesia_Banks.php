@@ -7,6 +7,8 @@
 
 namespace WP_BizWit\Localization;
 
+use WP_BizWit\Admin\Searchable_Select;
+
 /**
  * Loads bank transfer codes and names for payment destination UI.
  *
@@ -252,6 +254,9 @@ class Indonesia_Banks {
 	/**
 	 * Render a bank &lt;select&gt; with optgroups from the catalogue.
 	 *
+	 * Uses Admin\Searchable_Select (variant=bank) so the same searchable
+	 * dropdown component can be reused elsewhere without re-styling.
+	 *
 	 * @param string $name          Input name attribute.
 	 * @param string $id            Input id attribute.
 	 * @param string $selected_code Currently selected bank code.
@@ -267,45 +272,55 @@ class Indonesia_Banks {
 			}
 		}
 
-		$labels = self::type_labels();
-		$html   = sprintf(
-			'<select class="wp-bizwit-pay-card__select wp-bizwit-bank-select" name="%1$s" id="%2$s" data-bank-select data-placeholder="%3$s">',
-			esc_attr( $name ),
-			esc_attr( $id ),
-			esc_attr__( 'Search by bank name or transfer code…', 'wp-bizwit' )
-		);
-		// Empty option: short label for the closed control.
-		$html .= '<option value="">' . esc_html__( 'Select a bank…', 'wp-bizwit' ) . '</option>';
+		$labels  = self::type_labels();
+		$options = array();
 
 		foreach ( self::grouped() as $type => $banks ) {
-			$group_label = $labels[ $type ] ?? $type;
-			$html       .= '<optgroup label="' . esc_attr( $group_label ) . '">';
+			$group_options = array();
 			foreach ( $banks as $bank ) {
-				// data-name / data-code feed Tom Select; text is for search only.
-				// Render templates never show text as a single mixed string.
-				$search_text = $bank['name'] . ' ' . $bank['code'];
-				$html       .= sprintf(
-					'<option value="%1$s" data-code="%1$s" data-name="%2$s"%3$s>%4$s</option>',
-					esc_attr( $bank['code'] ),
-					esc_attr( $bank['name'] ),
-					selected( $selected_code, $bank['code'], false ),
-					esc_html( $search_text )
+				$group_options[] = array(
+					'value'  => $bank['code'],
+					'label'  => $bank['name'],
+					'meta'   => $bank['code'],
+					'search' => $bank['name'] . ' ' . $bank['code'],
 				);
 			}
-			$html .= '</optgroup>';
+			$options[] = array(
+				'group'   => $labels[ $type ] ?? $type,
+				'options' => $group_options,
+			);
 		}
 
 		// Custom free-text bank not in the list.
-		$custom = ( '' === $selected_code && '' !== trim( $fallback_name ) );
-		$html  .= '<optgroup label="' . esc_attr__( 'Not in list', 'wp-bizwit' ) . '">';
-		$html  .= sprintf(
-			'<option value="__custom__" data-code="" data-name=""%s>%s</option>',
-			selected( $custom, true, false ),
-			esc_html__( 'Other bank — type the name below', 'wp-bizwit' )
+		$custom    = ( '' === $selected_code && '' !== trim( $fallback_name ) );
+		$options[] = array(
+			'group'   => __( 'Not in list', 'wp-bizwit' ),
+			'options' => array(
+				array(
+					'value'  => '__custom__',
+					'label'  => __( 'Other bank — type the name below', 'wp-bizwit' ),
+					'meta'   => '',
+					'search' => __( 'Other bank — type the name below', 'wp-bizwit' ),
+				),
+			),
 		);
-		$html  .= '</optgroup>';
-		$html  .= '</select>';
 
-		return $html;
+		return Searchable_Select::render(
+			array(
+				'name'          => $name,
+				'id'            => $id,
+				'selected'      => $custom ? '__custom__' : $selected_code,
+				'variant'       => 'bank',
+				'size'          => 'md',
+				'class'         => 'wp-bizwit-pay-card__select wp-bizwit-bank-select',
+				'placeholder'   => __( 'Search by bank name or transfer code…', 'wp-bizwit' ),
+				'empty_label'   => __( 'Select a bank…', 'wp-bizwit' ),
+				'no_results'    => __( 'No banks match — try another name or code', 'wp-bizwit' ),
+				'max_options'   => 100,
+				'search_fields' => 'text,code,name,label,meta',
+				'plugins'       => 'dropdown_input',
+				'options'       => $options,
+			)
+		);
 	}
 }

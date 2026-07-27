@@ -154,6 +154,33 @@ if (
 
 <hr class="wp-header-end" />
 
+<?php
+$share_url        = (string) ( $data['share_url'] ?? '' );
+$share_rotate_url = (string) ( $data['share_rotate_url'] ?? '' );
+if ( '' !== $share_url ) :
+	?>
+	<div class="wp-bizwit-share-box">
+		<div class="wp-bizwit-share-box__field">
+			<label for="wp-bizwit-share-url"><strong><?php esc_html_e( 'Share link', 'wp-bizwit' ); ?></strong></label>
+			<input type="url" id="wp-bizwit-share-url" class="large-text" readonly value="<?php echo esc_attr( $share_url ); ?>" onclick="this.select();" />
+			<p class="description"><?php esc_html_e( 'Anyone with this link can view the invoice (no login). Search engines and AI crawlers are blocked. Available when status is not Draft or Void.', 'wp-bizwit' ); ?></p>
+		</div>
+		<p>
+			<button type="button" class="button" onclick="navigator.clipboard && navigator.clipboard.writeText(document.getElementById('wp-bizwit-share-url').value);">
+				<?php esc_html_e( 'Copy link', 'wp-bizwit' ); ?>
+			</button>
+			<?php if ( '' !== $share_rotate_url ) : ?>
+				<a class="button" href="<?php echo esc_url( $share_rotate_url ); ?>">
+					<?php esc_html_e( 'Regenerate link', 'wp-bizwit' ); ?>
+				</a>
+			<?php endif; ?>
+			<a class="button" href="<?php echo esc_url( $share_url ); ?>" target="_blank" rel="noopener noreferrer nofollow">
+				<?php esc_html_e( 'Open public view', 'wp-bizwit' ); ?>
+			</a>
+		</p>
+	</div>
+<?php endif; ?>
+
 <?php if ( $locked ) : ?>
 	<div class="notice notice-info inline">
 		<p>
@@ -184,6 +211,8 @@ if (
 		</p>
 	<?php endif; ?>
 
+	<div class="wp-bizwit-card">
+	<h2><?php esc_html_e( 'Invoice details', 'wp-bizwit' ); ?></h2>
 	<table class="form-table" role="presentation">
 		<tr>
 			<th scope="row">
@@ -279,6 +308,7 @@ if (
 			</td>
 		</tr>
 	</table>
+	</div><!-- .wp-bizwit-card -->
 
 	<details class="wp-bizwit-section" open>
 		<summary class="wp-bizwit-section__summary">

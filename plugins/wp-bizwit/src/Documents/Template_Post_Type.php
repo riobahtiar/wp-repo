@@ -349,6 +349,13 @@ class Template_Post_Type {
 				'resetDefault'      => __( 'Reset default', 'wp-bizwit' ),
 				'addField'          => __( 'Field', 'wp-bizwit' ),
 				'bankPlaceholder'   => __( 'Bank transfer details', 'wp-bizwit' ),
+				'logoPlaceholder'   => __( 'Logo (add in Settings)', 'wp-bizwit' ),
+				'maxHeight'         => __( 'Max height (px)', 'wp-bizwit' ),
+				'undo'              => __( 'Undo', 'wp-bizwit' ),
+				'redo'              => __( 'Redo', 'wp-bizwit' ),
+				'applyTheme'        => __( 'Apply theme', 'wp-bizwit' ),
+				'themes'            => __( 'Start from theme', 'wp-bizwit' ),
+				'pageMargin'        => __( 'Page margin (mm)', 'wp-bizwit' ),
 				'colDescription'    => __( 'Description', 'wp-bizwit' ),
 				'colQty'            => __( 'Qty', 'wp-bizwit' ),
 				'colUnit'           => __( 'Unit', 'wp-bizwit' ),
@@ -365,6 +372,15 @@ class Template_Post_Type {
 				'labelInWords'      => __( 'In words: %s', 'wp-bizwit' ),
 			),
 			'defaultLayout' => Layout::default_invoice(),
+			'themes'        => Layout::gallery_meta(),
+			'themeLayouts'  => array(
+				'classic'      => Layout::layout_for_theme( 'classic' ),
+				'modern'       => Layout::layout_for_theme( 'modern' ),
+				'professional' => Layout::layout_for_theme( 'professional' ),
+				'minimal'      => Layout::layout_for_theme( 'minimal' ),
+				'elegant'      => Layout::layout_for_theme( 'elegant' ),
+				'compact'      => Layout::layout_for_theme( 'compact' ),
+			),
 		);
 		$config_json = (string) wp_json_encode(
 			$payload,
@@ -400,6 +416,10 @@ class Template_Post_Type {
 			'field'      => array(
 				'label'       => __( 'Data field', 'wp-bizwit' ),
 				'description' => __( 'Invoice / business value', 'wp-bizwit' ),
+			),
+			'logo'       => array(
+				'label'       => __( 'Business logo', 'wp-bizwit' ),
+				'description' => __( 'Logo from Settings (hidden if empty)', 'wp-bizwit' ),
 			),
 			'line_items' => array(
 				'label'       => __( 'Line items', 'wp-bizwit' ),

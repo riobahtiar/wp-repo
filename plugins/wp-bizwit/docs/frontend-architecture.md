@@ -167,6 +167,143 @@ using the same algorithms documented in [indonesia.md](indonesia.md).
 
 ---
 
+## Searchable select (`bw-ss`)
+
+Reusable progressive-enhancement dropdown used across admin screens (bank
+pickers first; client / project / status filters next). Built on **Tom Select**,
+styled with BizWit BEM (`.bw-ss-*`), and exposed as both PHP markup and a JS API
+so new screens never re-implement search UI.
+
+| Layer | Location |
+|-------|----------|
+| PHP markup helper | `src/Admin/Searchable_Select.php` |
+| JS enhancer | `resources/admin/searchable-select.ts` |
+| Styles | `resources/styles/admin.css` (control under `.wp-bizwit`; dropdown unscoped on `body > .ts-dropdown`) |
+| Global API | `window.wpBizwitSearchableSelect` after admin boot |
+
+### Why the dropdown CSS is unscoped
+
+Tom Select mounts the panel with `dropdownParent: 'body'` so overflow-hidden
+cards never clip it. Rules for the panel **must not** nest under `.wp-bizwit`,
+or the selector becomes `.wp-bizwit body > .ts-dropdown` and never matches
+(primary + meta collapse into one string, e.g. `Bank Ganesha161`).
+
+### Variants
+
+| Variant | Look | When |
+|---------|------|------|
+| `default` | Plain text option / item | Status, simple enums |
+| `meta` | Primary label + optional chip | Any code/tag beside a name |
+| `bank` | Same as `meta`; also sets `data-bank-select` for payment-destination hooks | Bank / VA pickers |
+
+### PHP usage
+
+```php
+use WP_BizWit\Admin\Searchable_Select;
+
+echo Searchable_Select::render( array(
+	'name'        => 'client_id',
+	'id'          => 'client_id',
+	'variant'     => 'meta',       // default | meta | bank
+	'size'        => 'md',         // sm | md | lg
+	'placeholder' => __( 'Search clients…', 'wp-bizwit' ),
+	'empty_label' => __( 'Select a client…', 'wp-bizwit' ),
+	'selected'    => $client_id,
+	'options'     => array(
+		array( 'value' => '1', 'label' => 'PT Maju', 'meta' => 'CLI-001' ),
+		array(
+			'group'   => __( 'Archived', 'wp-bizwit' ),
+			'options' => array(
+				array( 'value' => '9', 'label' => 'CV Lama', 'meta' => 'CLI-009' ),
+			),
+		),
+	),
+	// Optional knobs — all have sensible defaults:
+	// 'max_options' => 100,
+	// 'max_items' => 1,            // null or >1 = multi
+	// 'search_fields' => 'text,label,meta',
+	// 'plugins' => 'dropdown_input,clear_button',
+	// 'dropdown_class' => 'my-dropdown',
+	// 'control_class' => 'my-control',
+	// 'create' => false,
+	// 'disabled' => false,
+	// 'attrs' => array( 'data-foo' => 'bar' ),
+) );
+```
+
+Bank catalogue convenience (builds options + `variant=bank`):
+
+```php
+echo Indonesia_Banks::render_select( $name, $id, $code, $fallback_name );
+```
+
+### Markup / data attributes (no PHP helper required)
+
+Any native `<select data-bw-select>` is auto-enhanced on admin boot:
+
+| Attribute | Purpose |
+|-----------|---------|
+| `data-bw-select` | Opt-in (required) |
+| `data-bw-select-variant` | `default` \| `meta` \| `bank` |
+| `data-size` | `sm` \| `md` \| `lg` |
+| `data-placeholder` | Control / search placeholder |
+| `data-max-options` | Cap while searching |
+| `data-max-items` | `1` single; `null` unlimited multi |
+| `data-search-fields` | Comma list of option data keys |
+| `data-plugins` | Comma list of Tom Select plugins |
+| `data-dropdown-parent` | Default `body` |
+| `data-dropdown-class` / `data-control-class` | Extra classes |
+| `data-no-results` | Empty-state copy |
+| `data-allow-empty` / `data-create` / `data-open-on-focus` / … | Booleans (`0`/`1`) |
+
+Option data via attributes: `data-label` / `data-name` (primary),
+`data-meta` / `data-code` (chip). Option text content is the search string only
+and is **not** rendered as the visible label when using `meta`/`bank`.
+
+### JS API
+
+```ts
+import {
+  enhanceSearchableSelect,
+  enhanceAllSearchableSelects,
+  destroySearchableSelect,
+  destroyAllSearchableSelects,
+} from './searchable-select';
+
+// One select, full customisation
+enhanceSearchableSelect( el, {
+  variant: 'meta',
+  size: 'lg',
+  plugins: [ 'dropdown_input', 'clear_button' ],
+  onChange( value ) { /* … */ },
+  renderOption( data, escape ) {
+    return `<div class="bw-ss-opt">…${ escape( data.label ?? '' ) }</div>`;
+  },
+  // Escape hatch for non-layout Tom Select keys (diacritics, score, …).
+  // dropdownClass / dropdownParent / render / onChange cannot be dropped —
+  // extras go on top-level dropdownClass; ts-dropdown is always forced.
+  tomSelect: { diacritics: true },
+} );
+
+// Or globally after injecting markup
+window.wpBizwitSearchableSelect?.enhanceAll( container );
+```
+
+### CSS hooks for one-off themes
+
+| Hook | Where |
+|------|--------|
+| `.bw-ss-control` / `--sm` / `--md` / `--lg` / `--meta` / `--bank` | Wrapper inside the form |
+| `.bw-ss-item` / `__primary` / `__meta` | Closed control |
+| `.bw-ss-dropdown` / `--meta` / `--bank` | Panel on `body` |
+| `.bw-ss-opt` / `__primary` / `__meta` / `--plain` / `--placeholder` / `--custom` | Open list rows |
+| `.bw-ss-group` | Optgroup header |
+| `.bw-ss-empty` | No results |
+
+Prefer `dropdownClass` / `controlClass` (or data attrs) over forking the module.
+
+---
+
 ## REST API conventions
 
 Namespace: `wp-bizwit/v1`
@@ -232,7 +369,7 @@ Measured sizes and re-measure commands: [performance.md](performance.md).
 Same spirit as [development.md](development.md#dependency-policy):
 
 - Prefer zero runtime npm dependencies beyond Vue (and intentional tiny helpers).
-- **Current runtime `dependencies`:** `vue` only (MIT, GPL-compatible).
+- **Current runtime `dependencies`:** `vue`, `tom-select`, `@wordpress/i18n` (all GPL-compatible).
 - Any new runtime package must be: widely used / well maintained, updated within
   ~8 months, trusted maintainer — **and** justified against the performance budget.
 - Prefer first-party components over another UI framework.

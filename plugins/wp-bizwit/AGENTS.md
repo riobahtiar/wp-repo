@@ -255,19 +255,21 @@ Roles are written to the database on activation only. After changing
 
 ### Translations
 
-Indonesian (`id_ID`) ships complete: all 240 strings. Workflow after adding or
-changing any translatable string:
+Indonesian (`id_ID`) ships complete. **UI work is not done until the id_ID gate
+passes.** Workflow after adding or changing any user-facing string:
 
 ```bash
-$(command -v wp) i18n make-pot . languages/wp-bizwit.pot --exclude=resources,vendor,vendor-prefixed,node_modules,tests
-$(command -v wp) i18n update-po languages/wp-bizwit.pot languages/
-# translate the new msgids in languages/wp-bizwit-id_ID.po, then
-$(command -v wp) i18n make-mo languages/ && $(command -v wp) i18n make-php languages/
+npm run i18n:sync          # pot + update-po + check-id (fails if msgstr empty)
+# fill new msgstr in languages/wp-bizwit-id_ID.po
+npm run i18n:check-id      # must exit 0
+npm run i18n:compile       # .mo + .l10n.php + script JSON
 ```
 
-Use the global `wp` explicitly — see the tooling papercuts below. Compiled
-`.mo` / `.l10n.php` files are gitignored and built during release; regenerate
-them locally or Indonesian will not appear.
+Mechanical gate: `scripts/check-id-translations.mjs` (`npm run i18n:check-id`)
+fails on empty or fuzzy Indonesian msgstr. Use the global `wp` for pot/update
+— see tooling papercuts below. Compiled `.mo` / `.l10n.php` are gitignored and
+built during release; regenerate them locally or Indonesian will not appear.
+Details: [`docs/i18n.md`](docs/i18n.md).
 
 Note that strings authored in Indonesian in `Localization\Indonesia` are still
 wrapped in `__()` and appear in the catalogue translated to themselves. That is
@@ -411,7 +413,12 @@ When adding new primitives, patterns, or documentation to this plugin:
 
 1. Update `docs/` with detailed implementation guides
 2. Update @AGENTS.md with high-level reference
-3. Add the Indonesian translation for any new user-facing string
+3. **i18n is part of “done”, not a follow-up.** Every new user-facing string must:
+   - be wrapped in `__()` / `esc_html_e()` / JS `__()` with domain `wp-bizwit`
+   - have an Indonesian `msgstr` in `languages/wp-bizwit-id_ID.po`
+   - pass the gate: `npm run i18n:sync` → fill empty msgstr → `npm run i18n:check-id` → `npm run i18n:compile`
+   - be spot-checked under site language **id_ID** (no mixed EN/ID screens)
+   - never report a UI feature done while `i18n:check-id` fails
 4. If the change touches wording, tax logic, money or documents, check it against
    [`docs/indonesia.md`](docs/indonesia.md) before considering it done
 5. Do not reintroduce an external boilerplate dependency or scaffold sync path

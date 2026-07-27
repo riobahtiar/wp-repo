@@ -204,16 +204,24 @@ class Payments_Screen extends Screen {
 			}
 		}
 
-		$region = Regions::current();
+		$region      = Regions::current();
+		$client_name = '';
+		if ( is_array( $invoice ) && ! empty( $invoice['client_id'] ) ) {
+			$client = $this->clients->find( (int) $invoice['client_id'] );
+			if ( is_array( $client ) ) {
+				$client_name = (string) ( $client['display_name'] ?? '' );
+			}
+		}
 
 		$this->view(
 			'payments-form',
 			array(
 				'payment'         => $payment,
 				'invoice'         => $invoice,
+				'client_name'     => $client_name,
 				'is_edit'         => 'edit' === $action,
 				'region'          => $region,
-				'invoice_options' => $this->invoices->open_options(),
+				'invoice_options' => $this->invoices->open_select_options(),
 				'methods'         => $region->payment_methods(),
 				'handles_tax'     => Settings::handles_tax(),
 				'wht_label'       => (string) Settings::get( 'withholding_label', 'PPh 23' ),

@@ -67,7 +67,14 @@ class IndonesiaBanksTest extends WP_UnitTestCase {
 
 		$lines = Payment_Destinations::detail_lines( $row );
 		$this->assertNotEmpty( $lines );
-		$this->assertStringContainsString( '014', $lines[0] );
+		// Documents show bank name only — no transfer code or branch.
+		$this->assertStringContainsString( 'BCA', $lines[0] );
+		$this->assertStringNotContainsString( '014', $lines[0] );
+
+		$rows = Payment_Destinations::detail_rows( $row );
+		$this->assertCount( 3, $rows );
+		$this->assertSame( 'account', $rows[1]['kind'] );
+		$this->assertSame( '123', $rows[1]['value'] );
 	}
 
 	/**

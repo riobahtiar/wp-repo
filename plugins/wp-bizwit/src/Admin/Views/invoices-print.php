@@ -127,6 +127,80 @@ $document_title = sprintf(
 		.bank, .notes, .sign {
 			margin-top: 7mm;
 		}
+		.bank {
+			background: #f4f7f9;
+			border: 1px solid #e2e6ea;
+			border-left: 4px solid #1e4d6b;
+			border-radius: 0 6px 6px 0;
+			padding: 0;
+			overflow: hidden;
+		}
+		.bank h2 {
+			margin: 0;
+			padding: 2.8mm 4.5mm;
+			font-size: 8.5pt;
+			font-weight: 700;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: #1e4d6b;
+			background: #eef3f6;
+			border-bottom: 1px solid #e2e6ea;
+		}
+		.wp-bizwit-pay-methods { display: flex; flex-direction: column; }
+		.wp-bizwit-pay-method { padding: 3.5mm 4.5mm 4mm; }
+		.wp-bizwit-pay-method + .wp-bizwit-pay-method { border-top: 1px dashed #e2e6ea; }
+		.wp-bizwit-pay-method__head { margin: 0 0 2.2mm; }
+		.wp-bizwit-pay-method__title {
+			display: inline-flex;
+			align-items: center;
+			gap: 2mm;
+			font-weight: 700;
+			font-size: 10pt;
+			color: #1d2327;
+		}
+		.wp-bizwit-pay-method__title::before {
+			content: "";
+			display: inline-block;
+			width: 2.4mm;
+			height: 2.4mm;
+			border-radius: 50%;
+			background: #1e4d6b;
+		}
+		.wp-bizwit-pay-method__rows { margin: 0; display: grid; gap: 1.4mm; }
+		.wp-bizwit-pay-method__row {
+			display: grid;
+			grid-template-columns: 28mm minmax(0, 1fr);
+			column-gap: 3mm;
+			align-items: baseline;
+		}
+		.wp-bizwit-pay-method__row dt {
+			margin: 0;
+			font-size: 8.5pt;
+			font-weight: 500;
+			color: #646970;
+		}
+		.wp-bizwit-pay-method__row dd {
+			margin: 0;
+			font-size: 10.5pt;
+			font-weight: 600;
+			color: #1d2327;
+			word-break: break-word;
+		}
+		.wp-bizwit-pay-method__row--account dd {
+			font-size: 12pt;
+			font-weight: 700;
+			font-variant-numeric: tabular-nums;
+			letter-spacing: 0.04em;
+			font-family: "SF Mono", Menlo, Consolas, "Courier New", monospace;
+		}
+		.wp-bizwit-pay-method__notes {
+			margin: 2.2mm 0 0;
+			padding-top: 1.8mm;
+			border-top: 1px solid #e2e6ea;
+			font-size: 9pt;
+			font-style: italic;
+			color: #646970;
+		}
 		.sign {
 			display: flex;
 			justify-content: space-between;

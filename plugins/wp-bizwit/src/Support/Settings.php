@@ -66,6 +66,8 @@ class Settings {
 			'business_code'            => '',
 			'tax_id'                   => '',
 			'business_reg_no'          => '',
+			// Attachment ID for business logo (media library).
+			'business_logo_id'         => 0,
 
 			// Who is running this. A freelancer, home worker or professional has
 			// no NIB, no company stamp and often no tax to declare here, so the
@@ -212,6 +214,31 @@ class Settings {
 	 */
 	public static function handles_tax(): bool {
 		return self::REGIME_NONE !== (string) self::get( 'tax_regime', self::REGIME_NONE );
+	}
+
+	/**
+	 * Attachment ID for the business logo (0 if none).
+	 *
+	 * @return int
+	 */
+	public static function business_logo_id(): int {
+		return max( 0, (int) self::get( 'business_logo_id', 0 ) );
+	}
+
+	/**
+	 * Public URL for the business logo, or empty when unset.
+	 *
+	 * @param string $size Media size slug.
+	 *
+	 * @return string
+	 */
+	public static function business_logo_url( string $size = 'medium' ): string {
+		$id = self::business_logo_id();
+		if ( $id <= 0 ) {
+			return '';
+		}
+		$url = wp_get_attachment_image_url( $id, $size );
+		return is_string( $url ) ? $url : '';
 	}
 
 	/**

@@ -18,10 +18,12 @@ class Document_Renderer {
 	/**
 	 * Render a full invoice HTML document (standalone page).
 	 *
-	 * @param array<string, mixed>             $invoice Invoice row.
-	 * @param array<int, array<string, mixed>> $items   Line items.
-	 * @param array<string, mixed>|null        $client  Client row.
-	 * @param array<string, mixed>|null        $project Project row.
+	 * @param array<string, mixed>             $invoice     Invoice row.
+	 * @param array<int, array<string, mixed>> $items       Line items.
+	 * @param array<string, mixed>|null        $client      Client row.
+	 * @param array<string, mixed>|null        $project     Project row.
+	 * @param int|null                         $template_id Optional template post id (default when null).
+	 * @param array<string, mixed>             $options     public, no_print_bar, template_options.
 	 *
 	 * @return string|null Full HTML document, or null when no template.
 	 */
@@ -29,12 +31,28 @@ class Document_Renderer {
 		array $invoice,
 		array $items,
 		?array $client,
-		?array $project
+		?array $project,
+		?int $template_id = null,
+		array $options = array()
 	): ?string {
-		$template = Template_Post_Type::get_default( 'invoice' );
+		$template = null;
+		if ( null !== $template_id && $template_id > 0 ) {
+			$post = get_post( $template_id );
+			if ( $post instanceof WP_Post && Template_Post_Type::POST_TYPE === $post->post_type && 'publish' === $post->post_status ) {
+				$template = $post;
+			}
+		}
+		if ( ! $template instanceof WP_Post ) {
+			$template = Template_Post_Type::get_default( 'invoice' );
+		}
 		if ( ! $template instanceof WP_Post ) {
 			return null;
 		}
+
+		// Resolve layout first so theme tokens can style the whole document (body + sheet).
+		$layout = Layout::get_for_post( (int) $template->ID );
+		$page   = is_array( $layout['page'] ?? null ) ? $layout['page'] : array();
+		$theme  = sanitize_key( (string) ( $page['theme'] ?? 'classic' ) );
 
 		$body = $this->render_template(
 			$template,
@@ -57,6 +75,30 @@ class Document_Renderer {
 			__( 'Invoice %s', 'wp-bizwit' ),
 			(string) ( $invoice['invoice_number'] ?? '' )
 		);
+		$is_public   = ! empty( $options['public'] );
+		$show_bar    = empty( $options['no_print_bar'] );
+		$tpl_options = isset( $options['template_options'] ) && is_array( $options['template_options'] )
+			? $options['template_options']
+			: array();
+		$current_tpl = (int) $template->ID;
+
+		// Theme CSS variables on <body> so tables/bank/totals always pick them up.
+		$body_style = sprintf(
+			'--doc-accent:%1$s;--doc-ink:%2$s;--doc-muted:%3$s;--doc-soft:%4$s;--doc-total-bg:%5$s;--doc-line:%6$s;--doc-line-strong:%2$s;',
+			esc_attr( (string) ( $page['accent'] ?? '#1e4d6b' ) ),
+			esc_attr( (string) ( $page['ink'] ?? '#1a2332' ) ),
+			esc_attr( (string) ( $page['muted'] ?? '#5c6570' ) ),
+			esc_attr( (string) ( $page['soft'] ?? '#f4f7f9' ) ),
+			esc_attr( (string) ( $page['totalBg'] ?? '#f0f5f8' ) ),
+			esc_attr( (string) ( $page['line'] ?? '#e2e6ea' ) )
+		);
+		if ( ! empty( $page['fontFamily'] ) ) {
+			$body_style .= 'font-family:' . esc_attr( (string) $page['fontFamily'] ) . ';';
+		}
+
+		$theme_label = $tpl_options[ $current_tpl ] ?? $template->post_title;
+		$table_style = sanitize_key( (string) ( $page['tableStyle'] ?? 'filled' ) );
+		$header_style = sanitize_key( (string) ( $page['headerStyle'] ?? 'rule' ) );
 
 		ob_start();
 		?>
@@ -65,14 +107,79 @@ class Document_Renderer {
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<?php if ( $is_public ) : ?>
+		<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai" />
+		<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet" />
+		<meta name="referrer" content="no-referrer" />
+	<?php endif; ?>
 	<title><?php echo esc_html( $document_title ); ?></title>
 	<style><?php echo Document_Styles::css(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static CSS. ?></style>
 </head>
-<body class="wp-bizwit-document wp-bizwit-document--invoice">
+<body
+	class="wp-bizwit-document wp-bizwit-document--invoice wp-bizwit-theme-<?php echo esc_attr( $theme ); ?> wp-bizwit-table--<?php echo esc_attr( $table_style ); ?> wp-bizwit-header--<?php echo esc_attr( $header_style ); ?><?php echo $is_public ? ' wp-bizwit-document--public' : ''; ?>"
+	data-theme="<?php echo esc_attr( $theme ); ?>"
+	style="<?php echo esc_attr( $body_style ); ?>"
+>
+	<?php if ( $show_bar ) : ?>
 	<div class="wp-bizwit-print-bar no-print">
 		<button type="button" onclick="window.print()"><?php esc_html_e( 'Print / Save as PDF', 'wp-bizwit' ); ?></button>
 		<span class="hint"><?php esc_html_e( 'Use A4 paper · browser print dialog', 'wp-bizwit' ); ?></span>
+		<span class="wp-bizwit-theme-badge" title="<?php echo esc_attr__( 'Active template', 'wp-bizwit' ); ?>">
+			<?php
+			echo esc_html(
+				sprintf(
+					/* translators: %s: template name */
+					__( 'Template: %s', 'wp-bizwit' ),
+					(string) $theme_label
+				)
+			);
+			?>
+		</span>
+		<?php if ( array() !== $tpl_options && ! $is_public ) : ?>
+			<form method="get" action="<?php echo esc_url( admin_url( 'admin.php' ) ); ?>" class="wp-bizwit-template-switch" id="wp-bizwit-template-form">
+				<?php
+				// Always re-assert the print route (do not rely on ambient query state).
+				printf( '<input type="hidden" name="page" value="%s" />', esc_attr( 'wp-bizwit-invoices' ) );
+				printf( '<input type="hidden" name="action" value="%s" />', esc_attr( 'print' ) );
+				printf( '<input type="hidden" name="invoice" value="%s" />', esc_attr( (string) (int) ( $invoice['id'] ?? 0 ) ) );
+				?>
+				<label for="wp-bizwit-template-select">
+					<span><?php esc_html_e( 'Change template', 'wp-bizwit' ); ?></span>
+					<select name="template" id="wp-bizwit-template-select" onchange="this.form.submit()">
+						<?php foreach ( $tpl_options as $tid => $tlabel ) : ?>
+							<option value="<?php echo esc_attr( (string) $tid ); ?>" <?php selected( $current_tpl, (int) $tid ); ?>>
+								<?php echo esc_html( (string) $tlabel ); ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+				</label>
+				<button type="submit" class="button-print"><?php esc_html_e( 'Apply', 'wp-bizwit' ); ?></button>
+			</form>
+			<nav class="wp-bizwit-template-chips" aria-label="<?php esc_attr_e( 'Templates', 'wp-bizwit' ); ?>">
+				<?php
+				$invoice_id = (int) ( $invoice['id'] ?? 0 );
+				foreach ( $tpl_options as $tid => $tlabel ) :
+					$url = add_query_arg(
+						array(
+							'page'     => 'wp-bizwit-invoices',
+							'action'   => 'print',
+							'invoice'  => $invoice_id,
+							'template' => (int) $tid,
+						),
+						admin_url( 'admin.php' )
+					);
+					$is_active = ( (int) $tid === $current_tpl );
+					?>
+					<a
+						class="wp-bizwit-template-chip<?php echo $is_active ? ' is-active' : ''; ?>"
+						href="<?php echo esc_url( $url ); ?>"
+						<?php echo $is_active ? ' aria-current="true"' : ''; ?>
+					><?php echo esc_html( (string) $tlabel ); ?></a>
+				<?php endforeach; ?>
+			</nav>
+		<?php endif; ?>
 	</div>
+	<?php endif; ?>
 	<div class="wp-bizwit-document-sheet">
 		<?php if ( Invoice_Status::VOID === $status ) : ?>
 			<div class="void-banner"><?php esc_html_e( 'VOID', 'wp-bizwit' ); ?></div>

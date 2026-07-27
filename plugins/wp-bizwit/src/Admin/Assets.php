@@ -8,6 +8,7 @@
 namespace WP_BizWit\Admin;
 
 use WP_BizWit\Admin\Screens\Dashboard_Screen;
+use WP_BizWit\Admin\Screens\Settings_Screen;
 use WP_BizWit\Localization\Regions;
 use WP_BizWit\Support\Settings;
 use WP_BizWit\WP_BizWit;
@@ -115,6 +116,11 @@ class Assets {
 
 		if ( Dashboard_Screen::SLUG === $page ) {
 			$this->enqueue_entry( 'dashboard' );
+		}
+
+		// Media library for business logo on settings.
+		if ( Settings_Screen::SLUG === $page ) {
+			wp_enqueue_media();
 		}
 	}
 

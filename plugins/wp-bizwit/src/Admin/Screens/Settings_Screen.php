@@ -97,6 +97,11 @@ class Settings_Screen extends Screen {
 			$business_type = Settings::TYPE_PERSONAL;
 		}
 
+		$logo_id = absint( $_POST['business_logo_id'] ?? 0 );
+		if ( $logo_id > 0 && ! wp_attachment_is_image( $logo_id ) ) {
+			$logo_id = 0;
+		}
+
 		$settings = array(
 			'business_name'            => sanitize_text_field( wp_unslash( $_POST['business_name'] ?? '' ) ),
 			'business_email'           => sanitize_email( wp_unslash( $_POST['business_email'] ?? '' ) ),
@@ -106,6 +111,7 @@ class Settings_Screen extends Screen {
 			'business_code'            => strtoupper( substr( sanitize_text_field( wp_unslash( $_POST['business_code'] ?? '' ) ), 0, 12 ) ),
 			'tax_id'                   => sanitize_text_field( wp_unslash( $_POST['tax_id'] ?? '' ) ),
 			'business_reg_no'          => sanitize_text_field( wp_unslash( $_POST['business_reg_no'] ?? '' ) ),
+			'business_logo_id'         => $logo_id,
 			'region'                   => $region,
 			'business_type'            => $business_type,
 			'business_scale'           => $scale,

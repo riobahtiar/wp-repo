@@ -105,6 +105,9 @@ const layout = reactive< LayoutDoc >( deepClone( config.layout ) );
 const selectedId = ref< string | null >( null );
 const activeZone = ref< Zone >( 'body' );
 const mode = ref< Mode >( 'design' );
+const history = ref< string[] >( [ JSON.stringify( config.layout ) ] );
+const historyIndex = ref( 0 );
+let skipHistory = false;
 
 const hiddenInput = () =>
 	document.getElementById( 'wp-bizwit-layout-json' ) as HTMLInputElement | null;
@@ -116,7 +119,78 @@ function syncHidden(): void {
 	}
 }
 
-watch( layout, () => syncHidden(), { deep: true } );
+function pushHistory(): void {
+	if ( skipHistory ) {
+		return;
+	}
+	const snap = JSON.stringify( layout );
+	if ( history.value[ historyIndex.value ] === snap ) {
+		return;
+	}
+	history.value = history.value.slice( 0, historyIndex.value + 1 );
+	history.value.push( snap );
+	if ( history.value.length > 40 ) {
+		history.value.shift();
+	} else {
+		historyIndex.value += 1;
+	}
+}
+
+function restoreSnapshot( index: number ): void {
+	skipHistory = true;
+	const next = deepClone( JSON.parse( history.value[ index ] ) as LayoutDoc );
+	layout.version = next.version;
+	layout.page = next.page;
+	layout.sections = next.sections;
+	selectedId.value = null;
+	skipHistory = false;
+	syncHidden();
+}
+
+function undo(): void {
+	if ( historyIndex.value <= 0 ) {
+		return;
+	}
+	historyIndex.value -= 1;
+	restoreSnapshot( historyIndex.value );
+}
+
+function redo(): void {
+	if ( historyIndex.value >= history.value.length - 1 ) {
+		return;
+	}
+	historyIndex.value += 1;
+	restoreSnapshot( historyIndex.value );
+}
+
+function applyTheme( slug: string ): void {
+	const themes = ( config as BuilderConfig & { themeLayouts?: Record< string, LayoutDoc > } ).themeLayouts;
+	const next = themes?.[ slug ];
+	if ( ! next ) {
+		return;
+	}
+	if ( ! window.confirm( t( 'applyTheme', 'Apply theme' ) + '?' ) ) {
+		return;
+	}
+	skipHistory = true;
+	const cloned = deepClone( next );
+	layout.version = cloned.version;
+	layout.page = cloned.page;
+	layout.sections = cloned.sections;
+	selectedId.value = null;
+	skipHistory = false;
+	pushHistory();
+	syncHidden();
+}
+
+watch(
+	layout,
+	() => {
+		syncHidden();
+		pushHistory();
+	},
+	{ deep: true }
+);
 onMounted( () => {
 	syncHidden();
 	// Expand the postbox to full width of the editor column.
@@ -124,6 +198,16 @@ onMounted( () => {
 	if ( box ) {
 		box.classList.add( 'bw-lb-host' );
 	}
+	window.addEventListener( 'keydown', ( e ) => {
+		if ( ( e.metaKey || e.ctrlKey ) && e.key === 'z' && ! e.shiftKey ) {
+			e.preventDefault();
+			undo();
+		}
+		if ( ( e.metaKey || e.ctrlKey ) && ( e.key === 'y' || ( e.key === 'z' && e.shiftKey ) ) ) {
+			e.preventDefault();
+			redo();
+		}
+	} );
 } );
 
 const zones: Zone[] = [ 'header', 'body', 'footer' ];
@@ -196,6 +280,13 @@ function defaultProps( type: string ): Record< string, unknown > {
 				color: '#1a2332',
 				marginTop: 0,
 				marginBottom: 4,
+			};
+		case 'logo':
+			return {
+				align: 'left',
+				maxHeight: 56,
+				marginTop: 0,
+				marginBottom: 8,
 			};
 		case 'line_items':
 			return { showTax: true, marginTop: 8, marginBottom: 8 };
@@ -362,6 +453,7 @@ const icons: Record< string, string > = {
 	heading: 'H',
 	text: 'T',
 	field: '··',
+	logo: '▣',
 	line_items: '☰',
 	totals: 'Σ',
 	bank: '₳',
@@ -402,6 +494,21 @@ const icons: Record< string, string > = {
 					{{ t( 'modePreview', 'Print preview' ) }}
 				</button>
 			</div>
+			<button type="button" class="bw-studio__ghost" @click="undo" :disabled="historyIndex <= 0">
+				{{ t( 'undo', 'Undo' ) }}
+			</button>
+			<button type="button" class="bw-studio__ghost" @click="redo" :disabled="historyIndex >= history.length - 1">
+				{{ t( 'redo', 'Redo' ) }}
+			</button>
+			<label class="bw-studio__theme">
+				<span>{{ t( 'themes', 'Start from theme' ) }}</span>
+				<select @change="( e ) => { const v = ( e.target as HTMLSelectElement ).value; if ( v ) applyTheme( v ); ( e.target as HTMLSelectElement ).value = ''; }">
+					<option value="">—</option>
+					<option v-for="( meta, slug ) in ( ( config as any ).themes || {} )" :key="slug" :value="slug">
+						{{ meta.title || slug }}
+					</option>
+				</select>
+			</label>
 			<button type="button" class="bw-studio__ghost" @click="resetDefault">
 				{{ t( 'resetDefault', 'Reset default' ) }}
 			</button>
@@ -545,6 +652,18 @@ const icons: Record< string, string > = {
 									{{ sampleField( 'bank_block' ) || t( 'bankPlaceholder', 'Bank transfer details' ) }}
 								</div>
 							</template>
+							<template v-else-if="node.type === 'logo'">
+								<div
+									class="bw-studio__logo"
+									:style="{
+										textAlign: ( [ 'left', 'center', 'right' ].includes( String( node.props.align ) )
+											? String( node.props.align )
+											: 'left' ) as 'left' | 'center' | 'right',
+									}"
+								>
+									<span class="bw-studio__logo-ph">{{ t( 'logoPlaceholder', 'Logo (add in Settings)' ) }}</span>
+								</div>
+							</template>
 							<template v-else-if="node.type === 'signature'">
 								<div class="bw-studio__sign">
 									<div>
@@ -660,6 +779,30 @@ const icons: Record< string, string > = {
 						/>
 						{{ t( 'showLabel', 'Show label' ) }}
 					</label>
+
+					<template v-if="selected.node.type === 'logo'">
+						<label class="bw-f">
+							<span>{{ t( 'align', 'Alignment' ) }}</span>
+							<select
+								:value="String( selected.node.props.align || 'left' )"
+								@change="setProp( 'align', ( $event.target as HTMLSelectElement ).value )"
+							>
+								<option value="left">{{ t( 'left', 'Left' ) }}</option>
+								<option value="center">{{ t( 'center', 'Center' ) }}</option>
+								<option value="right">{{ t( 'right', 'Right' ) }}</option>
+							</select>
+						</label>
+						<label class="bw-f">
+							<span>{{ t( 'maxHeight', 'Max height (px)' ) }}</span>
+							<input
+								type="number"
+								min="24"
+								max="120"
+								:value="Number( selected.node.props.maxHeight || 56 )"
+								@input="setProp( 'maxHeight', Number( ( $event.target as HTMLInputElement ).value ) )"
+							/>
+						</label>
+					</template>
 
 					<label
 						v-if="selected.node.type === 'heading' || selected.node.type === 'text'"
@@ -878,6 +1021,30 @@ const icons: Record< string, string > = {
 .bw-studio__ghost:hover {
 	border-color: var(--accent);
 	color: var(--accent);
+}
+.bw-studio__ghost:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+.bw-studio__theme {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 12px;
+	color: var(--muted);
+}
+.bw-studio__theme select {
+	max-width: 11rem;
+	font-size: 12px;
+}
+.bw-studio__logo-ph {
+	display: inline-block;
+	padding: 10px 16px;
+	border: 1px dashed var(--line);
+	border-radius: 6px;
+	font-size: 11px;
+	color: var(--muted);
+	background: var(--soft);
 }
 .bw-studio__body {
 	display: grid;

@@ -246,6 +246,9 @@ class Payment_Destinations {
 	/**
 	 * HTML for invoice / template merge field `bank_block`.
 	 *
+	 * Structured label/value rows so print templates read like formal
+	 * Indonesian paperwork rather than a plain text dump.
+	 *
 	 * @return string Escaped HTML fragment.
 	 */
 	public static function block_html(): string {
@@ -264,22 +267,35 @@ class Payment_Destinations {
 				$title = $types[ $type ] ?? $type;
 			}
 
-			$lines = self::detail_lines( $row );
-			if ( array() === $lines && '' === trim( (string) ( $row['notes'] ?? '' ) ) ) {
+			$detail_rows = self::detail_rows( $row );
+			$notes       = trim( (string) ( $row['notes'] ?? '' ) );
+			if ( array() === $detail_rows && '' === $notes ) {
 				continue;
 			}
 
-			$inner  = '<div class="wp-bizwit-pay-method__title">' . esc_html( $title ) . '</div>';
-			$inner .= '<div class="wp-bizwit-pay-method__body">';
-			$inner .= implode( '<br />', array_map( 'esc_html', $lines ) );
-			$notes  = trim( (string) ( $row['notes'] ?? '' ) );
-			if ( '' !== $notes ) {
-				if ( array() !== $lines ) {
-					$inner .= '<br />';
-				}
-				$inner .= esc_html( $notes );
-			}
+			$inner  = '<div class="wp-bizwit-pay-method__head">';
+			$inner .= '<span class="wp-bizwit-pay-method__title">' . esc_html( $title ) . '</span>';
 			$inner .= '</div>';
+
+			if ( array() !== $detail_rows ) {
+				$inner .= '<dl class="wp-bizwit-pay-method__rows">';
+				foreach ( $detail_rows as $detail ) {
+					$kind    = (string) ( $detail['kind'] ?? '' );
+					$row_cls = 'wp-bizwit-pay-method__row';
+					if ( '' !== $kind ) {
+						$row_cls .= ' wp-bizwit-pay-method__row--' . sanitize_html_class( $kind );
+					}
+					$inner .= '<div class="' . esc_attr( $row_cls ) . '">';
+					$inner .= '<dt>' . esc_html( (string) $detail['label'] ) . '</dt>';
+					$inner .= '<dd>' . esc_html( (string) $detail['value'] ) . '</dd>';
+					$inner .= '</div>';
+				}
+				$inner .= '</dl>';
+			}
+
+			if ( '' !== $notes ) {
+				$inner .= '<div class="wp-bizwit-pay-method__notes">' . esc_html( $notes ) . '</div>';
+			}
 
 			$parts[] = '<div class="wp-bizwit-pay-method" data-type="' . esc_attr( $type ) . '">' . $inner . '</div>';
 		}
@@ -292,74 +308,88 @@ class Payment_Destinations {
 	}
 
 	/**
-	 * Human detail lines for one destination (unescaped).
+	 * Labelled detail rows for one destination (unescaped).
+	 *
+	 * Bank transfer omits branch and transfer code — name, account number and
+	 * holder are enough for Indonesian transfer forms and QRIS-less paperwork.
 	 *
 	 * @param array<string, mixed> $row Destination.
 	 *
-	 * @return string[]
+	 * @return array<int, array{label: string, value: string, kind?: string}>
 	 */
-	public static function detail_lines( array $row ): array {
-		$type  = (string) ( $row['type'] ?? '' );
-		$lines = array();
+	public static function detail_rows( array $row ): array {
+		$type = (string) ( $row['type'] ?? '' );
+		$out  = array();
 
 		switch ( $type ) {
 			case self::TYPE_BANK_TRANSFER:
-				$code = trim( (string) ( $row['bank_code'] ?? '' ) );
-				$name = trim( (string) ( $row['bank_name'] ?? '' ) );
-				if ( '' !== $code ) {
-					$name = Indonesia_Banks::display_name( $code, $name );
-				}
-				$br  = trim( (string) ( $row['branch'] ?? '' ) );
+				$name = self::resolved_bank_name(
+					(string) ( $row['bank_code'] ?? '' ),
+					(string) ( $row['bank_name'] ?? '' )
+				);
 				$no  = trim( (string) ( $row['account_no'] ?? '' ) );
 				$acc = trim( (string) ( $row['account_name'] ?? '' ) );
 				if ( '' !== $name ) {
-					$lines[] = '' !== $br ? $name . ' — ' . $br : $name;
+					$out[] = array(
+						'label' => __( 'Bank', 'wp-bizwit' ),
+						'value' => $name,
+						'kind'  => 'bank',
+					);
 				}
 				if ( '' !== $no ) {
-					$lines[] = '' !== $acc
-						? sprintf(
-							/* translators: 1: account number, 2: account holder name */
-							__( '%1$s a/n %2$s', 'wp-bizwit' ),
-							$no,
-							$acc
-						)
-						: $no;
-				} elseif ( '' !== $acc ) {
-					$lines[] = $acc;
+					$out[] = array(
+						'label' => __( 'Account number', 'wp-bizwit' ),
+						'value' => $no,
+						'kind'  => 'account',
+					);
+				}
+				if ( '' !== $acc ) {
+					$out[] = array(
+						'label' => __( 'Account holder', 'wp-bizwit' ),
+						'value' => $acc,
+						'kind'  => 'holder',
+					);
 				}
 				break;
 
 			case self::TYPE_VIRTUAL_ACCOUNT:
-				$va_code = trim( (string) ( $row['va_bank_code'] ?? '' ) );
-				$bank    = trim( (string) ( $row['va_bank'] ?? '' ) );
-				if ( '' !== $va_code ) {
-					$bank = Indonesia_Banks::display_name( $va_code, $bank );
-				}
+				$bank = self::resolved_bank_name(
+					(string) ( $row['va_bank_code'] ?? '' ),
+					(string) ( $row['va_bank'] ?? '' )
+				);
 				$va  = trim( (string) ( $row['va_number'] ?? '' ) );
 				$acc = trim( (string) ( $row['account_name'] ?? '' ) );
 				if ( '' !== $bank ) {
-					$lines[] = $bank;
+					$out[] = array(
+						'label' => __( 'Bank', 'wp-bizwit' ),
+						'value' => $bank,
+						'kind'  => 'bank',
+					);
 				}
 				if ( '' !== $va ) {
-					$lines[] = '' !== $acc
-						? sprintf(
-							/* translators: 1: VA number, 2: account name */
-							__( 'VA %1$s a/n %2$s', 'wp-bizwit' ),
-							$va,
-							$acc
-						)
-						: sprintf(
-							/* translators: %s: VA number */
-							__( 'VA %s', 'wp-bizwit' ),
-							$va
-						);
+					$out[] = array(
+						'label' => __( 'VA number', 'wp-bizwit' ),
+						'value' => $va,
+						'kind'  => 'account',
+					);
+				}
+				if ( '' !== $acc ) {
+					$out[] = array(
+						'label' => __( 'Account holder', 'wp-bizwit' ),
+						'value' => $acc,
+						'kind'  => 'holder',
+					);
 				}
 				break;
 
 			case self::TYPE_PAYMENT_LINK:
 				$url = trim( (string) ( $row['url'] ?? '' ) );
 				if ( '' !== $url ) {
-					$lines[] = $url;
+					$out[] = array(
+						'label' => __( 'Link', 'wp-bizwit' ),
+						'value' => $url,
+						'kind'  => 'link',
+					);
 				}
 				break;
 
@@ -369,26 +399,82 @@ class Payment_Destinations {
 			case self::TYPE_SHOPEEPAY:
 				$id = trim( (string) ( $row['ewallet_id'] ?? '' ) );
 				if ( '' !== $id ) {
-					$lines[] = $id;
+					$out[] = array(
+						'label' => __( 'Phone / ID', 'wp-bizwit' ),
+						'value' => $id,
+						'kind'  => 'account',
+					);
 				}
 				break;
 
 			case self::TYPE_OFFLINE:
 			case self::TYPE_OTHER:
 			default:
-				// Notes carry the detail; optional account fields still shown.
 				$no  = trim( (string) ( $row['account_no'] ?? '' ) );
 				$acc = trim( (string) ( $row['account_name'] ?? '' ) );
+				$url = trim( (string) ( $row['url'] ?? '' ) );
 				if ( '' !== $no ) {
-					$lines[] = $no;
+					$out[] = array(
+						'label' => __( 'Account number', 'wp-bizwit' ),
+						'value' => $no,
+						'kind'  => 'account',
+					);
 				}
 				if ( '' !== $acc ) {
-					$lines[] = $acc;
+					$out[] = array(
+						'label' => __( 'Account holder', 'wp-bizwit' ),
+						'value' => $acc,
+						'kind'  => 'holder',
+					);
+				}
+				if ( '' !== $url ) {
+					$out[] = array(
+						'label' => __( 'Link', 'wp-bizwit' ),
+						'value' => $url,
+						'kind'  => 'link',
+					);
 				}
 				break;
 		}
 
+		return $out;
+	}
+
+	/**
+	 * Human detail lines for one destination (unescaped).
+	 *
+	 * Values only — prefer {@see detail_rows()} for labelled document output.
+	 *
+	 * @param array<string, mixed> $row Destination.
+	 *
+	 * @return string[]
+	 */
+	public static function detail_lines( array $row ): array {
+		$lines = array();
+		foreach ( self::detail_rows( $row ) as $detail ) {
+			$lines[] = (string) $detail['value'];
+		}
 		return $lines;
+	}
+
+	/**
+	 * Official bank name from transfer code, without the code suffix.
+	 *
+	 * @param string $code          Catalogue transfer code.
+	 * @param string $fallback_name Free-text name.
+	 *
+	 * @return string
+	 */
+	private static function resolved_bank_name( string $code, string $fallback_name ): string {
+		$code = trim( $code );
+		$name = trim( $fallback_name );
+		if ( '' !== $code ) {
+			$found = Indonesia_Banks::find_by_code( $code );
+			if ( null !== $found ) {
+				return $found['name'];
+			}
+		}
+		return $name;
 	}
 
 	/**

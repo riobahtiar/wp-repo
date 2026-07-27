@@ -37,7 +37,9 @@ $currency        = (string) ( $data['ageing_currency'] ?? 'IDR' );
 
 <hr class="wp-header-end" />
 
-<p class="description">
+<div class="wp-bizwit-dashboard">
+
+<p class="description wp-bizwit-lede">
 	<?php esc_html_e( 'Client records, projects, invoices and payment receipts. Record keeping only — BizWit never processes or moves money.', 'wp-bizwit' ); ?>
 </p>
 
@@ -208,3 +210,5 @@ $currency        = (string) ( $data['ageing_currency'] ?? 'IDR' );
 // Mount root for the Vite dashboard island (resources/screens/DashboardApp.vue).
 ?>
 <div id="wp-bizwit-dashboard" class="wp-bizwit-dashboard-mount"></div>
+
+</div><!-- .wp-bizwit-dashboard -->

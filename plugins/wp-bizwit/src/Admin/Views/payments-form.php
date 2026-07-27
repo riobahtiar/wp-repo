@@ -7,6 +7,7 @@
  * @var array<string, mixed> $data View data.
  */
 
+use WP_BizWit\Admin\Searchable_Select;
 use WP_BizWit\Support\Invoice_Totals;
 use WP_BizWit\Support\Money;
 
@@ -118,28 +119,73 @@ if ( $is_edit && ! empty( $payment['id'] ) ) {
 		</p>
 	<?php endif; ?>
 
+	<div class="wp-bizwit-card">
+	<h2><?php esc_html_e( 'Payment details', 'wp-bizwit' ); ?></h2>
 	<table class="form-table" role="presentation">
 		<tr>
 			<th scope="row">
 				<label for="wp-bizwit-invoice"><?php esc_html_e( 'Invoice', 'wp-bizwit' ); ?></label>
 			</th>
 			<td>
-				<select name="invoice_id" id="wp-bizwit-invoice" required>
-					<option value="0"><?php esc_html_e( '— Select invoice —', 'wp-bizwit' ); ?></option>
-					<?php foreach ( (array) $data['invoice_options'] as $iid => $label ) : ?>
-						<option value="<?php echo esc_attr( (string) $iid ); ?>" <?php selected( $invoice_id, (int) $iid ); ?>>
-							<?php echo esc_html( (string) $label ); ?>
-						</option>
-					<?php endforeach; ?>
-					<?php
-					// Keep current invoice selectable even if paid (edit/history).
-					if ( $invoice_id > 0 && is_array( $invoice ) && ! isset( $data['invoice_options'][ $invoice_id ] ) ) :
-						?>
-						<option value="<?php echo esc_attr( (string) $invoice_id ); ?>" selected>
-							<?php echo esc_html( (string) $invoice['invoice_number'] ); ?>
-						</option>
-					<?php endif; ?>
-				</select>
+				<?php
+				$invoice_opts = is_array( $data['invoice_options'] ?? null ) ? $data['invoice_options'] : array();
+				// Keep current invoice selectable even if fully paid (edit/history).
+				$in_list = false;
+				foreach ( $invoice_opts as $opt ) {
+					if ( is_array( $opt ) && (string) ( $opt['value'] ?? '' ) === (string) $invoice_id ) {
+						$in_list = true;
+						break;
+					}
+				}
+				if ( $invoice_id > 0 && is_array( $invoice ) && ! $in_list ) {
+					$client_name = '';
+					if ( ! empty( $data['client_name'] ) ) {
+						$client_name = (string) $data['client_name'];
+					}
+					$num   = (string) $invoice['invoice_number'];
+					$label = '' !== $client_name
+						? sprintf(
+							/* translators: 1: invoice number, 2: client name */
+							__( '%1$s — %2$s', 'wp-bizwit' ),
+							$num,
+							$client_name
+						)
+						: $num;
+					array_unshift(
+						$invoice_opts,
+						array(
+							'value'  => (string) $invoice_id,
+							'label'  => $label,
+							'meta'   => '',
+							'search' => trim( $num . ' ' . $client_name ),
+						)
+					);
+				}
+
+				$invoice_select = Searchable_Select::render(
+					array(
+						'name'          => 'invoice_id',
+						'id'            => 'wp-bizwit-invoice',
+						'selected'      => $invoice_id > 0 ? (string) $invoice_id : '',
+						'variant'       => 'meta',
+						'size'          => 'md',
+						'class'         => 'regular-text',
+						'placeholder'   => __( 'Search by invoice number or client…', 'wp-bizwit' ),
+						'empty_label'   => __( '— Select invoice —', 'wp-bizwit' ),
+						'no_results'    => __( 'No invoices match — try another number or client name', 'wp-bizwit' ),
+						'required'      => true,
+						'max_options'   => 100,
+						'search_fields' => 'text,label,meta,name',
+						'plugins'       => 'dropdown_input',
+						'options'       => $invoice_opts,
+					)
+				);
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built/escaped by Searchable_Select.
+				echo $invoice_select;
+				?>
+				<p class="description">
+					<?php esc_html_e( 'Draft and void invoices are excluded. Paid invoices stay listed so you can record overpayments. Type to search by number or client.', 'wp-bizwit' ); ?>
+				</p>
 			</td>
 		</tr>
 		<tr>
@@ -208,6 +254,7 @@ if ( $is_edit && ! empty( $payment['id'] ) ) {
 			</td>
 		</tr>
 	</table>
+	</div><!-- .wp-bizwit-card -->
 
 	<p class="submit">
 		<button type="submit" class="button button-primary">

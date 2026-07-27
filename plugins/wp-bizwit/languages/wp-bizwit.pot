@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP BizWit 1.1.0\n"
+"Project-Id-Version: WP BizWit 1.2.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-bizwit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-27T00:09:51+00:00\n"
+"POT-Creation-Date: 2026-07-27T12:42:26+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-bizwit\n"
@@ -25,7 +25,7 @@ msgid "Business administration for Indonesian companies and UMKM: clients, proje
 msgstr ""
 
 #. translators: %s: Vite entry name (e.g. dashboard).
-#: src/Admin/Assets.php:537
+#: src/Admin/Assets.php:543
 #, php-format
 msgid "WP BizWit: Vite asset manifest is missing or incomplete (entry: %s). Run npm run build."
 msgstr ""
@@ -40,7 +40,7 @@ msgid "Clients"
 msgstr ""
 
 #: src/Admin/Menu.php:69
-#: src/Admin/Views/clients-form.php:375
+#: src/Admin/Views/clients-form.php:378
 #: src/Admin/Views/projects-list.php:32
 msgid "Projects"
 msgstr ""
@@ -139,7 +139,7 @@ msgstr ""
 #: src/Admin/Screens/Dashboard_Screen.php:193
 #: src/Admin/Tables/Clients_Table.php:199
 #: src/Admin/Views/clients-form.php:128
-#: src/Admin/Views/clients-form.php:357
+#: src/Admin/Views/clients-form.php:360
 #: src/Admin/Views/clients-list.php:36
 #: src/Admin/Views/dashboard.php:29
 msgid "Add client"
@@ -156,8 +156,8 @@ msgstr ""
 #: src/Admin/Screens/Dashboard_Screen.php:203
 #: src/Admin/Tables/Payments_Table.php:181
 #: src/Admin/Views/invoices-form.php:151
-#: src/Admin/Views/payments-form.php:56
-#: src/Admin/Views/payments-form.php:214
+#: src/Admin/Views/payments-form.php:57
+#: src/Admin/Views/payments-form.php:261
 #: src/Admin/Views/payments-list.php:32
 msgid "Record payment"
 msgstr ""
@@ -165,33 +165,37 @@ msgstr ""
 #: src/Admin/Screens/Dashboard_Screen.php:209
 #: src/Admin/Tables/Projects_Table.php:220
 #: src/Admin/Views/projects-form.php:77
-#: src/Admin/Views/projects-form.php:361
+#: src/Admin/Views/projects-form.php:364
 #: src/Admin/Views/projects-list.php:35
 msgid "Add project"
 msgstr ""
 
-#: src/Admin/Screens/Invoices_Screen.php:279
+#: src/Admin/Screens/Invoices_Screen.php:107
+msgid "Share link regenerated. The previous link no longer works."
+msgstr ""
+
+#: src/Admin/Screens/Invoices_Screen.php:323
 msgid "Invoice updated."
 msgstr ""
 
-#: src/Admin/Screens/Invoices_Screen.php:280
+#: src/Admin/Screens/Invoices_Screen.php:324
 msgid "Invoice created."
 msgstr ""
 
-#: src/Admin/Screens/Invoices_Screen.php:301
+#: src/Admin/Screens/Invoices_Screen.php:345
 msgid "Invoice deleted."
 msgstr ""
 
-#: src/Admin/Screens/Invoices_Screen.php:321
+#: src/Admin/Screens/Invoices_Screen.php:365
 msgid "Invoice voided. The number is kept for your records."
 msgstr ""
 
-#: src/Admin/Screens/Invoices_Screen.php:341
+#: src/Admin/Screens/Invoices_Screen.php:385
 msgid "Invoice marked as sent."
 msgstr ""
 
 #. translators: %d: number of invoices
-#: src/Admin/Screens/Invoices_Screen.php:393
+#: src/Admin/Screens/Invoices_Screen.php:437
 #, php-format
 msgid "%d invoice marked as sent."
 msgid_plural "%d invoices marked as sent."
@@ -199,7 +203,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of invoices
-#: src/Admin/Screens/Invoices_Screen.php:396
+#: src/Admin/Screens/Invoices_Screen.php:440
 #, php-format
 msgid "%d invoice voided."
 msgid_plural "%d invoices voided."
@@ -207,48 +211,48 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of invoices
-#: src/Admin/Screens/Invoices_Screen.php:399
+#: src/Admin/Screens/Invoices_Screen.php:443
 #, php-format
 msgid "%d draft deleted."
 msgid_plural "%d drafts deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Admin/Screens/Invoices_Screen.php:422
-#: src/Repositories/Invoice_Repository.php:266
-#: src/Repositories/Invoice_Repository.php:363
-#: src/Repositories/Invoice_Repository.php:442
-#: src/Repositories/Invoice_Repository.php:542
+#: src/Admin/Screens/Invoices_Screen.php:466
+#: src/Repositories/Invoice_Repository.php:373
+#: src/Repositories/Invoice_Repository.php:470
+#: src/Repositories/Invoice_Repository.php:549
+#: src/Repositories/Invoice_Repository.php:677
 msgid "That invoice no longer exists."
 msgstr ""
 
 #. translators: %s: overpaid amount
-#: src/Admin/Screens/Payments_Screen.php:265
+#: src/Admin/Screens/Payments_Screen.php:273
 #, php-format
 msgid "Payment saved. This invoice is overpaid by %s — treat the excess as credit."
 msgstr ""
 
-#: src/Admin/Screens/Payments_Screen.php:273
+#: src/Admin/Screens/Payments_Screen.php:281
 msgid "Payment updated."
 msgstr ""
 
-#: src/Admin/Screens/Payments_Screen.php:274
+#: src/Admin/Screens/Payments_Screen.php:282
 msgid "Payment recorded."
 msgstr ""
 
-#: src/Admin/Screens/Payments_Screen.php:297
+#: src/Admin/Screens/Payments_Screen.php:305
 msgid "Payment deleted. Invoice balance recalculated."
 msgstr ""
 
 #. translators: %d: number of payments
-#: src/Admin/Screens/Payments_Screen.php:337
+#: src/Admin/Screens/Payments_Screen.php:345
 #, php-format
 msgid "%d payment deleted."
 msgid_plural "%d payments deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Admin/Screens/Payments_Screen.php:362
+#: src/Admin/Screens/Payments_Screen.php:370
 #: src/Repositories/Payment_Repository.php:230
 #: src/Repositories/Payment_Repository.php:300
 msgid "That payment no longer exists."
@@ -267,7 +271,7 @@ msgid "Project deleted."
 msgstr ""
 
 #: src/Admin/Screens/Projects_Screen.php:310
-#: src/Repositories/Invoice_Repository.php:622
+#: src/Repositories/Invoice_Repository.php:757
 #: src/Repositories/Project_Repository.php:401
 #: src/Repositories/Project_Repository.php:460
 msgid "That project no longer exists."
@@ -305,41 +309,58 @@ msgstr ""
 msgid "Settings saved."
 msgstr ""
 
+#: src/Admin/Searchable_Select.php:49
+msgid "Both name and id are required for Searchable_Select::render()."
+msgstr ""
+
+#: src/Admin/Searchable_Select.php:67
+msgid "Search…"
+msgstr ""
+
+#: src/Admin/Searchable_Select.php:68
+msgid "Select…"
+msgstr ""
+
+#: src/Admin/Searchable_Select.php:74
+#: src/I18n/Script_Strings.php:22
+msgid "No matches found"
+msgstr ""
+
 #: src/Admin/Tables/Clients_Table.php:69
 #: src/Admin/Tables/Projects_Table.php:74
-#: src/Admin/Views/clients-form.php:145
-#: src/Admin/Views/clients-form.php:382
-#: src/Admin/Views/projects-form.php:130
-#: src/Admin/Views/projects-form.php:285
+#: src/Admin/Views/clients-form.php:147
+#: src/Admin/Views/clients-form.php:385
+#: src/Admin/Views/projects-form.php:132
+#: src/Admin/Views/projects-form.php:288
 msgid "Name"
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:70
-#: src/Admin/Views/clients-form.php:168
+#: src/Admin/Views/clients-form.php:170
 msgid "Type"
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:71
 #: src/Admin/Tables/Invoices_Table.php:78
 #: src/Admin/Tables/Projects_Table.php:76
-#: src/Admin/Views/clients-form.php:281
-#: src/Admin/Views/clients-form.php:383
-#: src/Admin/Views/dashboard.php:159
-#: src/Admin/Views/invoices-form.php:221
-#: src/Admin/Views/projects-form.php:148
+#: src/Admin/Views/clients-form.php:284
+#: src/Admin/Views/clients-form.php:386
+#: src/Admin/Views/dashboard.php:161
+#: src/Admin/Views/invoices-form.php:250
+#: src/Admin/Views/projects-form.php:150
 #: src/Documents/Merge_Fields.php:40
 msgid "Status"
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:72
-#: src/Admin/Views/clients-form.php:154
-#: src/Admin/Views/settings.php:84
+#: src/Admin/Views/clients-form.php:156
+#: src/Admin/Views/settings.php:110
 msgid "Email"
 msgstr ""
 
 #: src/Admin/Tables/Clients_Table.php:73
-#: src/Admin/Views/clients-form.php:161
-#: src/Admin/Views/settings.php:88
+#: src/Admin/Views/clients-form.php:163
+#: src/Admin/Views/settings.php:114
 msgid "Phone"
 msgstr ""
 
@@ -395,50 +416,50 @@ msgid "Open in WhatsApp"
 msgstr ""
 
 #: src/Admin/Tables/Invoices_Table.php:76
-#: src/Admin/Views/dashboard.php:157
+#: src/Admin/Views/dashboard.php:159
 msgid "Number"
 msgstr ""
 
 #: src/Admin/Tables/Invoices_Table.php:77
 #: src/Admin/Tables/Payments_Table.php:69
 #: src/Admin/Tables/Projects_Table.php:75
-#: src/Admin/Views/dashboard.php:158
-#: src/Admin/Views/invoices-form.php:190
-#: src/Admin/Views/projects-form.php:115
+#: src/Admin/Views/dashboard.php:160
+#: src/Admin/Views/invoices-form.php:219
+#: src/Admin/Views/projects-form.php:117
 msgid "Client"
 msgstr ""
 
 #: src/Admin/Tables/Invoices_Table.php:79
-#: src/Admin/Views/invoices-form.php:253
+#: src/Admin/Views/invoices-form.php:282
 #: src/Documents/Merge_Fields.php:38
 msgid "Issue date"
 msgstr ""
 
 #: src/Admin/Tables/Invoices_Table.php:80
-#: src/Admin/Views/invoices-form.php:261
+#: src/Admin/Views/invoices-form.php:290
 #: src/Documents/Merge_Fields.php:39
 msgid "Due date"
 msgstr ""
 
 #: src/Admin/Tables/Invoices_Table.php:81
-#: src/Admin/Views/dashboard.php:160
-#: src/Admin/Views/invoices-form.php:426
+#: src/Admin/Views/dashboard.php:162
+#: src/Admin/Views/invoices-form.php:456
 #: src/Admin/Views/invoices-print.php:286
 #: src/Documents/Document_Blocks.php:338
 #: src/Documents/Document_I18n.php:79
-#: src/Documents/Layout_Renderer.php:268
+#: src/Documents/Layout_Renderer.php:327
 #: src/Documents/Merge_Fields.php:50
-#: src/Documents/Template_Post_Type.php:358
-#: src/I18n/Script_Strings.php:41
+#: src/Documents/Template_Post_Type.php:365
+#: src/I18n/Script_Strings.php:45
 msgid "Total"
 msgstr ""
 
 #: src/Admin/Tables/Invoices_Table.php:82
-#: src/Admin/Views/invoices-form.php:445
+#: src/Admin/Views/invoices-form.php:475
 #: src/Admin/Views/invoices-print.php:305
 #: src/Documents/Document_Blocks.php:357
 #: src/Documents/Document_I18n.php:82
-#: src/Documents/Layout_Renderer.php:287
+#: src/Documents/Layout_Renderer.php:346
 #: src/Documents/Merge_Fields.php:53
 msgid "Balance"
 msgstr ""
@@ -489,10 +510,10 @@ msgstr ""
 
 #: src/Admin/Tables/Payments_Table.php:70
 #: src/Admin/Views/invoices-print.php:193
-#: src/Admin/Views/payments-form.php:124
+#: src/Admin/Views/payments-form.php:127
 #: src/Documents/Merge_Fields.php:96
 #: src/Documents/Template_Post_Type.php:235
-#: src/Documents/Template_Post_Type.php:553
+#: src/Documents/Template_Post_Type.php:573
 msgid "Invoice"
 msgstr ""
 
@@ -501,7 +522,8 @@ msgid "Date"
 msgstr ""
 
 #: src/Admin/Tables/Payments_Table.php:72
-#: src/Admin/Views/payments-form.php:181
+#: src/Admin/Views/payments-form.php:227
+#: src/Admin/Views/settings.php:190
 msgid "Method"
 msgstr ""
 
@@ -518,7 +540,7 @@ msgid "No payments recorded yet. When money arrives in the bank, record it here 
 msgstr ""
 
 #: src/Admin/Tables/Payments_Table.php:248
-#: src/Admin/Views/payments-form.php:65
+#: src/Admin/Views/payments-form.php:66
 msgid "Print receipt"
 msgstr ""
 
@@ -527,12 +549,12 @@ msgid "Delete this payment? The invoice balance will be recalculated."
 msgstr ""
 
 #: src/Admin/Tables/Projects_Table.php:77
-#: src/Admin/Views/clients-form.php:240
+#: src/Admin/Views/clients-form.php:243
 msgid "Billing"
 msgstr ""
 
 #: src/Admin/Tables/Projects_Table.php:78
-#: src/Admin/Views/projects-form.php:215
+#: src/Admin/Views/projects-form.php:218
 #: src/Localization/Indonesia.php:142
 msgid "Budget"
 msgstr ""
@@ -558,144 +580,148 @@ msgstr ""
 msgid "Back to clients"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:145
-#: src/Admin/Views/projects-form.php:115
-#: src/Admin/Views/projects-form.php:130
+#: src/Admin/Views/clients-form.php:143
+msgid "Client details"
+msgstr ""
+
+#: src/Admin/Views/clients-form.php:147
+#: src/Admin/Views/projects-form.php:117
+#: src/Admin/Views/projects-form.php:132
 msgid "required"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:150
+#: src/Admin/Views/clients-form.php:152
 msgid "A single name is fine. This is how the client appears throughout BizWit and on documents."
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:183
-#: src/Admin/Views/clients-form.php:189
-#: src/Admin/Views/settings.php:92
+#: src/Admin/Views/clients-form.php:186
+#: src/Admin/Views/clients-form.php:192
+#: src/Admin/Views/settings.php:118
 msgid "Address"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:184
+#: src/Admin/Views/clients-form.php:187
 msgid "Needed on printed invoices and receipts"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:193
+#: src/Admin/Views/clients-form.php:196
 msgid "Address line 2"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:202
+#: src/Admin/Views/clients-form.php:205
 msgid "City"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:206
+#: src/Admin/Views/clients-form.php:209
 msgid "State or province"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:210
+#: src/Admin/Views/clients-form.php:213
 msgid "— Select —"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:223
+#: src/Admin/Views/clients-form.php:226
 #: src/Localization/Indonesia.php:139
 msgid "Postal code"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:227
-#: src/Admin/Views/settings.php:427
+#: src/Admin/Views/clients-form.php:230
+#: src/Admin/Views/settings.php:529
 msgid "Country"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:231
+#: src/Admin/Views/clients-form.php:234
 msgid "Two-letter ISO 3166-1 country code."
 msgstr ""
 
 #. translators: 1: currency code, 2: number of days
-#: src/Admin/Views/clients-form.php:245
+#: src/Admin/Views/clients-form.php:248
 #, php-format
 msgid "Currently %1$s, %2$d days"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:255
-#: src/Admin/Views/invoices-form.php:269
-#: src/Admin/Views/projects-form.php:192
-#: src/Admin/Views/settings.php:96
+#: src/Admin/Views/clients-form.php:258
+#: src/Admin/Views/invoices-form.php:298
+#: src/Admin/Views/projects-form.php:195
+#: src/Admin/Views/settings.php:122
 #: src/Documents/Merge_Fields.php:45
 msgid "Currency"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:270
-#: src/Admin/Views/settings.php:105
+#: src/Admin/Views/clients-form.php:273
+#: src/Admin/Views/settings.php:131
 msgid "Payment terms"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:274
-#: src/Admin/Views/settings.php:107
+#: src/Admin/Views/clients-form.php:277
+#: src/Admin/Views/settings.php:133
 msgid "days"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:276
+#: src/Admin/Views/clients-form.php:279
 msgid "Used to calculate the due date on new invoices."
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:290
+#: src/Admin/Views/clients-form.php:293
 msgid "Archive a client instead of deleting it to keep its invoices and payments intact."
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:299
+#: src/Admin/Views/clients-form.php:302
 msgid "Legal and tax identity"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:300
+#: src/Admin/Views/clients-form.php:303
 msgid "Only needed if you invoice a registered entity"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:305
+#: src/Admin/Views/clients-form.php:308
 msgid "Legal name"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:309
+#: src/Admin/Views/clients-form.php:312
 msgid "Registered name, if it differs from the name above. Used on invoices."
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:314
+#: src/Admin/Views/clients-form.php:317
 msgid "Tax ID"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:324
-#: src/Admin/Views/settings.php:304
+#: src/Admin/Views/clients-form.php:327
+#: src/Admin/Views/settings.php:406
 msgid "Registration number"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:328
+#: src/Admin/Views/clients-form.php:331
 msgid "Company number, agency code or other official identifier."
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:342
-#: src/Admin/Views/invoices-form.php:465
+#: src/Admin/Views/clients-form.php:345
+#: src/Admin/Views/invoices-form.php:495
 #: src/Admin/Views/invoices-print.php:334
-#: src/Admin/Views/payments-form.php:204
+#: src/Admin/Views/payments-form.php:250
 #: src/Admin/Views/payments-print.php:235
-#: src/Admin/Views/projects-form.php:287
+#: src/Admin/Views/projects-form.php:290
 #: src/Documents/Merge_Fields.php:57
 msgid "Notes"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:343
+#: src/Admin/Views/clients-form.php:346
 msgid "Never shown to the client"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:348
+#: src/Admin/Views/clients-form.php:351
 msgid "Internal notes"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:357
+#: src/Admin/Views/clients-form.php:360
 msgid "Update client"
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:377
+#: src/Admin/Views/clients-form.php:380
 msgid "No projects yet for this client."
 msgstr ""
 
-#: src/Admin/Views/clients-form.php:414
+#: src/Admin/Views/clients-form.php:417
 msgid "Add project for this client"
 msgstr ""
 
@@ -711,94 +737,94 @@ msgstr ""
 msgid "That client may have been deleted by someone else, or the link may be out of date."
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:41
+#: src/Admin/Views/dashboard.php:43
 msgid "Client records, projects, invoices and payment receipts. Record keeping only — BizWit never processes or moves money."
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:47
+#: src/Admin/Views/dashboard.php:49
 msgid "Get set up"
 msgstr ""
 
 #. translators: %d: remaining steps
-#: src/Admin/Views/dashboard.php:53
+#: src/Admin/Views/dashboard.php:55
 #, php-format
 msgid "%d step remaining."
 msgid_plural "%d steps remaining."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Admin/Views/dashboard.php:78
+#: src/Admin/Views/dashboard.php:80
 msgid "Dismiss checklist"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:95
+#: src/Admin/Views/dashboard.php:97
 msgid "Quick actions"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:108
+#: src/Admin/Views/dashboard.php:110
 msgid "Receivables ageing"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:110
+#: src/Admin/Views/dashboard.php:112
 msgid "Unpaid invoice balances by how long past the due date."
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:113
+#: src/Admin/Views/dashboard.php:115
 msgid "Receivables ageing by overdue bucket"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:116
+#: src/Admin/Views/dashboard.php:118
 msgid "Bucket"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:117
+#: src/Admin/Views/dashboard.php:119
 #: src/Admin/Views/invoices-print.php:249
-#: src/Admin/Views/projects-form.php:286
+#: src/Admin/Views/projects-form.php:289
 #: src/Documents/Document_Blocks.php:272
 #: src/Documents/Document_I18n.php:77
-#: src/Documents/Layout_Renderer.php:195
-#: src/Documents/Template_Post_Type.php:356
-#: src/I18n/Script_Strings.php:39
+#: src/Documents/Layout_Renderer.php:254
+#: src/Documents/Template_Post_Type.php:363
+#: src/I18n/Script_Strings.php:43
 msgid "Amount"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:122
+#: src/Admin/Views/dashboard.php:124
 msgid "Current (not overdue)"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:126
+#: src/Admin/Views/dashboard.php:128
 msgid "1–30 days overdue"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:130
+#: src/Admin/Views/dashboard.php:132
 msgid "31–60 days overdue"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:134
+#: src/Admin/Views/dashboard.php:136
 msgid "61+ days overdue"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:140
+#: src/Admin/Views/dashboard.php:142
 msgid "Total outstanding"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:152
+#: src/Admin/Views/dashboard.php:154
 msgid "Recent invoices"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:154
+#: src/Admin/Views/dashboard.php:156
 msgid "Recently updated invoices"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:180
+#: src/Admin/Views/dashboard.php:182
 msgid "View all invoices"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:188
+#: src/Admin/Views/dashboard.php:190
 msgid "Recent activity"
 msgstr ""
 
-#: src/Admin/Views/dashboard.php:190
+#: src/Admin/Views/dashboard.php:192
 msgid "Who changed clients, projects, invoices and payments — kept for one year."
 msgstr ""
 
@@ -811,182 +837,206 @@ msgstr ""
 msgid "Back to invoices"
 msgstr ""
 
-#. translators: %s: invoice status label
 #: src/Admin/Views/invoices-form.php:164
+msgid "Share link"
+msgstr ""
+
+#: src/Admin/Views/invoices-form.php:166
+msgid "Anyone with this link can view the invoice (no login). Search engines and AI crawlers are blocked. Available when status is not Draft or Void."
+msgstr ""
+
+#: src/Admin/Views/invoices-form.php:170
+msgid "Copy link"
+msgstr ""
+
+#: src/Admin/Views/invoices-form.php:174
+msgid "Regenerate link"
+msgstr ""
+
+#: src/Admin/Views/invoices-form.php:178
+msgid "Open public view"
+msgstr ""
+
+#. translators: %s: invoice status label
+#: src/Admin/Views/invoices-form.php:191
 #, php-format
 msgid "This invoice is %s. Line items and amounts are locked. You can still update status, due date, notes and terms — or void the invoice."
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:181
+#: src/Admin/Views/invoices-form.php:208
 msgid "Number:"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:194
-#: src/Admin/Views/projects-form.php:119
+#: src/Admin/Views/invoices-form.php:215
+msgid "Invoice details"
+msgstr ""
+
+#: src/Admin/Views/invoices-form.php:223
+#: src/Admin/Views/projects-form.php:121
 msgid "— Select client —"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:205
+#: src/Admin/Views/invoices-form.php:234
 msgid "Project"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:209
+#: src/Admin/Views/invoices-form.php:238
 msgid "— No project —"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:216
+#: src/Admin/Views/invoices-form.php:245
 msgid "Optional. Link this invoice to a project when billing staged work."
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:285
-#: src/Documents/Template_Post_Type.php:405
+#: src/Admin/Views/invoices-form.php:315
+#: src/Documents/Template_Post_Type.php:425
 msgid "Line items"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:291
+#: src/Admin/Views/invoices-form.php:321
 #: src/Admin/Views/invoices-print.php:242
-#: src/Admin/Views/projects-form.php:346
-#: src/Admin/Views/projects-form.php:352
+#: src/Admin/Views/projects-form.php:349
+#: src/Admin/Views/projects-form.php:355
 #: src/Documents/Document_Blocks.php:265
 #: src/Documents/Document_I18n.php:73
-#: src/Documents/Layout_Renderer.php:188
-#: src/Documents/Template_Post_Type.php:352
-#: src/I18n/Script_Strings.php:35
+#: src/Documents/Layout_Renderer.php:247
+#: src/Documents/Template_Post_Type.php:359
+#: src/I18n/Script_Strings.php:39
 msgid "Description"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:292
+#: src/Admin/Views/invoices-form.php:322
 #: src/Admin/Views/invoices-print.php:243
 #: src/Documents/Document_Blocks.php:266
 #: src/Documents/Document_I18n.php:74
-#: src/Documents/Layout_Renderer.php:189
-#: src/Documents/Template_Post_Type.php:353
-#: src/I18n/Script_Strings.php:36
+#: src/Documents/Layout_Renderer.php:248
+#: src/Documents/Template_Post_Type.php:360
+#: src/I18n/Script_Strings.php:40
 msgid "Qty"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:293
+#: src/Admin/Views/invoices-form.php:323
 #: src/Admin/Views/invoices-print.php:244
 #: src/Documents/Document_Blocks.php:267
 #: src/Documents/Document_I18n.php:75
-#: src/Documents/Layout_Renderer.php:190
-#: src/Documents/Template_Post_Type.php:354
-#: src/I18n/Script_Strings.php:37
+#: src/Documents/Layout_Renderer.php:249
+#: src/Documents/Template_Post_Type.php:361
+#: src/I18n/Script_Strings.php:41
 msgid "Unit"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:294
+#: src/Admin/Views/invoices-form.php:324
 #: src/Admin/Views/invoices-print.php:245
 #: src/Documents/Document_Blocks.php:268
 #: src/Documents/Document_I18n.php:76
-#: src/Documents/Layout_Renderer.php:191
-#: src/Documents/Template_Post_Type.php:355
-#: src/I18n/Script_Strings.php:38
+#: src/Documents/Layout_Renderer.php:250
+#: src/Documents/Template_Post_Type.php:362
+#: src/I18n/Script_Strings.php:42
 msgid "Unit price"
 msgstr ""
 
 #. translators: %s: tax label e.g. PPN
-#: src/Admin/Views/invoices-form.php:301
+#: src/Admin/Views/invoices-form.php:331
 #, php-format
 msgid "%s %%"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:308
+#: src/Admin/Views/invoices-form.php:338
 msgid "Line total"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:332
+#: src/Admin/Views/invoices-form.php:362
 msgid "pcs"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:355
+#: src/Admin/Views/invoices-form.php:385
 msgid "Leave a description blank to drop that row. Save to recompute totals. Amounts use whole rupiah when the currency is IDR."
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:363
+#: src/Admin/Views/invoices-form.php:393
 #: src/Documents/Document_Blocks.php:301
-#: src/Documents/Layout_Renderer.php:228
-#: src/Documents/Template_Post_Type.php:409
+#: src/Documents/Layout_Renderer.php:287
+#: src/Documents/Template_Post_Type.php:429
 msgid "Totals"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:369
-#: src/Admin/Views/invoices-form.php:415
+#: src/Admin/Views/invoices-form.php:399
+#: src/Admin/Views/invoices-form.php:445
 #: src/Admin/Views/invoices-print.php:275
 #: src/Documents/Document_Blocks.php:327
 #: src/Documents/Document_I18n.php:80
-#: src/Documents/Layout_Renderer.php:257
+#: src/Documents/Layout_Renderer.php:316
 #: src/Documents/Merge_Fields.php:47
 msgid "Discount"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:373
+#: src/Admin/Views/invoices-form.php:403
 msgid "Header discount applied after line totals (before tax scaling)."
 msgstr ""
 
 #. translators: %s: withholding label e.g. PPh 23
-#: src/Admin/Views/invoices-form.php:386
+#: src/Admin/Views/invoices-form.php:416
 #, php-format
 msgid "Client withholds %s on this invoice"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:394
+#: src/Admin/Views/invoices-form.php:424
 msgid "Rate (%)"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:399
+#: src/Admin/Views/invoices-form.php:429
 msgid "Shown as gross, withheld and net expected so bank credits can be reconciled."
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:410
+#: src/Admin/Views/invoices-form.php:440
 #: src/Admin/Views/invoices-print.php:270
 #: src/Documents/Document_Blocks.php:322
 #: src/Documents/Document_I18n.php:78
-#: src/Documents/Layout_Renderer.php:252
+#: src/Documents/Layout_Renderer.php:311
 #: src/Documents/Merge_Fields.php:46
-#: src/Documents/Template_Post_Type.php:357
-#: src/I18n/Script_Strings.php:40
+#: src/Documents/Template_Post_Type.php:364
+#: src/I18n/Script_Strings.php:44
 msgid "Subtotal"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:435
+#: src/Admin/Views/invoices-form.php:465
 #: src/Admin/Views/invoices-print.php:295
 #: src/Documents/Document_Blocks.php:347
 #: src/Documents/Document_I18n.php:83
-#: src/Documents/Layout_Renderer.php:277
+#: src/Documents/Layout_Renderer.php:336
 #: src/Documents/Merge_Fields.php:56
 msgid "Net expected"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:441
+#: src/Admin/Views/invoices-form.php:471
 #: src/Admin/Views/invoices-print.php:301
 #: src/Documents/Document_Blocks.php:353
 #: src/Documents/Document_I18n.php:81
-#: src/Documents/Layout_Renderer.php:283
+#: src/Documents/Layout_Renderer.php:342
 #: src/Documents/Merge_Fields.php:52
 #: src/Support/Invoice_Status.php:36
 msgid "Paid"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:452
+#: src/Admin/Views/invoices-form.php:482
 msgid "Totals are calculated when you save."
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:459
+#: src/Admin/Views/invoices-form.php:489
 msgid "Notes and terms"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:473
+#: src/Admin/Views/invoices-form.php:503
 #: src/Admin/Views/invoices-print.php:341
 #: src/Documents/Merge_Fields.php:58
 msgid "Terms"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:485
+#: src/Admin/Views/invoices-form.php:515
 msgid "Update invoice"
 msgstr ""
 
-#: src/Admin/Views/invoices-form.php:485
+#: src/Admin/Views/invoices-form.php:515
 #: src/Admin/Views/projects-form.php:101
 msgid "Create invoice"
 msgstr ""
@@ -1023,7 +1073,7 @@ msgstr ""
 
 #. translators: %s: invoice number
 #: src/Admin/Views/invoices-print.php:64
-#: src/Documents/Document_Renderer.php:57
+#: src/Documents/Document_Renderer.php:75
 #, php-format
 msgid "Invoice %s"
 msgstr ""
@@ -1034,7 +1084,7 @@ msgid "Use your browser’s print dialog to save as PDF (A4)."
 msgstr ""
 
 #: src/Admin/Views/invoices-print.php:174
-#: src/Documents/Document_Renderer.php:78
+#: src/Documents/Document_Renderer.php:185
 msgid "VOID"
 msgstr ""
 
@@ -1046,7 +1096,7 @@ msgstr ""
 
 #: src/Admin/Views/invoices-print.php:215
 #: src/Documents/Document_I18n.php:71
-#: src/I18n/Script_Strings.php:33
+#: src/I18n/Script_Strings.php:37
 msgid "Bill to"
 msgstr ""
 
@@ -1060,16 +1110,17 @@ msgstr ""
 #: src/Admin/Views/invoices-print.php:317
 #: src/Admin/Views/payments-print.php:187
 #: src/Documents/Document_Blocks.php:368
-#: src/Documents/Layout_Renderer.php:298
-#: src/Documents/Template_Post_Type.php:365
+#: src/Documents/Layout_Renderer.php:357
+#: src/Documents/Template_Post_Type.php:372
 #, php-format
 msgid "In words: %s"
 msgstr ""
 
 #: src/Admin/Views/invoices-print.php:327
+#: src/Admin/Views/payments-form.php:123
 #: src/Documents/Document_I18n.php:72
-#: src/Documents/Layout_Renderer.php:326
-#: src/I18n/Script_Strings.php:34
+#: src/Documents/Layout_Renderer.php:385
+#: src/I18n/Script_Strings.php:38
 msgid "Payment details"
 msgstr ""
 
@@ -1080,9 +1131,9 @@ msgstr ""
 #: src/Admin/Views/invoices-print.php:354
 #: src/Documents/Document_Blocks.php:391
 #: src/Documents/Document_I18n.php:84
-#: src/Documents/Layout_Renderer.php:343
-#: src/Documents/Template_Post_Type.php:359
-#: src/I18n/Script_Strings.php:42
+#: src/Documents/Layout_Renderer.php:402
+#: src/Documents/Template_Post_Type.php:366
+#: src/I18n/Script_Strings.php:46
 #: resources/blocks/document-blocks.js:257
 msgid "Received by"
 msgstr ""
@@ -1090,8 +1141,8 @@ msgstr ""
 #. translators: %s: business name
 #: src/Admin/Views/invoices-print.php:361
 #: src/Documents/Document_Blocks.php:398
-#: src/Documents/Layout_Renderer.php:352
-#: src/Documents/Template_Post_Type.php:363
+#: src/Documents/Layout_Renderer.php:411
+#: src/Documents/Template_Post_Type.php:370
 #, php-format
 msgid "For %s"
 msgstr ""
@@ -1100,72 +1151,91 @@ msgstr ""
 #: src/Admin/Views/payments-print.php:271
 #: src/Documents/Document_Blocks.php:404
 #: src/Documents/Document_I18n.php:86
-#: src/Documents/Layout_Renderer.php:358
-#: src/Documents/Template_Post_Type.php:361
-#: src/I18n/Script_Strings.php:44
+#: src/Documents/Layout_Renderer.php:417
+#: src/Documents/Template_Post_Type.php:368
+#: src/I18n/Script_Strings.php:48
 #: resources/blocks/document-blocks.js:270
 msgid "Signature and company stamp"
 msgstr ""
 
-#: src/Admin/Views/payments-form.php:56
+#: src/Admin/Views/payments-form.php:57
 msgid "Edit payment"
 msgstr ""
 
-#: src/Admin/Views/payments-form.php:60
+#: src/Admin/Views/payments-form.php:61
 #: src/Admin/Views/payments-missing.php:19
 msgid "Back to payments"
 msgstr ""
 
 #. translators: 1: total, 2: paid, 3: balance
-#: src/Admin/Views/payments-form.php:85
+#: src/Admin/Views/payments-form.php:86
 #, php-format
 msgid "Total %1$s · Settled %2$s · Balance %3$s"
 msgstr ""
 
 #. translators: %s: credit amount
-#: src/Admin/Views/payments-form.php:98
+#: src/Admin/Views/payments-form.php:99
 #, php-format
 msgid "(overpaid by %s)"
 msgstr ""
 
-#: src/Admin/Views/payments-form.php:116
+#: src/Admin/Views/payments-form.php:117
 msgid "Receipt:"
 msgstr ""
 
-#: src/Admin/Views/payments-form.php:128
-msgid "— Select invoice —"
-msgstr ""
-
-#: src/Admin/Views/payments-form.php:147
-msgid "Date received"
-msgstr ""
-
-#: src/Admin/Views/payments-form.php:155
-msgid "Amount received (bank)"
-msgstr ""
-
-#: src/Admin/Views/payments-form.php:159
-msgid "What actually arrived in your account."
-msgstr ""
-
-#: src/Admin/Views/payments-form.php:170
-msgid "Withheld by the client and remitted on your behalf. Counts toward settling the invoice even though it is not in your bank."
+#. translators: 1: invoice number, 2: client name
+#: src/Admin/Views/payments-form.php:149
+#: src/Repositories/Invoice_Repository.php:649
+#, php-format
+msgid "%1$s — %2$s"
 msgstr ""
 
 #: src/Admin/Views/payments-form.php:173
+msgid "Search by invoice number or client…"
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:174
+msgid "— Select invoice —"
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:175
+msgid "No invoices match — try another number or client name"
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:187
+msgid "Draft and void invoices are excluded. Paid invoices stay listed so you can record overpayments. Type to search by number or client."
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:193
+msgid "Date received"
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:201
+msgid "Amount received (bank)"
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:205
+msgid "What actually arrived in your account."
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:216
+msgid "Withheld by the client and remitted on your behalf. Counts toward settling the invoice even though it is not in your bank."
+msgstr ""
+
+#: src/Admin/Views/payments-form.php:219
 msgid "Withholding certificate ref."
 msgstr ""
 
-#: src/Admin/Views/payments-form.php:195
+#: src/Admin/Views/payments-form.php:241
 #: src/Admin/Views/payments-print.php:209
 msgid "Reference"
 msgstr ""
 
-#: src/Admin/Views/payments-form.php:199
+#: src/Admin/Views/payments-form.php:245
 msgid "Bank transfer ref, VA number, or other reconciliation hint."
 msgstr ""
 
-#: src/Admin/Views/payments-form.php:214
+#: src/Admin/Views/payments-form.php:261
 msgid "Update payment"
 msgstr ""
 
@@ -1266,100 +1336,105 @@ msgstr ""
 msgid "Back to projects"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:139
+#: src/Admin/Views/projects-form.php:113
+msgid "Project details"
+msgstr ""
+
+#: src/Admin/Views/projects-form.php:141
+#: src/I18n/Script_Strings.php:21
 msgid "Code"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:144
+#: src/Admin/Views/projects-form.php:146
 msgid "Optional internal or contract reference."
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:161
+#: src/Admin/Views/projects-form.php:163
 #: src/Localization/Indonesia.php:143
 msgid "Billing type"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:177
+#: src/Admin/Views/projects-form.php:180
 msgid "Billing details"
 msgstr ""
 
 #. translators: 1: currency code, 2: billing type label
-#: src/Admin/Views/projects-form.php:182
+#: src/Admin/Views/projects-form.php:185
 #, php-format
 msgid "%1$s · %2$s"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:204
+#: src/Admin/Views/projects-form.php:207
 msgid "Rate"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:210
+#: src/Admin/Views/projects-form.php:213
 msgid "Hourly or retainer rate. Leave blank when not applicable."
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:227
+#: src/Admin/Views/projects-form.php:230
 msgid "Contract or agreed total for this project."
 msgstr ""
 
 #. translators: %s: example amount with grouping, e.g. 1.500.000
-#: src/Admin/Views/projects-form.php:234
+#: src/Admin/Views/projects-form.php:237
 #, php-format
 msgid " Example: %s"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:243
+#: src/Admin/Views/projects-form.php:246
 msgid "Retention %"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:248
+#: src/Admin/Views/projects-form.php:251
 msgid "Percentage held back until final acceptance. Applied when invoicing."
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:252
+#: src/Admin/Views/projects-form.php:255
 msgid "Start date"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:259
+#: src/Admin/Views/projects-form.php:262
 msgid "End date"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:271
+#: src/Admin/Views/projects-form.php:274
 msgid "Termin stages"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:272
+#: src/Admin/Views/projects-form.php:275
 msgid "Ordered billing stages that sum to the budget"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:278
+#: src/Admin/Views/projects-form.php:281
 msgid "Each row is one stage (uang muka, termin 1, retensi, …). Amounts use the project currency. Empty rows are ignored."
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:304
+#: src/Admin/Views/projects-form.php:307
 msgid "e.g. Termin 1 — DP"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:318
+#: src/Admin/Views/projects-form.php:321
 msgid "Optional"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:328
+#: src/Admin/Views/projects-form.php:331
 msgid "Fill the empty row to add a stage, then save. To add more, save and open the project again."
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:335
+#: src/Admin/Views/projects-form.php:338
 msgid "Allow termin total to differ from the project budget"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:337
+#: src/Admin/Views/projects-form.php:340
 msgid "When unchecked, the stage amounts must add up to the budget."
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:347
+#: src/Admin/Views/projects-form.php:350
 msgid "Internal notes about the work"
 msgstr ""
 
-#: src/Admin/Views/projects-form.php:361
+#: src/Admin/Views/projects-form.php:364
 msgid "Update project"
 msgstr ""
 
@@ -1375,292 +1450,342 @@ msgstr ""
 msgid "That project may have been deleted by someone else, or the link may be out of date."
 msgstr ""
 
-#: src/Admin/Views/settings.php:47
+#: src/Admin/Views/settings.php:48
 msgid "BizWit Settings"
 msgstr ""
 
-#: src/Admin/Views/settings.php:50
+#: src/Admin/Views/settings.php:51
 msgid "Fill in the basics below and you can start adding clients. Everything else is optional and grouped into the sections underneath."
 msgstr ""
 
-#: src/Admin/Views/settings.php:57
+#: src/Admin/Views/settings.php:59
 msgid "The basics"
 msgstr ""
 
-#: src/Admin/Views/settings.php:60
+#: src/Admin/Views/settings.php:62
 msgid "You are"
 msgstr ""
 
-#: src/Admin/Views/settings.php:63
+#: src/Admin/Views/settings.php:65
 msgid "Business type"
 msgstr ""
 
-#: src/Admin/Views/settings.php:73
+#: src/Admin/Views/settings.php:75
 msgid "Only changes which fields BizWit shows by default. Nothing is ever locked away — every field stays reachable in the sections below."
 msgstr ""
 
-#: src/Admin/Views/settings.php:77
+#: src/Admin/Views/settings.php:79
 msgid "Your name or business name"
 msgstr ""
 
-#: src/Admin/Views/settings.php:80
+#: src/Admin/Views/settings.php:82
 msgid "Appears at the top of every invoice and receipt you issue."
 msgstr ""
 
-#: src/Admin/Views/settings.php:120
+#: src/Admin/Views/settings.php:86
+#: src/Documents/Template_Post_Type.php:421
+msgid "Business logo"
+msgstr ""
+
+#: src/Admin/Views/settings.php:100
+msgid "Select logo"
+msgstr ""
+
+#: src/Admin/Views/settings.php:103
+msgid "Remove logo"
+msgstr ""
+
+#: src/Admin/Views/settings.php:106
+msgid "Shown on document templates that include a logo block. Prefer a PNG or SVG with a transparent background, at least 400px wide."
+msgstr ""
+
+#: src/Admin/Views/settings.php:147
 msgid "Where clients pay you"
 msgstr ""
 
-#: src/Admin/Views/settings.php:126
+#: src/Admin/Views/settings.php:153
 msgid "Shown on invoices so clients know how to pay: bank transfer, Virtual Account, DANA / GoPay / OVO, payment links, offline or other. BizWit only records these — it never processes payments."
 msgstr ""
 
-#: src/Admin/Views/settings.php:128
+#: src/Admin/Views/settings.php:155
 msgid "Shown on invoices so clients know where to send payment. You may add several methods."
 msgstr ""
 
-#: src/Admin/Views/settings.php:143
-msgid "Payment method type"
+#. translators: 1: number of banks, 2: project name
+#: src/Admin/Views/settings.php:163
+#, php-format
+msgid "Bank list: %1$d Indonesian banks with transfer codes (from %2$s)."
 msgstr ""
 
-#: src/Admin/Views/settings.php:154
+#: src/Admin/Views/settings.php:170
+msgid "Source"
+msgstr ""
+
+#: src/Admin/Views/settings.php:208
 msgid "Show on invoices"
 msgstr ""
 
-#: src/Admin/Views/settings.php:157
+#: src/Admin/Views/settings.php:211
 #: src/Documents/Template_Post_Type.php:328
 msgid "Remove"
 msgstr ""
 
-#: src/Admin/Views/settings.php:163
+#: src/Admin/Views/settings.php:220
 msgid "Label (optional)"
 msgstr ""
 
-#: src/Admin/Views/settings.php:164
+#: src/Admin/Views/settings.php:228
 msgid "e.g. BCA operasional"
 msgstr ""
 
-#: src/Admin/Views/settings.php:171
-#: src/Documents/Merge_Fields.php:59
-msgid "Bank name"
+#: src/Admin/Views/settings.php:233
+#: src/Support/Payment_Destinations.php:334
+#: src/Support/Payment_Destinations.php:364
+msgid "Bank"
 msgstr ""
 
-#: src/Admin/Views/settings.php:177
-msgid "Branch"
+#: src/Admin/Views/settings.php:253
+#: src/Admin/Views/settings.php:294
+msgid "Type the bank name"
 msgstr ""
 
-#: src/Admin/Views/settings.php:183
+#: src/Admin/Views/settings.php:255
+msgid "Custom bank name"
+msgstr ""
+
+#: src/Admin/Views/settings.php:262
+#: src/Support/Payment_Destinations.php:341
+#: src/Support/Payment_Destinations.php:418
 msgid "Account number"
 msgstr ""
 
-#: src/Admin/Views/settings.php:189
+#: src/Admin/Views/settings.php:268
+#: src/Support/Payment_Destinations.php:348
+#: src/Support/Payment_Destinations.php:378
+#: src/Support/Payment_Destinations.php:425
 msgid "Account holder"
 msgstr ""
 
-#: src/Admin/Views/settings.php:195
+#: src/Admin/Views/settings.php:274
 msgid "VA bank"
 msgstr ""
 
-#: src/Admin/Views/settings.php:201
+#: src/Admin/Views/settings.php:296
+msgid "Custom VA bank name"
+msgstr ""
+
+#: src/Admin/Views/settings.php:302
+#: src/Support/Payment_Destinations.php:371
 msgid "VA number"
 msgstr ""
 
-#: src/Admin/Views/settings.php:207
+#: src/Admin/Views/settings.php:308
 msgid "Phone / ID / QR code text"
 msgstr ""
 
-#: src/Admin/Views/settings.php:213
+#: src/Admin/Views/settings.php:314
 msgid "Payment link URL"
 msgstr ""
 
-#: src/Admin/Views/settings.php:219
+#: src/Admin/Views/settings.php:320
 msgid "Notes / instructions"
 msgstr ""
 
-#: src/Admin/Views/settings.php:220
+#: src/Admin/Views/settings.php:322
 msgid "e.g. Bayar di kasir, tunjukkan nomor faktur"
 msgstr ""
 
-#: src/Admin/Views/settings.php:230
+#: src/Admin/Views/settings.php:332
 msgid "Add another payment method"
 msgstr ""
 
-#: src/Admin/Views/settings.php:234
+#: src/Admin/Views/settings.php:335
 msgid "Leave a card empty to drop it on save. Disable “Show on invoices” to keep details without printing them."
 msgstr ""
 
-#: src/Admin/Views/settings.php:241
+#: src/Admin/Views/settings.php:343
 #: src/Documents/Merge_Fields.php:48
 #: src/Localization/Region.php:164
 msgid "Tax"
 msgstr ""
 
-#: src/Admin/Views/settings.php:246
+#: src/Admin/Views/settings.php:348
 msgid "Many freelancers and small businesses do not need any of this. Leave it switched off and BizWit will not show a single tax field anywhere."
 msgstr ""
 
-#: src/Admin/Views/settings.php:250
+#: src/Admin/Views/settings.php:352
 msgid "Tax status"
 msgstr ""
 
-#: src/Admin/Views/settings.php:250
+#: src/Admin/Views/settings.php:352
 msgid "Tax handling"
 msgstr ""
 
 #. translators: %s: formatted PKP registration threshold
-#: src/Admin/Views/settings.php:264
+#: src/Admin/Views/settings.php:366
 #, php-format
 msgid "Only a PKP may charge VAT (PPN). Businesses with annual turnover up to %s are usually not yet required to register as PKP."
 msgstr ""
 
-#: src/Admin/Views/settings.php:270
+#: src/Admin/Views/settings.php:372
 msgid "UMKM final income tax (0.5%) is calculated on your own turnover, never added to the client bill. BizWit will not put it on invoices."
 msgstr ""
 
-#: src/Admin/Views/settings.php:276
+#: src/Admin/Views/settings.php:378
 #: src/Documents/Merge_Fields.php:49
 msgid "Tax label"
 msgstr ""
 
-#: src/Admin/Views/settings.php:279
+#: src/Admin/Views/settings.php:381
 msgid "Default tax rate"
 msgstr ""
 
-#: src/Admin/Views/settings.php:281
+#: src/Admin/Views/settings.php:383
 msgid "What the tax is called on your documents and the rate applied to new invoice lines. Only used when your tax status allows you to charge tax. Confirm the current rate with your tax consultant."
 msgstr ""
 
-#: src/Admin/Views/settings.php:286
+#: src/Admin/Views/settings.php:388
 msgid "Withholding tax"
 msgstr ""
 
-#: src/Admin/Views/settings.php:289
+#: src/Admin/Views/settings.php:391
 msgid "Withholding rate"
 msgstr ""
 
-#: src/Admin/Views/settings.php:292
+#: src/Admin/Views/settings.php:394
 msgid "Corporate clients often withhold income tax (PPh 23) on services and remit it on your behalf, so the bank credit is smaller than the invoice total."
 msgstr ""
 
-#: src/Admin/Views/settings.php:294
+#: src/Admin/Views/settings.php:396
 msgid "Used when a client withholds tax at source and remits it on your behalf."
 msgstr ""
 
-#: src/Admin/Views/settings.php:300
+#: src/Admin/Views/settings.php:402
 msgid "Your tax ID"
 msgstr ""
 
-#: src/Admin/Views/settings.php:313
+#: src/Admin/Views/settings.php:415
 msgid "Document numbering"
 msgstr ""
 
-#: src/Admin/Views/settings.php:319
-#: src/Admin/Views/settings.php:322
+#: src/Admin/Views/settings.php:421
+#: src/Admin/Views/settings.php:424
 msgid "Number format"
 msgstr ""
 
 #. translators: %s: an example document number
-#: src/Admin/Views/settings.php:328
+#: src/Admin/Views/settings.php:430
 #, php-format
 msgid "Regional house style (%s)"
 msgstr ""
 
 #. translators: %s: an example document number
-#: src/Admin/Views/settings.php:339
+#: src/Admin/Views/settings.php:441
 #, php-format
 msgid "Simple prefixed sequence (%s)"
 msgstr ""
 
-#: src/Admin/Views/settings.php:347
+#: src/Admin/Views/settings.php:449
 msgid "The Indonesian format builds numbers as sequence/type/business code/roman month/year so the month and year are readable from the number itself."
 msgstr ""
 
-#: src/Admin/Views/settings.php:353
+#: src/Admin/Views/settings.php:455
 msgid "Business code"
 msgstr ""
 
-#: src/Admin/Views/settings.php:356
+#: src/Admin/Views/settings.php:458
 msgid "Short code for your business, used inside regional document numbers."
 msgstr ""
 
-#: src/Admin/Views/settings.php:360
+#: src/Admin/Views/settings.php:462
 msgid "Prefixes"
 msgstr ""
 
-#: src/Admin/Views/settings.php:362
+#: src/Admin/Views/settings.php:464
 msgid "Invoice prefix"
 msgstr ""
 
-#: src/Admin/Views/settings.php:363
+#: src/Admin/Views/settings.php:465
 msgid "Receipt prefix"
 msgstr ""
 
-#: src/Admin/Views/settings.php:364
+#: src/Admin/Views/settings.php:466
 msgid "Number padding"
 msgstr ""
 
-#: src/Admin/Views/settings.php:365
+#: src/Admin/Views/settings.php:467
 msgid "Invoice prefix, receipt prefix, and how many digits to pad the sequence to."
 msgstr ""
 
-#: src/Admin/Views/settings.php:370
+#: src/Admin/Views/settings.php:472
 msgid "Stamp duty (bea meterai)"
 msgstr ""
 
-#: src/Admin/Views/settings.php:375
+#: src/Admin/Views/settings.php:477
 msgid "Remind when stamp duty is needed on large-value receipts (kwitansi)"
 msgstr ""
 
 #. translators: 1: threshold amount, 2: duty amount
-#: src/Admin/Views/settings.php:381
+#: src/Admin/Views/settings.php:483
 #, php-format
 msgid "Under Law 10/2020, documents stating an amount above %1$s attract stamp duty of %2$s."
 msgstr ""
 
-#: src/Admin/Views/settings.php:397
+#: src/Admin/Views/settings.php:499
 msgid "Advanced"
 msgstr ""
 
-#: src/Admin/Views/settings.php:403
+#: src/Admin/Views/settings.php:505
 msgid "Business region"
 msgstr ""
 
 #. translators: %s: name of the active regional profile
-#: src/Admin/Views/settings.php:416
+#: src/Admin/Views/settings.php:518
 #, php-format
 msgid "Sets the terminology, tax fields, address fields and document numbering used throughout BizWit. Currently active: %s."
 msgstr ""
 
-#: src/Admin/Views/settings.php:422
+#: src/Admin/Views/settings.php:524
 msgid "This is separate from the interface language, which follows your WordPress site language."
 msgstr ""
 
-#: src/Admin/Views/settings.php:430
+#: src/Admin/Views/settings.php:532
 msgid "Two-letter ISO 3166-1 code. Used to detect your region automatically."
 msgstr ""
 
-#: src/Admin/Views/settings.php:435
+#: src/Admin/Views/settings.php:537
 msgid "Business scale"
 msgstr ""
 
-#: src/Admin/Views/settings.php:444
+#: src/Admin/Views/settings.php:546
 msgid "Classification under PP 7/2021, based on capital or annual sales."
 msgstr ""
 
-#: src/Admin/Views/settings.php:449
+#: src/Admin/Views/settings.php:551
 msgid "On uninstall"
 msgstr ""
 
-#: src/Admin/Views/settings.php:454
+#: src/Admin/Views/settings.php:556
 msgid "Delete all BizWit data when the plugin is uninstalled"
 msgstr ""
 
-#: src/Admin/Views/settings.php:457
+#: src/Admin/Views/settings.php:559
 msgid "Off by default. Deactivating the plugin never touches your data; only uninstalling with this box ticked does."
 msgstr ""
 
-#: src/Admin/Views/settings.php:466
+#: src/Admin/Views/settings.php:568
 msgid "Save settings"
+msgstr ""
+
+#. translators: %s: template style name
+#: src/Documents/Default_Templates.php:118
+#, php-format
+msgid "Invoice — %s"
+msgstr ""
+
+#: src/Documents/Default_Templates.php:121
+#: src/Documents/Default_Templates.php:124
+msgid "Default invoice"
 msgstr ""
 
 #: src/Documents/Document_Blocks.php:74
@@ -1706,56 +1831,132 @@ msgid "Signature block"
 msgstr ""
 
 #: src/Documents/Document_Blocks.php:249
-#: src/Documents/Layout_Renderer.php:171
+#: src/Documents/Layout_Renderer.php:230
 msgid "Line items table"
 msgstr ""
 
 #: src/Documents/Document_I18n.php:85
-#: src/Documents/Layout_Renderer.php:344
-#: src/Documents/Template_Post_Type.php:360
-#: src/I18n/Script_Strings.php:43
+#: src/Documents/Layout_Renderer.php:403
+#: src/Documents/Template_Post_Type.php:367
+#: src/I18n/Script_Strings.php:47
 msgid "Name & signature"
 msgstr ""
 
 #: src/Documents/Document_I18n.php:87
-#: src/Documents/Document_Renderer.php:163
-#: src/Documents/Document_Renderer.php:171
-#: src/I18n/Script_Strings.php:45
+#: src/Documents/Document_Renderer.php:270
+#: src/Documents/Document_Renderer.php:278
+#: src/I18n/Script_Strings.php:49
 msgid "package"
 msgstr ""
 
-#: src/Documents/Document_Renderer.php:73
+#: src/Documents/Document_Renderer.php:125
 msgid "Print / Save as PDF"
 msgstr ""
 
-#: src/Documents/Document_Renderer.php:74
+#: src/Documents/Document_Renderer.php:126
 msgid "Use A4 paper · browser print dialog"
 msgstr ""
 
-#: src/Documents/Document_Renderer.php:157
+#: src/Documents/Document_Renderer.php:127
+msgid "Active template"
+msgstr ""
+
+#. translators: %s: template name
+#: src/Documents/Document_Renderer.php:132
+#, php-format
+msgid "Template: %s"
+msgstr ""
+
+#: src/Documents/Document_Renderer.php:147
+msgid "Change template"
+msgstr ""
+
+#: src/Documents/Document_Renderer.php:156
+msgid "Apply"
+msgstr ""
+
+#: src/Documents/Document_Renderer.php:158
+#: src/Documents/Template_Post_Type.php:63
+msgid "Templates"
+msgstr ""
+
+#: src/Documents/Document_Renderer.php:264
 msgid "Payment within 30 days via bank transfer."
 msgstr ""
 
-#: src/Documents/Document_Renderer.php:161
+#: src/Documents/Document_Renderer.php:268
 #: src/Documents/Template_Post_Type.php:295
 msgid "Website redesign — discovery & UI"
 msgstr ""
 
-#: src/Documents/Document_Renderer.php:169
+#: src/Documents/Document_Renderer.php:276
 #: src/Documents/Template_Post_Type.php:296
 msgid "Implementation & training"
 msgstr ""
 
-#: src/Documents/Document_Renderer.php:178
+#: src/Documents/Document_Renderer.php:285
 msgid "PT Nusantara Maju"
 msgstr ""
 
-#: src/Documents/Document_Renderer.php:183
+#: src/Documents/Document_Renderer.php:290
 msgid "Corporate website 2026"
 msgstr ""
 
-#: src/Documents/Layout_Renderer.php:322
-#: src/Documents/Template_Post_Type.php:413
+#: src/Documents/Layout.php:61
+msgid "Classic"
+msgstr ""
+
+#: src/Documents/Layout.php:62
+msgid "Clean two-column header with balanced typography."
+msgstr ""
+
+#: src/Documents/Layout.php:65
+msgid "Modern"
+msgstr ""
+
+#: src/Documents/Layout.php:66
+msgid "Bold accent title, open spacing, minimal chrome."
+msgstr ""
+
+#: src/Documents/Layout.php:69
+msgid "Professional"
+msgstr ""
+
+#: src/Documents/Layout.php:70
+msgid "Corporate band header with logo and formal structure."
+msgstr ""
+
+#: src/Documents/Layout.php:73
+msgid "Minimal"
+msgstr ""
+
+#: src/Documents/Layout.php:74
+msgid "Sparse layout focused on line items and totals."
+msgstr ""
+
+#: src/Documents/Layout.php:77
+msgid "Elegant"
+msgstr ""
+
+#: src/Documents/Layout.php:78
+msgid "Serif-like hierarchy with centered brand mark."
+msgstr ""
+
+#: src/Documents/Layout.php:81
+msgid "Compact"
+msgstr ""
+
+#: src/Documents/Layout.php:82
+msgid "Dense A4 packing for long line lists."
+msgstr ""
+
+#: src/Documents/Layout_Renderer.php:134
+#: src/Documents/Template_Post_Type.php:352
+msgid "Logo (add in Settings)"
+msgstr ""
+
+#: src/Documents/Layout_Renderer.php:381
+#: src/Documents/Template_Post_Type.php:433
 msgid "Bank details"
 msgstr ""
 
@@ -1815,6 +2016,10 @@ msgstr ""
 msgid "Withholding label"
 msgstr ""
 
+#: src/Documents/Merge_Fields.php:59
+msgid "Bank name"
+msgstr ""
+
 #: src/Documents/Merge_Fields.php:60
 msgid "Bank account number"
 msgstr ""
@@ -1831,8 +2036,11 @@ msgstr ""
 msgid "Bank details (block)"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:63
-msgid "Templates"
+#: src/Documents/Public_Document.php:91
+#: src/Documents/Public_Document.php:99
+#: src/Documents/Public_Document.php:106
+#: src/Documents/Public_Document.php:138
+msgid "Document not found."
 msgstr ""
 
 #: src/Documents/Template_Post_Type.php:65
@@ -1873,17 +2081,17 @@ msgid "Document layout"
 msgstr ""
 
 #: src/Documents/Template_Post_Type.php:236
-#: src/Documents/Template_Post_Type.php:554
+#: src/Documents/Template_Post_Type.php:574
 msgid "Receipt / kwitansi"
 msgstr ""
 
 #: src/Documents/Template_Post_Type.php:237
-#: src/Documents/Template_Post_Type.php:555
+#: src/Documents/Template_Post_Type.php:575
 msgid "General"
 msgstr ""
 
 #: src/Documents/Template_Post_Type.php:241
-#: src/Documents/Template_Post_Type.php:533
+#: src/Documents/Template_Post_Type.php:553
 msgid "Document type"
 msgstr ""
 
@@ -1944,7 +2152,7 @@ msgid "Add components to this section"
 msgstr ""
 
 #: src/Documents/Template_Post_Type.php:333
-#: src/Documents/Template_Post_Type.php:401
+#: src/Documents/Template_Post_Type.php:417
 #: resources/blocks/document-blocks.js:142
 msgid "Data field"
 msgstr ""
@@ -1978,7 +2186,7 @@ msgid "Space below"
 msgstr ""
 
 #: src/Documents/Template_Post_Type.php:341
-#: src/Documents/Template_Post_Type.php:397
+#: src/Documents/Template_Post_Type.php:413
 msgid "Text"
 msgstr ""
 
@@ -2023,115 +2231,143 @@ msgstr ""
 msgid "Bank transfer details"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:393
+#: src/Documents/Template_Post_Type.php:353
+msgid "Max height (px)"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:354
+msgid "Undo"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:355
+msgid "Redo"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:356
+msgid "Apply theme"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:357
+msgid "Start from theme"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:358
+msgid "Page margin (mm)"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:409
 msgid "Heading"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:394
+#: src/Documents/Template_Post_Type.php:410
 msgid "Static title text"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:398
+#: src/Documents/Template_Post_Type.php:414
 msgid "Free paragraph"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:402
+#: src/Documents/Template_Post_Type.php:418
 msgid "Invoice / business value"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:406
-msgid "Invoice rows table"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:410
-msgid "Subtotal, tax, total"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:414
-msgid "Payment account block"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:417
-msgid "Signature"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:418
-msgid "Sign and stamp area"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:421
-msgid "Spacer"
-msgstr ""
-
 #: src/Documents/Template_Post_Type.php:422
-msgid "Vertical space"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:425
-msgid "Divider"
+msgid "Logo from Settings (hidden if empty)"
 msgstr ""
 
 #: src/Documents/Template_Post_Type.php:426
-msgid "Horizontal rule"
-msgstr ""
-
-#: src/Documents/Template_Post_Type.php:429
-msgid "Columns"
+msgid "Invoice rows table"
 msgstr ""
 
 #: src/Documents/Template_Post_Type.php:430
+msgid "Subtotal, tax, total"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:434
+msgid "Payment account block"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:437
+msgid "Signature"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:438
+msgid "Sign and stamp area"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:441
+msgid "Spacer"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:442
+msgid "Vertical space"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:445
+msgid "Divider"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:446
+msgid "Horizontal rule"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:449
+msgid "Columns"
+msgstr ""
+
+#: src/Documents/Template_Post_Type.php:450
 msgid "Two side-by-side columns"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:534
+#: src/Documents/Template_Post_Type.php:554
 msgid "Default"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:562
+#: src/Documents/Template_Post_Type.php:582
 msgid "Yes"
 msgstr ""
 
-#: src/Documents/Template_Post_Type.php:577
+#: src/Documents/Template_Post_Type.php:597
 msgid "Template name"
 msgstr ""
 
-#: src/I18n/Script_Strings.php:21
+#: src/I18n/Script_Strings.php:25
 msgid "System status"
 msgstr ""
 
-#: src/I18n/Script_Strings.php:22
+#: src/I18n/Script_Strings.php:26
 msgid "Vue pilot panel — verifies REST and money formatting."
 msgstr ""
 
-#: src/I18n/Script_Strings.php:23
+#: src/I18n/Script_Strings.php:27
 msgid "Loading…"
 msgstr ""
 
-#: src/I18n/Script_Strings.php:24
+#: src/I18n/Script_Strings.php:28
 msgid "Could not load status"
 msgstr ""
 
-#: src/I18n/Script_Strings.php:25
+#: src/I18n/Script_Strings.php:29
 msgid "Could not load system status."
 msgstr ""
 
-#: src/I18n/Script_Strings.php:26
+#: src/I18n/Script_Strings.php:30
 msgid "Please try again. Make sure you are still signed in and have a BizWit capability."
 msgstr ""
 
-#: src/I18n/Script_Strings.php:27
+#: src/I18n/Script_Strings.php:31
 msgid "Try again"
 msgstr ""
 
-#: src/I18n/Script_Strings.php:28
+#: src/I18n/Script_Strings.php:32
 msgid "Version"
 msgstr ""
 
-#: src/I18n/Script_Strings.php:29
+#: src/I18n/Script_Strings.php:33
 msgid "Region"
 msgstr ""
 
-#: src/I18n/Script_Strings.php:30
+#: src/I18n/Script_Strings.php:34
 msgid "Money format example"
 msgstr ""
 
@@ -2372,7 +2608,7 @@ msgstr ""
 
 #: src/Localization/Indonesia.php:309
 #: src/Localization/Region.php:129
-#: src/Support/Payment_Destinations.php:46
+#: src/Support/Payment_Destinations.php:48
 msgid "Bank transfer"
 msgstr ""
 
@@ -2390,7 +2626,7 @@ msgid "E-wallet (GoPay / OVO / DANA / ShopeePay)"
 msgstr ""
 
 #: src/Localization/Indonesia.php:313
-#: src/Support/Payment_Destinations.php:47
+#: src/Support/Payment_Destinations.php:49
 msgid "Virtual Account"
 msgstr ""
 
@@ -2412,7 +2648,7 @@ msgstr ""
 
 #: src/Localization/Indonesia.php:318
 #: src/Localization/Region.php:133
-#: src/Support/Payment_Destinations.php:54
+#: src/Support/Payment_Destinations.php:56
 msgid "Other"
 msgstr ""
 
@@ -2474,6 +2710,65 @@ msgstr ""
 
 #: src/Localization/Indonesia.php:569
 msgid "Please include the invoice number in the transfer reference."
+msgstr ""
+
+#: src/Localization/Indonesia_Banks.php:48
+msgid "State banks (BUMN)"
+msgstr ""
+
+#: src/Localization/Indonesia_Banks.php:49
+msgid "Private banks"
+msgstr ""
+
+#: src/Localization/Indonesia_Banks.php:50
+msgid "Regional banks (BPD)"
+msgstr ""
+
+#: src/Localization/Indonesia_Banks.php:51
+msgid "Islamic banks (syariah)"
+msgstr ""
+
+#: src/Localization/Indonesia_Banks.php:52
+msgid "Digital banks"
+msgstr ""
+
+#: src/Localization/Indonesia_Banks.php:53
+msgid "Foreign banks"
+msgstr ""
+
+#: src/Localization/Indonesia_Banks.php:54
+msgid "E-money / other"
+msgstr ""
+
+#: src/Localization/Indonesia_Banks.php:55
+msgid "Rural banks (BPR)"
+msgstr ""
+
+#. translators: 1: bank name, 2: 3-digit transfer code
+#: src/Localization/Indonesia_Banks.php:228
+#, php-format
+msgid "%1$s (code %2$s)"
+msgstr ""
+
+#: src/Localization/Indonesia_Banks.php:297
+msgid "Not in list"
+msgstr ""
+
+#: src/Localization/Indonesia_Banks.php:301
+#: src/Localization/Indonesia_Banks.php:303
+msgid "Other bank — type the name below"
+msgstr ""
+
+#: src/Localization/Indonesia_Banks.php:316
+msgid "Search by bank name or transfer code…"
+msgstr ""
+
+#: src/Localization/Indonesia_Banks.php:317
+msgid "Select a bank…"
+msgstr ""
+
+#: src/Localization/Indonesia_Banks.php:318
+msgid "No banks match — try another name or code"
 msgstr ""
 
 #: src/Localization/Region.php:131
@@ -2611,64 +2906,58 @@ msgstr ""
 msgid "tax ID"
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:207
-#: src/Repositories/Invoice_Repository.php:302
-#: src/Repositories/Invoice_Repository.php:391
+#: src/Repositories/Invoice_Repository.php:314
+#: src/Repositories/Invoice_Repository.php:409
+#: src/Repositories/Invoice_Repository.php:498
 msgid "Could not allocate an invoice number. Please try again."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:223
+#: src/Repositories/Invoice_Repository.php:330
 msgid "The invoice could not be saved."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:272
+#: src/Repositories/Invoice_Repository.php:379
 msgid "A void invoice cannot be changed."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:310
-#: src/Repositories/Invoice_Repository.php:371
-#: src/Repositories/Invoice_Repository.php:695
+#: src/Repositories/Invoice_Repository.php:417
+#: src/Repositories/Invoice_Repository.php:478
+#: src/Repositories/Invoice_Repository.php:830
 msgid "That status change is not allowed for this invoice."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:323
-#: src/Repositories/Invoice_Repository.php:400
-#: src/Repositories/Invoice_Repository.php:467
-#: src/Repositories/Invoice_Repository.php:713
+#: src/Repositories/Invoice_Repository.php:430
+#: src/Repositories/Invoice_Repository.php:507
+#: src/Repositories/Invoice_Repository.php:574
+#: src/Repositories/Invoice_Repository.php:848
 msgid "The invoice could not be updated."
 msgstr ""
 
-#. translators: 1: invoice number, 2: client name, 3: balance formatted
-#: src/Repositories/Invoice_Repository.php:520
-#, php-format
-msgid "%1$s — %2$s (balance %3$s)"
-msgstr ""
-
-#: src/Repositories/Invoice_Repository.php:548
+#: src/Repositories/Invoice_Repository.php:683
 msgid "Only draft invoices can be deleted. Void a sent invoice to keep the number for your records."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:556
+#: src/Repositories/Invoice_Repository.php:691
 msgid "This invoice has payment records and cannot be deleted."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:565
+#: src/Repositories/Invoice_Repository.php:700
 msgid "The invoice could not be deleted."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:765
+#: src/Repositories/Invoice_Repository.php:900
 msgid "Add at least one line item with a description."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:800
+#: src/Repositories/Invoice_Repository.php:935
 msgid "Please choose a client for this invoice."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:806
+#: src/Repositories/Invoice_Repository.php:941
 msgid "That project does not belong to the selected client."
 msgstr ""
 
-#: src/Repositories/Invoice_Repository.php:916
+#: src/Repositories/Invoice_Repository.php:1051
 msgid "The invoice lines could not be saved."
 msgstr ""
 
@@ -2810,73 +3099,64 @@ msgstr ""
 msgid "Review the invoice document template"
 msgstr ""
 
-#: src/Support/Payment_Destinations.php:48
+#: src/Support/Payment_Destinations.php:50
 msgid "Payment link"
 msgstr ""
 
-#: src/Support/Payment_Destinations.php:49
+#: src/Support/Payment_Destinations.php:51
 msgid "DANA"
 msgstr ""
 
-#: src/Support/Payment_Destinations.php:50
+#: src/Support/Payment_Destinations.php:52
 msgid "GoPay"
 msgstr ""
 
-#: src/Support/Payment_Destinations.php:51
+#: src/Support/Payment_Destinations.php:53
 msgid "OVO"
 msgstr ""
 
-#: src/Support/Payment_Destinations.php:52
+#: src/Support/Payment_Destinations.php:54
 msgid "ShopeePay"
 msgstr ""
 
-#: src/Support/Payment_Destinations.php:53
+#: src/Support/Payment_Destinations.php:55
 msgid "Offline payment"
 msgstr ""
 
-#: src/Support/Payment_Destinations.php:144
+#: src/Support/Payment_Destinations.php:148
 msgid "Not set yet"
 msgstr ""
 
 #. translators: 1: number of payment methods, 2: first method label
-#: src/Support/Payment_Destinations.php:162
+#: src/Support/Payment_Destinations.php:166
 #, php-format
 msgid "%1$d method · %2$s"
 msgid_plural "%1$d methods · %2$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#. translators: 1: account number, 2: account holder name
-#: src/Support/Payment_Destinations.php:314
-#, php-format
-msgid "%1$s a/n %2$s"
+#: src/Support/Payment_Destinations.php:389
+#: src/Support/Payment_Destinations.php:432
+msgid "Link"
 msgstr ""
 
-#. translators: 1: VA number, 2: account name
-#: src/Support/Payment_Destinations.php:335
-#, php-format
-msgid "VA %1$s a/n %2$s"
+#: src/Support/Payment_Destinations.php:403
+msgid "Phone / ID"
 msgstr ""
 
-#. translators: %s: VA number
-#: src/Support/Payment_Destinations.php:341
-#, php-format
-msgid "VA %s"
-msgstr ""
-
-#: src/Support/Settings.php:186
+#: src/Support/Settings.php:188
 msgid "Individual — freelancer, home business, professional"
 msgstr ""
 
-#: src/Support/Settings.php:187
+#: src/Support/Settings.php:189
 msgid "Registered entity — PT, CV, UD, koperasi, yayasan"
 msgstr ""
 
-#: src/Support/Settings.php:251
+#: src/Support/Settings.php:278
 msgid "Not handling tax"
 msgstr ""
 
-#: src/Support/Settings.php:257
+#: src/Support/Settings.php:284
 msgid "Tax enabled"
 msgstr ""
 

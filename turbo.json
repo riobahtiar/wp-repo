@@ -58,6 +58,14 @@
     "check:bundle-size": {
       "dependsOn": ["build"],
       "outputs": []
+    },
+    "check:i18n": {
+      "inputs": [
+        "languages/wp-bizwit-id_ID.po",
+        "scripts/check-id-translations.mjs",
+        "package.json"
+      ],
+      "outputs": []
     }
   }
 }

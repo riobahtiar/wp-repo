@@ -11,6 +11,43 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.2.0] — 2026-07-27
+
+### Added
+- Dashboard full-width aligned tiles/panels for large desktops.
+- Form cards and consistent spacing on add/edit screens.
+- Business logo in Settings + **logo** document component.
+- Template gallery themes: Classic, Modern, Professional, Minimal, Elegant, Compact.
+- Template builder: undo/redo, apply theme, logo block.
+- Invoice print: template preview dropdown.
+- Public share link for non-draft invoices: `/biz-doc/public/{token}/`
+  (noindex, nofollow, noai, no-referrer). Schema 1.6.0 `public_token`.
+- `i18n:check-id` / monorepo `check:i18n` gate.
+
+### Fixed
+- Searchable select multi `name[]`, doubled Indonesian msgstr, bank sync order,
+  `ts-dropdown` protection, faktur picker help copy.
+
+## [1.1.3] — 2026-07-27
+
+Reusable searchable select component (`bw-ss`) extracted from the bank picker.
+
+### Added
+- **`Admin\Searchable_Select`** PHP markup helper — variants (`default` /
+  `meta` / `bank`), sizes (`sm` / `md` / `lg`), multi-select, plugins, custom
+  classes, and option groups.
+- **`resources/admin/searchable-select.ts`** — shared Tom Select enhancer with
+  rich options (`renderOption` / `renderItem`, lifecycle hooks, `tomSelect`
+  escape hatch) and `window.wpBizwitSearchableSelect` API.
+- Docs: searchable select section in [frontend-architecture.md](docs/frontend-architecture.md).
+
+### Changed
+- Bank catalogue `Indonesia_Banks::render_select()` builds on the shared helper.
+- Payment destinations and admin boot wire through the shared module (no
+  duplicated Tom Select setup in `main.ts`).
+- CSS renamed to `.bw-ss-*` BEM (control + body-portaled dropdown).
+- Version **1.1.3**.
+
 ## [1.1.2] — 2026-07-27
 
 Searchable bank select (Tom Select) for payment destinations.

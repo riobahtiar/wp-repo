@@ -25,7 +25,9 @@ class Layout_Renderer {
 	 */
 	public function render( array $layout ): string {
 		$layout = Layout::sanitize( $layout );
-		$margin = (int) $layout['page']['marginMm'];
+		$page   = is_array( $layout['page'] ?? null ) ? $layout['page'] : array();
+		$margin = (int) ( $page['marginMm'] ?? 16 );
+		$theme  = sanitize_key( (string) ( $page['theme'] ?? 'classic' ) );
 		$parts  = array();
 
 		foreach ( array( 'header', 'body', 'footer' ) as $zone ) {
@@ -38,9 +40,31 @@ class Layout_Renderer {
 			);
 		}
 
-		return sprintf(
-			'<div class="wp-bizwit-layout" style="--bw-page-margin:%dmm">%s</div>',
+		// Theme tokens → CSS variables (inherit into tables, bank block, totals).
+		$style = sprintf(
+			'--bw-page-margin:%1$dmm;' .
+			'--doc-accent:%2$s;--doc-ink:%3$s;--doc-muted:%4$s;--doc-soft:%5$s;' .
+			'--doc-total-bg:%6$s;--doc-line:%7$s;--doc-line-strong:%3$s;' .
+			'font-family:%8$s;color:var(--doc-ink);',
 			$margin,
+			esc_attr( (string) ( $page['accent'] ?? '#1e4d6b' ) ),
+			esc_attr( (string) ( $page['ink'] ?? '#1a2332' ) ),
+			esc_attr( (string) ( $page['muted'] ?? '#5c6570' ) ),
+			esc_attr( (string) ( $page['soft'] ?? '#f4f7f9' ) ),
+			esc_attr( (string) ( $page['totalBg'] ?? '#f0f5f8' ) ),
+			esc_attr( (string) ( $page['line'] ?? '#e2e6ea' ) ),
+			esc_attr( (string) ( $page['fontFamily'] ?? 'inherit' ) )
+		);
+
+		$table_style  = sanitize_key( (string) ( $page['tableStyle'] ?? 'filled' ) );
+		$header_style = sanitize_key( (string) ( $page['headerStyle'] ?? 'rule' ) );
+
+		return sprintf(
+			'<div class="wp-bizwit-layout wp-bizwit-layout--%1$s wp-bizwit-table--%2$s wp-bizwit-header--%3$s" style="%4$s" data-theme="%1$s">%5$s</div>',
+			esc_attr( $theme ),
+			esc_attr( $table_style ),
+			esc_attr( $header_style ),
+			$style,
 			implode( '', $parts )
 		);
 	}
@@ -75,6 +99,7 @@ class Layout_Renderer {
 			'heading'    => $this->render_heading( $props ),
 			'text'       => $this->render_text( $props ),
 			'field'      => $this->render_field( $props ),
+			'logo'       => $this->render_logo( $props ),
 			'line_items' => $this->render_line_items( $props ),
 			'totals'     => $this->render_totals( $props ),
 			'bank'       => $this->render_bank( $props ),
@@ -84,6 +109,40 @@ class Layout_Renderer {
 			'columns'    => $this->render_columns( $props ),
 			default      => '',
 		};
+	}
+
+	/**
+	 * Business logo from settings (empty when none uploaded).
+	 *
+	 * @param array<string, mixed> $props Props.
+	 */
+	private function render_logo( array $props ): string {
+		$max_h = max( 24, min( 120, (int) ( $props['maxHeight'] ?? 56 ) ) );
+		$align = (string) ( $props['align'] ?? 'left' );
+		if ( ! in_array( $align, array( 'left', 'center', 'right' ), true ) ) {
+			$align = 'left';
+		}
+		$margin = $this->margin_style( $props );
+		$style  = $margin . ';text-align:' . $align;
+
+		$url = Settings::business_logo_url( 'medium' );
+		if ( '' === $url ) {
+			if ( ! Document_Context::is_rendering() ) {
+				return sprintf(
+					'<div class="wp-bizwit-c-logo wp-bizwit-c-preview" style="%s">%s</div>',
+					esc_attr( $style ),
+					esc_html__( 'Logo (add in Settings)', 'wp-bizwit' )
+				);
+			}
+			return '';
+		}
+
+		return sprintf(
+			'<div class="wp-bizwit-c-logo" style="%1$s"><img src="%2$s" alt="" style="max-height:%3$dpx;max-width:100%%;width:auto;height:auto;" /></div>',
+			esc_attr( $style ),
+			esc_url( $url ),
+			$max_h
+		);
 	}
 
 	/**
@@ -323,7 +382,7 @@ class Layout_Renderer {
 		}
 		$title = '';
 		if ( ! empty( $props['showTitle'] ) ) {
-			$title = '<div class="wp-bizwit-field-label">' . esc_html__( 'Payment details', 'wp-bizwit' ) . '</div>';
+			$title = '<div class="wp-bizwit-c-bank__title">' . esc_html__( 'Payment details', 'wp-bizwit' ) . '</div>';
 		}
 		return '<div class="wp-bizwit-c-bank" style="' . esc_attr( $margin ) . '">' . $title . $block . '</div>';
 	}

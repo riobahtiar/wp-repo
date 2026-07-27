@@ -147,6 +147,11 @@ class PaymentDestinationsTest extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'DANA', $html );
 		$this->assertStringContainsString( '0812', $html );
 		$this->assertStringNotContainsString( 'Kasir', $html );
+		$this->assertStringContainsString( 'wp-bizwit-pay-method__rows', $html );
+		$this->assertStringContainsString( 'wp-bizwit-pay-method__row--account', $html );
+		// Bank transfer documents never surface transfer code or branch.
+		$this->assertStringNotContainsString( 'code 014', $html );
+		$this->assertStringNotContainsString( 'Sudirman', $html );
 	}
 
 	/**

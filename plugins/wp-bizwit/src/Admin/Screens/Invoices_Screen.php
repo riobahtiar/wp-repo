@@ -11,6 +11,8 @@ use WP_Error;
 use WP_BizWit\Admin\Notices;
 use WP_BizWit\Admin\Tables\Invoices_Table;
 use WP_BizWit\Documents\Document_Renderer;
+use WP_BizWit\Documents\Public_Document;
+use WP_BizWit\Documents\Template_Post_Type;
 use WP_BizWit\Localization\Regions;
 use WP_BizWit\Repositories\Client_Repository;
 use WP_BizWit\Repositories\Invoice_Repository;
@@ -97,6 +99,25 @@ class Invoices_Screen extends Screen {
 		}
 
 		// phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- Verified per handler.
+		if ( isset( $_GET['action'] ) && 'share_rotate' === $_GET['action'] && isset( $_GET['invoice'] ) ) {
+			check_admin_referer( 'wp_bizwit_share_rotate_' . absint( $_GET['invoice'] ) );
+			$id = absint( $_GET['invoice'] );
+			if ( $id > 0 ) {
+				$this->invoices->rotate_public_token( $id );
+				Notices::add( __( 'Share link regenerated. The previous link no longer works.', 'wp-bizwit' ), 'success' );
+			}
+			wp_safe_redirect(
+				$this->page_url(
+					self::SLUG,
+					array(
+						'action'  => 'edit',
+						'invoice' => $id,
+					)
+				)
+			);
+			exit;
+		}
+
 		if ( isset( $_POST['wp_bizwit_invoice_form'] ) ) {
 			$this->handle_save();
 
@@ -217,7 +238,28 @@ class Invoices_Screen extends Screen {
 			? $this->projects->options_for_client( $client_id_for_projects )
 			: array();
 
-		$region = Regions::current();
+		$region    = Regions::current();
+		$share_url = '';
+		$share_rotate_url = '';
+		if ( 'edit' === $action && ! empty( $invoice['id'] ) ) {
+			$status = (string) ( $invoice['status'] ?? '' );
+			if ( Invoice_Status::DRAFT !== $status && Invoice_Status::VOID !== $status ) {
+				$token = $this->invoices->ensure_public_token( (int) $invoice['id'] );
+				if ( '' !== $token ) {
+					$share_url = Public_Document::url_for_token( $token );
+					$share_rotate_url = wp_nonce_url(
+						$this->page_url(
+							self::SLUG,
+							array(
+								'action'  => 'share_rotate',
+								'invoice' => (int) $invoice['id'],
+							)
+						),
+						'wp_bizwit_share_rotate_' . (int) $invoice['id']
+					);
+				}
+			}
+		}
 
 		$this->view(
 			'invoices-form',
@@ -227,6 +269,8 @@ class Invoices_Screen extends Screen {
 				'is_edit'           => 'edit' === $action,
 				'locked'            => $locked,
 				'region'            => $region,
+				'share_url'         => $share_url,
+				'share_rotate_url'  => $share_rotate_url,
 				'client_options'    => $this->clients->options( false ),
 				'project_options'   => $project_options,
 				'statuses'          => Invoice_Status::labels(),
@@ -433,12 +477,35 @@ class Invoices_Screen extends Screen {
 		status_header( 200 );
 		nocache_headers();
 
-		// Prefer Gutenberg document template (labels follow site language).
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only template switcher.
+		$template_id = absint( $_GET['template'] ?? 0 );
+
+		$template_options = array();
+		$templates        = get_posts(
+			array(
+				'post_type'      => Template_Post_Type::POST_TYPE,
+				'post_status'    => 'publish',
+				'posts_per_page' => 50,
+				'orderby'        => 'title',
+				'order'          => 'ASC',
+				'meta_key'       => Template_Post_Type::META_DOC_TYPE,
+				'meta_value'     => 'invoice',
+			)
+		);
+		foreach ( $templates as $tpl ) {
+			$template_options[ (int) $tpl->ID ] = $tpl->post_title;
+		}
+
+		// Prefer layout document template (labels follow site language).
 		$rendered = ( new Document_Renderer() )->render_invoice_document(
 			$invoice,
 			$items,
 			$client,
-			$project
+			$project,
+			$template_id > 0 ? $template_id : null,
+			array(
+				'template_options' => $template_options,
+			)
 		);
 
 		if ( null !== $rendered && '' !== $rendered ) {

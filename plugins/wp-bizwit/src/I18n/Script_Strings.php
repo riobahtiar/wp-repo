@@ -17,6 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	return;
 }
 
+// Searchable select (resources/admin/searchable-select.ts).
+__( 'Code', 'wp-bizwit' );
+__( 'No matches found', 'wp-bizwit' );
+
 // Dashboard pilot (resources/screens/DashboardApp.vue).
 __( 'System status', 'wp-bizwit' );
 __( 'Vue pilot panel — verifies REST and money formatting.', 'wp-bizwit' );

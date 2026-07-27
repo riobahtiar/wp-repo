@@ -65,10 +65,6 @@
 	 * Forms — top-level and inside sections
 	 * ========================================================================= */
 
-	.wp-bizwit-form {
-		max-width: 56rem;
-	}
-
 	/*
 	 * Override core .form-table spacing only inside our root so th/td line up
 	 * cleanly and descriptions sit tight under controls.
@@ -396,68 +392,209 @@
 		color: var(--bw-color-text-muted);
 	}
 
-	/* Dashboard tiles */
+	/* =========================================================================
+	 * Dashboard — full-width, aligned cards on large desktops
+	 * ========================================================================= */
+
+	.wp-bizwit-dashboard {
+		display: flex;
+		flex-direction: column;
+		gap: var(--bw-space-5);
+		max-width: 1280px;
+		margin: 0 0 var(--bw-space-6);
+	}
 
 	.wp-bizwit-tiles {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: var(--bw-space-4);
-		margin: var(--bw-space-5) 0;
+		margin: 0;
+		align-items: stretch;
+	}
+
+	@media (min-width: 782px) {
+		.wp-bizwit-tiles {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
 	}
 
 	.wp-bizwit-tile {
 		display: flex;
 		flex-direction: column;
-		gap: var(--bw-space-1);
+		justify-content: space-between;
+		gap: var(--bw-space-2);
+		min-height: 6.5rem;
 		padding: var(--bw-space-5);
 		background: var(--bw-color-surface);
 		border: 1px solid var(--bw-color-border-soft);
-		border-radius: var(--bw-radius);
+		border-radius: 8px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 		text-decoration: none;
 		color: inherit;
+		transition: border-color 0.12s ease, box-shadow 0.12s ease;
 
 		&:hover,
 		&:focus {
 			border-color: var(--bw-color-primary);
+			box-shadow: 0 2px 8px rgba(34, 113, 177, 0.12);
+			outline: none;
 		}
 	}
 
 	.wp-bizwit-tile__value {
-		font-size: 28px;
-		font-weight: 600;
-		line-height: 1.2;
+		font-size: clamp(1.35rem, 1.1rem + 0.6vw, 1.85rem);
+		font-weight: 700;
+		line-height: 1.15;
+		font-variant-numeric: tabular-nums;
+		color: var(--bw-color-text);
+		word-break: break-word;
 	}
 
 	.wp-bizwit-tile__label {
 		color: var(--bw-color-text-muted);
 		font-size: 13px;
+		font-weight: 500;
+		line-height: 1.35;
 	}
 
 	.wp-bizwit-panel {
-		max-width: 780px;
-		margin: var(--bw-space-5) 0;
-		padding: var(--bw-space-1) var(--bw-space-5) var(--bw-space-5);
+		width: 100%;
+		max-width: none;
+		margin: 0;
+		padding: var(--bw-space-4) var(--bw-space-5) var(--bw-space-5);
 		background: var(--bw-color-surface);
 		border: 1px solid var(--bw-color-border-soft);
-		border-radius: var(--bw-radius);
+		border-radius: 8px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 	}
 
 	.wp-bizwit-panel h2 {
-		margin-top: var(--bw-space-4);
-		font-size: 1.1em;
+		margin: 0 0 var(--bw-space-3);
+		padding: 0;
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.35;
+		color: var(--bw-color-text);
+	}
+
+	.wp-bizwit-panel > .description:first-of-type {
+		margin-top: calc(var(--bw-space-2) * -1);
+		margin-bottom: var(--bw-space-3);
 	}
 
 	.wp-bizwit-dashboard-cols {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		grid-template-columns: 1fr;
 		gap: var(--bw-space-4);
-		max-width: 1100px;
-		margin: var(--bw-space-5) 0;
+		width: 100%;
+		max-width: none;
+		margin: 0;
+		align-items: start;
+	}
+
+	@media (min-width: 960px) {
+		.wp-bizwit-dashboard-cols {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
 	}
 
 	.wp-bizwit-dashboard-cols .wp-bizwit-panel {
 		max-width: none;
 		margin: 0;
+		height: 100%;
+	}
+
+	/* Form cards — consistent sections on add/edit screens */
+
+	.wp-bizwit-form {
+		max-width: 56rem;
+	}
+
+	.wp-bizwit-card {
+		margin: 0 0 var(--bw-space-5);
+		padding: var(--bw-space-4) var(--bw-space-5) var(--bw-space-5);
+		background: var(--bw-color-surface);
+		border: 1px solid var(--bw-color-border-soft);
+		border-radius: 8px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+	}
+
+	.wp-bizwit-card > h2,
+	.wp-bizwit-form > h2 {
+		margin: 0 0 var(--bw-space-4);
+		padding: 0 0 var(--bw-space-3);
+		border-bottom: 1px solid var(--bw-color-border-soft);
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.35;
+	}
+
+	.wp-bizwit-card .form-table,
+	.wp-bizwit-form .form-table {
+		margin-bottom: 0;
+	}
+
+	.wp-bizwit-form .form-table th {
+		padding-top: 1rem;
+		padding-bottom: 1rem;
+	}
+
+	.wp-bizwit-form .form-table td {
+		padding-top: 0.85rem;
+		padding-bottom: 0.85rem;
+	}
+
+	.wp-bizwit-form .submit {
+		margin-top: var(--bw-space-2);
+		padding-top: var(--bw-space-4);
+	}
+
+	.wp-bizwit-share-box {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		gap: var(--bw-space-3);
+		margin: var(--bw-space-4) 0;
+		padding: var(--bw-space-4);
+		background: var(--bw-color-surface-muted);
+		border: 1px solid var(--bw-color-border-soft);
+		border-radius: 8px;
+	}
+
+	.wp-bizwit-share-box__field {
+		flex: 1 1 16rem;
+		min-width: 0;
+	}
+
+	.wp-bizwit-share-box__field input[type="url"] {
+		width: 100%;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+		font-size: 12px;
+	}
+
+	.wp-bizwit-logo-preview {
+		display: block;
+		max-width: 180px;
+		max-height: 72px;
+		width: auto;
+		height: auto;
+		margin: 0 0 var(--bw-space-2);
+		border: 1px solid var(--bw-color-border-soft);
+		border-radius: 4px;
+		background: #fff;
+		object-fit: contain;
+	}
+
+	.wp-bizwit-template-switch {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin: 0 0 1rem;
+		flex-wrap: wrap;
+	}
+
+	.wp-bizwit-template-switch select {
+		min-width: 12rem;
 	}
 
 	.wp-bizwit-activity {
@@ -703,8 +840,9 @@
 		margin: 0;
 	}
 
-	/* Bank select control (wrapper lives inside .wp-bizwit) */
+	/* Searchable select (bw-ss) — control lives inside .wp-bizwit */
 
+	.bw-ss,
 	.wp-bizwit-bank-select {
 		max-width: 100%;
 	}
@@ -717,7 +855,8 @@
 		display: none !important;
 	}
 
-	.ts-wrapper {
+	.ts-wrapper,
+	.ts-wrapper.bw-ss-control {
 		width: 100%;
 		max-width: 100%;
 	}
@@ -736,15 +875,28 @@
 		line-height: 1.35;
 	}
 
+	/* Size variants */
+	.ts-wrapper.bw-ss-control--sm.single .ts-control {
+		min-height: 30px;
+		padding: 3px 8px;
+		font-size: 12px;
+	}
+
+	.ts-wrapper.bw-ss-control--lg.single .ts-control {
+		min-height: 42px;
+		padding: 8px 12px;
+		font-size: 15px;
+	}
+
 	.ts-wrapper.single.input-active .ts-control,
 	.ts-wrapper.focus .ts-control {
 		border-color: var(--bw-color-primary);
 		box-shadow: 0 0 0 1px var(--bw-color-primary);
 	}
 
-	/* Selected item root is .item.bw-bank-item */
+	/* Selected item root is .item / .bw-ss-item */
 	.ts-wrapper.single .ts-control > .item,
-	.ts-wrapper.single .ts-control > .bw-bank-item {
+	.ts-wrapper.single .ts-control > .bw-ss-item {
 		display: flex !important;
 		align-items: center;
 		justify-content: space-between;
@@ -761,7 +913,16 @@
 		font-size: 14px !important;
 	}
 
-	.bw-bank-item__name {
+	.ts-wrapper.bw-ss-control--sm .ts-control > input {
+		font-size: 12px !important;
+	}
+
+	.ts-wrapper.bw-ss-control--lg .ts-control > input {
+		font-size: 15px !important;
+	}
+
+	.bw-ss-item__primary,
+	.bw-ss-item__name {
 		flex: 1 1 auto;
 		min-width: 0;
 		overflow: hidden;
@@ -771,7 +932,8 @@
 		color: #1d2327;
 	}
 
-	.bw-bank-item__code {
+	.bw-ss-item__meta,
+	.bw-ss-item__code {
 		flex: 0 0 auto;
 		margin-left: 8px;
 		padding: 2px 8px;
@@ -786,7 +948,7 @@
 		line-height: 1.45;
 	}
 
-	.bw-bank-item--muted {
+	.bw-ss-item--muted {
 		color: #646970;
 		font-weight: 400;
 	}
@@ -927,14 +1089,21 @@
 }
 
 /*
- * Tom Select bank dropdown is portaled to <body> (dropdownParent: 'body').
+ * Searchable select dropdown is portaled to <body> (dropdownParent: 'body').
  * These rules MUST stay outside `.wp-bizwit { }` — otherwise the compiled
  * selector becomes `.wp-bizwit body > .ts-dropdown` and never matches, so
- * name + code render as one stuck-together string ("Bank Ganesha161").
+ * primary + meta render as one stuck-together string ("Bank Ganesha161").
  *
- * render.option root becomes the .option node itself (class option bw-bank-opt).
+ * Tom Select only applies position:absolute when the panel has class
+ * `.ts-dropdown`. Our enhancer always keeps that class and adds `.bw-ss-dropdown`.
+ *
+ * render.option root becomes the .option node itself (class option bw-ss-opt).
+ * BEM: .bw-ss-opt / .bw-ss-opt__primary / .bw-ss-opt__meta / .bw-ss-group / .bw-ss-empty
  */
-body > .ts-dropdown {
+body > .ts-dropdown,
+body > .ts-dropdown.bw-ss-dropdown,
+body > .bw-ss-dropdown {
+	position: absolute;
 	z-index: 100100;
 	margin-top: 4px;
 	padding: 0;
@@ -945,15 +1114,18 @@ body > .ts-dropdown {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	overflow: hidden;
 	color: #1d2327;
+	background: #fff;
 }
 
-body > .ts-dropdown .dropdown-input-wrap {
+body > .ts-dropdown .dropdown-input-wrap,
+body > .bw-ss-dropdown .dropdown-input-wrap {
 	padding: 10px;
 	border-bottom: 1px solid #dcdcde;
 	background: #f6f7f7;
 }
 
-body > .ts-dropdown .dropdown-input {
+body > .ts-dropdown .dropdown-input,
+body > .bw-ss-dropdown .dropdown-input {
 	display: block;
 	width: 100%;
 	min-height: 34px;
@@ -964,32 +1136,39 @@ body > .ts-dropdown .dropdown-input {
 	font-size: 13px;
 	line-height: 1.4;
 	box-sizing: border-box;
+	background: #fff;
 }
 
-body > .ts-dropdown .dropdown-input:focus {
+body > .ts-dropdown .dropdown-input:focus,
+body > .bw-ss-dropdown .dropdown-input:focus {
 	border-color: #2271b1;
 	box-shadow: 0 0 0 1px #2271b1;
 	outline: none;
 }
 
-body > .ts-dropdown .ts-dropdown-content {
+body > .ts-dropdown .ts-dropdown-content,
+body > .bw-ss-dropdown .ts-dropdown-content {
 	max-height: 300px;
 	padding: 4px 0 6px;
 }
 
-body > .ts-dropdown .optgroup {
+body > .ts-dropdown .optgroup,
+body > .bw-ss-dropdown .optgroup {
 	margin: 0;
 	padding: 0;
 }
 
-body > .ts-dropdown .optgroup + .optgroup {
+body > .ts-dropdown .optgroup + .optgroup,
+body > .bw-ss-dropdown .optgroup + .optgroup {
 	margin-top: 4px;
 	padding-top: 2px;
 	border-top: 1px solid #e8e8e9;
 }
 
 body > .ts-dropdown .optgroup-header,
-body > .ts-dropdown .bw-bank-optgroup {
+body > .ts-dropdown .bw-ss-group,
+body > .bw-ss-dropdown .optgroup-header,
+body > .bw-ss-dropdown .bw-ss-group {
 	display: block;
 	margin: 0;
 	padding: 10px 14px 4px;
@@ -1004,9 +1183,11 @@ body > .ts-dropdown .bw-bank-optgroup {
 	cursor: default;
 }
 
-/* Option root IS .option.bw-bank-opt — name + code are direct child spans. */
+/* Option root IS .option.bw-ss-opt — primary + meta are direct child spans. */
 body > .ts-dropdown .option,
-body > .ts-dropdown .option.bw-bank-opt {
+body > .ts-dropdown .option.bw-ss-opt,
+body > .bw-ss-dropdown .option,
+body > .bw-ss-dropdown .option.bw-ss-opt {
 	display: flex !important;
 	flex-direction: row;
 	align-items: center;
@@ -1022,24 +1203,33 @@ body > .ts-dropdown .option.bw-bank-opt {
 }
 
 body > .ts-dropdown .option.active,
-body > .ts-dropdown .option.selected {
+body > .ts-dropdown .option.selected,
+body > .bw-ss-dropdown .option.active,
+body > .bw-ss-dropdown .option.selected {
 	background: #f0f6fc !important;
 	color: #1d2327;
 }
 
-body > .ts-dropdown .option .bw-bank-opt__name,
-body > .ts-dropdown .bw-bank-opt__name {
+body > .ts-dropdown .option .bw-ss-opt__primary,
+body > .ts-dropdown .bw-ss-opt__primary,
+body > .bw-ss-dropdown .option .bw-ss-opt__primary,
+body > .bw-ss-dropdown .bw-ss-opt__primary {
 	display: block;
 	flex: 1 1 auto;
 	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 	font-size: 13px;
 	font-weight: 500;
 	line-height: 1.35;
 	color: #1d2327;
 }
 
-body > .ts-dropdown .option .bw-bank-opt__code,
-body > .ts-dropdown .bw-bank-opt__code {
+body > .ts-dropdown .option .bw-ss-opt__meta,
+body > .ts-dropdown .bw-ss-opt__meta,
+body > .bw-ss-dropdown .option .bw-ss-opt__meta,
+body > .bw-ss-dropdown .bw-ss-opt__meta {
 	display: inline-block;
 	flex: 0 0 auto;
 	margin-left: 12px;
@@ -1056,28 +1246,43 @@ body > .ts-dropdown .bw-bank-opt__code {
 	white-space: nowrap;
 }
 
-body > .ts-dropdown .option.active .bw-bank-opt__code,
-body > .ts-dropdown .option.selected .bw-bank-opt__code {
+body > .ts-dropdown .option.active .bw-ss-opt__meta,
+body > .ts-dropdown .option.selected .bw-ss-opt__meta,
+body > .bw-ss-dropdown .option.active .bw-ss-opt__meta,
+body > .bw-ss-dropdown .option.selected .bw-ss-opt__meta {
 	background: #d8e6f5;
 	border-color: #c5d9ed;
 	color: #135e96;
 }
 
-body > .ts-dropdown .option.bw-bank-opt--placeholder,
-body > .ts-dropdown .option.bw-bank-opt--custom {
+body > .ts-dropdown .option.bw-ss-opt--placeholder,
+body > .ts-dropdown .option.bw-ss-opt--custom,
+body > .ts-dropdown .option .bw-ss-opt--placeholder,
+body > .ts-dropdown .option .bw-ss-opt--custom,
+body > .bw-ss-dropdown .option.bw-ss-opt--placeholder,
+body > .bw-ss-dropdown .option.bw-ss-opt--custom {
 	font-size: 13px;
 	color: #646970;
 	font-style: italic;
 	font-weight: 400;
 }
 
-body > .ts-dropdown .option.bw-bank-opt--custom {
+body > .ts-dropdown .option.bw-ss-opt--custom,
+body > .ts-dropdown .option .bw-ss-opt--custom,
+body > .bw-ss-dropdown .option.bw-ss-opt--custom {
 	font-style: normal;
 	color: #1d2327;
 }
 
+body > .ts-dropdown .option.bw-ss-opt--plain,
+body > .bw-ss-dropdown .option.bw-ss-opt--plain {
+	justify-content: flex-start;
+}
+
 body > .ts-dropdown .no-results,
-body > .ts-dropdown .bw-bank-empty {
+body > .ts-dropdown .bw-ss-empty,
+body > .bw-ss-dropdown .no-results,
+body > .bw-ss-dropdown .bw-ss-empty {
 	padding: 18px 14px;
 	font-size: 13px;
 	line-height: 1.45;

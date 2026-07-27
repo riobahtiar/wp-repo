@@ -176,6 +176,113 @@ class Invoice_Repository extends Repository {
 	}
 
 	/**
+	 * Find an invoice by its public share token.
+	 *
+	 * @param string $token Token (6–12 alnum).
+	 *
+	 * @return array<string, mixed>|null
+	 */
+	public function find_by_public_token( string $token ): ?array {
+		$token = preg_replace( '/[^a-zA-Z0-9]/', '', $token ) ?? '';
+		if ( strlen( $token ) < 6 ) {
+			return null;
+		}
+
+		$table = $this->table();
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$row = $this->db()->get_row(
+			$this->db()->prepare( "SELECT * FROM `{$table}` WHERE public_token = %s LIMIT 1", $token ),
+			ARRAY_A
+		);
+		// phpcs:enable
+
+		return is_array( $row ) ? $row : null;
+	}
+
+	/**
+	 * Ensure a public share token exists (creates one if empty).
+	 *
+	 * @param int $invoice_id Invoice id.
+	 *
+	 * @return string Token, or empty on failure.
+	 */
+	public function ensure_public_token( int $invoice_id ): string {
+		$row = $this->find( $invoice_id );
+		if ( null === $row ) {
+			return '';
+		}
+
+		$existing = (string) ( $row['public_token'] ?? '' );
+		if ( '' !== $existing ) {
+			return $existing;
+		}
+
+		$token = $this->generate_unique_public_token();
+		if ( '' === $token ) {
+			return '';
+		}
+
+		$this->update_row(
+			$invoice_id,
+			array(
+				'public_token' => $token,
+				'updated_at'   => $this->now(),
+			),
+			array( '%s', '%s' )
+		);
+
+		return $token;
+	}
+
+	/**
+	 * Rotate the public share token (invalidates old links).
+	 *
+	 * @param int $invoice_id Invoice id.
+	 *
+	 * @return string New token.
+	 */
+	public function rotate_public_token( int $invoice_id ): string {
+		$token = $this->generate_unique_public_token();
+		if ( '' === $token ) {
+			return '';
+		}
+
+		$this->update_row(
+			$invoice_id,
+			array(
+				'public_token' => $token,
+				'updated_at'   => $this->now(),
+			),
+			array( '%s', '%s' )
+		);
+
+		return $token;
+	}
+
+	/**
+	 * @return string 10-char alnum token unique in the table.
+	 */
+	private function generate_unique_public_token(): string {
+		$table = $this->table();
+		for ( $i = 0; $i < 12; $i++ ) {
+			$raw   = wp_generate_password( 16, false, false );
+			$token = strtolower( substr( preg_replace( '/[^a-zA-Z0-9]/', '', $raw ) ?? '', 0, 10 ) );
+			if ( strlen( $token ) < 10 ) {
+				continue;
+			}
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$exists = $this->db()->get_var(
+				$this->db()->prepare( "SELECT id FROM `{$table}` WHERE public_token = %s LIMIT 1", $token )
+			);
+			// phpcs:enable
+			if ( null === $exists || '' === (string) $exists ) {
+				return $token;
+			}
+		}
+		return '';
+	}
+
+	/**
 	 * Create an invoice from raw input.
 	 *
 	 * @param array<string, mixed> $input Raw field values.
@@ -491,6 +598,24 @@ class Invoice_Repository extends Repository {
 	 * @return array<int, string> Invoice id mapped to label (number · client · balance).
 	 */
 	public function open_options( int $client_id = 0 ): array {
+		$map = array();
+		foreach ( $this->open_select_options( $client_id ) as $opt ) {
+			$map[ (int) $opt['value'] ] = (string) $opt['search'];
+		}
+
+		return $map;
+	}
+
+	/**
+	 * Structured options for Admin\Searchable_Select (payment form faktur picker).
+	 *
+	 * Primary: invoice number — client name. Meta chip: remaining balance.
+	 *
+	 * @param int $client_id Optional client filter (0 = all).
+	 *
+	 * @return array<int, array{value: string, label: string, meta: string, search: string}>
+	 */
+	public function open_select_options( int $client_id = 0 ): array {
 		$table   = $this->table();
 		$clients = Schema::table( Schema::CLIENTS );
 		$where   = 'i.status NOT IN (%s, %s)';
@@ -514,15 +639,25 @@ class Invoice_Repository extends Repository {
 
 		$options = array();
 		foreach ( (array) $rows as $row ) {
+			$number  = (string) $row['invoice_number'];
+			$client  = (string) ( $row['client_name'] ?? '' );
 			$balance = Invoice_Totals::balance_minor( (int) $row['total_minor'], (int) $row['paid_minor'] );
-			$label   = sprintf(
-				/* translators: 1: invoice number, 2: client name, 3: balance formatted */
-				__( '%1$s — %2$s (balance %3$s)', 'wp-bizwit' ),
-				(string) $row['invoice_number'],
-				(string) ( $row['client_name'] ?? '' ),
-				Money::format( $balance, (string) $row['currency'] )
+			$money   = Money::format( $balance, (string) $row['currency'] );
+			$label   = '' !== $client
+				? sprintf(
+					/* translators: 1: invoice number, 2: client name */
+					__( '%1$s — %2$s', 'wp-bizwit' ),
+					$number,
+					$client
+				)
+				: $number;
+
+			$options[] = array(
+				'value'  => (string) (int) $row['id'],
+				'label'  => $label,
+				'meta'   => $money,
+				'search' => trim( $number . ' ' . $client . ' ' . $money ),
 			);
-			$options[ (int) $row['id'] ] = $label;
 		}
 
 		return $options;

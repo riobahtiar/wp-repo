@@ -51,10 +51,11 @@ $value = static function ( string $key ) use ( $settings ): string {
 	<?php esc_html_e( 'Fill in the basics below and you can start adding clients. Everything else is optional and grouped into the sections underneath.', 'wp-bizwit' ); ?>
 </p>
 
-<form method="post" class="wp-bizwit-form">
+<form method="post" class="wp-bizwit-form" enctype="multipart/form-data">
 	<?php wp_nonce_field( (string) $data['nonce_field'] ); ?>
 	<input type="hidden" name="wp_bizwit_settings_form" value="1" />
 
+	<div class="wp-bizwit-card">
 	<h2><?php esc_html_e( 'The basics', 'wp-bizwit' ); ?></h2>
 	<table class="form-table" role="presentation">
 		<tr>
@@ -79,6 +80,30 @@ $value = static function ( string $key ) use ( $settings ): string {
 			<td>
 				<input type="text" id="wp-bizwit-business-name" name="business_name" class="regular-text" value="<?php echo esc_attr( $value( 'business_name' ) ); ?>" />
 				<p class="description"><?php esc_html_e( 'Appears at the top of every invoice and receipt you issue.', 'wp-bizwit' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="wp-bizwit-business-logo"><?php esc_html_e( 'Business logo', 'wp-bizwit' ); ?></label></th>
+			<td>
+				<?php
+				$logo_id  = (int) ( $settings['business_logo_id'] ?? 0 );
+				$logo_url = $logo_id > 0 ? wp_get_attachment_image_url( $logo_id, 'medium' ) : '';
+				?>
+				<input type="hidden" name="business_logo_id" id="wp-bizwit-business-logo-id" value="<?php echo esc_attr( (string) $logo_id ); ?>" />
+				<?php if ( is_string( $logo_url ) && '' !== $logo_url ) : ?>
+					<img src="<?php echo esc_url( $logo_url ); ?>" alt="" class="wp-bizwit-logo-preview" id="wp-bizwit-business-logo-preview" />
+				<?php else : ?>
+					<img src="" alt="" class="wp-bizwit-logo-preview" id="wp-bizwit-business-logo-preview" hidden />
+				<?php endif; ?>
+				<p>
+					<button type="button" class="button" id="wp-bizwit-business-logo-pick">
+						<?php esc_html_e( 'Select logo', 'wp-bizwit' ); ?>
+					</button>
+					<button type="button" class="button" id="wp-bizwit-business-logo-clear" <?php echo $logo_id > 0 ? '' : ' hidden'; ?>>
+						<?php esc_html_e( 'Remove logo', 'wp-bizwit' ); ?>
+					</button>
+				</p>
+				<p class="description"><?php esc_html_e( 'Shown on document templates that include a logo block. Prefer a PNG or SVG with a transparent background, at least 400px wide.', 'wp-bizwit' ); ?></p>
 			</td>
 		</tr>
 		<tr>
@@ -109,6 +134,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 			</td>
 		</tr>
 	</table>
+	</div><!-- .wp-bizwit-card basics -->
 
 	<?php
 	$pay_types = Payment_Destinations::types();
@@ -204,7 +230,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 							</div>
 							<div class="wp-bizwit-pay-card__field wp-bizwit-pay-card__field--full" data-pay-field="bank_name">
 								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-bank-<?php echo esc_attr( (string) $i ); ?>">
-									<?php esc_html_e( 'Bank (name & transfer code)', 'wp-bizwit' ); ?>
+									<?php esc_html_e( 'Bank', 'wp-bizwit' ); ?>
 								</label>
 								<?php
 								$bank_code        = (string) ( $dest['bank_code'] ?? '' );
@@ -231,12 +257,6 @@ $value = static function ( string $key ) use ( $settings ): string {
 									autocomplete="organization"
 								/>
 							</div>
-							<div class="wp-bizwit-pay-card__field" data-pay-field="branch">
-								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-branch-<?php echo esc_attr( (string) $i ); ?>">
-									<?php esc_html_e( 'Branch', 'wp-bizwit' ); ?>
-								</label>
-								<input type="text" id="wp-bizwit-pay-branch-<?php echo esc_attr( (string) $i ); ?>" class="wp-bizwit-pay-card__input" name="<?php echo esc_attr( $prefix ); ?>[branch]" value="<?php echo esc_attr( (string) ( $dest['branch'] ?? '' ) ); ?>" />
-							</div>
 							<div class="wp-bizwit-pay-card__field" data-pay-field="account_no">
 								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-accno-<?php echo esc_attr( (string) $i ); ?>">
 									<?php esc_html_e( 'Account number', 'wp-bizwit' ); ?>
@@ -251,7 +271,7 @@ $value = static function ( string $key ) use ( $settings ): string {
 							</div>
 							<div class="wp-bizwit-pay-card__field wp-bizwit-pay-card__field--full" data-pay-field="va_bank">
 								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-vabank-<?php echo esc_attr( (string) $i ); ?>">
-									<?php esc_html_e( 'VA bank (name & transfer code)', 'wp-bizwit' ); ?>
+									<?php esc_html_e( 'VA bank', 'wp-bizwit' ); ?>
 								</label>
 								<?php
 								$va_code        = (string) ( $dest['va_bank_code'] ?? '' );

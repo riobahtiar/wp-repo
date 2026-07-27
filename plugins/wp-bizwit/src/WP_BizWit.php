@@ -19,6 +19,7 @@ use WP_BizWit\Cron\Overdue_Invoices;
 use WP_BizWit\Database\Installer;
 use WP_BizWit\Documents\Default_Templates;
 use WP_BizWit\Documents\Document_Blocks;
+use WP_BizWit\Documents\Public_Document;
 use WP_BizWit\Documents\Template_Post_Type;
 use WP_BizWit\Repositories\Activity_Repository;
 use WP_BizWit\Repositories\Client_Repository;
@@ -36,7 +37,7 @@ class WP_BizWit {
 
 
 	const PLUGIN_NAME    = 'wp-bizwit';
-	const PLUGIN_VERSION = '1.1.2';
+	const PLUGIN_VERSION = '1.2.0';
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -178,8 +179,27 @@ class WP_BizWit {
 		// Legacy Gutenberg document blocks remain registered for older content.
 		( new Document_Blocks() )->register();
 
-		// Seed sample default invoice template after CPT exists (admin only).
+		// Public shareable invoice links: /biz-doc/public/{token}/
+		( new Public_Document() )->register();
+
+		// Seed sample default + gallery invoice templates after CPT exists (admin only).
 		$this->loader->add_action( 'admin_init', new Default_Templates(), 'maybe_seed', 20 );
+		// Flush rewrite when schema gains public docs (once after upgrade).
+		$this->loader->add_action( 'admin_init', $this, 'maybe_flush_public_rewrite', 30 );
+	}
+
+	/**
+	 * Flush rewrite rules once after public document URLs are introduced.
+	 *
+	 * @return void
+	 */
+	public function maybe_flush_public_rewrite(): void {
+		$flag = 'wp_bizwit_public_rewrite_flushed_v1';
+		if ( get_option( $flag ) ) {
+			return;
+		}
+		flush_rewrite_rules( false );
+		update_option( $flag, 1, false );
 	}
 
 	/**

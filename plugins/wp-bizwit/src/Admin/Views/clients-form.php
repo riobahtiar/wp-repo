@@ -139,6 +139,8 @@ foreach ( $meta_fields as $meta_key => $definition ) {
 	<input type="hidden" name="wp_bizwit_client_form" value="1" />
 	<input type="hidden" name="client_id" value="<?php echo esc_attr( $field( 'id', '0' ) ); ?>" />
 
+	<div class="wp-bizwit-card">
+	<h2><?php esc_html_e( 'Client details', 'wp-bizwit' ); ?></h2>
 	<table class="form-table" role="presentation">
 		<tr>
 			<th scope="row">
@@ -177,6 +179,7 @@ foreach ( $meta_fields as $meta_key => $definition ) {
 			</td>
 		</tr>
 	</table>
+	</div><!-- .wp-bizwit-card -->
 
 	<details class="wp-bizwit-section">
 		<summary>

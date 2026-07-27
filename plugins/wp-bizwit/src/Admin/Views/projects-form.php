@@ -109,6 +109,8 @@ $form_terms[] = array(
 	<input type="hidden" name="wp_bizwit_project_form" value="1" />
 	<input type="hidden" name="project_id" value="<?php echo esc_attr( $field( 'id', '0' ) ); ?>" />
 
+	<div class="wp-bizwit-card">
+	<h2><?php esc_html_e( 'Project details', 'wp-bizwit' ); ?></h2>
 	<table class="form-table" role="presentation">
 		<tr>
 			<th scope="row">
@@ -171,6 +173,7 @@ $form_terms[] = array(
 			</td>
 		</tr>
 	</table>
+	</div><!-- .wp-bizwit-card -->
 
 	<details class="wp-bizwit-section" open>
 		<summary>
