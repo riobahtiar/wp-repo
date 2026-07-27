@@ -269,9 +269,10 @@ class Indonesia_Banks {
 
 		$labels = self::type_labels();
 		$html   = sprintf(
-			'<select class="wp-bizwit-pay-card__select wp-bizwit-bank-select" name="%1$s" id="%2$s" data-bank-select>',
+			'<select class="wp-bizwit-pay-card__select wp-bizwit-bank-select" name="%1$s" id="%2$s" data-bank-select data-placeholder="%3$s">',
 			esc_attr( $name ),
-			esc_attr( $id )
+			esc_attr( $id ),
+			esc_attr__( 'Search bank name or code…', 'wp-bizwit' )
 		);
 		$html  .= '<option value="">' . esc_html__( '— Select bank —', 'wp-bizwit' ) . '</option>';
 

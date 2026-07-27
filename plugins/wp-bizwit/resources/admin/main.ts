@@ -2,7 +2,12 @@
  * Shared admin entry — product styles under `.wp-bizwit` + progressive enhancement.
  * Enqueued on every BizWit admin screen via Admin\Assets.
  */
+import TomSelect from 'tom-select';
+
+import 'tom-select/dist/css/tom-select.default.css';
 import '@/styles/admin.css';
+
+type TomSelectEl = HTMLSelectElement & { tomselect?: TomSelect };
 
 /**
  * Warn before leaving a dirty form (progressive enhancement; forms still work without JS).
@@ -30,7 +35,6 @@ function bindDirtyFormGuard(): void {
 				return;
 			}
 			event.preventDefault();
-			// Modern browsers ignore custom strings; assignment still triggers the dialog.
 			event.returnValue = true;
 		} );
 	} );
@@ -54,7 +58,92 @@ function focusAdminNotice(): void {
 }
 
 /**
- * Settings: multiple payment destinations — show fields by type, add/remove cards.
+ * Show free-text bank name when user picks "Other bank".
+ */
+function syncBankCustom( select: HTMLSelectElement ): void {
+	const wrap = select.closest( '.wp-bizwit-pay-card__field' );
+	const custom = wrap?.querySelector< HTMLInputElement >( '[data-bank-custom]' );
+	if ( ! custom ) {
+		return;
+	}
+
+	const show = select.value === '__custom__';
+	custom.hidden = ! show;
+
+	if ( ! show && select.value && select.value !== '__custom__' ) {
+		const el = select as TomSelectEl;
+		const ts = el.tomselect;
+		let label = '';
+		if ( ts ) {
+			const opt = ts.options[ select.value ] as { text?: string } | undefined;
+			label = String( opt?.text ?? '' );
+		} else {
+			label = select.selectedOptions[ 0 ]?.textContent || '';
+		}
+		custom.value = label.replace( /\s·\s\d+$/, '' ).trim();
+	}
+}
+
+/**
+ * Enhance a bank &lt;select&gt; with Tom Select (search by name or code).
+ */
+function enhanceBankSelect( select: HTMLSelectElement ): void {
+	const el = select as TomSelectEl;
+	if ( el.tomselect ) {
+		return;
+	}
+
+	new TomSelect( select, {
+		allowEmptyOption: true,
+		create: false,
+		maxOptions: 80,
+		searchField: [ 'text' ],
+		dropdownParent: 'body',
+		optgroupField: 'optgroup',
+		lockOptgroupOrder: true,
+		plugins: [ 'dropdown_input' ],
+		render: {
+			option( data: { text?: string }, escape: ( s: string ) => string ) {
+				const text = String( data.text ?? '' );
+				const m = text.match( /^(.*)\s·\s(\d+)$/ );
+				if ( m ) {
+					return (
+						`<div class="bw-bank-opt">` +
+						`<span class="bw-bank-opt__name">${ escape( m[ 1 ] ) }</span>` +
+						`<span class="bw-bank-opt__code">${ escape( m[ 2 ] ) }</span>` +
+						`</div>`
+					);
+				}
+				return `<div>${ escape( text ) }</div>`;
+			},
+			item( data: { text?: string }, escape: ( s: string ) => string ) {
+				return `<div>${ escape( String( data.text ?? '' ) ) }</div>`;
+			},
+			optgroup_header( data: { label?: string }, escape: ( s: string ) => string ) {
+				return `<div class="bw-bank-optgroup">${ escape( String( data.label ?? '' ) ) }</div>`;
+			},
+			no_results( _data: unknown, escape: ( s: string ) => string ) {
+				return `<div class="no-results">${ escape( 'No match — try bank name or code' ) }</div>`;
+			},
+		},
+		onChange() {
+			syncBankCustom( select );
+		},
+		onInitialize() {
+			syncBankCustom( select );
+		},
+	} );
+}
+
+function destroyBankSelect( select: HTMLSelectElement ): void {
+	const el = select as TomSelectEl;
+	if ( el.tomselect ) {
+		el.tomselect.destroy();
+	}
+}
+
+/**
+ * Settings: multiple payment destinations — type fields, add/remove, searchable banks.
  */
 function bindPaymentDestinations(): void {
 	const root = document.getElementById( 'wp-bizwit-pay-destinations' );
@@ -74,29 +163,6 @@ function bindPaymentDestinations(): void {
 		other: [ 'label', 'notes', 'account_no', 'account_name', 'url' ],
 	};
 
-	const syncBankCustom = ( select: HTMLSelectElement ): void => {
-		const wrap = select.closest( '.wp-bizwit-pay-card__field' );
-		const custom = wrap?.querySelector< HTMLInputElement >( '[data-bank-custom]' );
-		if ( ! custom ) {
-			return;
-		}
-		const isCustom = select.value === '__custom__' || select.value === '';
-		// Show free-text only for explicit "other bank", or empty+existing custom name.
-		const show = select.value === '__custom__';
-		custom.hidden = ! show;
-		if ( ! show && select.value && select.value !== '__custom__' ) {
-			// Keep name in hidden field from option text for form post of bank_name.
-			const opt = select.selectedOptions[ 0 ];
-			if ( opt ) {
-				// Strip " · 014" suffix from option label.
-				custom.value = opt.textContent?.replace( /\s·\s\d+$/, '' ).trim() || '';
-			}
-		}
-		if ( isCustom && select.value === '' ) {
-			custom.hidden = true;
-		}
-	};
-
 	const applyType = ( card: HTMLElement ): void => {
 		const select = card.querySelector< HTMLSelectElement >( '[data-pay-type]' );
 		const type = select?.value || 'bank_transfer';
@@ -106,6 +172,14 @@ function bindPaymentDestinations(): void {
 			const key = el.getAttribute( 'data-pay-field' ) || '';
 			el.hidden = ! allowed.includes( key );
 		} );
+	};
+
+	const enhanceAll = (): void => {
+		root.querySelectorAll< HTMLSelectElement >( '[data-bank-select]' ).forEach( enhanceBankSelect );
+	};
+
+	const destroyAll = (): void => {
+		root.querySelectorAll< HTMLSelectElement >( '[data-bank-select]' ).forEach( destroyBankSelect );
 	};
 
 	const reindex = (): void => {
@@ -137,8 +211,28 @@ function bindPaymentDestinations(): void {
 		} );
 	};
 
+	const resetCardFields = ( card: HTMLElement ): void => {
+		card.querySelectorAll< HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement >(
+			'input, textarea, select'
+		).forEach( ( input ) => {
+			if ( input instanceof HTMLInputElement && input.type === 'checkbox' ) {
+				input.checked = true;
+				return;
+			}
+			if ( input instanceof HTMLSelectElement ) {
+				input.selectedIndex = 0;
+				return;
+			}
+			if ( input.name.includes( '[id]' ) ) {
+				input.value = '';
+				return;
+			}
+			input.value = '';
+		} );
+	};
+
 	root.querySelectorAll< HTMLElement >( '[data-pay-card]' ).forEach( applyType );
-	root.querySelectorAll< HTMLSelectElement >( '[data-bank-select]' ).forEach( syncBankCustom );
+	enhanceAll();
 
 	root.addEventListener( 'change', ( event ) => {
 		const t = event.target;
@@ -147,9 +241,6 @@ function bindPaymentDestinations(): void {
 			if ( card ) {
 				applyType( card );
 			}
-		}
-		if ( t instanceof HTMLSelectElement && t.matches( '[data-bank-select]' ) ) {
-			syncBankCustom( t );
 		}
 	} );
 
@@ -167,53 +258,46 @@ function bindPaymentDestinations(): void {
 		if ( ! card ) {
 			return;
 		}
+
 		const cards = root.querySelectorAll( '[data-pay-card]' );
 		if ( cards.length <= 1 ) {
-			// Clear fields instead of removing the last card.
-			card.querySelectorAll< HTMLInputElement | HTMLTextAreaElement >( 'input, textarea' ).forEach(
-				( input ) => {
-					if ( input.type === 'checkbox' ) {
-						( input as HTMLInputElement ).checked = true;
-					} else if ( input.type !== 'hidden' || input.name.includes( '[id]' ) ) {
-						if ( input.name.includes( '[id]' ) ) {
-							input.value = '';
-						} else if ( input.type !== 'checkbox' ) {
-							input.value = '';
-						}
-					}
-				}
-			);
+			destroyAll();
+			resetCardFields( card );
+			applyType( card );
+			enhanceAll();
 			return;
 		}
+
+		card.querySelectorAll< HTMLSelectElement >( '[data-bank-select]' ).forEach( destroyBankSelect );
 		card.remove();
 		reindex();
 	} );
 
-	const addBtn = document.getElementById( 'wp-bizwit-pay-add' );
-	addBtn?.addEventListener( 'click', ( event ) => {
+	document.getElementById( 'wp-bizwit-pay-add' )?.addEventListener( 'click', ( event ) => {
 		event.preventDefault();
 		const cards = root.querySelectorAll( '[data-pay-card]' );
 		const last = cards[ cards.length - 1 ];
 		if ( ! ( last instanceof HTMLElement ) ) {
 			return;
 		}
+
+		// Destroy Tom Select so the clone is a clean native <select>.
+		destroyAll();
+
 		const clone = last.cloneNode( true ) as HTMLElement;
-		clone.querySelectorAll< HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement >(
-			'input, textarea, select'
-		).forEach( ( input ) => {
-			if ( input instanceof HTMLInputElement && input.type === 'checkbox' ) {
-				input.checked = true;
-				return;
-			}
-			if ( input instanceof HTMLSelectElement ) {
-				input.selectedIndex = 0;
-				return;
-			}
-			input.value = '';
+		clone.querySelectorAll( '.ts-wrapper' ).forEach( ( n ) => n.remove() );
+		clone.querySelectorAll< HTMLSelectElement >( 'select' ).forEach( ( sel ) => {
+			sel.classList.remove( 'tomselected', 'ts-hidden-accessible' );
+			sel.removeAttribute( 'tabindex' );
+			sel.style.display = '';
+			sel.style.position = '';
 		} );
+
+		resetCardFields( clone );
 		root.appendChild( clone );
 		applyType( clone );
 		reindex();
+		enhanceAll();
 	} );
 }
 

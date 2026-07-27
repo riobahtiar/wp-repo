@@ -11,6 +11,16 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.2] — 2026-07-27
+
+Searchable bank select (Tom Select) for payment destinations.
+
+### Changed
+- Bank / VA pickers use **Tom Select** with type-ahead search (name or transfer
+  code), optgroup headers, and a search field in the dropdown. Native
+  `<select>` remains as the progressive-enhancement fallback without JS.
+- Version **1.1.2**.
+
 ## [1.1.1] — 2026-07-27
 
 Indonesian bank catalogue for payment destination bank / VA pickers.
