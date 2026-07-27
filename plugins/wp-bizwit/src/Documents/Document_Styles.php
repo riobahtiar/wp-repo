@@ -256,23 +256,32 @@ table.wp-bizwit-totals tr.grand td {
 .wp-bizwit-pay-methods {
 	display: flex;
 	flex-direction: column;
-	gap: 3mm;
+	gap: 0;
+}
+.wp-bizwit-pay-method {
+	padding: 2.5mm 0;
+}
+.wp-bizwit-pay-method:first-child {
+	padding-top: 0;
+}
+.wp-bizwit-pay-method:last-child {
+	padding-bottom: 0;
+}
+.wp-bizwit-pay-method + .wp-bizwit-pay-method {
+	border-top: 1px solid var(--doc-line);
 }
 .wp-bizwit-pay-method__title {
 	font-weight: 700;
-	font-size: 9pt;
-	letter-spacing: 0.02em;
+	font-size: 8.5pt;
+	letter-spacing: 0.03em;
 	text-transform: uppercase;
-	color: var(--doc-accent);
-	margin-bottom: 1mm;
+	color: var(--doc-muted);
+	margin: 0 0 1.2mm;
 }
 .wp-bizwit-pay-method__body {
 	font-size: 9.5pt;
-	line-height: 1.5;
-}
-.wp-bizwit-pay-method + .wp-bizwit-pay-method {
-	padding-top: 2.5mm;
-	border-top: 1px dashed var(--doc-line);
+	line-height: 1.55;
+	color: var(--doc-ink);
 }
 
 /* —— Signature —— */

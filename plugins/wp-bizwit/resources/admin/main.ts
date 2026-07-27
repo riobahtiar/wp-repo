@@ -87,17 +87,29 @@ function bindPaymentDestinations(): void {
 
 	const reindex = (): void => {
 		root.querySelectorAll< HTMLElement >( '[data-pay-card]' ).forEach( ( card, index ) => {
+			const badge = card.querySelector( '.wp-bizwit-pay-card__index' );
+			if ( badge ) {
+				badge.textContent = String( index + 1 );
+			}
 			card.querySelectorAll< HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement >(
 				'input, select, textarea'
 			).forEach( ( input ) => {
 				const name = input.getAttribute( 'name' );
-				if ( ! name ) {
-					return;
+				if ( name ) {
+					input.setAttribute(
+						'name',
+						name.replace( /payment_destinations\[\d+\]/, `payment_destinations[${ index }]` )
+					);
 				}
-				input.setAttribute(
-					'name',
-					name.replace( /payment_destinations\[\d+\]/, `payment_destinations[${ index }]` )
-				);
+				const id = input.getAttribute( 'id' );
+				if ( id ) {
+					const nextId = id.replace( /-\d+$/, `-${ index }` );
+					input.setAttribute( 'id', nextId );
+					const lab = card.querySelector( `label[for="${ id }"]` );
+					if ( lab ) {
+						lab.setAttribute( 'for', nextId );
+					}
+				}
 			} );
 		} );
 	};

@@ -135,104 +135,124 @@ $value = static function ( string $key ) use ( $settings ): string {
 				$prefix = 'payment_destinations[' . (int) $i . ']';
 				$dtype  = (string) ( $dest['type'] ?? Payment_Destinations::TYPE_BANK_TRANSFER );
 				$did    = (string) ( $dest['id'] ?? '' );
+				$n      = (int) $i + 1;
 				?>
 				<fieldset class="wp-bizwit-pay-card" data-pay-card data-type="<?php echo esc_attr( $dtype ); ?>">
 					<input type="hidden" name="<?php echo esc_attr( $prefix ); ?>[id]" value="<?php echo esc_attr( $did ); ?>" />
-					<div class="wp-bizwit-pay-card__head">
-						<label class="wp-bizwit-pay-card__type">
-							<span class="screen-reader-text"><?php esc_html_e( 'Payment method type', 'wp-bizwit' ); ?></span>
-							<select name="<?php echo esc_attr( $prefix ); ?>[type]" data-pay-type>
+
+					<div class="wp-bizwit-pay-card__toolbar">
+						<span class="wp-bizwit-pay-card__index" aria-hidden="true"><?php echo esc_html( (string) $n ); ?></span>
+						<div class="wp-bizwit-pay-card__type-wrap">
+							<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-type-<?php echo esc_attr( (string) $i ); ?>">
+								<?php esc_html_e( 'Method', 'wp-bizwit' ); ?>
+							</label>
+							<select
+								id="wp-bizwit-pay-type-<?php echo esc_attr( (string) $i ); ?>"
+								class="wp-bizwit-pay-card__select"
+								name="<?php echo esc_attr( $prefix ); ?>[type]"
+								data-pay-type
+							>
 								<?php foreach ( $pay_types as $slug => $lab ) : ?>
 									<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $dtype, $slug ); ?>>
 										<?php echo esc_html( $lab ); ?>
 									</option>
 								<?php endforeach; ?>
 							</select>
-						</label>
-						<label class="wp-bizwit-pay-card__enabled">
-							<input type="checkbox" name="<?php echo esc_attr( $prefix ); ?>[enabled]" value="1" <?php checked( ! empty( $dest['enabled'] ) ); ?> />
-							<?php esc_html_e( 'Show on invoices', 'wp-bizwit' ); ?>
-						</label>
-						<button type="button" class="button-link-delete wp-bizwit-pay-card__remove" data-pay-remove>
-							<?php esc_html_e( 'Remove', 'wp-bizwit' ); ?>
-						</button>
+						</div>
+						<div class="wp-bizwit-pay-card__actions">
+							<label class="wp-bizwit-pay-card__toggle">
+								<input type="checkbox" name="<?php echo esc_attr( $prefix ); ?>[enabled]" value="1" <?php checked( ! empty( $dest['enabled'] ) ); ?> />
+								<span><?php esc_html_e( 'Show on invoices', 'wp-bizwit' ); ?></span>
+							</label>
+							<button type="button" class="button button-small wp-bizwit-pay-card__remove" data-pay-remove>
+								<?php esc_html_e( 'Remove', 'wp-bizwit' ); ?>
+							</button>
+						</div>
 					</div>
 
-					<p class="wp-bizwit-pay-card__field" data-pay-field="label">
-						<label>
-							<?php esc_html_e( 'Label (optional)', 'wp-bizwit' ); ?>
-							<input type="text" class="regular-text" name="<?php echo esc_attr( $prefix ); ?>[label]" value="<?php echo esc_attr( (string) ( $dest['label'] ?? '' ) ); ?>" placeholder="<?php esc_attr_e( 'e.g. BCA operasional', 'wp-bizwit' ); ?>" />
-						</label>
-					</p>
-
-					<div class="wp-bizwit-pay-card__grid">
-						<p class="wp-bizwit-pay-card__field" data-pay-field="bank_name">
-							<label>
-								<?php esc_html_e( 'Bank name', 'wp-bizwit' ); ?>
-								<input type="text" class="regular-text" name="<?php echo esc_attr( $prefix ); ?>[bank_name]" value="<?php echo esc_attr( (string) ( $dest['bank_name'] ?? '' ) ); ?>" placeholder="BCA" />
-							</label>
-						</p>
-						<p class="wp-bizwit-pay-card__field" data-pay-field="branch">
-							<label>
-								<?php esc_html_e( 'Branch', 'wp-bizwit' ); ?>
-								<input type="text" class="regular-text" name="<?php echo esc_attr( $prefix ); ?>[branch]" value="<?php echo esc_attr( (string) ( $dest['branch'] ?? '' ) ); ?>" />
-							</label>
-						</p>
-						<p class="wp-bizwit-pay-card__field" data-pay-field="account_no">
-							<label>
-								<?php esc_html_e( 'Account number', 'wp-bizwit' ); ?>
-								<input type="text" class="regular-text" name="<?php echo esc_attr( $prefix ); ?>[account_no]" value="<?php echo esc_attr( (string) ( $dest['account_no'] ?? '' ) ); ?>" />
-							</label>
-						</p>
-						<p class="wp-bizwit-pay-card__field" data-pay-field="account_name">
-							<label>
-								<?php esc_html_e( 'Account holder', 'wp-bizwit' ); ?>
-								<input type="text" class="regular-text" name="<?php echo esc_attr( $prefix ); ?>[account_name]" value="<?php echo esc_attr( (string) ( $dest['account_name'] ?? '' ) ); ?>" />
-							</label>
-						</p>
-						<p class="wp-bizwit-pay-card__field" data-pay-field="va_bank">
-							<label>
-								<?php esc_html_e( 'VA bank', 'wp-bizwit' ); ?>
-								<input type="text" class="regular-text" name="<?php echo esc_attr( $prefix ); ?>[va_bank]" value="<?php echo esc_attr( (string) ( $dest['va_bank'] ?? '' ) ); ?>" placeholder="BCA / Mandiri / BNI" />
-							</label>
-						</p>
-						<p class="wp-bizwit-pay-card__field" data-pay-field="va_number">
-							<label>
-								<?php esc_html_e( 'VA number', 'wp-bizwit' ); ?>
-								<input type="text" class="regular-text" name="<?php echo esc_attr( $prefix ); ?>[va_number]" value="<?php echo esc_attr( (string) ( $dest['va_number'] ?? '' ) ); ?>" />
-							</label>
-						</p>
-						<p class="wp-bizwit-pay-card__field" data-pay-field="ewallet_id">
-							<label>
-								<?php esc_html_e( 'Phone / ID / QR code text', 'wp-bizwit' ); ?>
-								<input type="text" class="regular-text" name="<?php echo esc_attr( $prefix ); ?>[ewallet_id]" value="<?php echo esc_attr( (string) ( $dest['ewallet_id'] ?? '' ) ); ?>" placeholder="08…" />
-							</label>
-						</p>
-						<p class="wp-bizwit-pay-card__field" data-pay-field="url">
-							<label>
-								<?php esc_html_e( 'Payment link URL', 'wp-bizwit' ); ?>
-								<input type="url" class="regular-text" name="<?php echo esc_attr( $prefix ); ?>[url]" value="<?php echo esc_attr( (string) ( $dest['url'] ?? '' ) ); ?>" placeholder="https://" />
-							</label>
-						</p>
-						<p class="wp-bizwit-pay-card__field wp-bizwit-pay-card__field--full" data-pay-field="notes">
-							<label>
-								<?php esc_html_e( 'Notes / instructions', 'wp-bizwit' ); ?>
-								<textarea class="large-text" rows="2" name="<?php echo esc_attr( $prefix ); ?>[notes]" placeholder="<?php esc_attr_e( 'e.g. Bayar di kasir, tunjukkan nomor faktur', 'wp-bizwit' ); ?>"><?php echo esc_textarea( (string) ( $dest['notes'] ?? '' ) ); ?></textarea>
-							</label>
-						</p>
+					<div class="wp-bizwit-pay-card__body">
+						<div class="wp-bizwit-pay-card__grid">
+							<div class="wp-bizwit-pay-card__field wp-bizwit-pay-card__field--full" data-pay-field="label">
+								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-label-<?php echo esc_attr( (string) $i ); ?>">
+									<?php esc_html_e( 'Label (optional)', 'wp-bizwit' ); ?>
+								</label>
+								<input
+									type="text"
+									id="wp-bizwit-pay-label-<?php echo esc_attr( (string) $i ); ?>"
+									class="wp-bizwit-pay-card__input"
+									name="<?php echo esc_attr( $prefix ); ?>[label]"
+									value="<?php echo esc_attr( (string) ( $dest['label'] ?? '' ) ); ?>"
+									placeholder="<?php esc_attr_e( 'e.g. BCA operasional', 'wp-bizwit' ); ?>"
+								/>
+							</div>
+							<div class="wp-bizwit-pay-card__field" data-pay-field="bank_name">
+								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-bank-<?php echo esc_attr( (string) $i ); ?>">
+									<?php esc_html_e( 'Bank name', 'wp-bizwit' ); ?>
+								</label>
+								<input type="text" id="wp-bizwit-pay-bank-<?php echo esc_attr( (string) $i ); ?>" class="wp-bizwit-pay-card__input" name="<?php echo esc_attr( $prefix ); ?>[bank_name]" value="<?php echo esc_attr( (string) ( $dest['bank_name'] ?? '' ) ); ?>" placeholder="BCA" autocomplete="organization" />
+							</div>
+							<div class="wp-bizwit-pay-card__field" data-pay-field="branch">
+								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-branch-<?php echo esc_attr( (string) $i ); ?>">
+									<?php esc_html_e( 'Branch', 'wp-bizwit' ); ?>
+								</label>
+								<input type="text" id="wp-bizwit-pay-branch-<?php echo esc_attr( (string) $i ); ?>" class="wp-bizwit-pay-card__input" name="<?php echo esc_attr( $prefix ); ?>[branch]" value="<?php echo esc_attr( (string) ( $dest['branch'] ?? '' ) ); ?>" />
+							</div>
+							<div class="wp-bizwit-pay-card__field" data-pay-field="account_no">
+								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-accno-<?php echo esc_attr( (string) $i ); ?>">
+									<?php esc_html_e( 'Account number', 'wp-bizwit' ); ?>
+								</label>
+								<input type="text" id="wp-bizwit-pay-accno-<?php echo esc_attr( (string) $i ); ?>" class="wp-bizwit-pay-card__input" name="<?php echo esc_attr( $prefix ); ?>[account_no]" value="<?php echo esc_attr( (string) ( $dest['account_no'] ?? '' ) ); ?>" inputmode="numeric" />
+							</div>
+							<div class="wp-bizwit-pay-card__field" data-pay-field="account_name">
+								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-accname-<?php echo esc_attr( (string) $i ); ?>">
+									<?php esc_html_e( 'Account holder', 'wp-bizwit' ); ?>
+								</label>
+								<input type="text" id="wp-bizwit-pay-accname-<?php echo esc_attr( (string) $i ); ?>" class="wp-bizwit-pay-card__input" name="<?php echo esc_attr( $prefix ); ?>[account_name]" value="<?php echo esc_attr( (string) ( $dest['account_name'] ?? '' ) ); ?>" />
+							</div>
+							<div class="wp-bizwit-pay-card__field" data-pay-field="va_bank">
+								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-vabank-<?php echo esc_attr( (string) $i ); ?>">
+									<?php esc_html_e( 'VA bank', 'wp-bizwit' ); ?>
+								</label>
+								<input type="text" id="wp-bizwit-pay-vabank-<?php echo esc_attr( (string) $i ); ?>" class="wp-bizwit-pay-card__input" name="<?php echo esc_attr( $prefix ); ?>[va_bank]" value="<?php echo esc_attr( (string) ( $dest['va_bank'] ?? '' ) ); ?>" placeholder="BCA / Mandiri / BNI" />
+							</div>
+							<div class="wp-bizwit-pay-card__field" data-pay-field="va_number">
+								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-vano-<?php echo esc_attr( (string) $i ); ?>">
+									<?php esc_html_e( 'VA number', 'wp-bizwit' ); ?>
+								</label>
+								<input type="text" id="wp-bizwit-pay-vano-<?php echo esc_attr( (string) $i ); ?>" class="wp-bizwit-pay-card__input" name="<?php echo esc_attr( $prefix ); ?>[va_number]" value="<?php echo esc_attr( (string) ( $dest['va_number'] ?? '' ) ); ?>" inputmode="numeric" />
+							</div>
+							<div class="wp-bizwit-pay-card__field" data-pay-field="ewallet_id">
+								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-ew-<?php echo esc_attr( (string) $i ); ?>">
+									<?php esc_html_e( 'Phone / ID / QR code text', 'wp-bizwit' ); ?>
+								</label>
+								<input type="text" id="wp-bizwit-pay-ew-<?php echo esc_attr( (string) $i ); ?>" class="wp-bizwit-pay-card__input" name="<?php echo esc_attr( $prefix ); ?>[ewallet_id]" value="<?php echo esc_attr( (string) ( $dest['ewallet_id'] ?? '' ) ); ?>" placeholder="08…" />
+							</div>
+							<div class="wp-bizwit-pay-card__field wp-bizwit-pay-card__field--full" data-pay-field="url">
+								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-url-<?php echo esc_attr( (string) $i ); ?>">
+									<?php esc_html_e( 'Payment link URL', 'wp-bizwit' ); ?>
+								</label>
+								<input type="url" id="wp-bizwit-pay-url-<?php echo esc_attr( (string) $i ); ?>" class="wp-bizwit-pay-card__input" name="<?php echo esc_attr( $prefix ); ?>[url]" value="<?php echo esc_attr( (string) ( $dest['url'] ?? '' ) ); ?>" placeholder="https://" />
+							</div>
+							<div class="wp-bizwit-pay-card__field wp-bizwit-pay-card__field--full" data-pay-field="notes">
+								<label class="wp-bizwit-pay-card__label" for="wp-bizwit-pay-notes-<?php echo esc_attr( (string) $i ); ?>">
+									<?php esc_html_e( 'Notes / instructions', 'wp-bizwit' ); ?>
+								</label>
+								<textarea id="wp-bizwit-pay-notes-<?php echo esc_attr( (string) $i ); ?>" class="wp-bizwit-pay-card__input wp-bizwit-pay-card__textarea" rows="2" name="<?php echo esc_attr( $prefix ); ?>[notes]" placeholder="<?php esc_attr_e( 'e.g. Bayar di kasir, tunjukkan nomor faktur', 'wp-bizwit' ); ?>"><?php echo esc_textarea( (string) ( $dest['notes'] ?? '' ) ); ?></textarea>
+							</div>
+						</div>
 					</div>
 				</fieldset>
 			<?php endforeach; ?>
 		</div>
 
-		<p>
-			<button type="button" class="button" id="wp-bizwit-pay-add">
+		<div class="wp-bizwit-pay-destinations__footer">
+			<button type="button" class="button button-secondary" id="wp-bizwit-pay-add">
 				<?php esc_html_e( 'Add another payment method', 'wp-bizwit' ); ?>
 			</button>
-		</p>
-		<p class="description">
-			<?php esc_html_e( 'Leave a card empty to drop it on save. Disable “Show on invoices” to keep details without printing them.', 'wp-bizwit' ); ?>
-		</p>
+			<p class="description">
+				<?php esc_html_e( 'Leave a card empty to drop it on save. Disable “Show on invoices” to keep details without printing them.', 'wp-bizwit' ); ?>
+			</p>
+		</div>
 	</div>
 	</details>
 
