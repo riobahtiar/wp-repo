@@ -83,8 +83,11 @@ class Document_Renderer {
 		$current_tpl = (int) $template->ID;
 
 		// Theme CSS variables on <body> so tables/bank/totals always pick them up.
+		// marginMm drives left/right sheet padding (defaults to 10mm).
+		$margin_mm  = max( 8, min( 30, (int) ( $page['marginMm'] ?? 10 ) ) );
 		$body_style = sprintf(
-			'--doc-accent:%1$s;--doc-ink:%2$s;--doc-muted:%3$s;--doc-soft:%4$s;--doc-total-bg:%5$s;--doc-line:%6$s;--doc-line-strong:%2$s;',
+			'--doc-pad-x:%1$dmm;--doc-accent:%2$s;--doc-ink:%3$s;--doc-muted:%4$s;--doc-soft:%5$s;--doc-total-bg:%6$s;--doc-line:%7$s;--doc-line-strong:%3$s;',
+			$margin_mm,
 			esc_attr( (string) ( $page['accent'] ?? '#1e4d6b' ) ),
 			esc_attr( (string) ( $page['ink'] ?? '#1a2332' ) ),
 			esc_attr( (string) ( $page['muted'] ?? '#5c6570' ) ),
@@ -96,8 +99,8 @@ class Document_Renderer {
 			$body_style .= 'font-family:' . esc_attr( (string) $page['fontFamily'] ) . ';';
 		}
 
-		$theme_label = $tpl_options[ $current_tpl ] ?? $template->post_title;
-		$table_style = sanitize_key( (string) ( $page['tableStyle'] ?? 'filled' ) );
+		$theme_label  = $tpl_options[ $current_tpl ] ?? $template->post_title;
+		$table_style  = sanitize_key( (string) ( $page['tableStyle'] ?? 'filled' ) );
 		$header_style = sanitize_key( (string) ( $page['headerStyle'] ?? 'rule' ) );
 
 		ob_start();
@@ -107,7 +110,7 @@ class Document_Renderer {
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<?php if ( $is_public ) : ?>
+		<?php if ( $is_public ) : ?>
 		<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai" />
 		<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet" />
 		<meta name="referrer" content="no-referrer" />
@@ -120,7 +123,7 @@ class Document_Renderer {
 	data-theme="<?php echo esc_attr( $theme ); ?>"
 	style="<?php echo esc_attr( $body_style ); ?>"
 >
-	<?php if ( $show_bar ) : ?>
+		<?php if ( $show_bar ) : ?>
 	<div class="wp-bizwit-print-bar no-print">
 		<button type="button" onclick="window.print()"><?php esc_html_e( 'Print / Save as PDF', 'wp-bizwit' ); ?></button>
 		<span class="hint"><?php esc_html_e( 'Use A4 paper · browser print dialog', 'wp-bizwit' ); ?></span>
@@ -135,7 +138,7 @@ class Document_Renderer {
 			);
 			?>
 		</span>
-		<?php if ( array() !== $tpl_options && ! $is_public ) : ?>
+			<?php if ( array() !== $tpl_options && ! $is_public ) : ?>
 			<form method="get" action="<?php echo esc_url( admin_url( 'admin.php' ) ); ?>" class="wp-bizwit-template-switch" id="wp-bizwit-template-form">
 				<?php
 				// Always re-assert the print route (do not rely on ambient query state).
@@ -159,7 +162,7 @@ class Document_Renderer {
 				<?php
 				$invoice_id = (int) ( $invoice['id'] ?? 0 );
 				foreach ( $tpl_options as $tid => $tlabel ) :
-					$url = add_query_arg(
+					$url       = add_query_arg(
 						array(
 							'page'     => 'wp-bizwit-invoices',
 							'action'   => 'print',
@@ -265,20 +268,29 @@ class Document_Renderer {
 			),
 			'items'   => array(
 				array(
-					'description'      => __( 'Website redesign — discovery & UI', 'wp-bizwit' ),
+					'description'      => __( 'Website maintenance & support', 'wp-bizwit' ),
 					'quantity'         => '1.0000',
-					'unit'             => __( 'package', 'wp-bizwit' ),
+					// Canonical satuan preset (stored-data vocabulary, not translated).
+					'unit'             => 'bulan',
 					'unit_price_minor' => 10000000,
 					'tax_rate'         => '0.0000',
 					'line_total_minor' => 10000000,
+					'item_kind'        => 'service',
+					'billing_period'   => 'monthly',
+					'period_count'     => 0,
+					'period_unit'      => '',
 				),
 				array(
 					'description'      => __( 'Implementation & training', 'wp-bizwit' ),
 					'quantity'         => '1.0000',
-					'unit'             => __( 'package', 'wp-bizwit' ),
+					'unit'             => 'paket',
 					'unit_price_minor' => 5000000,
 					'tax_rate'         => '0.0000',
 					'line_total_minor' => 5000000,
+					'item_kind'        => '',
+					'billing_period'   => 'one_time',
+					'period_count'     => 0,
+					'period_unit'      => '',
 				),
 			),
 			'client'  => array(

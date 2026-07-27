@@ -1289,3 +1289,43 @@ body > .bw-ss-dropdown .bw-ss-empty {
 	color: #646970;
 	text-align: center;
 }
+
+/* —— Invoice line items: kind/period meta row —— */
+.wp-bizwit-item__meta td {
+	padding-top: 0;
+	border-top: 0;
+}
+.wp-bizwit-item-meta__row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px 16px;
+	font-size: 12px;
+	color: #646970;
+}
+.wp-bizwit-item-meta__field {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+.wp-bizwit-item-meta__field > span {
+	font-weight: 600;
+}
+.wp-bizwit-item-meta__row select {
+	margin: 0;
+	min-height: 26px;
+	padding: 0 24px 0 8px;
+	font-size: 12px;
+	line-height: 1.4;
+}
+.wp-bizwit-item-custom {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+.wp-bizwit-item-custom[hidden] {
+	display: none;
+}
+.wp-bizwit-item-custom input[type='number'] {
+	width: 72px;
+}

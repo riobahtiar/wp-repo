@@ -135,4 +135,63 @@ class LayoutTest extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'Acme', $html );
 		$this->assertStringContainsString( 'wp-bizwit-lines', $html );
 	}
+
+	/**
+	 * Recurring service lines show the subline; bare one_time lines do not.
+	 */
+	public function test_renderer_line_item_subline(): void {
+		Document_Context::set(
+			'invoice',
+			array(
+				'invoice' => array(
+					'currency'          => 'IDR',
+					'total_minor'       => 3000,
+					'tax_minor'         => 0,
+					'paid_minor'        => 0,
+					'subtotal_minor'    => 3000,
+					'discount_minor'    => 0,
+					'withholding_minor' => 0,
+				),
+				'items'   => array(
+					array(
+						'description'      => 'Retainer',
+						'quantity'         => '1.0000',
+						'unit'             => 'bulan',
+						'unit_price_minor' => 2000,
+						'tax_rate'         => '0.0000',
+						'line_total_minor' => 2000,
+						'item_kind'        => 'service',
+						'billing_period'   => 'monthly',
+						'period_count'     => 0,
+						'period_unit'      => '',
+					),
+					array(
+						'description'      => 'Toner',
+						'quantity'         => '1.0000',
+						'unit'             => 'pcs',
+						'unit_price_minor' => 1000,
+						'tax_rate'         => '0.0000',
+						'line_total_minor' => 1000,
+						'item_kind'        => '',
+						'billing_period'   => 'one_time',
+						'period_count'     => 0,
+						'period_unit'      => '',
+					),
+				),
+				'client'  => array( 'display_name' => 'Acme' ),
+				'project' => null,
+			)
+		);
+
+		$layout                                   = Layout::empty();
+		$layout['sections']['body']['components'] = array(
+			Layout::component( 'line_items', array( 'showTax' => false ) ),
+		);
+
+		$html = ( new Layout_Renderer() )->render( $layout );
+		Document_Context::clear();
+
+		$this->assertSame( 1, substr_count( $html, 'wp-bizwit-line-sub' ) );
+		$this->assertStringContainsString( 'Service · billed monthly', $html );
+	}
 }

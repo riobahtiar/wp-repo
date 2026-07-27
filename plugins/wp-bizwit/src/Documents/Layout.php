@@ -113,7 +113,7 @@ class Layout {
 			'page'     => array_merge(
 				array(
 					'size'     => 'A4',
-					'marginMm' => 16,
+					'marginMm' => 10,
 				),
 				self::theme_tokens( 'classic' )
 			),
@@ -229,7 +229,7 @@ class Layout {
 	 *
 	 * @return array<string, mixed>
 	 */
-	public static function with_theme( array $layout, string $slug, int $margin = 14 ): array {
+	public static function with_theme( array $layout, string $slug, int $margin = 10 ): array {
 		$layout['page'] = array_merge(
 			is_array( $layout['page'] ?? null ) ? $layout['page'] : array(),
 			self::theme_tokens( $slug ),
@@ -247,7 +247,7 @@ class Layout {
 	 * @return array<string, mixed>
 	 */
 	public static function default_invoice(): array {
-		$layout = self::with_theme( self::empty(), 'classic', 14 );
+		$layout = self::with_theme( self::empty(), 'classic', 10 );
 
 		$layout['sections']['header']['components'] = array(
 			self::component(
@@ -260,7 +260,7 @@ class Layout {
 								'field',
 								array(
 									'field'        => 'business_name',
-									'fontSize'     => 20,
+									'fontSize'     => 16,
 									'fontWeight'   => '700',
 									'color'        => '#1e4d6b',
 									'marginBottom' => 6,
@@ -270,7 +270,7 @@ class Layout {
 								'field',
 								array(
 									'field'        => 'business_address',
-									'fontSize'     => 10,
+									'fontSize'     => 11,
 									'color'        => '#5c6570',
 									'marginBottom' => 2,
 								)
@@ -279,7 +279,7 @@ class Layout {
 								'field',
 								array(
 									'field'        => 'business_phone',
-									'fontSize'     => 10,
+									'fontSize'     => 11,
 									'color'        => '#5c6570',
 									'marginBottom' => 2,
 								)
@@ -288,7 +288,7 @@ class Layout {
 								'field',
 								array(
 									'field'        => 'business_email',
-									'fontSize'     => 10,
+									'fontSize'     => 11,
 									'color'        => '#5c6570',
 									'marginBottom' => 4,
 								)
@@ -298,7 +298,7 @@ class Layout {
 								array(
 									'field'     => 'business_tax_id',
 									'showLabel' => true,
-									'fontSize'  => 10,
+									'fontSize'  => 11,
 									'color'     => '#5c6570',
 								)
 							),
@@ -308,7 +308,7 @@ class Layout {
 								'field',
 								array(
 									'field'        => 'document_title',
-									'fontSize'     => 26,
+									'fontSize'     => 24,
 									'fontWeight'   => '700',
 									'align'        => 'right',
 									'color'        => '#1a2332',
@@ -321,7 +321,7 @@ class Layout {
 									'field'        => 'invoice_number',
 									'showLabel'    => true,
 									'align'        => 'right',
-									'fontSize'     => 11,
+									'fontSize'     => 12,
 									'fontWeight'   => '600',
 									'marginBottom' => 3,
 								)
@@ -332,7 +332,7 @@ class Layout {
 									'field'        => 'issue_date',
 									'showLabel'    => true,
 									'align'        => 'right',
-									'fontSize'     => 11,
+									'fontSize'     => 12,
 									'marginBottom' => 3,
 								)
 							),
@@ -342,7 +342,7 @@ class Layout {
 									'field'     => 'due_date',
 									'showLabel' => true,
 									'align'     => 'right',
-									'fontSize'  => 11,
+									'fontSize'  => 12,
 								)
 							),
 						),
@@ -357,8 +357,8 @@ class Layout {
 				array(
 					'content'      => 'Bill to',
 					'level'        => 3,
-					'fontSize'     => 10,
-					'fontWeight'   => '600',
+					'fontSize'     => 12,
+					'fontWeight'   => '700',
 					'color'        => '#5c6570',
 					'marginBottom' => 6,
 				)
@@ -367,7 +367,7 @@ class Layout {
 				'field',
 				array(
 					'field'        => 'client_name',
-					'fontSize'     => 13,
+					'fontSize'     => 15,
 					'fontWeight'   => '700',
 					'marginBottom' => 3,
 				)
@@ -376,7 +376,7 @@ class Layout {
 				'field',
 				array(
 					'field'        => 'client_address',
-					'fontSize'     => 11,
+					'fontSize'     => 12,
 					'color'        => '#5c6570',
 					'marginBottom' => 3,
 				)
@@ -386,7 +386,7 @@ class Layout {
 				array(
 					'field'        => 'client_tax_id',
 					'showLabel'    => true,
-					'fontSize'     => 10,
+					'fontSize'     => 11,
 					'color'        => '#5c6570',
 					'marginBottom' => 3,
 				)
@@ -396,7 +396,7 @@ class Layout {
 				array(
 					'field'        => 'project_name',
 					'showLabel'    => true,
-					'fontSize'     => 10,
+					'fontSize'     => 11,
 					'color'        => '#5c6570',
 					'marginBottom' => 14,
 				)
@@ -424,8 +424,8 @@ class Layout {
 				array(
 					'content'      => 'Payment details',
 					'level'        => 3,
-					'fontSize'     => 10,
-					'fontWeight'   => '600',
+					'fontSize'     => 12,
+					'fontWeight'   => '700',
 					'color'        => '#5c6570',
 					'marginTop'    => 8,
 					'marginBottom' => 6,
@@ -437,12 +437,12 @@ class Layout {
 				array(
 					'field'        => 'terms',
 					'showLabel'    => true,
-					'fontSize'     => 10,
+					'fontSize'     => 11,
 					'color'        => '#5c6570',
 					'marginBottom' => 16,
 				)
 			),
-			self::component( 'signature', array( 'marginTop' => 8 ) ),
+			self::component( 'signature', array( 'marginTop' => 20 ) ),
 		);
 
 		// Prefer logo when configured (falls back to empty in renderer).
@@ -467,15 +467,22 @@ class Layout {
 	 * @return array<string, mixed>
 	 */
 	public static function layout_modern(): array {
-		$layout = self::with_theme( self::empty(), 'modern', 18 );
+		$layout = self::with_theme( self::empty(), 'modern', 10 );
 		// Stacked brand left, huge teal title — open, editorial feel.
 		$layout['sections']['header']['components'] = array(
-			self::component( 'logo', array( 'align' => 'left', 'maxHeight' => 40, 'marginBottom' => 14 ) ),
+			self::component(
+				'logo',
+				array(
+					'align'        => 'left',
+					'maxHeight'    => 40,
+					'marginBottom' => 14,
+				)
+			),
 			self::component(
 				'field',
 				array(
 					'field'        => 'document_title',
-					'fontSize'     => 36,
+					'fontSize'     => 24,
 					'fontWeight'   => '700',
 					'color'        => '#0f766e',
 					'marginBottom' => 2,
@@ -485,7 +492,7 @@ class Layout {
 				'field',
 				array(
 					'field'        => 'business_name',
-					'fontSize'     => 11,
+					'fontSize'     => 13,
 					'fontWeight'   => '600',
 					'color'        => '#0f766e',
 					'marginBottom' => 18,
@@ -497,32 +504,141 @@ class Layout {
 					'gap'     => 40,
 					'columns' => array(
 						array(
-							self::component( 'field', array( 'field' => 'invoice_number', 'showLabel' => true, 'fontSize' => 10, 'color' => '#134e4a', 'marginBottom' => 6 ) ),
-							self::component( 'field', array( 'field' => 'issue_date', 'showLabel' => true, 'fontSize' => 10, 'color' => '#5b7c78', 'marginBottom' => 6 ) ),
-							self::component( 'field', array( 'field' => 'due_date', 'showLabel' => true, 'fontSize' => 10, 'color' => '#5b7c78' ) ),
+							self::component(
+								'field',
+								array(
+									'field'        => 'invoice_number',
+									'showLabel'    => true,
+									'fontSize'     => 12,
+									'color'        => '#134e4a',
+									'marginBottom' => 6,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'        => 'issue_date',
+									'showLabel'    => true,
+									'fontSize'     => 11,
+									'color'        => '#5b7c78',
+									'marginBottom' => 6,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'     => 'due_date',
+									'showLabel' => true,
+									'fontSize'  => 11,
+									'color'     => '#5b7c78',
+								)
+							),
 						),
 						array(
-							self::component( 'field', array( 'field' => 'business_address', 'fontSize' => 9, 'color' => '#5b7c78', 'align' => 'right', 'marginBottom' => 3 ) ),
-							self::component( 'field', array( 'field' => 'business_email', 'fontSize' => 9, 'color' => '#5b7c78', 'align' => 'right', 'marginBottom' => 3 ) ),
-							self::component( 'field', array( 'field' => 'business_phone', 'fontSize' => 9, 'color' => '#5b7c78', 'align' => 'right' ) ),
+							self::component(
+								'field',
+								array(
+									'field'        => 'business_address',
+									'fontSize'     => 11,
+									'color'        => '#5b7c78',
+									'align'        => 'right',
+									'marginBottom' => 3,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'        => 'business_email',
+									'fontSize'     => 11,
+									'color'        => '#5b7c78',
+									'align'        => 'right',
+									'marginBottom' => 3,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'    => 'business_phone',
+									'fontSize' => 11,
+									'color'    => '#5b7c78',
+									'align'    => 'right',
+								)
+							),
 						),
 					),
 				)
 			),
 			self::component( 'spacer', array( 'height' => 20 ) ),
 		);
-		$layout['sections']['body']['components'] = array(
-			self::component( 'heading', array( 'content' => 'Bill to', 'level' => 3, 'fontSize' => 9, 'fontWeight' => '700', 'color' => '#0f766e', 'marginBottom' => 8 ) ),
-			self::component( 'field', array( 'field' => 'client_name', 'fontSize' => 15, 'fontWeight' => '700', 'color' => '#134e4a', 'marginBottom' => 4 ) ),
-			self::component( 'field', array( 'field' => 'client_address', 'fontSize' => 10, 'color' => '#5b7c78', 'marginBottom' => 18 ) ),
-			self::component( 'line_items', array( 'showTax' => true, 'marginBottom' => 12 ) ),
-			self::component( 'totals', array( 'showTerbilang' => true, 'align' => 'right' ) ),
+		$layout['sections']['body']['components']   = array(
+			self::component(
+				'heading',
+				array(
+					'content'      => 'Bill to',
+					'level'        => 3,
+					'fontSize'     => 12,
+					'fontWeight'   => '700',
+					'color'        => '#0f766e',
+					'marginBottom' => 8,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'client_name',
+					'fontSize'     => 15,
+					'fontWeight'   => '700',
+					'color'        => '#134e4a',
+					'marginBottom' => 4,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'client_address',
+					'fontSize'     => 11,
+					'color'        => '#5b7c78',
+					'marginBottom' => 18,
+				)
+			),
+			self::component(
+				'line_items',
+				array(
+					'showTax'      => true,
+					'marginBottom' => 12,
+				)
+			),
+			self::component(
+				'totals',
+				array(
+					'showTerbilang' => true,
+					'align'         => 'right',
+				)
+			),
 		);
 		$layout['sections']['footer']['components'] = array(
 			self::component( 'spacer', array( 'height' => 16 ) ),
-			self::component( 'heading', array( 'content' => 'Payment details', 'level' => 3, 'fontSize' => 9, 'fontWeight' => '700', 'color' => '#0f766e', 'marginBottom' => 8 ) ),
+			self::component(
+				'heading',
+				array(
+					'content'      => 'Payment details',
+					'level'        => 3,
+					'fontSize'     => 12,
+					'fontWeight'   => '700',
+					'color'        => '#0f766e',
+					'marginBottom' => 8,
+				)
+			),
 			self::component( 'bank', array( 'marginBottom' => 12 ) ),
-			self::component( 'field', array( 'field' => 'terms', 'fontSize' => 9, 'color' => '#5b7c78', 'marginBottom' => 16 ) ),
+			self::component(
+				'field',
+				array(
+					'field'        => 'terms',
+					'fontSize'     => 11,
+					'color'        => '#5b7c78',
+					'marginBottom' => 16,
+				)
+			),
 			self::component( 'signature', array() ),
 		);
 		return $layout;
@@ -535,7 +651,7 @@ class Layout {
 	 */
 	public static function layout_professional(): array {
 		// Dark navy band header (CSS --headerStyle: band) + formal serif body.
-		$layout = self::with_theme( self::empty(), 'professional', 12 );
+		$layout                                     = self::with_theme( self::empty(), 'professional', 10 );
 		$layout['sections']['header']['components'] = array(
 			self::component(
 				'columns',
@@ -543,35 +659,192 @@ class Layout {
 					'gap'     => 20,
 					'columns' => array(
 						array(
-							self::component( 'logo', array( 'align' => 'left', 'maxHeight' => 52, 'marginBottom' => 8 ) ),
-							self::component( 'field', array( 'field' => 'business_name', 'fontSize' => 17, 'fontWeight' => '700', 'color' => '#ffffff', 'marginBottom' => 4 ) ),
-							self::component( 'field', array( 'field' => 'business_tax_id', 'showLabel' => true, 'fontSize' => 9, 'color' => '#cbd5e1' ) ),
+							self::component(
+								'logo',
+								array(
+									'align'        => 'left',
+									'maxHeight'    => 52,
+									'marginBottom' => 8,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'        => 'business_name',
+									'fontSize'     => 16,
+									'fontWeight'   => '700',
+									'color'        => '#ffffff',
+									'marginBottom' => 4,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'     => 'business_tax_id',
+									'showLabel' => true,
+									'fontSize'  => 11,
+									'color'     => '#cbd5e1',
+								)
+							),
 						),
 						array(
-							self::component( 'field', array( 'field' => 'document_title', 'fontSize' => 24, 'fontWeight' => '700', 'align' => 'right', 'color' => '#ffffff', 'marginBottom' => 10 ) ),
-							self::component( 'field', array( 'field' => 'invoice_number', 'showLabel' => true, 'align' => 'right', 'fontSize' => 10, 'fontWeight' => '600', 'color' => '#e2e8f0', 'marginBottom' => 4 ) ),
-							self::component( 'field', array( 'field' => 'issue_date', 'showLabel' => true, 'align' => 'right', 'fontSize' => 10, 'color' => '#cbd5e1', 'marginBottom' => 4 ) ),
-							self::component( 'field', array( 'field' => 'due_date', 'showLabel' => true, 'align' => 'right', 'fontSize' => 10, 'color' => '#cbd5e1' ) ),
+							self::component(
+								'field',
+								array(
+									'field'        => 'document_title',
+									'fontSize'     => 24,
+									'fontWeight'   => '700',
+									'align'        => 'right',
+									'color'        => '#ffffff',
+									'marginBottom' => 10,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'        => 'invoice_number',
+									'showLabel'    => true,
+									'align'        => 'right',
+									'fontSize'     => 12,
+									'fontWeight'   => '600',
+									'color'        => '#e2e8f0',
+									'marginBottom' => 4,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'        => 'issue_date',
+									'showLabel'    => true,
+									'align'        => 'right',
+									'fontSize'     => 11,
+									'color'        => '#cbd5e1',
+									'marginBottom' => 4,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'     => 'due_date',
+									'showLabel' => true,
+									'align'     => 'right',
+									'fontSize'  => 11,
+									'color'     => '#cbd5e1',
+								)
+							),
 						),
 					),
 				)
 			),
 		);
-		$layout['sections']['body']['components'] = array(
-			self::component( 'field', array( 'field' => 'business_address', 'fontSize' => 9, 'color' => '#64748b', 'marginTop' => 10, 'marginBottom' => 2 ) ),
-			self::component( 'field', array( 'field' => 'business_email', 'fontSize' => 9, 'color' => '#64748b', 'marginBottom' => 14 ) ),
-			self::component( 'heading', array( 'content' => 'Bill to', 'level' => 3, 'fontSize' => 9, 'fontWeight' => '700', 'color' => '#0b1f3a', 'marginBottom' => 6 ) ),
-			self::component( 'field', array( 'field' => 'client_name', 'fontSize' => 13, 'fontWeight' => '700', 'marginBottom' => 3 ) ),
-			self::component( 'field', array( 'field' => 'client_address', 'fontSize' => 10, 'color' => '#64748b', 'marginBottom' => 3 ) ),
-			self::component( 'field', array( 'field' => 'client_tax_id', 'showLabel' => true, 'fontSize' => 9, 'color' => '#64748b', 'marginBottom' => 3 ) ),
-			self::component( 'field', array( 'field' => 'project_name', 'showLabel' => true, 'fontSize' => 9, 'color' => '#64748b', 'marginBottom' => 12 ) ),
-			self::component( 'line_items', array( 'showTax' => true, 'marginBottom' => 8 ) ),
-			self::component( 'totals', array( 'showTerbilang' => true, 'align' => 'right' ) ),
+		$layout['sections']['body']['components']   = array(
+			self::component(
+				'field',
+				array(
+					'field'        => 'business_address',
+					'fontSize'     => 11,
+					'color'        => '#64748b',
+					'marginTop'    => 10,
+					'marginBottom' => 2,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'business_email',
+					'fontSize'     => 11,
+					'color'        => '#64748b',
+					'marginBottom' => 14,
+				)
+			),
+			self::component(
+				'heading',
+				array(
+					'content'      => 'Bill to',
+					'level'        => 3,
+					'fontSize'     => 12,
+					'fontWeight'   => '700',
+					'color'        => '#0b1f3a',
+					'marginBottom' => 6,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'client_name',
+					'fontSize'     => 15,
+					'fontWeight'   => '700',
+					'marginBottom' => 3,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'client_address',
+					'fontSize'     => 11,
+					'color'        => '#64748b',
+					'marginBottom' => 3,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'client_tax_id',
+					'showLabel'    => true,
+					'fontSize'     => 11,
+					'color'        => '#64748b',
+					'marginBottom' => 3,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'project_name',
+					'showLabel'    => true,
+					'fontSize'     => 11,
+					'color'        => '#64748b',
+					'marginBottom' => 12,
+				)
+			),
+			self::component(
+				'line_items',
+				array(
+					'showTax'      => true,
+					'marginBottom' => 8,
+				)
+			),
+			self::component(
+				'totals',
+				array(
+					'showTerbilang' => true,
+					'align'         => 'right',
+				)
+			),
 		);
 		$layout['sections']['footer']['components'] = array(
-			self::component( 'heading', array( 'content' => 'Payment details', 'level' => 3, 'fontSize' => 9, 'fontWeight' => '700', 'color' => '#0b1f3a', 'marginTop' => 10, 'marginBottom' => 6 ) ),
+			self::component(
+				'heading',
+				array(
+					'content'      => 'Payment details',
+					'level'        => 3,
+					'fontSize'     => 12,
+					'fontWeight'   => '700',
+					'color'        => '#0b1f3a',
+					'marginTop'    => 10,
+					'marginBottom' => 6,
+				)
+			),
 			self::component( 'bank', array( 'marginBottom' => 10 ) ),
-			self::component( 'field', array( 'field' => 'terms', 'showLabel' => true, 'fontSize' => 9, 'color' => '#64748b', 'marginBottom' => 14 ) ),
+			self::component(
+				'field',
+				array(
+					'field'        => 'terms',
+					'showLabel'    => true,
+					'fontSize'     => 11,
+					'color'        => '#64748b',
+					'marginBottom' => 14,
+				)
+			),
 			self::component( 'signature', array() ),
 		);
 		return $layout;
@@ -583,7 +856,7 @@ class Layout {
 	 * @return array<string, mixed>
 	 */
 	public static function layout_minimal(): array {
-		$layout = self::with_theme( self::empty(), 'minimal', 20 );
+		$layout                                     = self::with_theme( self::empty(), 'minimal', 10 );
 		$layout['sections']['header']['components'] = array(
 			self::component(
 				'columns',
@@ -591,24 +864,93 @@ class Layout {
 					'gap'     => 24,
 					'columns' => array(
 						array(
-							self::component( 'logo', array( 'maxHeight' => 28, 'marginBottom' => 8 ) ),
-							self::component( 'field', array( 'field' => 'business_name', 'fontSize' => 11, 'fontWeight' => '600', 'color' => '#18181b' ) ),
+							self::component(
+								'logo',
+								array(
+									'maxHeight'    => 28,
+									'marginBottom' => 8,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'      => 'business_name',
+									'fontSize'   => 13,
+									'fontWeight' => '600',
+									'color'      => '#18181b',
+								)
+							),
 						),
 						array(
-							self::component( 'field', array( 'field' => 'document_title', 'fontSize' => 14, 'fontWeight' => '600', 'align' => 'right', 'color' => '#18181b', 'marginBottom' => 8 ) ),
-							self::component( 'field', array( 'field' => 'invoice_number', 'align' => 'right', 'fontSize' => 10, 'color' => '#18181b', 'marginBottom' => 2 ) ),
-							self::component( 'field', array( 'field' => 'issue_date', 'align' => 'right', 'fontSize' => 9, 'color' => '#71717a' ) ),
+							self::component(
+								'field',
+								array(
+									'field'        => 'document_title',
+									'fontSize'     => 24,
+									'fontWeight'   => '600',
+									'align'        => 'right',
+									'color'        => '#18181b',
+									'marginBottom' => 8,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'        => 'invoice_number',
+									'align'        => 'right',
+									'fontSize'     => 12,
+									'color'        => '#18181b',
+									'marginBottom' => 2,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'    => 'issue_date',
+									'align'    => 'right',
+									'fontSize' => 11,
+									'color'    => '#71717a',
+								)
+							),
 						),
 					),
 				)
 			),
 			self::component( 'spacer', array( 'height' => 28 ) ),
 		);
-		$layout['sections']['body']['components'] = array(
-			self::component( 'field', array( 'field' => 'client_name', 'fontSize' => 12, 'fontWeight' => '600', 'marginBottom' => 2 ) ),
-			self::component( 'field', array( 'field' => 'client_address', 'fontSize' => 9, 'color' => '#71717a', 'marginBottom' => 20 ) ),
-			self::component( 'line_items', array( 'showTax' => true, 'marginBottom' => 10 ) ),
-			self::component( 'totals', array( 'showTerbilang' => false, 'align' => 'right' ) ),
+		$layout['sections']['body']['components']   = array(
+			self::component(
+				'field',
+				array(
+					'field'        => 'client_name',
+					'fontSize'     => 15,
+					'fontWeight'   => '600',
+					'marginBottom' => 2,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'client_address',
+					'fontSize'     => 11,
+					'color'        => '#71717a',
+					'marginBottom' => 20,
+				)
+			),
+			self::component(
+				'line_items',
+				array(
+					'showTax'      => true,
+					'marginBottom' => 10,
+				)
+			),
+			self::component(
+				'totals',
+				array(
+					'showTerbilang' => false,
+					'align'         => 'right',
+				)
+			),
 		);
 		$layout['sections']['footer']['components'] = array(
 			self::component( 'spacer', array( 'height' => 24 ) ),
@@ -624,42 +966,185 @@ class Layout {
 	 * @return array<string, mixed>
 	 */
 	public static function layout_elegant(): array {
-		$layout = self::with_theme( self::empty(), 'elegant', 18 );
+		$layout                                     = self::with_theme( self::empty(), 'elegant', 10 );
 		$layout['sections']['header']['components'] = array(
-			self::component( 'logo', array( 'align' => 'center', 'maxHeight' => 56, 'marginBottom' => 12 ) ),
-			self::component( 'field', array( 'field' => 'business_name', 'fontSize' => 16, 'fontWeight' => '700', 'align' => 'center', 'color' => '#7c2d12', 'marginBottom' => 4 ) ),
-			self::component( 'field', array( 'field' => 'business_address', 'fontSize' => 9, 'align' => 'center', 'color' => '#78716c', 'marginBottom' => 14 ) ),
-			self::component( 'divider', array( 'color' => '#7c2d12', 'marginBottom' => 14 ) ),
-			self::component( 'field', array( 'field' => 'document_title', 'fontSize' => 22, 'fontWeight' => '700', 'align' => 'center', 'color' => '#292524', 'marginBottom' => 12 ) ),
+			self::component(
+				'logo',
+				array(
+					'align'        => 'center',
+					'maxHeight'    => 56,
+					'marginBottom' => 12,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'business_name',
+					'fontSize'     => 16,
+					'fontWeight'   => '700',
+					'align'        => 'center',
+					'color'        => '#7c2d12',
+					'marginBottom' => 4,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'business_address',
+					'fontSize'     => 11,
+					'align'        => 'center',
+					'color'        => '#78716c',
+					'marginBottom' => 14,
+				)
+			),
+			self::component(
+				'divider',
+				array(
+					'color'        => '#7c2d12',
+					'marginBottom' => 14,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'document_title',
+					'fontSize'     => 24,
+					'fontWeight'   => '700',
+					'align'        => 'center',
+					'color'        => '#292524',
+					'marginBottom' => 12,
+				)
+			),
 			self::component(
 				'columns',
 				array(
 					'gap'     => 24,
 					'columns' => array(
 						array(
-							self::component( 'field', array( 'field' => 'invoice_number', 'showLabel' => true, 'fontSize' => 10, 'color' => '#292524', 'marginBottom' => 4 ) ),
-							self::component( 'field', array( 'field' => 'issue_date', 'showLabel' => true, 'fontSize' => 10, 'color' => '#78716c' ) ),
+							self::component(
+								'field',
+								array(
+									'field'        => 'invoice_number',
+									'showLabel'    => true,
+									'fontSize'     => 12,
+									'color'        => '#292524',
+									'marginBottom' => 4,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'     => 'issue_date',
+									'showLabel' => true,
+									'fontSize'  => 11,
+									'color'     => '#78716c',
+								)
+							),
 						),
 						array(
-							self::component( 'field', array( 'field' => 'due_date', 'showLabel' => true, 'align' => 'right', 'fontSize' => 10, 'color' => '#78716c', 'marginBottom' => 4 ) ),
-							self::component( 'field', array( 'field' => 'status_label', 'showLabel' => true, 'align' => 'right', 'fontSize' => 10, 'color' => '#78716c' ) ),
+							self::component(
+								'field',
+								array(
+									'field'        => 'due_date',
+									'showLabel'    => true,
+									'align'        => 'right',
+									'fontSize'     => 11,
+									'color'        => '#78716c',
+									'marginBottom' => 4,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'     => 'status_label',
+									'showLabel' => true,
+									'align'     => 'right',
+									'fontSize'  => 11,
+									'color'     => '#78716c',
+								)
+							),
 						),
 					),
 				)
 			),
 		);
-		$layout['sections']['body']['components'] = array(
-			self::component( 'heading', array( 'content' => 'Bill to', 'level' => 3, 'fontSize' => 9, 'fontWeight' => '700', 'color' => '#7c2d12', 'marginTop' => 16, 'marginBottom' => 8 ) ),
-			self::component( 'field', array( 'field' => 'client_name', 'fontSize' => 13, 'fontWeight' => '700', 'color' => '#292524', 'marginBottom' => 3 ) ),
-			self::component( 'field', array( 'field' => 'client_address', 'fontSize' => 10, 'color' => '#78716c', 'marginBottom' => 16 ) ),
-			self::component( 'line_items', array( 'showTax' => true, 'marginBottom' => 10 ) ),
-			self::component( 'totals', array( 'showTerbilang' => true, 'align' => 'right' ) ),
+		$layout['sections']['body']['components']   = array(
+			self::component(
+				'heading',
+				array(
+					'content'      => 'Bill to',
+					'level'        => 3,
+					'fontSize'     => 12,
+					'fontWeight'   => '700',
+					'color'        => '#7c2d12',
+					'marginTop'    => 16,
+					'marginBottom' => 8,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'client_name',
+					'fontSize'     => 15,
+					'fontWeight'   => '700',
+					'color'        => '#292524',
+					'marginBottom' => 3,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'client_address',
+					'fontSize'     => 11,
+					'color'        => '#78716c',
+					'marginBottom' => 16,
+				)
+			),
+			self::component(
+				'line_items',
+				array(
+					'showTax'      => true,
+					'marginBottom' => 10,
+				)
+			),
+			self::component(
+				'totals',
+				array(
+					'showTerbilang' => true,
+					'align'         => 'right',
+				)
+			),
 		);
 		$layout['sections']['footer']['components'] = array(
-			self::component( 'divider', array( 'color' => '#e7d5c4', 'marginTop' => 12, 'marginBottom' => 12 ) ),
-			self::component( 'heading', array( 'content' => 'Payment details', 'level' => 3, 'fontSize' => 9, 'fontWeight' => '700', 'color' => '#7c2d12', 'marginBottom' => 8 ) ),
+			self::component(
+				'divider',
+				array(
+					'color'        => '#e7d5c4',
+					'marginTop'    => 12,
+					'marginBottom' => 12,
+				)
+			),
+			self::component(
+				'heading',
+				array(
+					'content'      => 'Payment details',
+					'level'        => 3,
+					'fontSize'     => 12,
+					'fontWeight'   => '700',
+					'color'        => '#7c2d12',
+					'marginBottom' => 8,
+				)
+			),
 			self::component( 'bank', array( 'marginBottom' => 12 ) ),
-			self::component( 'field', array( 'field' => 'terms', 'fontSize' => 9, 'color' => '#78716c', 'marginBottom' => 18 ) ),
+			self::component(
+				'field',
+				array(
+					'field'        => 'terms',
+					'fontSize'     => 11,
+					'color'        => '#78716c',
+					'marginBottom' => 18,
+				)
+			),
 			self::component( 'signature', array() ),
 		);
 		return $layout;
@@ -671,7 +1156,7 @@ class Layout {
 	 * @return array<string, mixed>
 	 */
 	public static function layout_compact(): array {
-		$layout = self::with_theme( self::empty(), 'compact', 9 );
+		$layout                                     = self::with_theme( self::empty(), 'compact', 10 );
 		$layout['sections']['header']['components'] = array(
 			self::component(
 				'columns',
@@ -679,30 +1164,129 @@ class Layout {
 					'gap'     => 10,
 					'columns' => array(
 						array(
-							self::component( 'logo', array( 'maxHeight' => 28, 'marginBottom' => 3 ) ),
-							self::component( 'field', array( 'field' => 'business_name', 'fontSize' => 10, 'fontWeight' => '700', 'marginBottom' => 1 ) ),
-							self::component( 'field', array( 'field' => 'business_phone', 'fontSize' => 8, 'color' => '#64748b' ) ),
+							self::component(
+								'logo',
+								array(
+									'maxHeight'    => 28,
+									'marginBottom' => 3,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'        => 'business_name',
+									'fontSize'     => 12,
+									'fontWeight'   => '700',
+									'marginBottom' => 1,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'    => 'business_phone',
+									'fontSize' => 11,
+									'color'    => '#64748b',
+								)
+							),
 						),
 						array(
-							self::component( 'field', array( 'field' => 'document_title', 'fontSize' => 14, 'fontWeight' => '700', 'align' => 'right', 'color' => '#334155', 'marginBottom' => 3 ) ),
-							self::component( 'field', array( 'field' => 'invoice_number', 'showLabel' => true, 'align' => 'right', 'fontSize' => 8, 'marginBottom' => 1 ) ),
-							self::component( 'field', array( 'field' => 'issue_date', 'showLabel' => true, 'align' => 'right', 'fontSize' => 8, 'marginBottom' => 1 ) ),
-							self::component( 'field', array( 'field' => 'due_date', 'showLabel' => true, 'align' => 'right', 'fontSize' => 8 ) ),
+							self::component(
+								'field',
+								array(
+									'field'        => 'document_title',
+									'fontSize'     => 24,
+									'fontWeight'   => '700',
+									'align'        => 'right',
+									'color'        => '#334155',
+									'marginBottom' => 3,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'        => 'invoice_number',
+									'showLabel'    => true,
+									'align'        => 'right',
+									'fontSize'     => 12,
+									'color'        => '#64748b',
+									'marginBottom' => 1,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'        => 'issue_date',
+									'showLabel'    => true,
+									'align'        => 'right',
+									'fontSize'     => 11,
+									'color'        => '#64748b',
+									'marginBottom' => 1,
+								)
+							),
+							self::component(
+								'field',
+								array(
+									'field'     => 'due_date',
+									'showLabel' => true,
+									'align'     => 'right',
+									'fontSize'  => 11,
+								)
+							),
 						),
 					),
 				)
 			),
-			self::component( 'divider', array( 'marginTop' => 4, 'marginBottom' => 4 ) ),
+			self::component(
+				'divider',
+				array(
+					'marginTop'    => 4,
+					'marginBottom' => 4,
+				)
+			),
 		);
-		$layout['sections']['body']['components'] = array(
-			self::component( 'field', array( 'field' => 'client_name', 'fontSize' => 10, 'fontWeight' => '700', 'marginBottom' => 1 ) ),
-			self::component( 'field', array( 'field' => 'client_address', 'fontSize' => 8, 'color' => '#64748b', 'marginBottom' => 5 ) ),
-			self::component( 'line_items', array( 'showTax' => true, 'marginBottom' => 3 ) ),
-			self::component( 'totals', array( 'showTerbilang' => true, 'align' => 'right' ) ),
+		$layout['sections']['body']['components']   = array(
+			self::component(
+				'field',
+				array(
+					'field'        => 'client_name',
+					'fontSize'     => 13,
+					'fontWeight'   => '700',
+					'marginBottom' => 1,
+				)
+			),
+			self::component(
+				'field',
+				array(
+					'field'        => 'client_address',
+					'fontSize'     => 11,
+					'color'        => '#64748b',
+					'marginBottom' => 5,
+				)
+			),
+			self::component(
+				'line_items',
+				array(
+					'showTax'      => true,
+					'marginBottom' => 3,
+				)
+			),
+			self::component(
+				'totals',
+				array(
+					'showTerbilang' => true,
+					'align'         => 'right',
+				)
+			),
 		);
 		$layout['sections']['footer']['components'] = array(
-			self::component( 'bank', array( 'marginTop' => 4, 'marginBottom' => 4 ) ),
-			self::component( 'signature', array( 'marginTop' => 2 ) ),
+			self::component(
+				'bank',
+				array(
+					'marginTop'    => 4,
+					'marginBottom' => 4,
+				)
+			),
+			self::component( 'signature', array( 'marginTop' => 20 ) ),
 		);
 		return $layout;
 	}
@@ -793,7 +1377,7 @@ class Layout {
 			$theme  = sanitize_key( (string) ( $page['theme'] ?? 'classic' ) );
 			$tokens = self::theme_tokens( $theme );
 			// Allow overrides from saved layout, but always keep a known theme slug.
-			$allowed_table = array( 'filled', 'underline', 'hairline', 'double', 'dense' );
+			$allowed_table  = array( 'filled', 'underline', 'hairline', 'double', 'dense' );
 			$allowed_header = array( 'rule', 'open', 'band', 'centered' );
 			$table_style    = (string) ( $page['tableStyle'] ?? $tokens['tableStyle'] );
 			$header_style   = (string) ( $page['headerStyle'] ?? $tokens['headerStyle'] );
@@ -806,7 +1390,7 @@ class Layout {
 
 			$base['page'] = array(
 				'size'        => 'A4',
-				'marginMm'    => max( 8, min( 30, (int) ( $page['marginMm'] ?? 16 ) ) ),
+				'marginMm'    => max( 8, min( 30, (int) ( $page['marginMm'] ?? 10 ) ) ),
 				'theme'       => $tokens['theme'],
 				'accent'      => self::color( (string) ( $page['accent'] ?? $tokens['accent'] ) ),
 				'ink'         => self::color( (string) ( $page['ink'] ?? $tokens['ink'] ) ),
@@ -880,10 +1464,10 @@ class Layout {
 	 */
 	private static function sanitize_props( string $type, array $props ): array {
 		$align      = self::align( $props['align'] ?? 'left' );
-		$size       = max( 9, min( 36, (int) ( $props['fontSize'] ?? 12 ) ) );
+		$size       = max( 9, min( 36, (int) ( $props['fontSize'] ?? 13 ) ) );
 		$raw_weight = (string) ( $props['fontWeight'] ?? '400' );
 		$weight     = in_array( $raw_weight, array( '400', '600', '700' ), true ) ? $raw_weight : '400';
-		$color      = self::color( (string) ( $props['color'] ?? '#1d2327' ) );
+		$color      = self::color( (string) ( $props['color'] ?? '#1a2332' ) );
 
 		$common = array(
 			'align'        => $align,
@@ -891,7 +1475,7 @@ class Layout {
 			'fontWeight'   => $weight,
 			'color'        => $color,
 			'marginTop'    => max( 0, min( 48, (int) ( $props['marginTop'] ?? 0 ) ) ),
-			'marginBottom' => max( 0, min( 48, (int) ( $props['marginBottom'] ?? 4 ) ) ),
+			'marginBottom' => max( 0, min( 48, (int) ( $props['marginBottom'] ?? 6 ) ) ),
 		);
 
 		switch ( $type ) {
@@ -1007,6 +1591,6 @@ class Layout {
 		if ( preg_match( '/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', $value ) ) {
 			return $value;
 		}
-		return '#1d2327';
+		return '#1a2332';
 	}
 }

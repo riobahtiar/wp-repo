@@ -12,6 +12,7 @@ use WP_BizWit\Database\Schema;
 use WP_BizWit\Database\Sequence;
 use WP_BizWit\Support\Invoice_Status;
 use WP_BizWit\Support\Invoice_Totals;
+use WP_BizWit\Support\Line_Item_Meta;
 use WP_BizWit\Support\Money;
 use WP_BizWit\Support\Settings;
 
@@ -172,7 +173,16 @@ class Invoice_Repository extends Repository {
 		$rows = $this->db()->get_results( $this->db()->prepare( $sql, $invoice_id ), ARRAY_A );
 		// phpcs:enable
 
-		return is_array( $rows ) ? $rows : array();
+		if ( ! is_array( $rows ) ) {
+			return array();
+		}
+
+		// Defaults keep reads safe while the 1.7.0 dbDelta has not run yet.
+		foreach ( $rows as $i => $row ) {
+			$rows[ $i ] = array_merge( Line_Item_Meta::defaults(), $row );
+		}
+
+		return $rows;
 	}
 
 	/**
@@ -260,6 +270,8 @@ class Invoice_Repository extends Repository {
 	}
 
 	/**
+	 * Generate a unique public share token.
+	 *
 	 * @return string 10-char alnum token unique in the table.
 	 */
 	private function generate_unique_public_token(): string {
@@ -766,12 +778,15 @@ class Invoice_Repository extends Repository {
 				if ( (int) $term['id'] !== $term_id ) {
 					continue;
 				}
-				$items[] = array(
-					'description'      => (string) $term['name'],
-					'quantity'         => '1.0000',
-					'unit'             => '',
-					'unit_price_minor' => (int) $term['amount_minor'],
-					'tax_rate'         => $tax_rate,
+				$items[] = array_merge(
+					Line_Item_Meta::defaults(),
+					array(
+						'description'      => (string) $term['name'],
+						'quantity'         => '1.0000',
+						'unit'             => '',
+						'unit_price_minor' => (int) $term['amount_minor'],
+						'tax_rate'         => $tax_rate,
+					)
 				);
 				break;
 			}
@@ -781,20 +796,26 @@ class Invoice_Repository extends Repository {
 			$budget = (int) $project['budget_minor'];
 			$name   = (string) $project['name'];
 			if ( $budget > 0 ) {
-				$items[] = array(
-					'description'      => $name,
-					'quantity'         => '1.0000',
-					'unit'             => '',
-					'unit_price_minor' => $budget,
-					'tax_rate'         => $tax_rate,
+				$items[] = array_merge(
+					Line_Item_Meta::defaults(),
+					array(
+						'description'      => $name,
+						'quantity'         => '1.0000',
+						'unit'             => '',
+						'unit_price_minor' => $budget,
+						'tax_rate'         => $tax_rate,
+					)
 				);
 			} else {
-				$items[] = array(
-					'description'      => $name,
-					'quantity'         => '1.0000',
-					'unit'             => '',
-					'unit_price_minor' => 0,
-					'tax_rate'         => $tax_rate,
+				$items[] = array_merge(
+					Line_Item_Meta::defaults(),
+					array(
+						'description'      => $name,
+						'quantity'         => '1.0000',
+						'unit'             => '',
+						'unit_price_minor' => 0,
+						'tax_rate'         => $tax_rate,
+					)
 				);
 			}
 		}
@@ -1003,13 +1024,16 @@ class Invoice_Repository extends Repository {
 				? Invoice_Totals::normalize_rate( $row['tax_rate'] ?? $default_rate )
 				: '0.0000';
 
-			$items[] = array(
-				'description'      => $description,
-				'quantity'         => Money::quantity_from_scaled( Money::quantity_to_scaled( $qty ) ),
-				'unit'             => sanitize_text_field( (string) ( $row['unit'] ?? '' ) ),
-				'unit_price_minor' => $unit_price,
-				'tax_rate'         => $tax_rate,
-				'line_total_minor' => 0,
+			$items[] = array_merge(
+				array(
+					'description'      => $description,
+					'quantity'         => Money::quantity_from_scaled( Money::quantity_to_scaled( $qty ) ),
+					'unit'             => sanitize_text_field( (string) ( $row['unit'] ?? '' ) ),
+					'unit_price_minor' => $unit_price,
+					'tax_rate'         => $tax_rate,
+					'line_total_minor' => 0,
+				),
+				Line_Item_Meta::normalize( $row )
 			);
 		}
 
@@ -1040,11 +1064,15 @@ class Invoice_Repository extends Repository {
 					'description'      => (string) $item['description'],
 					'quantity'         => (string) $item['quantity'],
 					'unit'             => (string) $item['unit'],
+					'item_kind'        => (string) ( $item['item_kind'] ?? '' ),
+					'billing_period'   => (string) ( $item['billing_period'] ?? Line_Item_Meta::PERIOD_ONE_TIME ),
+					'period_count'     => (int) ( $item['period_count'] ?? 0 ),
+					'period_unit'      => (string) ( $item['period_unit'] ?? '' ),
 					'unit_price_minor' => (int) $item['unit_price_minor'],
 					'tax_rate'         => (string) $item['tax_rate'],
 					'line_total_minor' => (int) $item['line_total_minor'],
 				),
-				array( '%d', '%d', '%s', '%s', '%s', '%d', '%s', '%d' )
+				array( '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%d' )
 			);
 
 			if ( false === $result ) {

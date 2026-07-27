@@ -12,6 +12,7 @@
 
 use WP_BizWit\Support\Invoice_Status;
 use WP_BizWit\Support\Invoice_Totals;
+use WP_BizWit\Support\Line_Item_Meta;
 use WP_BizWit\Support\Money;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -89,6 +90,8 @@ if ( array() === $form_items ) {
 		'tax_rate'         => $default_tax_rate,
 	);
 }
+
+$meta_colspan = $charges_sales_tax ? 6 : 5;
 
 $subtotal   = (int) ( $invoice['subtotal_minor'] ?? 0 );
 $tax_amount = (int) ( $invoice['tax_minor'] ?? 0 );
@@ -338,7 +341,6 @@ if ( '' !== $share_url ) :
 						<th scope="col"><?php esc_html_e( 'Line total', 'wp-bizwit' ); ?></th>
 					</tr>
 				</thead>
-				<tbody>
 					<?php foreach ( $form_items as $i => $item ) : ?>
 						<?php
 						$desc  = (string) ( $item['description'] ?? '' );
@@ -350,16 +352,18 @@ if ( '' !== $share_url ) :
 							$rate = '0';
 						}
 						$line_total = (int) ( $item['line_total_minor'] ?? 0 );
+						$meta       = Line_Item_Meta::normalize( $item );
 						?>
-						<tr>
+						<tbody class="wp-bizwit-item" data-item-index="<?php echo esc_attr( (string) $i ); ?>">
+						<tr class="wp-bizwit-item__main">
 							<td>
-								<input type="text" class="large-text" name="items[<?php echo esc_attr( (string) $i ); ?>][description]" value="<?php echo esc_attr( $desc ); ?>" <?php disabled( $locked ); ?> <?php echo 0 === $i && ! $locked ? 'required' : ''; ?> />
+								<input type="text" class="large-text wp-bizwit-item-desc" name="items[<?php echo esc_attr( (string) $i ); ?>][description]" value="<?php echo esc_attr( $desc ); ?>" <?php disabled( $locked ); ?> <?php echo 0 === $i && ! $locked ? 'required' : ''; ?> />
 							</td>
 							<td>
 								<input type="text" class="small-text" name="items[<?php echo esc_attr( (string) $i ); ?>][quantity]" value="<?php echo esc_attr( $qty ); ?>" <?php disabled( $locked ); ?> />
 							</td>
 							<td>
-								<input type="text" class="small-text" name="items[<?php echo esc_attr( (string) $i ); ?>][unit]" value="<?php echo esc_attr( $unit ); ?>" placeholder="<?php esc_attr_e( 'pcs', 'wp-bizwit' ); ?>" <?php disabled( $locked ); ?> />
+								<input type="text" class="small-text wp-bizwit-item-unit" name="items[<?php echo esc_attr( (string) $i ); ?>][unit]" value="<?php echo esc_attr( $unit ); ?>" placeholder="<?php esc_attr_e( 'pcs', 'wp-bizwit' ); ?>" <?php disabled( $locked ); ?> />
 							</td>
 							<td>
 								<input type="text" class="regular-text" name="items[<?php echo esc_attr( (string) $i ); ?>][unit_price]" value="<?php echo esc_attr( $price ); ?>" placeholder="<?php echo esc_attr( $money_example ); ?>" <?php disabled( $locked ); ?> />
@@ -377,8 +381,42 @@ if ( '' !== $share_url ) :
 								?>
 							</td>
 						</tr>
+						<tr class="wp-bizwit-item__meta">
+							<td colspan="<?php echo esc_attr( (string) $meta_colspan ); ?>">
+								<div class="wp-bizwit-item-meta__row">
+									<label class="wp-bizwit-item-meta__field">
+										<span><?php esc_html_e( 'Kind', 'wp-bizwit' ); ?></span>
+										<select name="items[<?php echo esc_attr( (string) $i ); ?>][item_kind]" <?php disabled( $locked ); ?>>
+											<option value=""><?php esc_html_e( 'Not specified', 'wp-bizwit' ); ?></option>
+											<?php foreach ( Line_Item_Meta::kinds() as $slug => $label ) : ?>
+												<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $meta['item_kind'], $slug ); ?>><?php echo esc_html( $label ); ?></option>
+											<?php endforeach; ?>
+										</select>
+									</label>
+									<label class="wp-bizwit-item-meta__field">
+										<span><?php esc_html_e( 'Billing', 'wp-bizwit' ); ?></span>
+										<select name="items[<?php echo esc_attr( (string) $i ); ?>][billing_period]" class="wp-bizwit-item-period" <?php disabled( $locked ); ?>>
+											<?php foreach ( Line_Item_Meta::periods() as $slug => $label ) : ?>
+												<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $meta['billing_period'], $slug ); ?>><?php echo esc_html( $label ); ?></option>
+											<?php endforeach; ?>
+										</select>
+									</label>
+									<span class="wp-bizwit-item-custom" <?php echo Line_Item_Meta::PERIOD_CUSTOM === $meta['billing_period'] ? '' : 'hidden'; ?>>
+										<label class="wp-bizwit-item-meta__field">
+											<span><?php esc_html_e( 'Length', 'wp-bizwit' ); ?></span>
+											<input type="number" class="small-text wp-bizwit-item-count" name="items[<?php echo esc_attr( (string) $i ); ?>][period_count]" value="<?php echo $meta['period_count'] > 0 ? esc_attr( (string) $meta['period_count'] ) : ''; ?>" min="1" max="999" step="1" <?php disabled( $locked ); ?> />
+										</label>
+										<select name="items[<?php echo esc_attr( (string) $i ); ?>][period_unit]" class="wp-bizwit-item-period-unit" <?php disabled( $locked ); ?>>
+											<?php foreach ( Line_Item_Meta::period_units() as $slug => $def ) : ?>
+												<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $meta['period_unit'], $slug ); ?>><?php echo esc_html( $def['label'] ); ?></option>
+											<?php endforeach; ?>
+										</select>
+									</span>
+								</div>
+							</td>
+						</tr>
+						</tbody>
 					<?php endforeach; ?>
-				</tbody>
 			</table>
 			<?php if ( ! $locked ) : ?>
 				<p class="description">

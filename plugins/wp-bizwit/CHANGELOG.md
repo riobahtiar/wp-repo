@@ -11,6 +11,34 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- Line item **kind + billing period** on invoice lines (goods/service/digital;
+  one-time/monthly/quarterly/yearly/custom length). Schema 1.7.0 adds
+  `item_kind`, `billing_period`, `period_count`, `period_unit` to
+  `bizwit_invoice_items`. Printed faktur shows a muted subline
+  (`Jasa · berlangganan bulanan`) and derives satuan from the period — no new
+  table columns, labelling only, money math unchanged.
+- `Support\Line_Item_Meta` helper (whitelists, canonical satuan presets,
+  subline + description enrichment).
+- Invoice form: kind/period controls per line, custom-length inputs, satuan
+  suggestion (never overwrites a typed satuan), and JS add-next row cloning.
+- `Document_Styles::base_document_css()` — shared A4/token/payment-method
+  base used by layout templates and the legacy invoice/kwitansi prints.
+
+### Changed
+- Unified document type ramp: body 10pt, titles 18pt, sections 9pt, meta
+  8.5–9pt (px equivalents 11–24 in layout JSON); all six gallery themes
+  retuned; compact no longer seeds sub-9px type; dense table floor 9pt.
+- Signature metrics unified (36mm/16mm); signature spacing owned by the
+  component margin; bank account 11pt mono; table cell padding 2.2×2.4mm.
+- Builder defaults match the ramp; canvas padding mirrors the print sheet.
+- Gallery pack v7 refreshes themed template layouts.
+
+### Fixed
+- Legacy invoice/kwitansi prints drifted from the document family (11pt body,
+  `#1d2327` ink, divergent sign/bank metrics) — now on the shared base CSS
+  and tokens.
+
 ## [1.2.0] — 2026-07-27
 
 ### Added

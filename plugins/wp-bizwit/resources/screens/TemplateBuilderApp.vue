@@ -45,7 +45,7 @@ function emptyConfig(): BuilderConfig {
 	return {
 		layout: {
 			version: 1,
-			page: { size: 'A4', marginMm: 14 },
+			page: { size: 'A4', marginMm: 10 },
 			sections: {
 				header: { components: [] },
 				body: { components: [] },
@@ -62,7 +62,7 @@ function emptyConfig(): BuilderConfig {
 		i18n: {},
 		defaultLayout: {
 			version: 1,
-			page: { size: 'A4', marginMm: 14 },
+			page: { size: 'A4', marginMm: 10 },
 			sections: {
 				header: { components: [] },
 				body: { components: [] },
@@ -253,17 +253,17 @@ function defaultProps( type: string ): Record< string, unknown > {
 			return {
 				content: 'Heading',
 				level: 3,
-				fontSize: 11,
+				fontSize: 12,
 				fontWeight: '600',
 				align: 'left',
 				color: '#5c6570',
 				marginTop: 0,
-				marginBottom: 8,
+				marginBottom: 6,
 			};
 		case 'text':
 			return {
 				content: '',
-				fontSize: 11,
+				fontSize: 13,
 				fontWeight: '400',
 				align: 'left',
 				color: '#1a2332',
@@ -274,12 +274,12 @@ function defaultProps( type: string ): Record< string, unknown > {
 			return {
 				field: 'invoice_number',
 				showLabel: false,
-				fontSize: 12,
+				fontSize: 13,
 				fontWeight: '400',
 				align: 'left',
 				color: '#1a2332',
 				marginTop: 0,
-				marginBottom: 4,
+				marginBottom: 6,
 			};
 		case 'logo':
 			return {
@@ -301,7 +301,7 @@ function defaultProps( type: string ): Record< string, unknown > {
 		case 'divider':
 			return { color: '#e2e6ea', marginTop: 8, marginBottom: 8 };
 		case 'columns':
-			return { gap: 28, columns: [ [], [] ], marginTop: 0, marginBottom: 8 };
+			return { gap: 24, columns: [ [], [] ], marginTop: 0, marginBottom: 8 };
 		default:
 			return {};
 	}
@@ -541,7 +541,10 @@ const icons: Record< string, string > = {
 				<div
 					class="bw-studio__paper"
 					:class="{ 'is-preview': mode === 'preview' }"
-					:style="{ padding: layout.page.marginMm + 'mm' }"
+					:style="{
+						// Match the print sheet: 12mm top / marginMm sides / 16mm bottom (Document_Styles tokens).
+						padding: '12mm ' + layout.page.marginMm + 'mm 16mm',
+					}"
 				>
 					<section
 						v-for="zone in zones"

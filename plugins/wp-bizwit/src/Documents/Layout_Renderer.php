@@ -8,6 +8,7 @@
 namespace WP_BizWit\Documents;
 
 use WP_BizWit\Support\Invoice_Totals;
+use WP_BizWit\Support\Line_Item_Meta;
 use WP_BizWit\Support\Money;
 use WP_BizWit\Support\Settings;
 
@@ -26,7 +27,7 @@ class Layout_Renderer {
 	public function render( array $layout ): string {
 		$layout = Layout::sanitize( $layout );
 		$page   = is_array( $layout['page'] ?? null ) ? $layout['page'] : array();
-		$margin = (int) ( $page['marginMm'] ?? 16 );
+		$margin = (int) ( $page['marginMm'] ?? 10 );
 		$theme  = sanitize_key( (string) ( $page['theme'] ?? 'classic' ) );
 		$parts  = array();
 
@@ -257,9 +258,9 @@ class Layout_Renderer {
 			<tbody>
 				<?php foreach ( $items as $item ) : ?>
 					<tr>
-						<td><?php echo esc_html( (string) ( $item['description'] ?? '' ) ); ?></td>
+						<td><?php echo Line_Item_Meta::enrich_description_html( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped inside Line_Item_Meta. ?></td>
 						<td class="num"><?php echo esc_html( rtrim( rtrim( (string) ( $item['quantity'] ?? '' ), '0' ), '.' ) ); ?></td>
-						<td><?php echo esc_html( (string) ( $item['unit'] ?? '' ) ); ?></td>
+						<td><?php echo esc_html( Line_Item_Meta::display_unit( $item ) ); ?></td>
 						<td class="num"><?php echo esc_html( Money::format( (int) ( $item['unit_price_minor'] ?? 0 ), $currency ) ); ?></td>
 						<?php if ( $tax_on ) : ?>
 							<td class="num"><?php echo esc_html( rtrim( rtrim( (string) ( $item['tax_rate'] ?? '' ), '0' ), '.' ) ); ?></td>
@@ -437,7 +438,7 @@ class Layout_Renderer {
 	 * @param array<string, mixed> $props Props.
 	 */
 	private function render_divider( array $props ): string {
-		$color  = (string) ( $props['color'] ?? '#c3c4c7' );
+		$color  = (string) ( $props['color'] ?? 'var(--doc-line, #e2e6ea)' );
 		$margin = $this->margin_style( $props );
 		return '<hr class="wp-bizwit-c-divider" style="border:0;border-top:1px solid ' . esc_attr( $color ) . ';' . esc_attr( $margin ) . '" />';
 	}
@@ -468,9 +469,9 @@ class Layout_Renderer {
 	private function text_style( array $props ): string {
 		$parts = array(
 			'text-align:' . (string) ( $props['align'] ?? 'left' ),
-			'font-size:' . (int) ( $props['fontSize'] ?? 12 ) . 'px',
+			'font-size:' . (int) ( $props['fontSize'] ?? 13 ) . 'px',
 			'font-weight:' . (string) ( $props['fontWeight'] ?? '400' ),
-			'color:' . (string) ( $props['color'] ?? '#1d2327' ),
+			'color:' . (string) ( $props['color'] ?? 'var(--doc-ink, #1a2332)' ),
 			$this->margin_style( $props ),
 		);
 		return implode( ';', array_filter( $parts ) );
@@ -483,7 +484,7 @@ class Layout_Renderer {
 	 */
 	private function margin_style( array $props ): string {
 		$mt = (int) ( $props['marginTop'] ?? 0 );
-		$mb = (int) ( $props['marginBottom'] ?? 4 );
+		$mb = (int) ( $props['marginBottom'] ?? 6 );
 		return 'margin-top:' . $mt . 'px;margin-bottom:' . $mb . 'px';
 	}
 }

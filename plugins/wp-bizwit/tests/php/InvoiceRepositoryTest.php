@@ -152,6 +152,107 @@ class InvoiceRepositoryTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Kind/period columns persist on lines and normalise on save.
+	 */
+	public function test_items_persist_kind_and_period(): void {
+		Settings::update( array( 'tax_regime' => Settings::REGIME_NONE ) );
+		$client_id = $this->make_client();
+
+		$id = $this->invoices->create(
+			$this->payload(
+				$client_id,
+				array(
+					'items' => array(
+						array(
+							'description'    => 'Maintenance retainer',
+							'quantity'       => '1',
+							'unit'           => 'bulan',
+							'unit_price'     => '2000000',
+							'item_kind'      => 'service',
+							'billing_period' => 'monthly',
+							'period_count'   => 12,
+							'period_unit'    => 'month',
+						),
+						array(
+							'description'    => 'Licence, 6 months',
+							'quantity'       => '1',
+							'unit_price'     => '3000000',
+							'item_kind'      => 'digital',
+							'billing_period' => 'custom',
+							'period_count'   => 6,
+							'period_unit'    => 'month',
+						),
+						array(
+							'description' => 'Printer toner',
+							'quantity'    => '2',
+							'unit'        => 'pcs',
+							'unit_price'  => '250000',
+						),
+					),
+				)
+			)
+		);
+		$this->assertIsInt( $id );
+
+		$items = $this->invoices->get_items( $id );
+		$this->assertCount( 3, $items );
+
+		// Recurring period normalises count/unit away.
+		$this->assertSame( 'service', $items[0]['item_kind'] );
+		$this->assertSame( 'monthly', $items[0]['billing_period'] );
+		$this->assertSame( 0, (int) $items[0]['period_count'] );
+		$this->assertSame( '', $items[0]['period_unit'] );
+
+		// Custom length persists.
+		$this->assertSame( 'digital', $items[1]['item_kind'] );
+		$this->assertSame( 'custom', $items[1]['billing_period'] );
+		$this->assertSame( 6, (int) $items[1]['period_count'] );
+		$this->assertSame( 'month', $items[1]['period_unit'] );
+
+		// Bare line picks up the column defaults.
+		$this->assertSame( '', $items[2]['item_kind'] );
+		$this->assertSame( 'one_time', $items[2]['billing_period'] );
+		$this->assertSame( 0, (int) $items[2]['period_count'] );
+		$this->assertSame( '', $items[2]['period_unit'] );
+	}
+
+	/**
+	 * Kind/period never changes money: totals match the meta-less invoice.
+	 */
+	public function test_totals_identical_with_and_without_meta(): void {
+		Settings::update( array( 'tax_regime' => Settings::REGIME_NONE ) );
+		$client_id = $this->make_client();
+
+		$plain = $this->invoices->create( $this->payload( $client_id ) );
+		$this->assertIsInt( $plain );
+
+		$meta = $this->invoices->create(
+			$this->payload(
+				$client_id,
+				array(
+					'items' => array(
+						array(
+							'description'    => 'Consulting',
+							'quantity'       => '1',
+							'unit_price'     => '1500000',
+							'tax_rate'       => '11',
+							'item_kind'      => 'service',
+							'billing_period' => 'monthly',
+						),
+					),
+				)
+			)
+		);
+		$this->assertIsInt( $meta );
+
+		$a = $this->invoices->find( $plain );
+		$b = $this->invoices->find( $meta );
+		$this->assertSame( (int) $a['subtotal_minor'], (int) $b['subtotal_minor'] );
+		$this->assertSame( (int) $a['tax_minor'], (int) $b['tax_minor'] );
+		$this->assertSame( (int) $a['total_minor'], (int) $b['total_minor'] );
+	}
+
+	/**
 	 * Marking sent allocates a permanent number.
 	 */
 	public function test_send_allocates_number(): void {

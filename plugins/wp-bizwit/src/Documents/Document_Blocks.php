@@ -8,6 +8,7 @@
 namespace WP_BizWit\Documents;
 
 use WP_BizWit\Support\Invoice_Totals;
+use WP_BizWit\Support\Line_Item_Meta;
 use WP_BizWit\Support\Money;
 use WP_BizWit\Support\Settings;
 use WP_BizWit\WP_BizWit;
@@ -275,9 +276,9 @@ class Document_Blocks {
 			<tbody>
 				<?php foreach ( $items as $item ) : ?>
 					<tr>
-						<td><?php echo esc_html( (string) ( $item['description'] ?? '' ) ); ?></td>
+						<td><?php echo Line_Item_Meta::enrich_description_html( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped inside Line_Item_Meta. ?></td>
 						<td class="num"><?php echo esc_html( rtrim( rtrim( (string) ( $item['quantity'] ?? '' ), '0' ), '.' ) ); ?></td>
-						<td><?php echo esc_html( (string) ( $item['unit'] ?? '' ) ); ?></td>
+						<td><?php echo esc_html( Line_Item_Meta::display_unit( $item ) ); ?></td>
 						<td class="num"><?php echo esc_html( Money::format( (int) ( $item['unit_price_minor'] ?? 0 ), $currency ) ); ?></td>
 						<?php if ( $tax_on ) : ?>
 							<td class="num"><?php echo esc_html( rtrim( rtrim( (string) ( $item['tax_rate'] ?? '' ), '0' ), '.' ) ); ?></td>

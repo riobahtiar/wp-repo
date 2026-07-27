@@ -11,6 +11,7 @@
  * @var array<string, mixed>|null $client  Client row.
  */
 
+use WP_BizWit\Documents\Document_Styles;
 use WP_BizWit\Localization\Indonesia;
 use WP_BizWit\Localization\Regions;
 use WP_BizWit\Repositories\Payment_Repository;
@@ -66,31 +67,18 @@ $document_title = sprintf(
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title><?php echo esc_html( $document_title ); ?></title>
 	<style>
-		/* Keep body padding in print — same breathing room as on-screen (do not zero it). */
-		@page { size: A4; margin: 8mm; }
-		* { box-sizing: border-box; }
-		html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-		body {
-			font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-			font-size: 11pt;
-			color: #1d2327;
-			margin: 0;
-			padding: 12mm 14mm 14mm;
-			line-height: 1.5;
-			background: #fff;
-		}
+		<?php echo Document_Styles::base_document_css(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static CSS from Document_Styles. ?>
 		h1 { font-size: 18pt; margin: 0 0 2.5mm; }
-		.muted { color: #646970; }
 		.header {
 			display: flex;
 			justify-content: space-between;
 			gap: 12mm;
-			border-bottom: 1px solid #c3c4c7;
+			border-bottom: 1px solid var(--doc-line);
 			padding-bottom: 6mm;
 			margin-bottom: 8mm;
 		}
 		.box {
-			border: 1px solid #dcdcde;
+			border: 1px solid var(--doc-line);
 			padding: 5.5mm;
 			margin-bottom: 7mm;
 		}
@@ -99,36 +87,36 @@ $document_title = sprintf(
 			font-weight: 700;
 			margin: 4mm 0;
 		}
-		.words { font-style: italic; margin-bottom: 7mm; }
+		.words { font-style: italic; margin-bottom: 7mm; color: var(--doc-muted); }
 		table.meta { width: 100%; border-collapse: collapse; margin-bottom: 7mm; }
 		table.meta th, table.meta td { text-align: left; padding: 2.5mm 2.5mm 2.5mm 0; vertical-align: top; }
-		table.meta th { width: 32%; color: #646970; font-weight: 600; }
+		table.meta th { width: 32%; color: var(--doc-muted); font-weight: 600; }
 		.sign {
 			display: flex;
 			justify-content: space-between;
-			gap: 20mm;
+			gap: 16mm;
 			margin-top: 16mm;
 		}
 		.sign-box {
 			width: 45%;
-			min-height: 34mm;
-			border-top: 1px solid #c3c4c7;
+			min-height: 36mm;
+			border-top: 1px solid var(--doc-line-strong);
 			padding-top: 3.5mm;
 			font-size: 9pt;
-			color: #646970;
+			color: var(--doc-muted);
 		}
 		.meterai {
-			border: 1px dashed #646970;
+			border: 1px dashed var(--doc-muted);
 			padding: 4.5mm;
 			margin-top: 7mm;
 			font-size: 9pt;
-			color: #646970;
+			color: var(--doc-muted);
 			min-height: 18mm;
 		}
 		@media print {
 			html, body {
 				margin: 0 !important;
-				padding: 12mm 14mm 14mm !important;
+				padding: var(--doc-pad-y) var(--doc-pad-x) 14mm !important;
 				background: #fff !important;
 			}
 			.no-print { display: none !important; }

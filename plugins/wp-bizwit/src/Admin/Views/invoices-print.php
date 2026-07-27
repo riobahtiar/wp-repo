@@ -12,9 +12,11 @@
  * @var array<string, mixed>|null $project Project row or null.
  */
 
+use WP_BizWit\Documents\Document_Styles;
 use WP_BizWit\Localization\Regions;
 use WP_BizWit\Support\Invoice_Status;
 use WP_BizWit\Support\Invoice_Totals;
+use WP_BizWit\Support\Line_Item_Meta;
 use WP_BizWit\Support\Money;
 use WP_BizWit\Support\Payment_Destinations;
 use WP_BizWit\Support\Settings;
@@ -72,28 +74,15 @@ $document_title = sprintf(
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title><?php echo esc_html( $document_title ); ?></title>
 	<style>
-		/* Keep body padding in print — same breathing room as on-screen (do not zero it). */
-		@page { size: A4; margin: 8mm; }
-		* { box-sizing: border-box; }
-		html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-		body {
-			font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-			font-size: 11pt;
-			color: #1d2327;
-			margin: 0;
-			padding: 12mm 14mm 14mm;
-			line-height: 1.5;
-			background: #fff;
-		}
+		<?php echo Document_Styles::base_document_css(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static CSS from Document_Styles. ?>
 		h1 { font-size: 18pt; margin: 0 0 4mm; }
-		h2 { font-size: 12pt; margin: 0 0 2.5mm; font-weight: 600; }
-		.muted { color: #646970; }
+		h2 { font-size: 9pt; margin: 0 0 2.5mm; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--doc-muted); }
 		.header {
 			display: flex;
 			justify-content: space-between;
 			gap: 12mm;
 			margin-bottom: 8mm;
-			border-bottom: 1px solid #c3c4c7;
+			border-bottom: 1px solid var(--doc-line);
 			padding-bottom: 6mm;
 		}
 		.parties {
@@ -107,115 +96,64 @@ $document_title = sprintf(
 			width: 100%;
 			border-collapse: collapse;
 			margin-bottom: 7mm;
+			font-size: 9.5pt;
 		}
 		table.lines th,
 		table.lines td {
-			border-bottom: 1px solid #dcdcde;
-			padding: 3mm 2.5mm;
+			border-bottom: 1px solid var(--doc-line);
+			padding: 2.2mm 2.4mm;
 			text-align: left;
 			vertical-align: top;
 		}
-		table.lines th { font-size: 9pt; text-transform: uppercase; letter-spacing: 0.02em; color: #646970; }
-		table.lines .num { text-align: right; white-space: nowrap; }
+		table.lines th { font-size: 8pt; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--doc-muted); }
+		table.lines .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
 		.totals {
-			width: 70mm;
+			width: 72mm;
 			margin-left: auto;
 			margin-bottom: 8mm;
 		}
-		.totals td { padding: 2mm 2.5mm; }
-		.totals .grand td { font-weight: 700; border-top: 1px solid #1d2327; padding-top: 3.5mm; }
+		.totals td { padding: 2.2mm 2.4mm; border-bottom: 1px solid var(--doc-line); }
+		.totals .grand td { font-weight: 700; border-top: 2px solid var(--doc-line-strong); padding-top: 3.2mm; }
 		.bank, .notes, .sign {
 			margin-top: 7mm;
 		}
 		.bank {
-			background: #f4f7f9;
-			border: 1px solid #e2e6ea;
-			border-left: 4px solid #1e4d6b;
+			background: var(--doc-soft);
+			border: 1px solid var(--doc-line);
+			border-left: 4px solid var(--doc-accent);
 			border-radius: 0 6px 6px 0;
 			padding: 0;
 			overflow: hidden;
+			-webkit-print-color-adjust: exact;
+			print-color-adjust: exact;
 		}
 		.bank h2 {
 			margin: 0;
 			padding: 2.8mm 4.5mm;
-			font-size: 8.5pt;
+			font-size: 8pt;
 			font-weight: 700;
 			letter-spacing: 0.1em;
 			text-transform: uppercase;
-			color: #1e4d6b;
-			background: #eef3f6;
-			border-bottom: 1px solid #e2e6ea;
+			color: var(--doc-accent);
+			background: var(--doc-soft);
+			border-bottom: 1px solid var(--doc-line);
 		}
-		.wp-bizwit-pay-methods { display: flex; flex-direction: column; }
-		.wp-bizwit-pay-method { padding: 3.5mm 4.5mm 4mm; }
-		.wp-bizwit-pay-method + .wp-bizwit-pay-method { border-top: 1px dashed #e2e6ea; }
-		.wp-bizwit-pay-method__head { margin: 0 0 2.2mm; }
-		.wp-bizwit-pay-method__title {
-			display: inline-flex;
-			align-items: center;
-			gap: 2mm;
-			font-weight: 700;
-			font-size: 10pt;
-			color: #1d2327;
-		}
-		.wp-bizwit-pay-method__title::before {
-			content: "";
-			display: inline-block;
-			width: 2.4mm;
-			height: 2.4mm;
-			border-radius: 50%;
-			background: #1e4d6b;
-		}
-		.wp-bizwit-pay-method__rows { margin: 0; display: grid; gap: 1.4mm; }
-		.wp-bizwit-pay-method__row {
-			display: grid;
-			grid-template-columns: 28mm minmax(0, 1fr);
-			column-gap: 3mm;
-			align-items: baseline;
-		}
-		.wp-bizwit-pay-method__row dt {
-			margin: 0;
-			font-size: 8.5pt;
-			font-weight: 500;
-			color: #646970;
-		}
-		.wp-bizwit-pay-method__row dd {
-			margin: 0;
-			font-size: 10.5pt;
-			font-weight: 600;
-			color: #1d2327;
-			word-break: break-word;
-		}
-		.wp-bizwit-pay-method__row--account dd {
-			font-size: 12pt;
-			font-weight: 700;
-			font-variant-numeric: tabular-nums;
-			letter-spacing: 0.04em;
-			font-family: "SF Mono", Menlo, Consolas, "Courier New", monospace;
-		}
-		.wp-bizwit-pay-method__notes {
-			margin: 2.2mm 0 0;
-			padding-top: 1.8mm;
-			border-top: 1px solid #e2e6ea;
-			font-size: 9pt;
-			font-style: italic;
-			color: #646970;
-		}
+		/* Payment-methods rules come from Document_Styles::base_document_css(). */
 		.sign {
 			display: flex;
 			justify-content: space-between;
-			gap: 20mm;
+			gap: 16mm;
 			margin-top: 16mm;
 		}
 		.sign-box {
 			width: 45%;
-			min-height: 34mm;
-			border-top: 1px solid #c3c4c7;
+			min-height: 36mm;
+			border-top: 1px solid var(--doc-line-strong);
 			padding-top: 3.5mm;
 			font-size: 9pt;
-			color: #646970;
+			color: var(--doc-muted);
 		}
-		.stamp-note { font-size: 9pt; color: #646970; margin-top: 4mm; }
+		.stamp-note { font-size: 9pt; color: var(--doc-muted); margin-top: 4mm; }
 		.void-banner {
 			border: 2px solid #b32d2e;
 			color: #b32d2e;
@@ -223,13 +161,14 @@ $document_title = sprintf(
 			margin-bottom: 6mm;
 			text-align: center;
 			font-weight: 700;
-			letter-spacing: 0.08em;
+			letter-spacing: 0.12em;
+			font-size: 14pt;
 		}
 		@media print {
 			html, body {
 				margin: 0 !important;
 				/* Keep the same inner padding as screen preview */
-				padding: 12mm 14mm 14mm !important;
+				padding: var(--doc-pad-y) var(--doc-pad-x) 14mm !important;
 				background: #fff !important;
 			}
 			.no-print { display: none !important; }
@@ -326,9 +265,9 @@ $document_title = sprintf(
 		<tbody>
 			<?php foreach ( $items as $item ) : ?>
 				<tr>
-					<td><?php echo esc_html( (string) $item['description'] ); ?></td>
+					<td><?php echo Line_Item_Meta::enrich_description_html( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped inside Line_Item_Meta. ?></td>
 					<td class="num"><?php echo esc_html( rtrim( rtrim( (string) $item['quantity'], '0' ), '.' ) ); ?></td>
-					<td><?php echo esc_html( (string) ( $item['unit'] ?? '' ) ); ?></td>
+					<td><?php echo esc_html( Line_Item_Meta::display_unit( $item ) ); ?></td>
 					<td class="num"><?php echo esc_html( Money::format( (int) $item['unit_price_minor'], $currency ) ); ?></td>
 					<?php if ( $charges_tax ) : ?>
 						<td class="num"><?php echo esc_html( rtrim( rtrim( (string) $item['tax_rate'], '0' ), '.' ) ); ?></td>

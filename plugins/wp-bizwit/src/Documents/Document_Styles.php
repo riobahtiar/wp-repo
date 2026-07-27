@@ -13,18 +13,17 @@ namespace WP_BizWit\Documents;
 class Document_Styles {
 
 	/**
-	 * Full stylesheet for print pages and builder preview.
+	 * Base rules shared by the layout stylesheet and the legacy print views.
+	 *
+	 * Page setup, colour/type tokens, body typography, muted text, the
+	 * line-item subline and the payment-methods block — one list of rules so
+	 * faktur, kwitansi and template output stay the same document family.
+	 * Body is 10pt on the shared ink; the layout path overrides background
+	 * and padding for the grey-desk sheet.
 	 *
 	 * @return string CSS (no &lt;style&gt; wrapper).
 	 */
-	public static function css(): string {
-		/*
-		 * Spacing strategy (screen ≈ print dialog ≈ Save as PDF):
-		 * - Document breathing room lives on .wp-bizwit-document-sheet padding,
-		 *   never zeroed in @media print (browsers often ignore or override @page).
-		 * - @page keeps a small hardware-safe margin so content is not clipped.
-		 * - Screen shows a grey desk + white sheet; print is plain white.
-		 */
+	public static function base_document_css(): string {
 		return <<<'CSS'
 /* —— Page —— */
 @page {
@@ -37,7 +36,7 @@ html {
 	print-color-adjust: exact;
 	color-adjust: exact;
 }
-body.wp-bizwit-document {
+body {
 	--doc-ink: #1a2332;
 	--doc-muted: #5c6570;
 	--doc-line: #e2e6ea;
@@ -46,13 +45,135 @@ body.wp-bizwit-document {
 	--doc-soft: #f4f7f9;
 	--doc-total-bg: #f0f5f8;
 	--doc-pad-y: 12mm;
-	--doc-pad-x: 14mm;
+	--doc-pad-x: 10mm;
 	margin: 0;
-	padding: 0;
+	padding: var(--doc-pad-y) var(--doc-pad-x) 14mm;
 	font-family: "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-	font-size: 10.5pt;
+	font-size: 10pt;
 	line-height: 1.5;
 	color: var(--doc-ink);
+	background: #fff;
+}
+.muted { color: var(--doc-muted); }
+.wp-bizwit-line-sub {
+	display: block;
+	margin-top: 0.6mm;
+	font-size: 8.5pt;
+	line-height: 1.35;
+	color: var(--doc-muted);
+}
+
+/* —— Payment methods (shared: layout bank block + legacy invoice) —— */
+.wp-bizwit-pay-methods {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+.wp-bizwit-pay-method {
+	padding: 3.5mm 4.5mm 4mm;
+}
+.wp-bizwit-pay-method + .wp-bizwit-pay-method {
+	border-top: 1px dashed var(--doc-line);
+}
+.wp-bizwit-pay-method__head {
+	margin: 0 0 2.2mm;
+}
+.wp-bizwit-pay-method__title {
+	display: inline-flex;
+	align-items: center;
+	gap: 2mm;
+	font-weight: 700;
+	font-size: 9.5pt;
+	letter-spacing: 0.01em;
+	text-transform: none;
+	color: var(--doc-ink);
+	margin: 0;
+	line-height: 1.3;
+}
+.wp-bizwit-pay-method__title::before {
+	content: "";
+	display: inline-block;
+	width: 2.4mm;
+	height: 2.4mm;
+	border-radius: 50%;
+	background: var(--doc-accent);
+	flex-shrink: 0;
+	-webkit-print-color-adjust: exact;
+	print-color-adjust: exact;
+}
+.wp-bizwit-pay-method__rows {
+	margin: 0;
+	display: grid;
+	gap: 1.4mm;
+}
+.wp-bizwit-pay-method__row {
+	display: grid;
+	grid-template-columns: 28mm minmax(0, 1fr);
+	column-gap: 3mm;
+	align-items: baseline;
+}
+.wp-bizwit-pay-method__row dt {
+	margin: 0;
+	font-size: 8pt;
+	font-weight: 500;
+	color: var(--doc-muted);
+	line-height: 1.35;
+}
+.wp-bizwit-pay-method__row dd {
+	margin: 0;
+	font-size: 10pt;
+	font-weight: 600;
+	color: var(--doc-ink);
+	line-height: 1.35;
+	word-break: break-word;
+}
+.wp-bizwit-pay-method__row--account dd {
+	font-size: 11pt;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.04em;
+	font-family: "SF Mono", "Menlo", "Consolas", "Courier New", monospace;
+}
+.wp-bizwit-pay-method__row--link dd {
+	font-weight: 500;
+	font-size: 9pt;
+	word-break: break-all;
+}
+.wp-bizwit-pay-method__notes {
+	margin: 2.2mm 0 0;
+	padding-top: 1.8mm;
+	border-top: 1px solid var(--doc-line);
+	font-size: 8.5pt;
+	font-style: italic;
+	color: var(--doc-muted);
+	line-height: 1.45;
+}
+.wp-bizwit-pay-method__body {
+	font-size: 9.5pt;
+	line-height: 1.55;
+	color: var(--doc-ink);
+}
+CSS;
+	}
+
+	/**
+	 * Full stylesheet for print pages and builder preview.
+	 *
+	 * @return string CSS (no &lt;style&gt; wrapper).
+	 */
+	public static function css(): string {
+		/*
+		 * Spacing strategy (screen ≈ print dialog ≈ Save as PDF):
+		 * - Document breathing room lives on .wp-bizwit-document-sheet padding,
+		 *   never zeroed in @media print (browsers often ignore or override @page).
+		 * - @page keeps a small hardware-safe margin so content is not clipped.
+		 * - Screen shows a grey desk + white sheet; print is plain white.
+		 */
+		return self::base_document_css() . <<<'CSS'
+
+/* —— Document sheet (grey desk on screen, white in print) —— */
+body.wp-bizwit-document {
+	padding: 0;
 	background: #e8ecf0;
 }
 body.wp-bizwit-document .wp-bizwit-document-sheet {
@@ -239,8 +360,8 @@ body.wp-bizwit-header--band .wp-bizwit-doc-section--header,
 	color: #fff !important;
 	border-bottom: 0 !important;
 	/* Bleed into sheet padding for a full-width band */
-	margin: calc(var(--doc-pad-y, 12mm) * -1) calc(var(--doc-pad-x, 14mm) * -1) 8mm !important;
-	padding: 10mm var(--doc-pad-x, 14mm) 9mm !important;
+	margin: calc(var(--doc-pad-y, 12mm) * -1) calc(var(--doc-pad-x, 10mm) * -1) 8mm !important;
+	padding: 10mm var(--doc-pad-x, 10mm) 9mm !important;
 	-webkit-print-color-adjust: exact;
 	print-color-adjust: exact;
 }
@@ -293,11 +414,11 @@ body.wp-bizwit-table--double table.wp-bizwit-lines tbody tr:nth-child(even) td {
 	background: var(--doc-soft) !important;
 }
 body.wp-bizwit-table--dense table.wp-bizwit-lines {
-	font-size: 8.5pt;
+	font-size: 9pt;
 }
 body.wp-bizwit-table--dense table.wp-bizwit-lines thead th,
 body.wp-bizwit-table--dense table.wp-bizwit-lines tbody td {
-	padding: 1.6mm 1.8mm;
+	padding: 1.8mm 2mm;
 }
 
 /* Theme-specific bank / total polish */
@@ -422,12 +543,12 @@ table.wp-bizwit-lines thead th {
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.04em;
-	padding: 3mm 2.8mm;
+	padding: 2.2mm 2.4mm;
 	text-align: left;
 	border: 0;
 }
 table.wp-bizwit-lines tbody td {
-	padding: 3mm 2.8mm;
+	padding: 2.2mm 2.4mm;
 	border-bottom: 1px solid var(--doc-line);
 	vertical-align: top;
 }
@@ -493,107 +614,20 @@ table.wp-bizwit-totals tr.grand td {
 	background: var(--doc-soft);
 	border-bottom: 1px solid var(--doc-line);
 }
-.wp-bizwit-pay-methods {
-	display: flex;
-	flex-direction: column;
-	gap: 0;
-}
-.wp-bizwit-pay-method {
-	padding: 3.5mm 4.5mm 4mm;
-}
-.wp-bizwit-pay-method + .wp-bizwit-pay-method {
-	border-top: 1px dashed var(--doc-line);
-}
-.wp-bizwit-pay-method__head {
-	margin: 0 0 2.2mm;
-}
-.wp-bizwit-pay-method__title {
-	display: inline-flex;
-	align-items: center;
-	gap: 2mm;
-	font-weight: 700;
-	font-size: 9.5pt;
-	letter-spacing: 0.01em;
-	text-transform: none;
-	color: var(--doc-ink);
-	margin: 0;
-	line-height: 1.3;
-}
-.wp-bizwit-pay-method__title::before {
-	content: "";
-	display: inline-block;
-	width: 2.4mm;
-	height: 2.4mm;
-	border-radius: 50%;
-	background: var(--doc-accent);
-	flex-shrink: 0;
-	-webkit-print-color-adjust: exact;
-	print-color-adjust: exact;
-}
-.wp-bizwit-pay-method__rows {
-	margin: 0;
-	display: grid;
-	gap: 1.4mm;
-}
-.wp-bizwit-pay-method__row {
-	display: grid;
-	grid-template-columns: 28mm minmax(0, 1fr);
-	column-gap: 3mm;
-	align-items: baseline;
-}
-.wp-bizwit-pay-method__row dt {
-	margin: 0;
-	font-size: 8pt;
-	font-weight: 500;
-	color: var(--doc-muted);
-	line-height: 1.35;
-}
-.wp-bizwit-pay-method__row dd {
-	margin: 0;
-	font-size: 10pt;
-	font-weight: 600;
-	color: var(--doc-ink);
-	line-height: 1.35;
-	word-break: break-word;
-}
-.wp-bizwit-pay-method__row--account dd {
-	font-size: 11.5pt;
-	font-weight: 700;
-	font-variant-numeric: tabular-nums;
-	letter-spacing: 0.04em;
-	font-family: "SF Mono", "Menlo", "Consolas", "Courier New", monospace;
-}
-.wp-bizwit-pay-method__row--link dd {
-	font-weight: 500;
-	font-size: 9pt;
-	word-break: break-all;
-}
-.wp-bizwit-pay-method__notes {
-	margin: 2.2mm 0 0;
-	padding-top: 1.8mm;
-	border-top: 1px solid var(--doc-line);
-	font-size: 8.5pt;
-	font-style: italic;
-	color: var(--doc-muted);
-	line-height: 1.45;
-}
-.wp-bizwit-pay-method__body {
-	font-size: 9.5pt;
-	line-height: 1.55;
-	color: var(--doc-ink);
-}
+/* Payment-methods rules live in base_document_css() (shared with legacy prints). */
 
 /* —— Signature —— */
 .wp-bizwit-sign {
 	display: flex;
 	justify-content: space-between;
 	gap: 16mm;
-	margin-top: 12mm;
+	/* Spacing above is owned by the signature component's marginTop. */
+	margin-top: 0;
 	padding-top: 2mm;
 }
 .wp-bizwit-sign-box {
 	width: 42%;
-	min-height: 38mm;
+	min-height: 36mm;
 	padding-top: 2mm;
 	font-size: 9pt;
 	color: var(--doc-muted);

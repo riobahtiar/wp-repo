@@ -24,7 +24,7 @@ class Default_Templates {
 	 *
 	 * @var string
 	 */
-	public const GALLERY_OPTION = 'wp_bizwit_gallery_templates_v5';
+	public const GALLERY_OPTION = 'wp_bizwit_gallery_templates_v7';
 
 	/**
 	 * Ensure default + gallery invoice templates exist and layouts match the current design pack.
@@ -62,9 +62,9 @@ class Default_Templates {
 		}
 
 		// Force-refresh themed layouts when gallery pack version changes.
-		if ( 'v5' !== (string) get_option( self::GALLERY_OPTION, '' ) ) {
+		if ( 'v7' !== (string) get_option( self::GALLERY_OPTION, '' ) ) {
 			$this->refresh_all_theme_layouts();
-			update_option( self::GALLERY_OPTION, 'v5', false );
+			update_option( self::GALLERY_OPTION, 'v7', false );
 		}
 	}
 

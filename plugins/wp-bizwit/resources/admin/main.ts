@@ -10,6 +10,7 @@ import {
 	exposeSearchableSelectApi,
 } from './searchable-select';
 import { bindPaymentDestinations } from './payment-destinations';
+import { bindInvoiceItems } from './invoice-items';
 
 /**
  * Warn before leaving a dirty form (progressive enhancement; forms still work without JS).
@@ -138,6 +139,8 @@ function boot(): void {
 	// Order-independent: bank “other name” sync is built into searchable-select
 	// when [data-bank-custom] is present. Payment cards still manage add/remove.
 	bindPaymentDestinations();
+	// Invoice form: kind/period meta row, satuan suggest, add-next cloning.
+	bindInvoiceItems();
 	// Enhance any remaining [data-bw-select] (faktur picker, filters, …).
 	// Already-enhanced selects are no-ops.
 	enhanceAllSearchableSelects( document );

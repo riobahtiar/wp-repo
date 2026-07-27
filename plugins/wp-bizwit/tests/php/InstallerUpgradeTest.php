@@ -58,6 +58,26 @@ class InstallerUpgradeTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * The 1.7.0 schema carries the line item kind/period columns.
+	 *
+	 * @return void
+	 */
+	public function test_invoice_items_has_kind_and_period_columns(): void {
+		global $wpdb;
+
+		( new Installer() )->install();
+
+		$table = Schema::table( Schema::INVOICE_ITEMS );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$columns = $wpdb->get_col( "DESCRIBE `{$table}`", 0 );
+
+		$this->assertContains( 'item_kind', $columns );
+		$this->assertContains( 'billing_period', $columns );
+		$this->assertContains( 'period_count', $columns );
+		$this->assertContains( 'period_unit', $columns );
+	}
+
+	/**
 	 * Maybe_install is a no-op when already current (does not rewrite the option).
 	 *
 	 * @return void
